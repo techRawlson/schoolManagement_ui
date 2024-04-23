@@ -11,6 +11,7 @@ import StaffDetails from './Pages/Staff/StaffDetails';
 //for authentication
 import { AuthProvider } from './Pages/Auth/AuthContext';
 import { useState } from 'react';
+import Subject from './Pages/Subjetcs/Subjects';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/login" element={<Login setToken={setToken}/>} />
           <Route exact path='/dashboard' element={tok?<Dashboard/>:<Login setToken={setToken}/>}/>
           <Route exact path='/staff' element={tok?<Staff/>:<Login setToken={setToken}/>}/>
+          <Route exact path='/subjects' element={tok?<Subject/>:<Login setToken={setToken}/>}/>
           <Route exact path='/student' element={tok?<Student/>:<Login setToken={setToken}/>}/>
           <Route  path='/studentdetails/:id' element={tok?<StudentDetails/>:<Login setToken={setToken}/>}/>
           <Route  path='/staffdetails/:id' element={tok?<StaffDetails/>:<Login setToken={setToken}/>}/>

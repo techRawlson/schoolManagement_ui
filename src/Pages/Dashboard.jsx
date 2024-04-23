@@ -4,6 +4,7 @@ import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react'
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { SlCalender } from "react-icons/sl";
+import { ImBooks } from "react-icons/im";
 
 
 import { FcReading } from "react-icons/fc";
@@ -23,33 +24,33 @@ const Dashboard = () => {
 
     }
   }
-  
 
-  
+
+
 
 
 
 
   return (
     <Stack minH="100vh">
-      <Navbar/>
+      <Navbar />
 
       <SimpleGrid spacing={4} templateColumns='1fr 1fr 1fr' margin="auto" width="85%">
-        <Card cursor="pointer" onClick={()=>nextPage("student")}>
+        <Card cursor="pointer" onClick={() => nextPage("student")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Student </Heading>
           </CardHeader>
           <CardBody>
-            
+
             <Stack m={18} spacing={4} display="flex"
               alignItems="center"
               justifyContent="center">
               <FcReading size={100} />
             </Stack>
-             
+
           </CardBody>
 
-        </Card> <Card cursor="pointer" onClick={()=>nextPage("staff")}>
+        </Card> <Card cursor="pointer" onClick={() => nextPage("staff")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Staff</Heading>
           </CardHeader>
@@ -57,12 +58,22 @@ const Dashboard = () => {
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <PiChalkboardTeacher size={100} />
             </Stack>
-
           </CardBody>
 
-        </Card> <Card cursor="pointer" onClick={()=>nextPage("timetable")}>
+        </Card> 
+        <Card cursor="pointer" onClick={() => nextPage("subjects")}>
           <CardHeader>
-            <Heading size='md' textAlign="center"> Time Table</Heading>
+            <Heading size='md' textAlign="center"> Subjects</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <ImBooks size={100} />
+            </Stack>
+          </CardBody>
+
+        </Card><Card cursor="pointer" onClick={() => nextPage("timetable")}>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Staff Time Table</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">

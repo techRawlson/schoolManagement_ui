@@ -18,7 +18,12 @@ import {
     Box,
     CloseButton,
     Text,
-    Avatar
+    Avatar,
+    Checkbox,
+    MenuButton,
+    Menu,
+    MenuList,
+    MenuItem
 
 } from '@chakra-ui/react'
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
@@ -51,7 +56,17 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [isClose, setIsClose] = useState(false)
     const initialRef = useRef()
     const finalRef = useRef()
-
+    //////staff subject--------------------------
+    const options = [
+        { value: 'HINDI', label: 'HINDI' },
+        { value: 'ENGLISH', label: 'ENGLSIH' },
+        { value: 'MATHS', label: 'MATHS' },
+        { value: 'SOS', label: 'SOS' },
+        { value: 'SCIENCE', label: 'SCIENCE' },
+    ];
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    //////0----------------------------------------------
     const [isOpenFile, setIsOpenFile] = useState(false)
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -164,9 +179,11 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
 
+
     const pageNumbers = getPageNumbers();
 
     const nameRef = useRef()
+    const subjectRef = useRef()
     const sexRef = useRef()
     const mobileRef = useRef()
     const addressRef = useRef()
@@ -180,6 +197,8 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
     let body;
     const saveButton = async () => {
+        // Convert selectedItems array to a comma-separated string
+
         body = {
             name: nameRef.current.value,
             gender: sexRef.current.value,
@@ -187,28 +206,36 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             address: addressRef.current.value,
             designation: classRef.current.value,
             dob: dobRef.current.value,
-             department: depRef.current.value,
+            department: depRef.current.value,
             date_of_joining: admRef.current.value,
             email: emailRef.current.value,
             staff_id: parseInt(staffIdRef.current.value, 12),
-
-
+            subjects: []
         }
-
-
         try {
             console.log(body)
-            const studentData = [body]
+
             // Create a new FormData object
             const formData = new FormData();
             // Loop through the student data and append each field to the FormData object
-            studentData.forEach(std => {
-                Object.entries(std).forEach(([key, value]) => {
-                    if (key !== 'profilePicture') {
-                        formData.append(key, value);
-                    }
-                });
+            // Loop through the student data and append each field to the FormData object
+            Object.entries(body).forEach(([key, value]) => {
+
+                if (Array.isArray(value)) {
+                    // Append each item of the array as a separate value for the 'subjects' key
+                    selectedItems.forEach(item => {
+                        formData.append('subjects', item);
+                    });
+                } else {
+                    formData.append(key, value);
+                }
             });
+            // Append the image file to the FormData object
+            const file = image.current.files[0];
+            if (file) {
+                formData.append('profilePicture', file);
+            }
+
 
             const data = await fetch("http://192.168.1.10:8083/api/staff/create-staff", {
                 method: 'POST',
@@ -290,6 +317,38 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         navigate(-1)
     }
 
+
+    const handleItemClick = (event, value) => {
+        event.stopPropagation(); // Prevent event propagation
+        if (selectedItems.includes(value)) {
+            setSelectedItems(selectedItems.filter((item) => item !== value));
+        } else {
+            setSelectedItems([...selectedItems, value]);
+        }
+    };
+
+    const handleMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const handleMenuClose = () => {
+        setIsMenuOpen(false);
+    };
+    console.log(selectedItems)
+    const [subjects, setSubjects] = useState([])
+    const getSubjects = async () => {
+        try {
+            const data = await fetch('http://192.168.1.10:8083/api/staff/all-subjects');
+            const fdata = await data.json();
+console.log(fdata)
+            setSubjects(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        getSubjects()
+    }, [])
     return (
         <div>
             <>
@@ -321,9 +380,11 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                 <Th key={index}>{key}</Th>
               ))} */}
                                         <Th border="1px solid">Sr.No.</Th>
+                                        <Th border="1px solid">STAFF ID</Th>
+                                        <Th border="1px solid">SYSTEM ID</Th>
                                         <Th border="1px solid">Staff Name</Th>
                                         <Th border="1px solid">Designation</Th>
-                                        <Th border="1px solid">Staff Id</Th>
+
                                         <Th border="1px solid">Department</Th>
                                         <Th border="1px solid">Mobile</Th>
                                         <Th border="1px solid">Email</Th>
@@ -337,13 +398,16 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         classData?.slice(startIndex, endIndex).map((elm, i) => (
                                             <Tr key={i} border="1px solid">
                                                 <Td border="1px solid">{startIndex + i + 1}</Td>
+                                                <Td border="1px solid">{elm.staffId}</Td>
+                                                <Td border="1px solid">{elm.id}</Td>
                                                 <Td border="1px solid">
                                                     <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/staffdetails/${elm.id}`}>
                                                         {elm.name}
                                                     </ChakraLink>
                                                 </Td>
+
                                                 <Td border="1px solid">{elm.designation}</Td>
-                                                <Td border="1px solid">{elm.staffId}</Td>
+
                                                 <Td border="1px solid">{elm.department}</Td>
                                                 <Td border="1px solid">{elm.mobile}</Td>
                                                 <Td border="1px solid">{elm.email}</Td>
@@ -437,8 +501,30 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                 <Input id="name" name="name" placeholder="Your name" ref={nameRef} />
                                             </FormControl>
                                             <FormControl isRequired m="1">
+                                                <FormLabel >Subject</FormLabel>
+                                                <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
+                                                    <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
+                                                        Select Items
+                                                    </MenuButton>
+                                                    <MenuList onClick={(e) => e.stopPropagation()}>
+                                                        {subjects.map((option) => (
+                                                            <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
+                                                                <Checkbox
+                                                                    isChecked={selectedItems.includes(option.name)}
+                                                                    onChange={(e) => handleItemClick(e, option.name)}
+                                                                    size="sm"
+                                                                >
+                                                                    {option.name}
+                                                                </Checkbox>
+                                                            </MenuItem>
+                                                        ))}
+                                                    </MenuList>
+                                                </Menu>
+
+                                            </FormControl>
+                                            <FormControl isRequired m="1">
                                                 <FormLabel >Staff Id</FormLabel>
-                                                <Input id="name" name="name" placeholder="Your name" ref={staffIdRef} type='Number' />
+                                                <Input id="name" name="name" placeholder="name_0001" ref={staffIdRef} type='Number' />
                                             </FormControl>
 
 
@@ -505,7 +591,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         </Flex>
 
                                         <Flex justifyContent="space-between" alignItems="center">
-                                           
+
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Sex</FormLabel>
                                                 <Select ref={sexRef}>

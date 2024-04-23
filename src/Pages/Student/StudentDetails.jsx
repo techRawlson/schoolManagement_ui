@@ -42,22 +42,114 @@ const StudentDetails = () => {
 
     //update image
     //const imageUrl = `http://192.168.1.10:8082/api/students/update-image/${id}`;
-
-
-
-
-
-
-
-
-
     const [dis, setdis] = useState(true)
     const [image, setImage] = useState(null);
+
+
+
+
+    // Function to convert data URI to Blob
+    const dataURItoBlob = (dataURI) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    };
+
+    
     const editStudent = () => {
         setdis(!dis)
     }
 
 
+    // const handleFieldChange = async (event, index, fieldName) => {
+    //     try {
+    //         // for profile picture
+    //         if (fieldName === 'profilePicture') {
+    //             const file = event.target.files[0];
+    //             if (file && file.type.startsWith('image')) {
+    //                 const reader = new FileReader();
+    //                 reader.onload = () => {
+    //                     console.log(reader.result); // Check the image data
+    //                     setImage(reader.result); // Update the image state
+    //                 };
+    //                 reader.readAsDataURL(file);
+    //             } else {
+    //                 // Handle non-image file selection
+    //             }
+    //         }
+
+    //         const { value } = event.target;
+    //         console.log(value);
+    //         const updatedStudents = [...student]; // Create a copy of the student array
+    //         updatedStudents[index] = { ...updatedStudents[index], [fieldName]: value }; // Update the specified field of the specific student    
+    //         console.log(updatedStudents);
+    //         setStudent(updatedStudents);
+
+    //         // Log the image state after updating
+    //         console.log('Image state:', image);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    // console.log('Image state:', image);
+
+
+    // const submitStudent = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         // Create a new FormData object
+    //         const formData = new FormData();
+
+    //         // Loop through the student data and append each field to the FormData object
+    //         Object.entries(student[0]).forEach(([key, value]) => {
+    //             formData.append(key, value);
+    //         });
+
+            
+    //         if (image) {
+    //             // Append the profile picture
+    //             formData.append('profilePicture', dataURItoBlob(image)); // Use the image data directly, not a string
+    //         }
+
+    //         console.log(formData); // Log the formData here to see the updated content
+
+    //         const data = await fetch(`http://192.168.1.10:8082/api/students/update-student/${id}`, {
+    //             method: 'PUT',
+    //             body: formData
+    //         });
+    //         const dataf = await data.json();
+    //         console.log(dataf);
+
+    //         if (data.ok) {
+    //             setImage(null);
+    //             toast.success("Student details submitted successfully!");
+    //             setdis(!dis);
+    //         } else {
+    //             toast.error("Failed to submit student details.");
+    //         }
+    //     } catch (error) {
+    //         toast.error("Failed to submit student details.");
+    //         console.log(error);
+    //     }
+    // };
+
+    //go back to previous page
+    const navigate = useNavigate()
+    const goback = () => {
+        navigate(-1)
+    }
+
+
+
+
+    //new code 
+    let picture;
     const handleFieldChange = async (event, index, fieldName) => {
         try {
             // for profile picture
@@ -66,6 +158,7 @@ const StudentDetails = () => {
                 if (file && file.type.startsWith('image')) {
                     const reader = new FileReader();
                     reader.onload = () => {
+                        picture=reader.result;
                         console.log(reader.result); // Check the image data
                         setImage(reader.result); // Update the image state
                     };
@@ -74,28 +167,28 @@ const StudentDetails = () => {
                     // Handle non-image file selection
                 }
             }
-
+    
             const { value } = event.target;
             console.log(value);
             const updatedStudents = [...student]; // Create a copy of the student array
             updatedStudents[index] = { ...updatedStudents[index], [fieldName]: value }; // Update the specified field of the specific student    
             console.log(updatedStudents);
             setStudent(updatedStudents);
-
+    
             // Log the image state after updating
             console.log('Image state:', image);
         } catch (error) {
             console.log(error);
         }
     };
-
+    
     console.log('Image state:', image);
     const submitStudent = async (e) => {
         e.preventDefault();
         try {
             // Create a new FormData object
             const formData = new FormData();
-
+    
             // Loop through the student data and append each field to the FormData object
             student.forEach(std => {
                 Object.entries(std).forEach(([key, value]) => {
@@ -104,21 +197,22 @@ const StudentDetails = () => {
                     }
                 });
             });
-
-            if (image) {
+    
+            // if (picture) {
                 // Append the profile picture
-                formData.append('profilePicture', image); // Use the image data directly, not a string
-            }
-
+                console.log('p',picture)
+                formData.append('profilePicture', picture); // Use the image data directly, not a string
+            // }
+    
             console.log(formData); // Log the formData here to see the updated content
-
+    
             const data = await fetch(`http://192.168.1.10:8082/api/students/update-student/${id}`, {
                 method: 'PUT',
                 body: formData
             });
             const dataf = await data.json();
             console.log(dataf);
-
+    
             if (data.ok) {
                 setImage(null);
                 toast.success("Student details submitted successfully!");
@@ -131,19 +225,12 @@ const StudentDetails = () => {
             console.log(error);
         }
     };
-
-    //go back to previous page
-    const navigate = useNavigate()
-    const goback = () => {
-        navigate(-1)
-    }
-
     return (
         <Stack minH="100vh">
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-            <Stack  width="80vw" m="0 auto">
-                <Flex  mb="5" justifyContent="space-between" alignItems="center" width="87vw">
+            <Stack width="80vw" m="0 auto">
+                <Flex mb="5" justifyContent="space-between" alignItems="center" width="87vw">
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar

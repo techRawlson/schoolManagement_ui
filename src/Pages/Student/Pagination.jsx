@@ -19,9 +19,12 @@ import {
     CloseButton,
     Text,
     Avatar,
-    Toast
+    Toast,
+    FormControl, FormLabel, FormErrorMessage
 
 } from '@chakra-ui/react'
+
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Link as ReactRouterLink } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
@@ -37,12 +40,11 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    FormControl,
-    FormLabel
+
 } from '@chakra-ui/react'
 import { IoReturnUpBackOutline } from "react-icons/io5";
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 // import Student from '../Pages/Student';
@@ -94,11 +96,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     // }, [classData]);
 
 
-    // Define the validation schema using Yup
-    const validationSchema = Yup.object({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string().email('Invalid email format').required('Email is required'),
-    });
+
 
 
 
@@ -149,10 +147,6 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
         } catch (error) {
             console.error('Error downloading file:', error);
         }
-
-
-
-
     }
 
 
@@ -185,8 +179,18 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     const image = useRef()
 
     let body;
+
+    const excelFile = useRef()
+    let formData;
+
+
+
+
+
+
     const saveButton = async () => {
-        body = {
+        // Collect student details
+        const body = {
             name: nameRef.current.value,
             fathersName: fatherRef.current.value,
             sex: sexRef.current.value,
@@ -197,65 +201,52 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
             dob: dobRef.current.value,
             section: sectionRef.current.value,
             admissionYear: parseInt(admRef.current.value, 12),
-            profilePicture: image.current.value,
             email: emailRef.current.value,
             rollNumber: parseInt(rollRef.current.value, 12),
             enrollmentNumber: parseInt(enrollRef.current.value, 12),
-
-        }
-        
-        const studentData=[body]
+        };
+        console.log(body)
         // Create a new FormData object
         const formData = new FormData();
 
         // Loop through the student data and append each field to the FormData object
-        studentData.forEach(std => {
-            Object.entries(std).forEach(([key, value]) => {
-                if (key !== 'profilePicture') {
-                    formData.append(key, value);
-                }
-            });
+        Object.entries(body).forEach(([key, value]) => {
+            formData.append(key, value);
         });
 
-        try {
-            console.log(body)
+        // Append the image file to the FormData object
+        const file = image.current.files[0];
+        if (file) {
+            formData.append('profilePicture', file);
+        }
 
+        try {
             const data = await fetch("http://192.168.1.10:8082/api/students/create-student", {
                 method: 'POST',
                 body: formData
-            })
-            const fdata = await data.json()
-            console.log(fdata)
-            if(data.ok){
-                toast.success("student created successfully")
-                // setOpen(false)
-            }else{
-                toast.error("something went wrong")
-                // setOpen(false)
-            }
-           
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const excelFile = useRef()
-    let formData;
-    const fileChange = async () => {
-        try {
-            const file = event.target.files[0];
-            if (!file) {
-                console.log("No file selected");
-                return;
-            }
+            });
 
-            // Create a FormData object
-            formData = new FormData();
-            // Append the file to the FormData object
-            formData.append('file', file);
+            if (data.ok) {
+                toast.success("Student created successfully");
+                setOpen(false)
+            } else {
+                toast.error("Something went wrong");
+            }
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            toast.error("Something went wrong");
         }
-    }
+    };
+
+    // Function to handle file change
+    const fileChange = () => {
+        const file = image.current.files[0];
+        if (file) {
+            console.log("File selected:", file);
+        } else {
+            console.log("No file selected");
+        }
+    };
     const uploadFileExcel = async () => {
         try {
 
@@ -301,6 +292,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
             <div className="pagination-items">
                 <div>
                     <Navbar />
+                    <ToastContainer />
                     <Stack width="95%" orientation="horizontal" marginX="auto" >
                         <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
                             <Flex width="50%" paddingRight="1" justifyContent="space-between">
@@ -337,6 +329,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                 <Th key={index}>{key}</Th>
               ))} */}
                                         <Th border="1px solid">Sr.No.</Th>
+                                        
                                         <Th border="1px solid">Name</Th>
                                         <Th border="1px solid">Class Name</Th>
                                         <Th border="1px solid">Section</Th>
@@ -438,48 +431,61 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                         <ModalHeader>Add New</ModalHeader>
                         <ModalCloseButton onClick={() => setOpen(false)} />
                         <ModalBody pb={3}>
-                            <Formik initialValues={body}
-                                validationSchema={validationSchema}
-                                onSubmit={saveButton}>
-                                {({ errors, touched }) => (
+                            <Formik initialValues={
+                                { email: '', password: '' }
+                            }
+                                validate={(values) => {
+                                    const errors = {};
+                                    if (!values.name) {
+                                        errors.name = 'Required';
+                                    }
+
+                                    if (!values.email) {
+                                        errors.email = 'Required';
+                                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                                        errors.email = 'Invalid email address';
+                                    }
+                                    if (!values.password) {
+                                        errors.password = 'Required';
+                                    } else if (values.password.length < 6) {
+                                        errors.password = 'Password must be at least 6 characters long';
+                                    }
+                                    return errors;
+                                }}
+                                onSubmit={(values, { setSubmitting }) => {
+                                    setTimeout(() => {
+                                        alert(JSON.stringify(values, null, 2));
+                                        setSubmitting(false);
+                                    }, 400);
+                                }}
+                            >
+                                {({ isSubmitting }) => (
                                     <Form>
-                                        <FormControl>
-                                            <Flex justifyContent="center" alignItems="center" mt="-8" mb="5">
-
-                                                {/* <Avatar src="dummy" size="lg" /> */}
-
-                                            </Flex>
-
-                                        </FormControl>
-
                                         <Flex justifyContent="space-between" alignItems="center" >
-
-
-                                            <FormControl isRequired >
-                                                <FormLabel >Full Name</FormLabel>
-                                                <Input id="name" name="name" placeholder="Your name" ref={nameRef} />
-
-                                                {/* <ErrorMessage name="name">
-                                                    {(msg) => (
-                                                        <Text color="red.500">{msg}</Text>
-                                                    )}
-                                                </ErrorMessage> */}
-
-                                            </FormControl>
+                                            <Field name="name">
+                                                {({ field, form }) => (
+                                                    <FormControl isInvalid={form.errors.name && form.touched.name}>
+                                                        <FormLabel htmlFor="name">Name</FormLabel>
+                                                        <Input {...field} id="name" placeholder="Name" ref={nameRef} />
+                                                        <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <Field name="email" m="1">
+                                                {({ field, form }) => (
+                                                    <FormControl isInvalid={form.errors.email && form.touched.email} isRequired>
+                                                        <FormLabel htmlFor="email">Email Address</FormLabel>
+                                                        <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
+                                                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
 
                                             <FormControl isRequired m="1">
                                                 <FormLabel  >Father Name</FormLabel>
                                                 <Input placeholder='Father name' ref={fatherRef} />
                                             </FormControl>
-                                            <FormControl isRequired>
-                                                <FormLabel>Sex</FormLabel>
-                                                <Select ref={sexRef}>
-                                                    <option >Select</option>
-                                                    <option value='Male'>Male</option>
-                                                    <option value='Female'>Female</option>
-                                                    <option value='Other'>Other</option>
-                                                </Select>
-                                            </FormControl>
+
                                         </Flex>
 
                                         <Flex justifyContent="space-between" alignItems="center">
@@ -549,16 +555,16 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                     <option value='OTHER'>OTHER</option>
                                                 </Select>
                                             </FormControl>
-                                            <FormControl isRequired m="1">
-                                                <FormLabel htmlFor="email">Email</FormLabel>
-                                                <Input
-                                                    placeholder='Email'
-                                                    ref={emailRef}
-                                                    id="email"
-                                                    name="email"
-                                                    type='email'
-                                                />
+                                            <FormControl isRequired>
+                                                <FormLabel>Sex</FormLabel>
+                                                <Select ref={sexRef}>
+                                                    <option >Select</option>
+                                                    <option value='Male'>Male</option>
+                                                    <option value='Female'>Female</option>
+                                                    <option value='Other'>Other</option>
+                                                </Select>
                                             </FormControl>
+
                                             <FormControl isRequired>
                                                 <FormLabel>Roll No.</FormLabel>
                                                 <Input placeholder='Roll No.' ref={rollRef} type='number' />
@@ -572,7 +578,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                             </FormControl>
                                             <FormControl isRequired maxW="45%">
                                                 <FormLabel>Upload Image</FormLabel>
-                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
+                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' onChange={fileChange} />
                                             </FormControl>
                                         </Flex>
 

@@ -22,13 +22,6 @@ const StaffDetails = () => {
             console.log(fdata)
           
             if(data.ok){
-                if (fdata[0]?.profilePicture) {
-                    const byteCharacters = fdata[0].profilePicture;
-                    const byteNumbers = new Uint8Array(byteCharacters);
-                    const blob = new Blob([byteNumbers], { type: 'image/jpeg' });
-                    const imageUrl = URL.createObjectURL(blob);
-                    setImageData(imageUrl);
-                }
                 setStudent([fdata])
             }
         } catch (error) {
@@ -40,6 +33,7 @@ const StaffDetails = () => {
 
     useEffect(() => {
         getStudent()
+        
 
     }, [id])
 
@@ -113,7 +107,7 @@ const StaffDetails = () => {
             <ToastContainer /> {/* Add this line */}
             <Stack maxW="80vw" width="80vw" m="0 auto">
                 <Stack direction='row' mb="5" width="80vw" justifyContent="space-between">
-                    <Avatar src={imageData} borderRadius="6%" size="lg" />
+                    <Avatar src={`http://192.168.1.10:8083/api/staff/image/${id}`} borderRadius="6%" size="lg" />
                     <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
                 </Stack>
 

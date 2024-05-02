@@ -348,7 +348,7 @@ const StudentDetails = () => {
                                 </FormControl>
 
                                 <FormControl id="name">
-                                    <FormLabel>Sex</FormLabel>
+                                    <FormLabel>Gender</FormLabel>
                                     <Input fontWeight="bold"
                                         w='100%' h='10' bg='white.500' value={std.sex} onChange={(e) => handleFieldChange(e, i, 'sex')} disabled={dis}
                                     />

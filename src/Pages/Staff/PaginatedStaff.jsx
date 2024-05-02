@@ -26,6 +26,7 @@ import {
     MenuItem
 
 } from '@chakra-ui/react'
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
@@ -43,7 +44,7 @@ import {
     FormControl,
     FormLabel
 } from '@chakra-ui/react'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
@@ -340,7 +341,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         try {
             const data = await fetch('http://192.168.1.10:8083/api/staff/all-subjects');
             const fdata = await data.json();
-console.log(fdata)
+            console.log(fdata)
             setSubjects(fdata)
         } catch (error) {
             console.log(error)
@@ -349,6 +350,9 @@ console.log(fdata)
     useEffect(() => {
         getSubjects()
     }, [])
+
+
+    
     return (
         <div>
             <>

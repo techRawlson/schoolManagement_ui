@@ -29,7 +29,7 @@ function Register() {
         try {
             console.log(nameRef.current.value, emailRef.current.value, passRef.current.value);
 
-            const data = await fetch('http://192.168.1.10:8081/auth/create-user', {
+            const data = await fetch('http://192.168.1.81:8081/auth/create-user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

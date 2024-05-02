@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Pagination from './Pagination';
 import { Stack } from '@chakra-ui/react';
 
+
 const Student = () => {
     const [classData, setClassData] = useState([])
     const [uniqueKeys, setUniqueKeys] = useState(new Set());
@@ -137,17 +138,17 @@ const Student = () => {
     useEffect(() => {
         dataFilter();
     }, [filters]);
-
-
-
-
-
-
-
     useEffect(() => {
         getData()
 
     }, [])
+
+
+
+
+
+
+//form validation using formik
 
 
     const itemsPerPage = 10;

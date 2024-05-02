@@ -1,28 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, Toast } from '@chakra-ui/react'
+import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, Toast, Icon, Menu, MenuButton, MenuList, MenuItem, Checkbox } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
-import { Navigate, useParams,useNavigate } from 'react-router-dom';
+import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
+import { MdClose } from 'react-icons/md';
 const StaffDetails = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const notify = () => toast("Form Submitted Successfully");
     const [student, setStudent] = useState([])
     const [imageUrl, setImageUrl] = useState(false)
     const [imageData, setImageData] = useState('');
     const { id } = useParams();
-    console.log(id)
-
+    const [subjects, setSubjects] = useState([])
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
     const getStudent = async () => {
         try {
             const data = await fetch(`http://192.168.1.10:8083/api/staff/get-staff/${id}`)
             const fdata = await data.json()
             console.log(fdata)
-          
-            if(data.ok){
+
+            if (data.ok) {
                 setStudent([fdata])
+                setSelectedItems(fdata.subjects)
             }
         } catch (error) {
             console.log(error)
@@ -33,20 +36,7 @@ const StaffDetails = () => {
 
     useEffect(() => {
         getStudent()
-        
-
     }, [id])
-
-
-    //update image
-    //const imageUrl = `http://192.168.1.10:8082/api/students/update-image/${id}`;
-
-
-
-
-
-
-
 
 
     const [dis, setdis] = useState(true)
@@ -60,6 +50,9 @@ const StaffDetails = () => {
             const updatedStudents = [...student]; // Create a copy of the student array
             updatedStudents[index] = { ...updatedStudents[index], [fieldName]: value }; // Update the specified field of the specific student
             setStudent(updatedStudents);
+            if (fieldName == 'subject') {
+                console.log('event', event.target.value, index)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -75,8 +68,23 @@ const StaffDetails = () => {
                     if (key !== 'profilePicture') {
                         formData.append(key, value);
                     }
+                    
                 });
             });
+            //for subject items
+            
+           
+            
+            // Clear existing 'subjects' property in formData
+            formData.delete('subjects');
+            
+            // Append the new 'subjects' array to formData
+            selectedItems.forEach(item => {
+              formData.append('subjects', item);
+            });
+            
+            
+
             console.log(student[0])
             const data = await fetch(`http://192.168.1.10:8083/api/staff/update/${id}`, {
                 method: 'PUT',
@@ -96,11 +104,67 @@ const StaffDetails = () => {
             console.log(error)
         }
     }
- 
+
     const goback = () => {
         navigate(-1)
     }
 
+
+    const handleDeleteItem = async (index) => {
+        try {
+           
+            setSelectedItems((prevItems) => {
+                // Create a new array excluding the item to be deleted
+                return prevItems.filter((_, i) => i !== index);
+              });
+           
+        } catch (error) {
+            console.log(error)
+        }
+    }
+  
+
+    const handleMenuClose = () => {
+        setIsMenuOpen(false);
+    };
+    const handleMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+    const getSubjects = async () => {
+        try {
+            const data = await fetch('http://192.168.1.10:8083/api/staff/all-subjects');
+            const fdata = await data.json();
+            console.log(fdata)
+            setSubjects(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleItemClick = (event, value) => {
+        event.stopPropagation(); // Prevent event propagation
+        if (selectedItems.includes(value)) {
+            setSelectedItems(selectedItems.filter((item) => item !== value));
+        } else {
+            setSelectedItems([...selectedItems, value]);
+        }
+
+        // if (Array.isArray(student[0].subjects)) {
+        //     const newArray = [...selectedItems, ...student[0].subjects];
+        //     const unique = new Set(newArray)
+        //     const original = Array.from(unique)
+        //     console.log(original);
+        // } else {
+        //     console.error('student.subjects is not an array');
+        // }
+        // const uniqueArray=new Set()
+
+    };
+    
+    useEffect(() => {
+        getSubjects()
+       
+    }, [])
+    console.log(selectedItems)
     return (
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
@@ -201,7 +265,7 @@ const StaffDetails = () => {
                                 </FormControl>
 
                                 <FormControl id="name">
-                                    <FormLabel>Sex</FormLabel>
+                                    <FormLabel>Gender</FormLabel>
                                     <Select fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
@@ -213,9 +277,71 @@ const StaffDetails = () => {
                                         <option value='Other'>Other</option>
                                     </Select>
 
-                                    {/* <Input 
-                                    /> */}
+
                                 </FormControl>
+                                <FormControl>
+                                    {
+                                        dis ? "" :
+                                            <>
+                                                <FormControl isRequired m="1">
+                                                    <FormLabel >Subject</FormLabel>
+                                                    <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
+                                                        <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
+                                                            Select Items
+                                                        </MenuButton>
+                                                        <MenuList onClick={(e, i) => e.stopPropagation()}>
+                                                            {subjects.map((option) => (
+                                                                <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
+                                                                    <Checkbox
+                                                                        isChecked={selectedItems.includes(option.name)}
+                                                                       
+                                                                         onChange={(e) => handleItemClick(e, option.name)}
+                                                                        size="sm"
+                                                                    >
+                                                                        {option.name}
+                                                                    </Checkbox>
+                                                                </MenuItem>
+                                                            ))}
+                                                        </MenuList>
+                                                    </Menu>
+
+                                                </FormControl>
+                                            </>
+                                    } </FormControl>
+                                <FormControl>
+                                <FormLabel >Subject</FormLabel>
+                                    <Flex >
+                                    
+                                        {selectedItems.map((item, index) => (
+                                            <Button
+                                            key={index}
+                                            m={1}
+                                            colorScheme="teal"
+                                            variant="outline"
+                                            size="sm"
+                                            rightIcon={<Icon as={MdClose} />}
+                                            onClick={() => handleDeleteItem(index)}
+                                            disabled={dis} // Set the disabled prop based on the dis variable
+                                        >
+                                            {item}
+                                        </Button>
+                                        
+                                        ))}
+                                    </Flex>
+                                </FormControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
                             </Grid>
 
                         ))

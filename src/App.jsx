@@ -12,6 +12,11 @@ import StaffDetails from './Pages/Staff/StaffDetails';
 import { AuthProvider } from './Pages/Auth/AuthContext';
 import { useState } from 'react';
 import Subject from './Pages/Subjetcs/Subjects';
+import TimeTable from './Pages/TimeTable/TimeTable';
+import Classtimetable from './Pages/TimeTable/ClassTimeTable';
+import Stafftimetable from './Pages/TimeTable/StaffTimeTable';
+import Periods from './Pages/TimeTable/Periods';
+
 
 
 function App() {
@@ -26,10 +31,14 @@ function App() {
           <Route exact path="/login" element={<Login setToken={setToken}/>} />
           <Route exact path='/dashboard' element={tok?<Dashboard/>:<Login setToken={setToken}/>}/>
           <Route exact path='/staff' element={tok?<Staff/>:<Login setToken={setToken}/>}/>
+          <Route exact path='/timetable' element={tok?<TimeTable/>:<Login setToken={setToken}/>}/>
+          <Route exact path='/classtimetable' element={tok?<Classtimetable/>:<Login setToken={setToken}/>}/>
+          <Route exact path='/stafftimetable' element={tok?<Stafftimetable/>:<Login setToken={setToken}/>}/>
           <Route exact path='/subjects' element={tok?<Subject/>:<Login setToken={setToken}/>}/>
           <Route exact path='/student' element={tok?<Student/>:<Login setToken={setToken}/>}/>
           <Route  path='/studentdetails/:id' element={tok?<StudentDetails/>:<Login setToken={setToken}/>}/>
           <Route  path='/staffdetails/:id' element={tok?<StaffDetails/>:<Login setToken={setToken}/>}/>
+          <Route  path='/periods' element={tok?<Periods/>:<Login setToken={setToken}/>}/>
         </Routes>
       </AuthProvider>
     </Router>

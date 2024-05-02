@@ -1,4 +1,4 @@
-import { Button, Heading, Input, Stack, Text } from "@chakra-ui/react"
+import { Button, Flex, Heading, Input, Select, Stack, Text } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import {
@@ -12,11 +12,16 @@ import {
     TableCaption,
     TableContainer,
 } from '@chakra-ui/react'
+import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useRef, useState } from "react"
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
+import { IoReturnUpBackOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 const Subject = () => {
     //for subjects
     const [subjects, setSubjects] = useState([])
+    console.log(subjects)
     const [clas, setClas] = useState([])
     const getSubjects = async () => {
         try {
@@ -52,7 +57,7 @@ const Subject = () => {
             if (data.ok) {
                 toast.success('subject Added Successfully')
                 getSubjects()
-                subjectRef.current = null;
+                // subjectRef.current.value = '';
             } else {
                 toast.error('Oops !sommething went wrong')
             }
@@ -73,15 +78,20 @@ const Subject = () => {
             const data = await fetch(`http://192.168.1.10:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}`, {
                 method: 'POST',
             });
-            const fdata = await data.json();
-            if (data.ok) {
+
+            console.log('Response Redirected:', data.redirected);
+            console.log('Response Text:', data.statusText);
+            console.log('Response Body Used:', data.bodyUsed);
+           
+            if (!data.ok) {
+               
+                toast.error('Oops! Something went wrong');
+            }else{
                 toast.success('Class added successfully');
                 getClass();
-                subjectRef.current.value = '';
-                subjectRef.current = null;
-            } else {
-                toast.error('Oops! Something went wrong');
             }
+            
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -105,162 +115,419 @@ const Subject = () => {
         getClass()
         getMainTable()
     }, [])
+    const deleteSubject = async (id) => {
+        try {
+            console.log(id)
+            const data = await fetch(`http://192.168.1.10:8083/api/staff/delete-Subject/${id}`, {
+                method: 'DELETE'
+            })
+
+            await getSubjects()
+            if (data.ok) {
+                console.log("ok")
+                toast.success('deleted')
+            } else {
+                console.log("not ok")
+                toast.error('failed')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const deleteClass = async (id) => {
+        try {
+            console.log(id)
+            const data = await fetch(`http://192.168.1.10:8082/api/students/delete-class/${id}`, {
+                method: 'DELETE'
+            })
+
+            await getClass()
+            if (data.ok) {
+                console.log("ok")
+                toast.success('deleted')
+            } else {
+                console.log("not ok")
+                toast.error('failed')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const admsubjectRef = useRef()
+    const staffIdRef = useRef()
+    const staffNameRef = useRef()
+    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [filteredData, setFilteredData] = useState([])
+    console.log(filteredData)
+    const [filters, setFilters] = useState({
+        staffData: true,
+        subject: "",
+        staffName: '',
+        staffId: '',
+        serialNumber: ''
+
+    });
+    console.log(filters)
+    const dataFilter = () => {
+        let filterData = staff;
+
+        //filter for subject
+        // if (filters.class !== "") {
+        //     filterData = filterData.filter(
+        //         (ele) => ele.className === filters.class
+        //     );
+        // }
+        console.log(filterData)
+        //filter the data based on subject
+        if (filters.subject !== "") {
+            console.log("Filtering by subject:", filters.subject);
+            filterData = filterData.map(elm => {
+                // Check if the property containing the array exists and is not empty
+                if (Array.isArray(elm.subjects) && elm.subjects.length > 0) {
+                    // Filter the array to remove non-matching elements
+                    const filteredArray = elm.subjects.filter(element => {
+                        return element === filters.subject;
+                    });
+                    console.log("Filtered array:", filteredArray);
+
+                    // Create a new object with the filtered array
+                    return {
+                        ...elm,
+                        subjects: filteredArray
+                    };
+                } else {
+                    return null; // Exclude objects with no array or empty array
+                }
+            }).filter(Boolean);
+            filterData = filterData.filter(elm => {
+                // Check if the property containing the array exists and is not empty
+                if (Array.isArray(elm.subjects) && elm.subjects.length > 0) {
+                    // Check if any element in the array matches the filter
+                    const matchingElements = elm.subjects.filter(element => {
+                        return element === filters.subject;
+                    });
+                    console.log("Matching elements:", matchingElements);
+                    return matchingElements.length > 0;
+                } else {
+                    // Handle case where the property containing the array is empty or undefined
+                    return false; // Exclude objects with no matching elements from the filtered data
+                }
+            });
+        }
+
+        //filter the data based on staff name
+        if (filters.staffName !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.name === filters.staffName
+            );
+        }
+        //filter the data based on staffId
+        if (filters.staffId !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.staffId === filters.staffId
+            );
+        }
+
+        //filter the data based on subject
+        // Filter the data based on subject
+        if (filters.subject !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.subjects.some((subject) => subject === filters.subject)
+            );
+            console.log(filterData)
+        }
+
+        console.log(filterData)
+        setFilteredData(filterData)
+        console.log(filterData)
+
+
+    };
+    const [inputValue, setInputValue] = useState("");
+
+
+    console.log(inputValue)
+
+    //filter change for Subject  query
+    const handleFilterSubject = () => {
+        setFilters((prev) => ({
+            ...prev,
+            staffData: false,
+            subject: admsubjectRef.current.value,
+        }));
+    };
+    const handleFilterStaffId = () => {
+        setFilters((prev) => ({
+            ...prev,
+            staffData: false,
+            staffId: staffIdRef.current.value,
+        }));
+    };
+    const handleFilterStaffName = () => {
+        setFilters((prev) => ({
+            ...prev,
+            staffData: false,
+            staffName: staffNameRef.current.value,
+        }));
+    };
+    useEffect(() => {
+        dataFilter();
+    }, [filters]);
+
+
+
+    const validationSchema1 = Yup.object().shape({
+        subject: Yup.string().required("Subject is required"),
+
+    });
+    const validationSchema2 = Yup.object().shape({
+        class: Yup.string().required("Class is required"),
+        section: Yup.string().required("Section is required"),
+    });
+
+
+    //go back to previous page
+    const navigate = useNavigate()
+    const goback = () => {
+        navigate(-1)
+    }
     return (
 
-        <Stack minH="100vh" >
+        <Stack minH="100vh" maxW='100vw'>
             <Navbar />
+            <ToastContainer />
+            <Flex alignSelf='end' width="7.5%" mt='-5'>
+                <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
+            </Flex>
             <Stack display="flex" flexDir="row" justifyContent="space-around" >
-                <Card style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
-                    "&::-webkit-scrollbar": {
-                        width: "0 !important", // For Chrome, Safari, and Opera
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: "transparent", // For Chrome, Safari, and Opera
-                    },
-                    scrollbarWidth: "none", // For Firefox
-                    msOverflowStyle: "none", // For IE and Edge
-                }}>
 
-                    <CardHeader>
-                        <Heading size='md'> Add Subjects</Heading>
-                    </CardHeader>
-                    <CardBody >
-                        <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
-                            <Input type="text" ref={subjectRef} placeholder="subject" />
-                            <Button colorScheme='blue' onClick={() => createSubjects()}>Add</Button>
-                        </Stack>
-                        <TableContainer>
-                            <Table variant='striped' colorScheme='teal' >
-                                {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-                                <Thead>
-                                    <Tr >
-                                        <Th >Id</Th>
-                                        <Th>Subjects</Th>
+                <Stack width="30%">
+                    {/* <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
+                        <Input type="text" ref={subjectRef} placeholder="subject" />
+                        <Button colorScheme='blue' onClick={() => createSubjects()}>Add</Button>
+                    </Stack> */}
+                    <Formik
+                        initialValues={{ subject: "" }}
+                        onSubmit={(values, actions) => {
+                            createSubjects(values);
+                            actions.resetForm(); // Reset form after submission
+                        }}
+                        validationSchema={validationSchema1}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form>
+                                <Stack justifyContent="space-around" display="flex" flexDir="row">
+                                    <Field name="subject">
+                                        {({ field }) => (
+                                            <Flex flexDir="column" alignItems="center" justifyContent="space-around">
+                                                <Input {...field} ref={subjectRef} placeholder="Subject" />
+                                                <ErrorMessage name="subject" component="div" style={{ color: 'red' }} />
+                                            </Flex>
 
+                                        )}
+                                    </Field>
+
+                                    <Button colorScheme="blue" type="submit" isLoading={isSubmitting}>Add</Button>
+                                </Stack>
+                            </Form>
+                        )}
+                    </Formik>
+
+
+
+                    <TableContainer style={{ maxHeight: '70vh', overflowY: 'scroll' }} css={{
+                        "&::-webkit-scrollbar": {
+                            width: "0 !important", // For Chrome, Safari, and Opera
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent", // For Chrome, Safari, and Opera
+                        },
+                        scrollbarWidth: "none", // For Firefox
+                        msOverflowStyle: "none", // For IE and Edge
+                    }}>
+                        <Table variant='striped' colorScheme='teal' size='sm'>
+
+                            <Thead>
+                                <Tr>
+                                    <Th >Id</Th>
+                                    <Th>Subjects</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+
+                                {subjects?.map((subject, index) => (
+                                    <Tr key={index} style={{ height: "30px" }} >
+                                        <Td>{subject.id}</Td>
+                                        <Td>{subject.name}</Td>
+                                        <Td><Button size='sm' onClick={() => deleteSubject(subject.id)}>Delete</Button></Td>
                                     </Tr>
-                                </Thead>
-                                <Tbody >
-                                    {subjects?.map((subject, index) => (
-                                        <Tr key={index} height="30px" bgColor="red">
-                                            <Td>{subject.id}</Td>
-                                            <Td>{subject.name}</Td>
+                                ))}
+
+                            </Tbody>
+
+                        </Table>
+                    </TableContainer>
+                </Stack>
+                <Stack width="30%">
+
+                    <Formik
+                        initialValues={{ class: "", section: "" }}
+                        onSubmit={(values, actions) => {
+                            createClass(values);
+                            actions.resetForm(); // Reset form after submission
+                        }}
+                        validationSchema={validationSchema2}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form>
+                                <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
+                                    <Field name="class">
+                                        {({ field }) => (
+                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
+                                                <Input {...field} ref={classRef} placeholder="Class" />
+                                                <ErrorMessage name="class" component="div" style={{ color: 'red' }} />
+                                            </Stack>
+                                        )}
+                                    </Field>
+                                    <Field name="section">
+                                        {({ field }) => (
+                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
+                                                <Input {...field} ref={sectionRef} placeholder="Section" />
+                                                <ErrorMessage name="section" component="div" style={{ color: 'red' }} />
+                                            </Stack>
+                                        )}
+                                    </Field>
+                                    <Button colorScheme="blue" type="submit" isLoading={isSubmitting} >Add</Button>
+                                </Stack>
+                            </Form>
+                        )}
+                    </Formik>
+
+                    <TableContainer style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
+                        "&::-webkit-scrollbar": {
+                            width: "0 !important", // For Chrome, Safari, and Opera
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent", // For Chrome, Safari, and Opera
+                        },
+                        scrollbarWidth: "none", // For Firefox
+                        msOverflowStyle: "none", // For IE and Edge
+                    }}>
+                        <Table variant='striped' colorScheme='teal' size='sm'>
+
+                            <Thead>
+                                <Tr>
+                                    <Th >Id</Th>
+                                    <Th>Class</Th>
+                                    <Th>Section</Th>
+                                    <Th>Session</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+
+                                {clas?.map((subject, index) => (
+                                    <Tr key={index} style={{ height: "30px" }} >
+                                        <Td>{subject.id}</Td>
+                                        <Td>{subject.className}</Td>
+                                        <Td>{subject.section}</Td>
+                                        <Td>{subject.session}</Td>
+                                        <Td><Button size='sm' onClick={() => deleteClass(subject.id)}>Delete</Button></Td>
+                                    </Tr>
+                                ))}
+
+                            </Tbody>
+
+                        </Table>
+                    </TableContainer>
+                </Stack>
+
+                <Stack width="40%" >
+
+                    <TableContainer style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
+                        "&::-webkit-scrollbar": {
+                            width: "0 !important", // For Chrome, Safari, and Opera
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent", // For Chrome, Safari, and Opera
+                        },
+                        scrollbarWidth: "none", // For Firefox
+                        msOverflowStyle: "none", // For IE and Edge
+                    }}>
+                        <Table variant='striped' colorScheme='teal' size='sm'>
+
+                            <Thead>
+                                <Tr>
+                                    <Th>S.No.</Th>
+                                    <Th><Select placeholder='Staff Id' width='100px' onChange={handleFilterStaffId} ref={staffIdRef}>
+                                        <option value='8'>1</option>
+                                        <option value='9'>9</option>
+                                        {
+                                            staff?.map((elm, i) => (
+                                                <option value={elm.staffId}>{elm.staffId}</option>
+                                            ))
+                                        }
+
+                                    </Select></Th>
+                                    <Th><Select placeholder='Staff Name' onChange={handleFilterStaffName} ref={staffNameRef}>
+                                        {
+                                            staff?.map((elm, i) => (
+                                                <option value={elm.name}>{elm.name}</option>
+                                            ))
+                                        }
+
+                                    </Select></Th>
+                                    <Th><Select placeholder='Subjects' width='100px' onChange={handleFilterSubject} ref={admsubjectRef}>
+                                        {
+                                            subjects?.map((elm, i) => (
+                                                <option value={elm.name}>{elm.name}</option>
+                                            ))
+                                        }
+
+                                    </Select></Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {filters.staffData ? staff?.map((elm, i) => (
+                                    elm.subjects?.length > 0 ? elm.subjects.map((e, j) => (
+                                        <Tr key={`${i}-${j}`}>
+                                            <Td>{i + 1}</Td>
+                                            <Td>{elm.id}</Td>
+                                            <Td>{elm.name}</Td>
+                                            <Td>{e}</Td>
                                         </Tr>
-                                    ))}
+                                    )) :
+                                        <Tr key={i}>
+                                            <Td>{i + 1}</Td>
+                                            <Td>{elm.id}</Td>
+                                            <Td>{elm.name}</Td>
+                                            <Td>No subjects</Td>
+                                        </Tr>
+                                )) : filteredData?.map((elm, i) => (
+                                    elm.subjects?.length > 0 ? elm.subjects.map((e, j) => (
+                                        <Tr key={`${i}-${j}`}>
+                                            <Td>{i + 1}</Td>
+                                            <Td>{elm.id}</Td>
+                                            <Td>{elm.name}</Td>
+                                            <Td>{e}</Td>
+                                        </Tr>
+                                    )) :
+                                        <Tr key={i}>
+                                            <Td>{i + 1}</Td>
+                                            <Td>{elm.id}</Td>
+                                            <Td>{elm.name}</Td>
+                                            <Td>No subjects</Td>
+                                        </Tr>
+                                ))
+
+                                }
 
 
-                                </Tbody>
+                            </Tbody>
 
-                            </Table>
-                        </TableContainer>
-                    </CardBody>
-
-
-
-                </Card>
-                <Card style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
-                    "&::-webkit-scrollbar": {
-                        width: "0 !important", // For Chrome, Safari, and Opera
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: "transparent", // For Chrome, Safari, and Opera
-                    },
-                    scrollbarWidth: "none", // For Firefox
-                    msOverflowStyle: "none", // For IE and Edge
-                }}>
-
-                    <CardHeader>
-                        <Heading size='md'> Add Classes</Heading>
-                    </CardHeader>
-                    <CardBody >
-                        <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
-                            <Input type="text" ref={classRef} placeholder="class" />
-                            <Input type="text" ref={sectionRef} placeholder="section" />
-                            <Button colorScheme='blue' onClick={() => createClass()}>Add</Button>
-                        </Stack>
-                        <TableContainer>
-                            <Table variant='striped' colorScheme='teal'>
-                                {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-                                <Thead>
-                                    <Tr>
-                                        <Th>Id</Th>
-                                        <Th>Classes</Th>
-                                        <Th>Section</Th>
-
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {
-                                        clas?.map((elm, i) => (
-                                            <Tr>
-                                                <Td>{elm.id}</Td>
-                                                <Td>{elm.className}</Td>
-                                                <Td>{elm.section}</Td>
-                                            </Tr>
-                                        ))
-                                    }
-
-
-                                </Tbody>
-
-                            </Table>
-                        </TableContainer>
-                    </CardBody>
-                    <CardFooter>
-
-                    </CardFooter>
-
-
-                </Card>
-                <Card style={{ maxHeight: '80vh', overflowY: 'scroll', overflowX: 'hidden' }}>
-
-                    <CardHeader>
-                        <Heading size='md'> Main Table</Heading>
-                    </CardHeader>
-                    <CardBody mt="6.6vh">
-
-                        <TableContainer>
-                            <Table variant='striped' colorScheme='teal' >
-                                {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-                                <Thead>
-                                    <Tr>
-                                        <Th>S.No.</Th>
-                                        <Th>Staff Id</Th>
-                                        <Th>Staff</Th>
-                                        <Th>Subjects</Th>
-
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {
-                                        staff?.map((elm, i) => (
-                                            <Tr>
-                                                <Td>{i + 1}</Td>
-                                                <Td>{elm.id}</Td>
-                                                <Td>{elm.name}</Td>
-                                                <Td>{elm.subjects.length > 1 ? elm.subjects.map((elm) => (elm + ',  ')) : elm.subjects.map((elm) => (elm))}</Td>
-
-
-                                            </Tr>
-                                        ))
-                                    }
-
-
-                                </Tbody>
-
-                            </Table>
-                        </TableContainer>
-                    </CardBody>
-                    <CardFooter>
-
-                    </CardFooter>
-
-
-                </Card>
-
-
+                        </Table>
+                    </TableContainer>
+                </Stack>
             </Stack>
-
-
 
         </Stack>
 

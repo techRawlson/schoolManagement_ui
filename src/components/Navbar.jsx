@@ -13,8 +13,8 @@ const Navbar = () => {
     navigate('/')
   }
   return (
-    <div style={{ backgroundColor: "#FFBF00" }}>
-      <Stack direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: "100vw" }} mb={5} mt={5}   >
+    // <div style={{ backgroundColor: "#FFBF00" }}>
+      <Stack bgColor='#FFBF00' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center",width:'100vw',height:'7vw' }} mb={5}    >
 
         <AvatarGroup spacing='1rem'>
           <Avatar bg='red.500' />
@@ -23,13 +23,10 @@ const Navbar = () => {
         <Box w='50%' h='40px' style={{ textAlign: "center" }} >
           <Text fontSize="4vh">Student Management System</Text>
         </Box>
-
-
         <FiLogOut size="30px" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
 
       </Stack>
-      <Divider color="black" borderWidth="2px" mt="1%" mb="2%" width="96%" alignSelf="center" orientation="horizontal" marginX="auto" />
-    </div>
+      //
   )
 }
 

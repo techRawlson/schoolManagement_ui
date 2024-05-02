@@ -21,7 +21,7 @@ const Dashboard = () => {
       console.log(data)
       navigate(`/${data}`)
     } catch (error) {
-
+console.log(error)
     }
   }
 
@@ -73,7 +73,7 @@ const Dashboard = () => {
 
         </Card><Card cursor="pointer" onClick={() => nextPage("timetable")}>
           <CardHeader>
-            <Heading size='md' textAlign="center"> Staff Time Table</Heading>
+            <Heading size='md' textAlign="center"> Time Table</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">

@@ -25,7 +25,7 @@ const Subject = () => {
     const [clas, setClas] = useState([])
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8083/api/staff/all-subjects')
+            const data = await fetch('http://localhost:8083/api/staff/all-subjects')
             const fdata = await data.json()
             setSubjects(fdata)
         } catch (error) {
@@ -35,7 +35,7 @@ const Subject = () => {
     //for class
     const getClass = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8082/api/students/get-AllClasses')
+            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)
@@ -50,7 +50,7 @@ const Subject = () => {
 
         console.log(subjectRef.current.value)
         try {
-            const data = await fetch(`http://192.168.1.81:8083/api/staff/create-subject?name=${encodeURIComponent(subjectRef.current.value)}`, {
+            const data = await fetch(`http://localhost:8083/api/staff/create-subject?name=${encodeURIComponent(subjectRef.current.value)}`, {
                 method: 'POST',
             });
             const fdata = await data.json()
@@ -71,11 +71,12 @@ const Subject = () => {
     //create class
     const classRef = useRef()
     const sectionRef = useRef()
+    const sessionRef = useRef()
     const createClass = async () => {
 
         console.log(classRef.current.value)
         try {
-            const data = await fetch(`http://192.168.1.81:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}`, {
+            const data = await fetch(`http://localhost:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}&session=${encodeURIComponent(sessionRef.current.value)}`, {
                 method: 'POST',
             });
 
@@ -371,7 +372,7 @@ const Subject = () => {
                 <Stack width="30%">
 
                     <Formik
-                        initialValues={{ class: "", section: "" }}
+                        initialValues={{ class: "", section: "",session:"" }}
                         onSubmit={(values, actions) => {
                             createClass(values);
                             actions.resetForm(); // Reset form after submission
@@ -394,6 +395,14 @@ const Subject = () => {
                                             <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
                                                 <Input {...field} ref={sectionRef} placeholder="Section" />
                                                 <ErrorMessage name="section" component="div" style={{ color: 'red' }} />
+                                            </Stack>
+                                        )}
+                                    </Field>
+                                    <Field name="session">
+                                        {({ field }) => (
+                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
+                                                <Input {...field} ref={sessionRef} placeholder="Session" />
+                                                <ErrorMessage name="session" component="div" style={{ color: 'red' }} />
                                             </Stack>
                                         )}
                                     </Field>

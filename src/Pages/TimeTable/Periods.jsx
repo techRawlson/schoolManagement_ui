@@ -11,6 +11,8 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
+import { IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 const Periods = () => {
     const [periods, setPeriods] = useState([])
@@ -18,7 +20,7 @@ const Periods = () => {
     const [lecture, setLecture] = useState('')
     const [startTime, setStartTime] = useState('')
     const [endTime, setendTime] = useState('')
-
+    const navigate = useNavigate()
 
 
     const submit = async () => {
@@ -90,11 +92,25 @@ const Periods = () => {
     useEffect(() => {
         getPeriods()
     }, [])
-
+  
+    const goback = () => {
+        navigate(-1)
+    }
     return <Stack minH="100vh" alignItems="center" >
-        <h1>Periods</h1>
+       
+        <Flex minW="100vw" alignItems="center" justifyContent="space-around"> 
+        <h1 s>Periods</h1>
+                <IoReturnUpBackOutline
+                    size={35}
+                    cursor="pointer"
+                    onClick={goback}
+                   style={{marginLeft:'auto',marginRight:'7%'}}
+                    
+                />
+            </Flex>
         <ToastContainer />
         <TableContainer>
+            
             <Table variant='simple'  >
 
                 <Thead>

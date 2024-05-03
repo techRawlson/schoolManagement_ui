@@ -19,7 +19,7 @@ const StaffDetails = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://192.168.1.10:8083/api/staff/get-staff/${id}`)
+            const data = await fetch(`http://192.168.1.81:8083/api/staff/${id}`)
             const fdata = await data.json()
             console.log(fdata)
 
@@ -86,7 +86,7 @@ const StaffDetails = () => {
             
 
             console.log(student[0])
-            const data = await fetch(`http://192.168.1.10:8083/api/staff/update/${id}`, {
+            const data = await fetch(`http://192.168.1.81:8083/api/staff/update/${id}`, {
                 method: 'PUT',
                 body: formData,
             })
@@ -132,7 +132,7 @@ const StaffDetails = () => {
     };
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://192.168.1.10:8083/api/staff/all-subjects');
+            const data = await fetch('http://192.168.1.81:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -171,7 +171,7 @@ const StaffDetails = () => {
             <ToastContainer /> {/* Add this line */}
             <Stack maxW="80vw" width="80vw" m="0 auto">
                 <Stack direction='row' mb="5" width="80vw" justifyContent="space-between">
-                    <Avatar src={`http://192.168.1.10:8083/api/staff/image/${id}`} borderRadius="6%" size="lg" />
+                    <Avatar src={`http://192.168.1.81:8083/api/staff/image/${id}`} borderRadius="6%" size="lg" />
                     <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
                 </Stack>
 

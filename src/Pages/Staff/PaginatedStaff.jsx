@@ -119,7 +119,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
         try {
             // Define the URL of the API endpoint
-            const url = 'http://192.168.1.10:9091/api/download/excel';
+            const url = 'http://localhost:9091/api/download/excel';
 
             // Make a GET request to the API endpoint
             const response = await fetch(url, {
@@ -203,14 +203,14 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         body = {
             name: nameRef.current.value,
             gender: sexRef.current.value,
-            mobile: parseInt(mobileRef.current.value, 12),
+            mobile: parseInt(mobileRef.current.value),
             address: addressRef.current.value,
             designation: classRef.current.value,
             dob: dobRef.current.value,
             department: depRef.current.value,
             date_of_joining: admRef.current.value,
             email: emailRef.current.value,
-            staff_id: parseInt(staffIdRef.current.value, 12),
+            staff_id: staffIdRef.current.value,
             subjects: []
         }
         try {
@@ -233,20 +233,31 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             });
             // Append the image file to the FormData object
             const file = image.current.files[0];
-            if (file) {
-                formData.append('profilePicture', file);
-            }
+            let formData2 = new FormData()
+           
+           formData2.append('file', file);
+            console.log(formData2)
+            
 
 
-            const data = await fetch("http://192.168.1.10:8083/api/staff/create-staff", {
+            const data = await fetch("http://localhost:8083/api/staff/create-staff", {
                 method: 'POST',
                 body: formData
             })
             const fdata = await data.json()
             console.log(fdata)
+
+
+            const picture = await fetch(`http://localhost:8083/api/StaffImage/${fdata.id}`, {
+                method: 'put',
+                body: formData2,
+            })
+            console.log(picture)
+
+
             if (data.ok) {
                 toast.success("Staff created successfully")
-                setOpen(false)
+                // setOpen(false)
                 getData()
             } else {
                 toast.error("Staff created successfully")
@@ -257,35 +268,29 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         }
     }
     const excelFile = useRef()
-    let formData;
+    let form = new FormData()
     const fileChange = async () => {
-        try {
-            const file = event.target.files[0];
-            if (!file) {
-                console.log("No file selected");
-                return;
-            }
-
-            // Create a FormData object
-            formData = new FormData();
-            // Append the file to the FormData object
-            formData.append('file', file);
-        } catch (error) {
-            console.log(error)
+        const file = excelFile.current.files[0];
+        if (file) {
+            console.log("File selected:", file);
+        } else {
+            console.log("No file selected");
         }
     }
     const uploadFileExcel = async () => {
         try {
-
-            const response = await fetch('http://192.168.1.10:5173/api/upload-excel', {
+            form.append('file', file);
+            const response = await fetch('http://localhost:5173/api/upload-excel', {
                 method: 'POST',
-                body: formData,
+                body: form,
             });
 
             if (response.ok) {
+                toast.success("file uploaded successfully")
                 console.log('File uploaded successfully');
                 // Handle successful upload (e.g. show a success message)
             } else {
+                toast.error("file uploaded successfully")
                 console.error('File upload failed');
                 // Handle error (e.g. show an error message)
             }
@@ -307,12 +312,12 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     }
 
 
-    console.log(classData)
+
 
     //go back to previous page
     const navigate = useNavigate()
 
-    console.log(classData)
+
 
     const goback = () => {
         navigate(-1)
@@ -339,7 +344,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [subjects, setSubjects] = useState([])
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://192.168.1.10:8083/api/staff/all-subjects');
+            const data = await fetch('http://localhost:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -352,7 +357,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     }, [])
 
 
-    
+
     return (
         <div>
             <>
@@ -499,40 +504,20 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 onSubmit={saveButton}>
                                 {({ errors, touched }) => (
                                     <Form>
-                                        <Flex justifyContent="space-between" alignItems="center" >
+                                        <Flex justifyContent="space-around" alignItems="center" >
                                             <FormControl isRequired m="1">
                                                 <FormLabel >Full Name</FormLabel>
                                                 <Input id="name" name="name" placeholder="Your name" ref={nameRef} />
                                             </FormControl>
-                                            <FormControl isRequired m="1">
-                                                <FormLabel >Subject</FormLabel>
-                                                <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
-                                                    <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
-                                                        Select Items
-                                                    </MenuButton>
-                                                    <MenuList onClick={(e) => e.stopPropagation()}>
-                                                        {subjects.map((option) => (
-                                                            <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
-                                                                <Checkbox
-                                                                    isChecked={selectedItems.includes(option.name)}
-                                                                    onChange={(e) => handleItemClick(e, option.name)}
-                                                                    size="sm"
-                                                                >
-                                                                    {option.name}
-                                                                </Checkbox>
-                                                            </MenuItem>
-                                                        ))}
-                                                    </MenuList>
-                                                </Menu>
 
-                                            </FormControl>
                                             <FormControl isRequired m="1">
                                                 <FormLabel >Staff Id</FormLabel>
-                                                <Input id="name" name="name" placeholder="name_0001" ref={staffIdRef} type='Number' />
+                                                <Input id="name" name="name" placeholder="name_0001" ref={staffIdRef} type='text' />
                                             </FormControl>
 
 
                                         </Flex>
+
                                         <Flex>
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Designation</FormLabel>
@@ -597,13 +582,35 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         <Flex justifyContent="space-between" alignItems="center">
 
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Sex</FormLabel>
+                                                <FormLabel>Gender</FormLabel>
                                                 <Select ref={sexRef}>
                                                     <option >Select</option>
                                                     <option value='Male'>Male</option>
                                                     <option value='Female'>Female</option>
                                                     <option value='Other'>Other</option>
                                                 </Select>
+                                            </FormControl>
+                                            <FormControl isRequired m="1">
+                                                <FormLabel >Subject</FormLabel>
+                                                <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
+                                                    <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
+                                                        Select Items
+                                                    </MenuButton>
+                                                    <MenuList onClick={(e) => e.stopPropagation()}>
+                                                        {subjects.map((option) => (
+                                                            <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
+                                                                <Checkbox
+                                                                    isChecked={selectedItems.includes(option.name)}
+                                                                    onChange={(e) => handleItemClick(e, option.name)}
+                                                                    size="sm"
+                                                                >
+                                                                    {option.name}
+                                                                </Checkbox>
+                                                            </MenuItem>
+                                                        ))}
+                                                    </MenuList>
+                                                </Menu>
+
                                             </FormControl>
 
 
@@ -625,7 +632,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             </FormControl>
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Upload Image</FormLabel>
-                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
+                                                <Input placeholder='Upload Image' type='file' ref={image}  accept='image/jpeg' />
                                             </FormControl>
                                         </Flex>
 

@@ -12,9 +12,10 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from "react"
-import { IoAddSharp } from "react-icons/io5";
+import { IoAddSharp, IoReturnUpBackOutline } from "react-icons/io5";
 
 import { ToastContainer, toast } from "react-toastify"
+import { useNavigate } from "react-router-dom";
 const Classtimetable = () => {
     const [data, setData] = useState([])
 
@@ -49,6 +50,7 @@ const Classtimetable = () => {
     //
     // const[]=useState()
     //AddNew
+    const navigate = useNavigate()
     const [AddNew, setAddNew] = useState(false);
     const [disabledCheck, setDisabledCheck] = useState(true)
     const [update, setUpdate] = useState(false);
@@ -94,57 +96,90 @@ const Classtimetable = () => {
         className: classValue,
         session: session,
         section: section,
-        monday: mondayTeacher + " " + mondaySubject,
-        tuesday: tuesdayTeacher + " " + tuesdaySubject,
-        wednesday: wednesdayTeacher + " " + wednesdaySubject,
-        thursday: thursdayTeacher + " " + thursdaySubject,
-        friday: fridayTeacher + " " + fridaySubject,
+        monday: mondayTeacher == undefined ? '' : mondayTeacher + " " + mondaySubject,
+        tuesday: tuesdayTeacher == undefined ? '' : tuesdayTeacher + " " + tuesdaySubject,
+        wednesday: wednesdayTeacher == undefined ? '' : wednesdayTeacher + " " + wednesdaySubject,
+        thursday: thursdayTeacher == undefined ? '' : thursdayTeacher + " " + thursdaySubject,
+        friday: fridayTeacher == undefined ? '' : fridayTeacher + " " + fridaySubject,
     };
+    // || (wednesdayTeacher != '' && wednesdaySubject == '')
+    // || (thursdayTeacher != '' && thursdaySubject == '')
+    // || (fridayTeacher != '' && fridaySubject == '')
     const timeTable = async () => {
-        try {
+        console.log(mondayTeacher)
+        console.log(mondaySubject)
+
+        if (
+            (mondayTeacher != '' || mondayTeacher == undefined) && (mondaySubject == '' || mondaySubject == 'Select')
+            || (mondayTeacher == '' && mondaySubject == '')
+
+            || (tuesdayTeacher != '') && (tuesdayTeacher != undefined && tuesdaySubject == '')
+            || (tuesdayTeacher != '') && (tuesdayTeacher != undefined && tuesdaySubject == 'Select')
+            //for wednesday
+            || (wednesdayTeacher != '') && (wednesdayTeacher != undefined && wednesdaySubject == '')
+            || (wednesdayTeacher != '') && (wednesdayTeacher != undefined && wednesdaySubject == 'Select')
+
+            //for thursday
+            || (thursdayTeacher != '') && (thursdayTeacher != undefined && thursdaySubject == '')
+            || (thursdayTeacher != '') && (thursdayTeacher != undefined && thursdaySubject == 'Select')
+            //for friday
+            || (fridayTeacher != '') && (fridayTeacher != undefined && fridaySubject == '')
+            || (fridayTeacher != '') && (fridayTeacher != undefined && fridaySubject == 'Select')
 
 
-            console.log(body);
-
-            const response = await fetch('http://192.168.1.81:8086/api/timetable/create-timetable', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            });
 
 
-            const data = await response.json();
-            setcreateNew(false)
-            setDis(false)
-            const data1 = await fetch('http://192.168.1.81:8086/api/timetable/full-timetable')
-            const fdata = await data1.json()
-            //console.log(fdata)
-            dataFilter(fdata);
-            console.log(fdata);
+        ) {
+            console.log('monday')
+            toast.error('please fill the complete details ')
+        }
 
-            //empty all states
-            setCurrentEndTime('')
-            setCurrentStartTime('')
-            setMondaySubject('')
-            setMondayStore([])
-            setTuesdayTeacher('')
-            setTuesdaySubject('')
-            setTuesdayStore([])
-            setWednesdayTeacher('')
-            setWednesdaySubject('')
-            setWednesdayStore([])
-            setThursdayTeacher('')
-            setThursdaySubject('')
-            setThursdayStore([])
-            setFridayTeacher('')
-            setFridaySubject('')
-            setFridayStore([])
-            // setFridayStore('')
-        } catch (error) {
-            toast.error("something went wrong")
-            console.log(error);
+
+        else {
+
+            try {
+                console.log(body);
+
+                const response = await fetch('http://192.168.1.81:8086/api/timetable/create-timetable', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
+                });
+
+
+                const data = await response.json();
+                setcreateNew(false)
+                setDis(false)
+                const data1 = await fetch('http://192.168.1.81:8086/api/timetable/full-timetable')
+                const fdata = await data1.json()
+                //console.log(fdata)
+                dataFilter(fdata);
+                console.log(fdata);
+
+                //empty all states
+                setCurrentEndTime('')
+                setCurrentStartTime('')
+                setMondaySubject('')
+                setMondayStore([])
+                setTuesdayTeacher('')
+                setTuesdaySubject('')
+                setTuesdayStore([])
+                setWednesdayTeacher('')
+                setWednesdaySubject('')
+                setWednesdayStore([])
+                setThursdayTeacher('')
+                setThursdaySubject('')
+                setThursdayStore([])
+                setFridayTeacher('')
+                setFridaySubject('')
+                setFridayStore([])
+                // setFridayStore('')
+            } catch (error) {
+                toast.error("something went wrong")
+                console.log(error);
+            }
         }
     };
 
@@ -493,8 +528,20 @@ const Classtimetable = () => {
         , [lecture])
 
 
+    const goback = () => {
+        navigate(-1)
+    }
     return <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
         <Navbar />
+        <Flex >
+            <IoReturnUpBackOutline
+                size={35}
+                cursor="pointer"
+                onClick={goback}
+                style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+            />
+        </Flex>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex direction="column" width="65vw" maxW="85vw">
@@ -602,11 +649,11 @@ const Classtimetable = () => {
                                 const thursday = thu.firstLine + " " + thu.secondLine
                                 const friday = fri.firstLine + " " + fri.secondLine
                                 const body = {
-                                    monday: mondayTeacher == '' ? monday : mondayTeacher + " " + mondaySubject,
-                                    tuesday: tuesdayTeacher == '' ? tuesday : tuesdayTeacher + " " + tuesdaySubject,
-                                    wednesday: wednesdayTeacher == '' ? wednesday : wednesdayTeacher + " " + wednesdaySubject,
-                                    thursday: thursdayTeacher == '' ? thursday : thursdayTeacher + " " + thursdaySubject,
-                                    friday: fridayTeacher == '' ? friday : fridayTeacher + " " + fridaySubject,
+                                    monday: mondayTeacher == '' || mondayTeacher == undefined ? monday : mondayTeacher + " " + mondaySubject,
+                                    tuesday: tuesdayTeacher == '' || tuesdayTeacher == undefined ? tuesday : tuesdayTeacher + " " + tuesdaySubject,
+                                    wednesday: wednesdayTeacher == '' || wednesdayTeacher == undefined ? wednesday : wednesdayTeacher + " " + wednesdaySubject,
+                                    thursday: thursdayTeacher == '' || thursdayTeacher == undefined ? thursday : thursdayTeacher + " " + thursdaySubject,
+                                    friday: fridayTeacher == '' || fridayTeacher == undefined ? friday : fridayTeacher + " " + fridaySubject,
                                 }
                                 console.log(body)
                                 // Implement save functionality here, e.g., update database or state
@@ -859,7 +906,7 @@ const Classtimetable = () => {
                                                     <option key={i} value={elm.id}>{elm.name}</option>
                                                 ))}
                                             </Select>
-                                            <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)} disabled={disabledCheck}>
+                                            <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)} disabled={disabledCheck} required>
                                                 <option>Select</option>
                                                 {
                                                     mondayStore?.map((subject) => (
@@ -945,7 +992,7 @@ const Classtimetable = () => {
                                         <Button onClick={() => timeTable()} margin="4%">Save</Button>
                                         <Button onClick={() => setcreateNew(false)} >Cancel</Button>
                                     </Td>
-                                    
+
 
 
                                 </Tr>

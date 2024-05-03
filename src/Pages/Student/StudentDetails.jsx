@@ -13,20 +13,13 @@ const StudentDetails = () => {
     const [imageData, setImageData] = useState('');
     const { id } = useParams();
     console.log(id)
-
+    const imageRef = useRef()
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://192.168.1.10:8082/api/students/${id}`)
+            const data = await fetch(`http://192.168.1.81:8082/api/students/${id}`)
             const fdata = await data.json()
             console.log(fdata)
-            if (fdata[0]?.profilePicture) {
-                const byteCharacters = fdata[0].profilePicture;
-                const byteNumbers = new Uint8Array(byteCharacters);
-                const blob = new Blob([byteNumbers], { type: 'image/jpeg' });
-                const imageUrl = URL.createObjectURL(blob);
 
-                setImageData(imageUrl);
-            }
             setStudent([fdata])
 
         } catch (error) {
@@ -60,7 +53,7 @@ const StudentDetails = () => {
         return new Blob([ab], { type: mimeString });
     };
 
-    
+
     const editStudent = () => {
         setdis(!dis)
     }
@@ -111,7 +104,7 @@ const StudentDetails = () => {
     //             formData.append(key, value);
     //         });
 
-            
+
     //         if (image) {
     //             // Append the profile picture
     //             formData.append('profilePicture', dataURItoBlob(image)); // Use the image data directly, not a string
@@ -158,7 +151,7 @@ const StudentDetails = () => {
                 if (file && file.type.startsWith('image')) {
                     const reader = new FileReader();
                     reader.onload = () => {
-                        picture=reader.result;
+                        picture = reader.result;
                         console.log(reader.result); // Check the image data
                         setImage(reader.result); // Update the image state
                     };
@@ -167,28 +160,28 @@ const StudentDetails = () => {
                     // Handle non-image file selection
                 }
             }
-    
+
             const { value } = event.target;
             console.log(value);
             const updatedStudents = [...student]; // Create a copy of the student array
             updatedStudents[index] = { ...updatedStudents[index], [fieldName]: value }; // Update the specified field of the specific student    
             console.log(updatedStudents);
             setStudent(updatedStudents);
-    
+
             // Log the image state after updating
             console.log('Image state:', image);
         } catch (error) {
             console.log(error);
         }
     };
-    
+
     console.log('Image state:', image);
     const submitStudent = async (e) => {
         e.preventDefault();
         try {
             // Create a new FormData object
             const formData = new FormData();
-    
+
             // Loop through the student data and append each field to the FormData object
             student.forEach(std => {
                 Object.entries(std).forEach(([key, value]) => {
@@ -197,22 +190,33 @@ const StudentDetails = () => {
                     }
                 });
             });
-    
-            // if (picture) {
-                // Append the profile picture
-                console.log('p',picture)
-                formData.append('profilePicture', picture); // Use the image data directly, not a string
-            // }
-    
-            console.log(formData); // Log the formData here to see the updated content
-    
-            const data = await fetch(`http://192.168.1.10:8082/api/students/update-student/${id}`, {
+
+            // Log the formData here to see the updated content
+            console.log(student[0])
+            const data = await fetch(`http://192.168.1.81:8082/api/students/update-student/${id}`, {
                 method: 'PUT',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(student[0])
             });
-            const dataf = await data.json();
-            console.log(dataf);
-    
+
+            //updateimage
+            let formData2 = new FormData()
+            const file = imageRef.current.files[0];
+            console.log(file)
+            if (file) {
+                formData2.append('file', file);
+            }
+
+            const picture = await fetch(`http://192.168.1.81:8082/api/images/${id}`, {
+                method: 'put',
+                body: formData2,
+            })
+            console.log(picture)
+
+
+
             if (data.ok) {
                 setImage(null);
                 toast.success("Student details submitted successfully!");
@@ -234,19 +238,22 @@ const StudentDetails = () => {
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
-                                src={image || `http://192.168.1.10:8082/api/students/image/${id}`}
+                                src={image || `http://192.168.1.81:8082/api/images/${id}`}
                                 alt="Avatar"
                                 style={dis ? {} : { cursor: 'pointer' }}
                                 width="100px"
                                 height="100px"
+
                             />
                             <input
                                 id={`avatar-upload-${id}`}
                                 type="file"
-                                accept="image/*"
+                                accept='image/jpeg'
                                 style={{ display: 'none' }}
                                 onChange={(e) => handleFieldChange(e, 0, 'profilePicture')}
                                 disabled={dis}
+                                ref={imageRef}
+                                encType="multipart/form-data"
                             />
                         </label>
                     </Flex>
@@ -351,6 +358,12 @@ const StudentDetails = () => {
                                     <FormLabel>Gender</FormLabel>
                                     <Input fontWeight="bold"
                                         w='100%' h='10' bg='white.500' value={std.sex} onChange={(e) => handleFieldChange(e, i, 'sex')} disabled={dis}
+                                    />
+                                </FormControl>
+                                <FormControl id="name">
+                                    <FormLabel>Session</FormLabel>
+                                    <Input fontWeight="bold"
+                                        w='100%' h='10' bg='white.500' value={std.session} onChange={(e) => handleFieldChange(e, i, 'sex')} disabled={dis}
                                     />
                                 </FormControl>
                             </Grid>

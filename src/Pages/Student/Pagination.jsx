@@ -57,6 +57,8 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     const initialRef = useRef()
     const finalRef = useRef()
 
+    console.log(classData)
+
     const [isOpenFile, setIsOpenFile] = useState(false)
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -104,7 +106,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
 
         try {
             // Define the URL of the API endpoint
-            const url = 'http://192.168.1.10:9091/api/download/excel';
+            const url = 'http://localhost:9091/api/download/excel';
 
             // Make a GET request to the API endpoint
             const response = await fetch(url, {
@@ -162,7 +164,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     };
 
     const pageNumbers = getPageNumbers();
-
+    const sessionRef = useRef()
     const nameRef = useRef()
     const fatherRef = useRef()
     const sexRef = useRef()
@@ -186,24 +188,28 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
 
 
 
-
+    console.log(sessionRef)
 
     const saveButton = async () => {
         // Collect student details
+        console.log()
         const body = {
+
             name: nameRef.current.value,
             fathersName: fatherRef.current.value,
             sex: sexRef.current.value,
-            mobile: parseInt(mobileRef.current.value, 12),
+            mobile: parseInt(mobileRef.current.value),
             address: addressRef.current.value,
             className: classRef.current.value,
             category: catRef.current.value,
             dob: dobRef.current.value,
             section: sectionRef.current.value,
-            admissionYear: parseInt(admRef.current.value, 12),
+            session: parseInt(sessionRef.current.value),
+            admissionYear: parseInt(admRef.current.value),
             email: emailRef.current.value,
-            rollNumber: parseInt(rollRef.current.value, 12),
-            enrollmentNumber: parseInt(enrollRef.current.value, 12),
+            rollNumber: parseInt(rollRef.current.value),
+            enrollmentNumber: parseInt(enrollRef.current.value),
+
         };
         console.log(body)
         // Create a new FormData object
@@ -215,16 +221,25 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
         });
 
         // Append the image file to the FormData object
+        let formData2 = new FormData()
         const file = image.current.files[0];
         if (file) {
-            formData.append('profilePicture', file);
+            formData2.append('file', file);
         }
 
         try {
-            const data = await fetch("http://192.168.1.10:8082/api/students/create-student", {
+            const data = await fetch("http://localhost:8082/api/students/create-student", {
                 method: 'POST',
                 body: formData
             });
+            const fdata = await data.json()
+
+            const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
+                method: 'post',
+                body: formData2,
+            })
+            console.log(picture)
+
 
             if (data.ok) {
                 toast.success("Student created successfully");
@@ -239,8 +254,10 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     };
 
     // Function to handle file change
+    const form = new FormData()
     const fileChange = () => {
-        const file = image.current.files[0];
+        const file = excelFile.current.files[0];
+
         if (file) {
             console.log("File selected:", file);
         } else {
@@ -248,17 +265,20 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
         }
     };
     const uploadFileExcel = async () => {
+        form.append('file', excelFile.current.files[0])
+
         try {
 
-            const response = await fetch('http://192.168.1.10:5173/api/upload-excel', {
+            const response = await fetch('http://localhost:8082/api/students/upload-excel', {
                 method: 'POST',
-                body: formData,
+                body: form,
             });
-
             if (response.ok) {
+                toast.success("file uploaded successfully")
                 console.log('File uploaded successfully');
-                // Handle successful upload (e.g. show a success message)
+
             } else {
+                toast.error("someething went wrong")
                 console.error('File upload failed');
                 // Handle error (e.g. show an error message)
             }
@@ -284,6 +304,24 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     }
 
 
+    const [clas, setClas] = useState([])
+
+
+    //for class
+    const getClass = async () => {
+        try {
+            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const fdata = await data.json()
+            console.log(fdata)
+            setClas(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+
+        getClass()
+    }, [])
     return (
         <div>
             <>
@@ -297,19 +335,29 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                         <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
                             <Flex width="50%" paddingRight="1" justifyContent="space-between">
                                 <Select placeholder='Session' maxW="20%" onChange={handleFilterYear} ref={admYearRef}>
-                                    <option value='2022'>2022</option>
-                                    <option value='2023'>2023</option>
-                                    <option value='2024'>2024</option>
+                                    {
+                                        clas?.map((sub, i) => (
+                                            <option value={sub.session}>{sub.session}</option>
+                                        ))
+                                    }
+
+
                                 </Select>
                                 <Select placeholder='Class' maxW="20%" onChange={handleFilter} ref={clasRef}>
-                                    <option value='10th'>10th</option>
-                                    <option value='11th'>11th</option>
-                                    <option value='12th'>12th</option>
+                                    {
+                                        clas?.map((sub, i) => (
+                                            <option value={sub.className}>{sub.className}</option>
+                                        ))
+                                    }
+
                                 </Select>
                                 <Select placeholder='Section' maxW="20%" onChange={handleSectionFilter} ref={secFilter}>
-                                    <option value='A'>A</option>
-                                    <option value='B'>B</option>
-                                    <option value='C'>c</option>
+                                    {
+                                        clas?.map((sub, i) => (
+                                            <option value={sub.section}>{sub.section}</option>
+                                        ))
+                                    }
+
                                 </Select>
                                 <Input maxW="20%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
                                 <Button maxW="22%" onClick={() => setOpen(true)}>
@@ -329,9 +377,11 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                 <Th key={index}>{key}</Th>
               ))} */}
                                         <Th border="1px solid">Sr.No.</Th>
-                                        
+                                        <Th border="1px solid">Enrollment No.</Th>
                                         <Th border="1px solid">Name</Th>
+                                        <Th border="1px solid">Father Name</Th>
                                         <Th border="1px solid">Class Name</Th>
+                                        <Th border="1px solid">Session</Th>
                                         <Th border="1px solid">Section</Th>
                                         <Th border="1px solid">Roll Number</Th>
                                         <Th border="1px solid">Gender</Th>
@@ -343,12 +393,15 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                         classData?.slice(startIndex, endIndex).map((elm, i) => (
                                             <Tr key={i} border="1px solid">
                                                 <Td border="1px solid">{startIndex + i + 1}</Td>
+                                                <Td border="1px solid">{elm.enrollmentNumber}</Td>
                                                 <Td border="1px solid">
                                                     <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/studentdetails/${elm.id}`}>
                                                         {elm.name}
                                                     </ChakraLink>
                                                 </Td>
+                                                <Td border="1px solid">{elm.fathersName}</Td>
                                                 <Td border="1px solid">{elm.className}</Td>
+                                                <Td border="1px solid">{elm.session}</Td>
                                                 <Td border="1px solid">{elm.section}</Td>
                                                 <Td border="1px solid">{elm.rollNumber}</Td>
                                                 <Td border="1px solid">{elm.sex}</Td>
@@ -506,9 +559,13 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                 <FormLabel>Class</FormLabel>
                                                 <Select ref={classRef} isRequired >
                                                     <option >Select</option>
-                                                    <option value='10th'>10th</option>
-                                                    <option value='11th'>11th</option>
-                                                    <option value='12th'>12th</option>
+                                                    {
+                                                        clas?.map((sub, i) => (
+                                                            <option value={sub.className}>{sub.className}</option>
+                                                        ))
+                                                    }
+
+
 
                                                 </Select>
                                             </FormControl>
@@ -520,9 +577,11 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
 
                                                 <Select ref={sectionRef} isRequired>
                                                     <option >Select</option>
-                                                    <option value='A'>A</option>
-                                                    <option value='B'>B</option>
-                                                    <option value='C'>C</option>
+                                                    {
+                                                        clas?.map((sub, i) => (
+                                                            <option value={sub.section}>{sub.section}</option>
+                                                        ))
+                                                    }
 
                                                 </Select>
                                             </FormControl>
@@ -556,7 +615,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                 </Select>
                                             </FormControl>
                                             <FormControl isRequired>
-                                                <FormLabel>Sex</FormLabel>
+                                                <FormLabel>Gender</FormLabel>
                                                 <Select ref={sexRef}>
                                                     <option >Select</option>
                                                     <option value='Male'>Male</option>
@@ -579,6 +638,19 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                             <FormControl isRequired maxW="45%">
                                                 <FormLabel>Upload Image</FormLabel>
                                                 <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' onChange={fileChange} />
+                                            </FormControl>
+                                            <FormControl isRequired>
+                                                <FormLabel>Session</FormLabel>
+
+                                                <Select ref={sessionRef} isRequired>
+                                                    <option >Select</option>
+                                                    {
+                                                        clas?.map((sub, i) => (
+                                                            <option value={sub.session}>{sub.session}</option>
+                                                        ))
+                                                    }
+
+                                                </Select>
                                             </FormControl>
                                         </Flex>
 

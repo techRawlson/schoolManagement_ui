@@ -14,7 +14,7 @@ const Student = () => {
     const set = new Set()
     const getData = async () => {
         try {
-            const data = await fetch("http://192.168.1.10:8082/api/students/savedData");
+            const data = await fetch("http://192.168.1.81:8082/api/students/savedData");
             const fdata = await data.json();
 
             setClassData(fdata)
@@ -54,8 +54,7 @@ const Student = () => {
         const searchData =
             // (filters.classData ? classData : filteredData)
             classData.filter((ele) => {
-                console.log(ele.name)
-                console.log(val)
+              
                 if (ele.name) { // Check if ele.name is not null
                     let searchQuery = ele.name.substring(0, length).toLowerCase();
                     return searchQuery === val;
@@ -69,12 +68,14 @@ const Student = () => {
     //filteratrion part
     const dataFilter = () => {
         let filterData = classData;
+    
         //filter for class
         if (filters.class !== "") {
             filterData = filterData.filter(
                 (ele) => ele.className === filters.class
             );
         }
+       
         //filter for section
         if (filters.section !== "") {
             filterData = filterData.filter(
@@ -83,8 +84,9 @@ const Student = () => {
         }
         //filter for year
         if (filters.year !== "") {
+            console.log(filters.year)
             filterData = filterData.filter(
-                (ele) => ele.admissionYear == filters.year
+                (ele) => ele.session == filters.year
             );
         }
         console.log(filterData)

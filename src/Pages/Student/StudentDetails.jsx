@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel } from '@chakra-ui/react'
+import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,7 +16,7 @@ const StudentDetails = () => {
     const imageRef = useRef()
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://192.168.1.81:8082/api/students/${id}`)
+            const data = await fetch(`http://localhost:8082/api/students/${id}`)
             const fdata = await data.json()
             console.log(fdata)
 
@@ -193,7 +193,7 @@ const StudentDetails = () => {
 
             // Log the formData here to see the updated content
             console.log(student[0])
-            const data = await fetch(`http://192.168.1.81:8082/api/students/update-student/${id}`, {
+            const data = await fetch(`http://localhost:8082/api/students/update-student/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -209,8 +209,8 @@ const StudentDetails = () => {
                 formData2.append('file', file);
             }
 
-            const picture = await fetch(`http://192.168.1.81:8082/api/images/${id}`, {
-                method: 'put',
+            const picture = await fetch(`http://localhost:8082/api/images/${id}`, {
+                method: 'PUT',
                 body: formData2,
             })
             console.log(picture)
@@ -229,6 +229,24 @@ const StudentDetails = () => {
             console.log(error);
         }
     };
+
+    const [clas, setClas] = useState([])
+    const getClass = async () => {
+        try {
+            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const fdata = await data.json()
+            console.log(fdata)
+            setClas(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getClass()
+
+    }, [])
+
     return (
         <Stack minH="100vh">
             <Navbar />
@@ -238,7 +256,7 @@ const StudentDetails = () => {
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
-                                src={image || `http://192.168.1.81:8082/api/images/${id}`}
+                                src={image || `http://localhost:8082/api/images/${id}`}
                                 alt="Avatar"
                                 style={dis ? {} : { cursor: 'pointer' }}
                                 width="100px"
@@ -325,7 +343,8 @@ const StudentDetails = () => {
 
                                 <FormControl id="name">
                                     <FormLabel>Date of birth</FormLabel>
-                                    <Input fontWeight="bold"
+                                  
+                                    <Input fontWeight="bold" type='date'
                                         w='100%' h='10' bg='white.500' value={std.dob} onChange={(e) => handleFieldChange(e, i, 'dob')} disabled={dis}
                                     />
                                 </FormControl>
@@ -356,15 +375,39 @@ const StudentDetails = () => {
 
                                 <FormControl id="name">
                                     <FormLabel>Gender</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.sex} onChange={(e) => handleFieldChange(e, i, 'sex')} disabled={dis}
-                                    />
+                                    <Select
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        value={std.sex}
+                                        onChange={(e) => handleFieldChange(e, i, 'sex')}
+                                    >
+                                        <option value='Male'>Male</option>
+                                        <option value='Female'>Female</option>
+                                        <option value='Other'>Other</option>
+                                    </Select>
+
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Session</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.session} onChange={(e) => handleFieldChange(e, i, 'sex')} disabled={dis}
-                                    />
+                                    <Select
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        value={std.session}
+                                        onChange={(e) => handleFieldChange(e, i, 'session')}
+                                    >
+                                        {
+                                            clas?.map((std)=>(
+                                                <option value={std.session}>{std.session}</option>
+                                            ))
+                                        }
+                                   
+                                        
+                                    </Select>
+
                                 </FormControl>
                             </Grid>
 

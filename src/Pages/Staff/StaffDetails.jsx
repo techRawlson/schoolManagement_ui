@@ -17,9 +17,10 @@ const StaffDetails = () => {
     const [subjects, setSubjects] = useState([])
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
+    const imageRef = useRef()
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://192.168.1.81:8083/api/staff/${id}`)
+            const data = await fetch(`http://localhost:8083/api/staff/${id}`)
             const fdata = await data.json()
             console.log(fdata)
 
@@ -83,15 +84,29 @@ const StaffDetails = () => {
               formData.append('subjects', item);
             });
             
-            
-
             console.log(student[0])
-            const data = await fetch(`http://192.168.1.81:8083/api/staff/update/${id}`, {
+            const data = await fetch(`http://localhost:8083/api/staff/update/${id}`, {
                 method: 'PUT',
                 body: formData,
             })
             const dataf = await data.json();
             console.log(dataf)
+
+
+            const file = imageRef.current.files[0];
+            let formData2 = new FormData()
+           
+           formData2.append('file', file);
+
+           const picture = await fetch(`http://localhost:8083/api/StaffImage/${id}`, {
+            method: 'put',
+            body: formData2,
+        })
+        console.log(picture)
+
+
+
+
             if (data.ok) {
                 toast.success("Student details submitted successfully!")
                 setdis(!dis)
@@ -132,7 +147,7 @@ const StaffDetails = () => {
     };
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8083/api/staff/all-subjects');
+            const data = await fetch('http://localhost:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -164,16 +179,38 @@ const StaffDetails = () => {
         getSubjects()
        
     }, [])
-    console.log(selectedItems)
+    // console.log(imageRef.current.value=='')
     return (
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
             <ToastContainer /> {/* Add this line */}
             <Stack maxW="80vw" width="80vw" m="0 auto">
-                <Stack direction='row' mb="5" width="80vw" justifyContent="space-between">
-                    <Avatar src={`http://192.168.1.81:8083/api/staff/image/${id}`} borderRadius="6%" size="lg" />
+                {/* <Stack direction='row' mb="5" width="80vw" justifyContent="space-between">
+                    <Avatar src={`http://localhost:8083/api/StaffImage/${id}`} borderRadius="6%" size="lg" />
                     <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-                </Stack>
+                </Stack> */}
+                <Flex >
+                        <label htmlFor={`avatar-upload-${id}`}>
+                            <Avatar
+                                src={ `http://localhost:8083/api/StaffImage/${id}`}
+                                alt="Avatar"
+                                style={dis ? {} : { cursor: 'pointer' }}
+                                width="100px"
+                                height="100px"
+
+                            />
+                            <input
+                                id={`avatar-upload-${id}`}
+                                type={dis?'':'file'}
+                                accept='image/jpeg'
+                                style={{ display: 'none' }}
+                                // onChange={(e) => handleFieldChange(e, 0, 'profilePicture')}
+                                // disabled={dis}
+                                ref={imageRef}
+                                encType="multipart/form-data"
+                            />
+                        </label>
+                    </Flex>
 
                 <Stack>
                     {
@@ -308,27 +345,26 @@ const StaffDetails = () => {
                                                 </FormControl>
                                             </>
                                     } </FormControl>
-                                <FormControl>
-                                <FormLabel >Subject</FormLabel>
-                                    <Flex >
-                                    
-                                        {selectedItems.map((item, index) => (
-                                            <Button
-                                            key={index}
-                                            m={1}
-                                            colorScheme="teal"
-                                            variant="outline"
-                                            size="sm"
-                                            rightIcon={<Icon as={MdClose} />}
-                                            onClick={() => handleDeleteItem(index)}
-                                            disabled={dis} // Set the disabled prop based on the dis variable
-                                        >
-                                            {item}
-                                        </Button>
-                                        
-                                        ))}
-                                    </Flex>
-                                </FormControl>
+                               <FormControl>
+            <FormLabel>Subject</FormLabel>
+            <Flex>
+                {selectedItems.map((item, index) => (
+                    <Button
+                        key={index}
+                        m={1}
+                        colorScheme="teal"
+                        variant="outline"
+                        size="sm"
+                        rightIcon={<Icon as={MdClose} />}
+                        onClick={dis?"":() => handleDeleteItem(index)}
+                        disabled={dis} // Set the disabled prop based on the dis variable
+                        cursor={dis ? 'not-allowed' : 'pointer'} // Set cursor based on dis
+                    >
+                        {item}
+                    </Button>
+                ))}
+            </Flex>
+        </FormControl>
 
 
 

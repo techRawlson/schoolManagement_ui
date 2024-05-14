@@ -236,7 +236,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             let formData2 = new FormData()
            
            formData2.append('file', file);
-            console.log(formData2)
+           
             
 
 
@@ -249,7 +249,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
 
             const picture = await fetch(`http://localhost:8083/api/StaffImage/${fdata.id}`, {
-                method: 'put',
+                method: 'post',
                 body: formData2,
             })
             console.log(picture)
@@ -257,7 +257,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
             if (data.ok) {
                 toast.success("Staff created successfully")
-                // setOpen(false)
+                setOpen(false)
                 getData()
             } else {
                 toast.error("Staff created successfully")

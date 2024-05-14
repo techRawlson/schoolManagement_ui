@@ -16,16 +16,19 @@ import { IoAddSharp, IoReturnUpBackOutline } from "react-icons/io5";
 
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
+import Stafftimetable from "./StaffTimeTable";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { MdDelete, MdModeEditOutline } from "react-icons/md";
 const Classtimetable = () => {
     const [data, setData] = useState([])
-
+    console.log(data)
 
     const [detail, setDetail,] = useState([])
     const [createNew, setcreateNew] = useState(false)
     const [create, setcreate] = useState(false)
     const getData = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8086/api/timetable/full-timetable')
+            const data = await fetch('http://localhost:8086/api/timetable/full-timetable')
             const fdata = await data.json()
             //console.log(fdata)
             setData(fdata)
@@ -35,7 +38,7 @@ const Classtimetable = () => {
     }
     const getDetails = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8082/api/students/get-AllClasses')
+            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             //console.log(fdata)
             setDetail(fdata)
@@ -50,6 +53,7 @@ const Classtimetable = () => {
     //
     // const[]=useState()
     //AddNew
+    const [staffTimedata, setStaffTimedata] = useState([])
     const navigate = useNavigate()
     const [AddNew, setAddNew] = useState(false);
     const [disabledCheck, setDisabledCheck] = useState(true)
@@ -59,8 +63,6 @@ const Classtimetable = () => {
     const [currentEndTime, setCurrentEndTime] = useState()
     const [editMode, setEditMode] = useState('');
     const [lecture, setLecture] = useState(null);
-    const [startTime, setStartTime] = useState();
-    const [endTime, setEndTime] = useState();
     const [session, setSession] = useState();
     const [classValue, setClassValue] = useState('');
     const [section, setSection] = useState('');
@@ -82,11 +84,10 @@ const Classtimetable = () => {
     const [thursdayStore, setThursdayStore] = useState([]);
     const [fridayStore, setFridayStore] = useState([]);
 
-    //console.log(mondayTeacher, mondaySubject)
-    //console.log(tuesdayTeacher, tuesdaySubject)
-    //console.log(wednesdayTeacher, wednesdaySubject)
-    //console.log(thursdayTeacher, thursdaySubject)
-    //console.log(fridayTeacher, fridaySubject)
+
+
+    console.log(wednesdayTeacher)
+    console.log(wednesdayStore)
 
     //create a new time table
     const body = {
@@ -102,93 +103,317 @@ const Classtimetable = () => {
         thursday: thursdayTeacher == undefined ? '' : thursdayTeacher + " " + thursdaySubject,
         friday: fridayTeacher == undefined ? '' : fridayTeacher + " " + fridaySubject,
     };
-    // || (wednesdayTeacher != '' && wednesdaySubject == '')
-    // || (thursdayTeacher != '' && thursdaySubject == '')
-    // || (fridayTeacher != '' && fridaySubject == '')
+
     const timeTable = async () => {
-        console.log(mondayTeacher)
-        console.log(mondaySubject)
+        let totalEntry = 0;
+        let und = 0;
+        const arr = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+        arr.map((day) => (
 
-        if (
-            (mondayTeacher != '' || mondayTeacher == undefined) && (mondaySubject == '' || mondaySubject == 'Select')
-            || (mondayTeacher == '' && mondaySubject == '')
+            day == undefined || day == '' ? und++ : totalEntry++
+        ))
 
-            || (tuesdayTeacher != '') && (tuesdayTeacher != undefined && tuesdaySubject == '')
-            || (tuesdayTeacher != '') && (tuesdayTeacher != undefined && tuesdaySubject == 'Select')
-            //for wednesday
-            || (wednesdayTeacher != '') && (wednesdayTeacher != undefined && wednesdaySubject == '')
-            || (wednesdayTeacher != '') && (wednesdayTeacher != undefined && wednesdaySubject == 'Select')
+        //Validation to the creating new Time table
+        console.log(lecture)
+        console.log(classValue)
+        console.log(section)
 
-            //for thursday
-            || (thursdayTeacher != '') && (thursdayTeacher != undefined && thursdaySubject == '')
-            || (thursdayTeacher != '') && (thursdayTeacher != undefined && thursdaySubject == 'Select')
-            //for friday
-            || (fridayTeacher != '') && (fridayTeacher != undefined && fridaySubject == '')
-            || (fridayTeacher != '') && (fridayTeacher != undefined && fridaySubject == 'Select')
 
+        const dayCount = [1, 2, 3, 4, 5];
+        let lect = 0;
+        let tech = 0;
+        console.log(staffTimedata)
 
 
 
-        ) {
-            console.log('monday')
-            toast.error('please fill the complete details ')
+        try {
+
+            let body = {
+                lectureNumber: lecture,
+                startTime: currentStartTime,
+                endTime: currentEndTime,
+                className: classValue,
+                session: session,
+                section: section,
+            };
+            //this code is for table entries for class
+            const entryTeachers = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+            const entrySubjects = [mondaySubject, tuesdaySubject, wednesdaySubject, thursdaySubject, fridaySubject]
+            const entryDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",];
+
+            const bodyEntries = []; // Array to store entries for each day
+            // Iterate over each day
+            console.log(entryDays)
+            console.log(days)
+            let count = 0;
+            entryTeachers.forEach((teach, i) => {
+                const d = days.find((elm) => elm.day == entryDays[i])
+                console.log(d)
+                console.log(d ? true : false)
+                console.log(entryTeachers[i])
+                //    console.log
+                if (entryTeachers[i] && d) { // Check if teacher exists and day is defined
+                    console.log(teach)
+                    console.log(entryDays[i])
+                    const entry = {
+                        lectureNumber: lecture,
+                        startTime: currentStartTime,
+                        endTime: currentEndTime,
+                        className: classValue,
+                        session: session,
+                        section: section,
+                        day: d.day, // Assign day
+                        teacherName: teach, // Assign teacher name
+                        subject: entrySubjects[i] // Assign subject
+                    };
+                    // count++;
+                    bodyEntries.push(entry); // Add entry to array
+                } else {
+                    console.log("Nothing to add for day", entryDays[i]);
+                }
+            });
+
+            console.log(bodyEntries)
+            //this code is for Class time table entries
+
+            // const existingEntriesResponse = await fetch('http://localhost:8086/api/lecture_data');
+            // const existingEntries = await existingEntriesResponse.json();
+
+            // // Check for duplicates
+            // const duplicateEntry = bodyEntries.find(newEntry => {
+            //     return existingEntries.some(existingEntry => {
+            //         return newEntry.lectureNumber === existingEntry.lectureNumber &&
+            //             newEntry.startTime === existingEntry.startTime &&
+            //             newEntry.endTime === existingEntry.endTime &&
+            //             newEntry.className === existingEntry.className &&
+            //             newEntry.session === existingEntry.session &&
+            //             newEntry.section === existingEntry.section &&
+            //             newEntry.day === existingEntry.day &&
+            //             newEntry.teacherName === existingEntry.teacherName &&
+            //             newEntry.subject === existingEntry.subject;
+            //     });
+            // });
+
+            // if (duplicateEntry) {
+            //     console.log("Duplicate entry found. Stopping further execution.");
+            //     return; // Stop further execution
+            // }
+
+
+
+
+            let status = 0;
+            let check = [true, true, true, true, true]
+            // Create an array to store promises
+            const promises = bodyEntries?.map(async (elm, i) => {
+                console.log(elm);
+                try {
+                    const response = await fetch('http://localhost:8086/api/timetable/create-timetable', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(elm),
+                    });
+                    status = response.status;
+                    if (status >= 200 && status < 300) {
+                        console.log(status);
+                        check[i] = true
+                        toast.success('Data created');
+                        await getData()
+                    } else {
+                        check[i] = false
+                        console.log(status);
+                        toast.error('Teacher is not free');
+                        setcreateNew(true)
+                        setcreate(false)
+                    }
+                } catch (error) {
+                    check = false;
+                    console.log(error);
+                }
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(promises);
+            //this code is for staff time table entries
+
+            console.log(check)
+            //create timetable for teachers
+            arr.map(async (teach, i) => {
+                console.log('hello')
+                if (teach == undefined || teach == '') {
+                    console.log("do nothing")
+                } else {
+                    console.log(i)
+                    if (i == 0) {
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: mondayTeacher,
+                            teacherSubject: mondaySubject,
+                            day: 'Monday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://localhost:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    } else if (i == 1) {
+                        console.log("tuesdayTeacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: tuesdayTeacher,
+                            teacherSubject: tuesdaySubject,
+                            day: 'Tuesday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://localhost:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    } else if (i == 2) {
+                        console.log("wed teacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: wednesdayTeacher,
+                            teacherSubject: wednesdaySubject,
+                            day: 'Wednesday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://localhost:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    } else if (i == 3) {
+                        console.log("thursday teacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: thursdayTeacher,
+                            teacherSubject: thursdaySubject,
+                            day: 'Thursday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://localhost:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    } else if (i == 4) {
+                        console.log("friday teacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: fridayTeacher,
+                            teacherSubject: fridaySubject,
+                            day: 'Friday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://localhost:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    }
+                }
+            })
+
+
+
+            // const data = await response.json();
+
+
+
+
+
+
+
+            setcreateNew(false)
+            setDis(false)
+            //empty all states
+            setDisabledCheck(true)
+            setCurrentEndTime('')
+            setCurrentStartTime('')
+            setMondayTeacher('')
+            setMondaySubject('')
+            setMondayStore([])
+            setTuesdayTeacher('')
+            setTuesdaySubject('')
+            setTuesdayStore([])
+            setWednesdayTeacher('')
+            setWednesdaySubject('')
+            setWednesdayStore([])
+            setThursdayTeacher('')
+            setThursdaySubject('')
+            setThursdayStore([])
+            setFridayTeacher('')
+            setFridaySubject('')
+            setFridayStore([])
+            // setFridayStore('')
+        } catch (error) {
+            // toast.error("something went wrong")
+            console.log(error);
         }
-
-
-        else {
-
-            try {
-                console.log(body);
-
-                const response = await fetch('http://192.168.1.81:8086/api/timetable/create-timetable', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(body),
-                });
-
-
-                const data = await response.json();
-                setcreateNew(false)
-                setDis(false)
-                const data1 = await fetch('http://192.168.1.81:8086/api/timetable/full-timetable')
-                const fdata = await data1.json()
-                //console.log(fdata)
-                dataFilter(fdata);
-                console.log(fdata);
-
-                //empty all states
-                setCurrentEndTime('')
-                setCurrentStartTime('')
-                setMondaySubject('')
-                setMondayStore([])
-                setTuesdayTeacher('')
-                setTuesdaySubject('')
-                setTuesdayStore([])
-                setWednesdayTeacher('')
-                setWednesdaySubject('')
-                setWednesdayStore([])
-                setThursdayTeacher('')
-                setThursdaySubject('')
-                setThursdayStore([])
-                setFridayTeacher('')
-                setFridaySubject('')
-                setFridayStore([])
-                // setFridayStore('')
-            } catch (error) {
-                toast.error("something went wrong")
-                console.log(error);
-            }
-        }
-    };
+    }
+    // };
 
 
     //store all staff
     const [staff, setStaff] = useState([])
     const getStaff = async () => {
         try {
-            const data = await fetch("http://192.168.1.81:8083/api/staff/saved-Staff");
+            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
             const fdata = await data.json();
 
             setStaff(fdata)
@@ -207,33 +432,73 @@ const Classtimetable = () => {
 
 
     const [filteredData, setFilteredData] = useState([]);
+    const [modifiedData, setModifiedData] = useState([]);
     const [dis, setDis] = useState(false)
-
+    const [days, setDays] = useState([])
 
     const [totalSubjects, setTotalSubjects] = useState([]);
-    const subjects = new Set(totalSubjects);
-    const subjectsArray = Array.from(subjects).filter((elm, i) => elm != "")
+    const [uniqueSubject, setUniqeSuject] = useState([])
 
+    console.log(totalSubjects)
+
+    const [showMsg, setShowMsg] = useState(false)
 
     //filteratrion part
+    const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
+    // Extract unique class names
+    const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
+    const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
+    console.log(uniqueClassNames)
+    console.log(detail)
     const dataFilter = (data) => {
 
         let filterData = data;
-        //console.log(filterData)
+        console.log(filterData)
+
+
+        const modifiedData = Object.values(data.reduce((acc, obj) => {
+            const key = `${obj.className}-${obj.section}-${obj.session}-${obj.lectureNumber}`;
+            if (!acc[key]) {
+                acc[key] = { ...obj, days: [obj.day], subjects: [obj.subject], teachers: [obj.teacherName] };
+            } else {
+                acc[key] = {
+                    ...acc[key],
+                    days: [...acc[key].days, obj.day],
+                    subjects: [...acc[key].subjects, obj.subject],
+                    teachers: [...acc[key].teachers, obj.teacherName]
+                };
+            }
+            delete acc[key].day; // Remove day property from the final object
+            delete acc[key].subject; // Remove subject property from the final object
+            delete acc[key].teacherName; // Remove teacherName property from the final object
+            return acc;
+        }, {}));
+
+        // Convert React elements to strings for the 'days' property
+        modifiedData.forEach(item => {
+            console.log(item.days);
+        });
+        console.log(modifiedData);
+        filterData = modifiedData
+        console.log(filterData)
+        setModifiedData(modifiedData)
+
+
+
         //filter for session
         if (filters.year !== "") {
             filterData = filterData.filter(
                 (ele) => ele.session == filters.year
             );
         }
-
+        console.log(filterData)
         //filter for class
         if (filters.class !== "") {
             filterData = filterData.filter(
                 (ele) => ele.className === filters.class
             );
         }
-
+        console.log(filterData)
         //filter for section
         if (filters.section !== "") {
             filterData = filterData.filter(
@@ -241,37 +506,58 @@ const Classtimetable = () => {
             );
         }
 
-
+        console.log(filterData)
 
         if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
 
             if (filterData.length > 0) {
                 setcreate(true)
                 setDis(false)
-                setFilteredData(filterData)
-
-                // Create an array to store the subjects temporarily
-                let tempSubjects = [];
-
-                filterData.forEach(elm => {
-                    const stringToSplit1 = elm.monday;
-                    const stringToSplit2 = elm.tuesday;
-                    const stringToSplit3 = elm.wednesday;
-                    const stringToSplit4 = elm.thursday;
-                    const stringToSplit5 = elm.friday;
-                    const arr = [stringToSplit1, stringToSplit2, stringToSplit3, stringToSplit4, stringToSplit5];
-
-                    arr.forEach(e => {
-                        const parts = e.split(" ");
-                        if (parts.length > 1) {
-                            const laterPart = parts.slice(1).join(" ");
-                            tempSubjects.push(laterPart);
+                // Iterate over each object in the data array
+                // Create an empty object to store the subject counts
+                const subjectCounts = {};
+                filterData.forEach(item => {
+                    item.subjects.forEach(subject => {
+                        if (subjectCounts[subject]) {
+                            subjectCounts[subject]++;
+                        } else {
+                            subjectCounts[subject] = 1;
                         }
                     });
                 });
 
+                setTotalSubjects(subjectCounts)
+
+                setFilteredData(filterData)
+                // Object to store aggregated data
+                console.log(filterData)
+                setShowMsg(false)
+
+
+
+
+                // // Create an array to store the subjects temporarily
+                // let tempSubjects = [];
+
+                // filterData.forEach(elm => {
+                //     const stringToSplit1 = elm.monday;
+                //     const stringToSplit2 = elm.tuesday;
+                //     const stringToSplit3 = elm.wednesday;
+                //     const stringToSplit4 = elm.thursday;
+                //     const stringToSplit5 = elm.friday;
+                //     const arr = [stringToSplit1, stringToSplit2, stringToSplit3, stringToSplit4, stringToSplit5];
+
+                //     arr.forEach(e => {
+                //         const parts = e.split(" ");
+                //         if (parts.length > 1) {
+                //             const laterPart = parts.slice(1).join(" ");
+                //             tempSubjects.push(laterPart);
+                //         }
+                //     });
+                // });
+
                 // After processing all subjects, update totalSubjects
-                setTotalSubjects(tempSubjects);
+                // setTotalSubjects(tempSubjects);
                 setUpdateButton('Update')
                 setAddNew(true)
             }
@@ -281,9 +567,10 @@ const Classtimetable = () => {
                     fontFamily: 'Arial, sans-serif',
                     fontSize: '14px',
                 };
-                toast.error("This data is not available.if you want to create,click on the add new button", {
-                    style: customToastStyle
-                })
+                // toast.error("This data is not available.if you want to create,click on the add new button", {
+                //     style: customToastStyle
+                // })
+                setShowMsg(true)
                 setDis(true)
                 setFilteredData([])
                 setTotalSubjects([])
@@ -334,9 +621,42 @@ const Classtimetable = () => {
         //console.log("trigeered")
     }, [filters, data]);
 
+    const [daysMap, setDaysMap] = useState([])
+
+    const getDays = async () => {
+        try {
+            const data = await fetch('http://localhost:8086/api/days/days');
+            const fdata = await data.json();
+            // console.log(fdata);
+            // Sort the days array based on the day property
+            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            const sortedDays = fdata.slice().sort((a, b) => {
+                return desiredOrder.indexOf(a.day) - desiredOrder.indexOf(b.day);
+            });
+
+            if (sortedDays.length > 0) {
+                setDays(sortedDays)
+
+                const addSpaceBetweenLetters = str => str.split('').join(' ');
+
+                // Map through the desiredOrder array and add space between letters in each item
+                const spacedDesiredOrder = sortedDays.map(day => addSpaceBetweenLetters(day.day));
+                // console.log(spacedDesiredOrder)
+                setDaysMap(spacedDesiredOrder)
 
 
+            } else {
+                setDays([])
+            }
 
+
+        } catch (error) {
+            setDays([])
+            console.log(error);
+        }
+
+    }
 
 
 
@@ -344,9 +664,12 @@ const Classtimetable = () => {
         getData()
         getDetails()
         getStaff()
+
     }, [])
 
-
+    useEffect(() => {
+        getDays()
+    }, [])
 
 
     const get = async (e, day) => {
@@ -358,7 +681,7 @@ const Classtimetable = () => {
             console.log(e.target.value)
 
             try {
-                const data = await fetch(`http://192.168.1.81:8086/api/periods/lecture/${id}`);
+                const data = await fetch(`http://localhost:8086/api/periods/lecture/${id}`);
                 const fdata = await data.json();
                 //console.log(fdata);
                 setLecture(e.target.value)
@@ -374,7 +697,7 @@ const Classtimetable = () => {
         }
         else {
             try {
-                const ab = await fetch(`http://192.168.1.81:8083/api/staff/get-staff/${id}`)
+                const ab = await fetch(`http://localhost:8083/api/staff/${id}`)
                 const fab = await ab.json()
                 if (day == 'monday') {
 
@@ -426,7 +749,7 @@ const Classtimetable = () => {
     const [periods, setPeriods] = useState([])
     const getPeriods = async () => {
         try {
-            const data = await fetch('http://192.168.1.81:8086/api/periods/lectures');
+            const data = await fetch('http://localhost:8086/api/periods/lectures');
             const fdata = await data.json();
             //console.log(fdata);
             setPeriods(fdata)
@@ -445,7 +768,7 @@ const Classtimetable = () => {
     const createNewEntry = () => {
         try {
             setcreateNew(true)
-
+            setShowMsg(false)
         } catch (error) {
             console.log(error)
         }
@@ -457,18 +780,18 @@ const Classtimetable = () => {
 
     // Function to split the day name into parts after the second space
     const splitDayName = (dayName) => {
-        const parts = dayName.split(" ");
-        if (parts.length > 1) {
-            return {
-                firstLine: parts.slice(0, 1).join(" "),
-                secondLine: parts.slice(1).join(" ")
-            };
-        } else {
-            return {
-                firstLine: parts.join(" "),
-                secondLine: ""
-            };
-        }
+        // const parts = dayName.split(" ");
+        // if (parts.length > 1) {
+        //     return {
+        //         firstLine: parts.slice(0, 1).join(" "),
+        //         secondLine: parts.slice(1).join(" ")
+        //     };
+        // } else {
+        //     return {
+        //         firstLine: parts.join(" "),
+        //         secondLine: ""
+        //     };
+        // }
     };
 
 
@@ -476,18 +799,20 @@ const Classtimetable = () => {
     const create1 = () => {
         setcreateNew(true)
         setEditMode(null)
+
     }
 
 
 
-    const deleteEntry = async (id) => {
+    const deleteEntry = async (id, lec) => {
+
+
         try {
-            const del = await fetch(`http://192.168.1.81:8086/api/timetable/${id}`, {
+            const del = await fetch(`http://localhost:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
-
             await getData()
-            dataFilter(data)
+
         } catch (error) {
             console.log(error)
         }
@@ -531,7 +856,54 @@ const Classtimetable = () => {
     const goback = () => {
         navigate(-1)
     }
-    return <div style={{ minHeight: '100vh', minWidth: '100vw' }}>
+
+    const getDataFromStaffTimeTable = async () => {
+        try {
+            const data = await fetch('http://localhost:8086/api/LockedData/lecturedata')
+            const fdata = await data.json()
+            //console.log(fdata)
+            setStaffTimedata(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        getDataFromStaffTimeTable()
+
+    }, [])
+
+
+
+    const [lectureEdit, setLectureEdit] = useState(null)
+
+    const eModeOn = (a, b) => {
+        setEditMode(a)
+        setLectureEdit(b)
+    }
+    console.log(filteredData)
+    // CSS styles
+    const tableStyle = {
+        borderCollapse: 'collapse',
+        width: '100%',
+        borderCollapse: 'collapse'
+    };
+
+    const thStyle = {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'left'
+    };
+
+    const tdStyle = {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'left'
+    };
+    return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
             <IoReturnUpBackOutline
@@ -544,14 +916,15 @@ const Classtimetable = () => {
         </Flex>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
-            <Flex direction="column" width="65vw" maxW="85vw">
+            <Flex margin="0 0 0  5%"
+                direction="column" width="65vw" maxW="80vw">
                 <Flex justifyContent='space-around' alignItems='center'>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Session</FormLabel>
                         <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)}>
                             <option>Select</option>
-                            {detail?.map((elm, i) => (
-                                <option key={i} value={elm.session}>{elm.session}</option>
+                            {uniqueSessions?.map((elm, i) => (
+                                <option key={i} value={elm}>{elm}</option>
                             ))}
                         </Select>
                     </FormControl>
@@ -559,8 +932,8 @@ const Classtimetable = () => {
                         <FormLabel>Class</FormLabel>
                         <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
                             <option>Select</option>
-                            {detail?.map((elm, i) => (
-                                <option key={i} value={elm.className}>{elm.className}</option>
+                            {uniqueClassNames?.map((elm, i) => (
+                                <option key={i} value={elm}>{elm}</option>
                             ))}
                         </Select>
                     </FormControl>
@@ -568,19 +941,22 @@ const Classtimetable = () => {
                         <FormLabel>Section</FormLabel>
                         <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
                             <option>Select</option>
-                            {detail?.map((elm, i) => (
-                                <option key={i} value={elm.section}>{elm.section}</option>
+                            {uniqueSections?.map((elm, i) => (
+                                <option key={i} value={elm}>{elm}</option>
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl isRequired justifyContent="space-between" alignItems="center" m="4% 1% 0 1%" display='flex'>
+                    <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
                         {
                             dis ? <div>
                                 {createNew ?
                                     <div>
                                         <Button onClick={() => setcreateNew(false)}>Cancel</Button>
                                     </div>
-                                    : <Button onClick={() => createNewEntry()}>Add new</Button>}
+
+                                    : <div>
+                                        <Button onClick={() => createNewEntry()}>Add new</Button>
+                                    </div>}
                             </div> : <div>
                                 {
                                     create ? <Button onClick={() => showUpdate()}>{updateButton}</Button> : ''
@@ -596,23 +972,25 @@ const Classtimetable = () => {
                     </FormControl>
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
-                    <Table size='sm' variant="simple">
+                    <Table size='sm' variant="simple" style={tableStyle}>
 
                         {
                             filteredData?.length > 0 || createNew == true ?
                                 <>
-                                    <caption style={{ backgroundColor: 'lightgreen' }}>Class Time Table {classValue == 'Select' ? '' : classValue}</caption>
+                                    <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue}</caption>
 
                                     <Thead>
                                         <Tr>
-                                            <Th>Lecture No.</Th>
-                                            <Th>Start Time</Th>
-                                            <Th>End Time</Th>
-                                            <Th>M o n d a y   </Th>
-                                            <Th>T u e s d a y</Th>
-                                            <Th>W e d n e s d a y</Th>
-                                            <Th>T h u r s d a y</Th>
-                                            <Th>F r i d a y</Th>
+                                            <Th style={thStyle}>Lecture No.</Th>
+                                            <Th style={thStyle}>Start Time</Th>
+                                            <Th style={thStyle}>End Time</Th>
+                                            {
+                                                daysMap?.map((day, i) => (
+                                                    <Th key={i} style={thStyle}>{day}</Th>
+                                                ))
+                                            }
+
+
                                         </Tr>
                                     </Thead>
                                 </>
@@ -627,52 +1005,145 @@ const Classtimetable = () => {
                             const wednesdayParts = splitDayName(elm.wednesday);
                             const thursdayParts = splitDayName(elm.thursday);
                             const fridayParts = splitDayName(elm.friday);
-
-
-
                             // Function to save changes
                             const saveChanges = async (id) => {
-                                //console.log(id)
-                                const newData = await fetch(`http://192.168.1.81:8086/api/timetable/get/${id}`)
-                                const fNewData = await newData.json()
+                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+                                teacherArray?.map(async (teach, i) => {
+                                    if (teach == '' || teach == undefined) {
+                                        console.log('no updataes')
+                                    } else {
+                                        console.log('lets update this', teach, i)
+                                        const body = {
+                                            teacherName: teach,
+                                            subject: mondaySubject
+                                        };
+                                        if (i == 0) {
+                                            const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                        } else if (i == 1) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: tuesdaySubject
+                                            };
+                                            const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                        } else if (i == 2) {
 
-                                console.log(fNewData)
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: wednesdaySubject
+                                            }
 
-                                const mon = splitDayName(fNewData.monday)
-                                const tue = splitDayName(fNewData.tuesday)
-                                const wed = splitDayName(fNewData.wednesday)
-                                const thu = splitDayName(fNewData.thursday)
-                                const fri = splitDayName(fNewData.friday)
-                                const monday = mon.firstLine + " " + mon.secondLine
-                                const tuesday = tue.firstLine + " " + tue.secondLine
-                                const wednesday = wed.firstLine + " " + wed.secondLine
-                                const thursday = thu.firstLine + " " + thu.secondLine
-                                const friday = fri.firstLine + " " + fri.secondLine
-                                const body = {
-                                    monday: mondayTeacher == '' || mondayTeacher == undefined ? monday : mondayTeacher + " " + mondaySubject,
-                                    tuesday: tuesdayTeacher == '' || tuesdayTeacher == undefined ? tuesday : tuesdayTeacher + " " + tuesdaySubject,
-                                    wednesday: wednesdayTeacher == '' || wednesdayTeacher == undefined ? wednesday : wednesdayTeacher + " " + wednesdaySubject,
-                                    thursday: thursdayTeacher == '' || thursdayTeacher == undefined ? thursday : thursdayTeacher + " " + thursdaySubject,
-                                    friday: fridayTeacher == '' || fridayTeacher == undefined ? friday : fridayTeacher + " " + fridaySubject,
-                                }
-                                console.log(body)
+
+                                            const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                        } else if (i == 3) {
+
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: thursdaySubject
+                                            }
+
+
+                                            const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                        } else if (i == 4) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: fridaySubject
+                                            }
+                                            const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+
+                                        }
+                                    }
+                                    await getData()
+                                })
+
+
+                                console.log(data)
+                                console.log('reached')
+                                // const newData = await fetch(`http://localhost:8086/api/timetable/get-timetable/${session}/${classValue}/${section}/monday`)
+                                // const fNewData = await newData.json()
+
+                                // console.log(fNewData)
+
+                                // const mon = splitDayName(fNewData.monday)
+                                // const tue = splitDayName(fNewData.tuesday)
+                                // const wed = splitDayName(fNewData.wednesday)
+                                // const thu = splitDayName(fNewData.thursday)
+                                // const fri = splitDayName(fNewData.friday)
+                                // const monday = mon.firstLine + " " + mon.secondLine
+                                // const tuesday = tue.firstLine + " " + tue.secondLine
+                                // const wednesday = wed.firstLine + " " + wed.secondLine
+                                // const thursday = thu.firstLine + " " + thu.secondLine
+                                // const friday = fri.firstLine + " " + fri.secondLine
+                                // const body = {
+                                //     monday: mondayTeacher == '' || mondayTeacher == undefined ? monday : mondayTeacher + " " + mondaySubject,
+                                //     tuesday: tuesdayTeacher == '' || tuesdayTeacher == undefined ? tuesday : tuesdayTeacher + " " + tuesdaySubject,
+                                //     wednesday: wednesdayTeacher == '' || wednesdayTeacher == undefined ? wednesday : wednesdayTeacher + " " + wednesdaySubject,
+                                //     thursday: thursdayTeacher == '' || thursdayTeacher == undefined ? thursday : thursdayTeacher + " " + thursdaySubject,
+                                //     friday: fridayTeacher == '' || fridayTeacher == undefined ? friday : fridayTeacher + " " + fridaySubject,
+                                // }
+                                // console.log(body)
                                 // Implement save functionality here, e.g., update database or state
+
+
+
+
+
+
                                 try {
-                                    const data = await fetch(`http://192.168.1.81:8086/api/timetable/update/${id}`, {
-                                        method: 'put',
-                                        headers: {
-                                            'Content-Type': 'application/json' // Specify the content type as JSON
-                                        },
-                                        body: JSON.stringify(body)
-                                    })
-                                    const fdata = await data.json()
+                                    // const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${className}/${section}/${session}/${lectureNumber}/${day}`, {
+                                    //     method: 'put',
+                                    //     headers: {
+                                    //         'Content-Type': 'application/json' // Specify the content type as JSON
+                                    //     },
+                                    //     body: JSON.stringify(body)
+                                    // })
+                                    // const fdata = await data.json()
 
-                                    const data1 = await fetch('http://192.168.1.81:8086/api/timetable/full-timetable')
-                                    const fdata1 = await data1.json()
-                                    console.log(fdata1)
-                                    // setData(fdata1)
+                                    // const data1 = await fetch('http://localhost:8086/api/timetable/full-timetable')
+                                    // const fdata1 = await data1.json()
+                                    // console.log(fdata1)
+                                    // // setData(fdata1)
 
-                                    dataFilter(fdata1)
+                                    // dataFilter(fdata1)
 
 
                                     //empty all states
@@ -704,17 +1175,200 @@ const Classtimetable = () => {
                                 // Reset edit mode
                                 setEditMode(false);
                             };
-
+                            const mIndex = elm.days.indexOf('Tuesday')
+                            console.log(mIndex)
                             return (
                                 <Tbody key={i}>
                                     <Tr>
-                                        <Td>
+                                        <Td >
                                             <span> {elm.lectureNumber == null || elm.lectureNumber == 0 ? 1 : elm.lectureNumber}  </span>
                                         </Td>
-                                        <Td><input type="time" value={elm.startTime} disabled /></Td>
-                                        <Td><input type="time" value={elm.endTime} disabled /></Td>
+                                        <Td ><input type="time" value={elm.startTime} disabled /></Td>
+                                        <Td ><input type="time" value={elm.endTime} disabled /></Td>
                                         {/* Render Monday */}
-                                        <Td>
+                                        {
+
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Monday') ?
+                                                <Td  >
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Monday')]}
+                                                        <Select onChange={(e) => get(e, 'monday')} >
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Monday')]}
+                                                        <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                mondayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                :
+                                                <Td style={{ display: days.some(item => item.day === 'Monday') ? 'table-cell' : 'none' }} >
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Monday') ? <Flex direction="column">
+                                                            <Td >{elm.teachers[elm.days.indexOf('Monday')]}</Td>
+                                                            <Td >{elm.subjects[elm.days.indexOf('Monday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+
+
+
+                                        }
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Tuesday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Tuesday')]}
+                                                        <Select onChange={(e) => get(e, 'tuesday')} >
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Tuesday')]}
+                                                        <Select value={tuesdaySubject} onChange={(e) => setTuesdaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                tuesdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Tuesday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Tuesday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Tuesday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Tuesday')]}  </Td>
+                                                        </Flex> : ""
+
+
+                                                    }
+                                                </Td>
+                                        }
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Wednesday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Wednesday')]}
+                                                        <Select onChange={(e) => get(e, 'wednesday')}>
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Wednesday')]}
+                                                        <Select value={wednesdaySubject} onChange={(e) => setWednesdaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                wednesdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Wednesday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Wednesday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Wednesday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Wednesday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+                                        }
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Thursday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Thursday')]}
+                                                        <Select onChange={(e) => get(e, 'thursday')} >
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Thursday')]}
+                                                        <Select value={thursdaySubject} onChange={(e) => setThursdaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                thursdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Thursday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Thursday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Thursday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Thursday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+                                        }
+
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Friday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Friday')]}
+                                                        <Select onChange={(e) => get(e, 'friday')} >
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Friday')]}
+                                                        <Select value={fridaySubject} onChange={(e) => setFridaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                fridayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Friday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Friday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Friday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Friday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+                                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        {/* Render Monday */}
+                                        {/* <Td>
 
                                             {
                                                 editMode == elm.id ? mondayParts.firstLine : ''
@@ -746,9 +1400,9 @@ const Classtimetable = () => {
                                                         }
                                                     </Select>
                                                     : mondayParts.secondLine}</div>
-                                        </Td>
+                                        </Td> */}
                                         {/* Render Tuesday */}
-                                        <Td>
+                                        {/* <Td>
                                             {
                                                 editMode == elm.id ? tuesdayParts.firstLine : ''
                                             }
@@ -775,9 +1429,9 @@ const Classtimetable = () => {
                                                         }
                                                     </Select>
                                                     : tuesdayParts.secondLine}</div>
-                                        </Td>
+                                        </Td> */}
                                         {/* Render Wednesday */}
-                                        <Td>
+                                        {/* <Td>
                                             {
                                                 editMode == elm.id ? wednesdayParts.firstLine : ''
                                             }
@@ -803,9 +1457,9 @@ const Classtimetable = () => {
                                                         }
                                                     </Select>
                                                     : wednesdayParts.secondLine}</div>
-                                        </Td>
+                                        </Td> */}
                                         {/* Render Thursday */}
-                                        <Td >
+                                        {/* <Td >
                                             {
                                                 editMode == elm.id ? thursdayParts.firstLine : ''
                                             }
@@ -831,9 +1485,9 @@ const Classtimetable = () => {
                                                         }
                                                     </Select>
                                                     : thursdayParts.secondLine}</div>
-                                        </Td>
+                                        </Td> */}
                                         {/* Render Friday */}
-                                        <Td>
+                                        {/* <Td>
                                             {
                                                 editMode == elm.id ? fridayParts.firstLine : ''
                                             }
@@ -859,20 +1513,20 @@ const Classtimetable = () => {
                                                         }
                                                     </Select>
                                                     : fridayParts.secondLine}</div>
-                                        </Td>
+                                        </Td> */}
                                         {/* Render edit button or save button based on edit mode */}
                                         {
                                             update ? <Td>
                                                 {editMode == elm.id ? (
                                                     <Button onClick={() => saveChanges(elm.id)}>Save</Button>
                                                 ) : (
-                                                    <Button onClick={() => editModeOn(elm.id)}>Edit</Button>
+                                                    <Button onClick={() => eModeOn(elm.id, elm.lectureNumber)}><MdModeEditOutline size={32} /></Button>
                                                 )}
                                             </Td> : ''
                                         }
                                         {
                                             update ? <Td>
-                                                <Button bgColor="red" onClick={() => deleteEntry(elm.id)}>Delete</Button>
+                                                <Button bgColor="red" onClick={() => deleteEntry(elm.id, elm.lectureNumber)}><MdDelete size={32} /></Button>
                                             </Td> : ''
                                         }
 
@@ -885,124 +1539,158 @@ const Classtimetable = () => {
 
 
                         {
-                            createNew ? <Tbody>
-                                <Tr>
-                                    <Td>
-                                        {/* <Input  /> */}
-                                        <Select onChange={(e) => get(e, 'periods')} >
-                                            <option>Select</option>
-                                            {periods?.map((elm, i) => (
-                                                <option key={i} value={elm.lectureNumber}>{elm.lectureNumber}</option>
-                                            ))}
-                                        </Select>
-                                    </Td>
-                                    <Td><Input type="time" value={currentStartTime} onChange={(e) => setStartTime(e.target.value)} disabled style={{ fontWeight: 'bolder' }} /></Td>
-                                    <Td><Input type="time" value={currentEndTime} onChange={(e) => setEndTime(e.target.value)} disabled style={{ fontWeight: 'bolder' }} /></Td>
-                                    <Td  >
-                                        <Flex direction='column'>
-                                            <Select onChange={(e) => get(e, 'monday')} disabled={disabledCheck}>
+                            createNew ?
+                                <Tbody>
+                                    <Tr>
+                                        <Td>
+                                            {/* <Input  /> */}
+                                            <Select onChange={(e) => get(e, 'periods')} >
                                                 <option>Select</option>
-                                                {staff?.map((elm, i) => (
-                                                    <option key={i} value={elm.id}>{elm.name}</option>
+                                                {periods?.map((elm, i) => (
+                                                    <option key={i} value={elm.lectureNumber}>{elm.lectureNumber}</option>
                                                 ))}
                                             </Select>
-                                            <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)} disabled={disabledCheck} required>
-                                                <option>Select</option>
-                                                {
-                                                    mondayStore?.map((subject) => (
-                                                        <option>{subject}</option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Flex>
-                                    </Td>
-                                    <Td>
-                                        <Flex direction='column'>
-                                            <Select onChange={(e) => get(e, 'tuesday')} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {staff?.map((elm, i) => (
-                                                    <option key={i} value={elm.id}>{elm.name}</option>
-                                                ))}
-                                            </Select>
-                                            <Select value={tuesdaySubject} onChange={(e) => setTuesdaySubject(e.target.value)} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {
-                                                    tuesdayStore?.map((subject) => (
-                                                        <option>{subject}</option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Flex>
-                                    </Td>
-                                    <Td>
-                                        <Flex direction='column'>
-                                            <Select onChange={(e) => get(e, 'wednesday')} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {staff?.map((elm, i) => (
-                                                    <option key={i} value={elm.id}>{elm.name}</option>
-                                                ))}
-                                            </Select>
-                                            <Select value={wednesdaySubject} onChange={(e) => setWednesdaySubject(e.target.value)} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {
-                                                    wednesdayStore?.map((subject) => (
-                                                        <option>{subject}</option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Flex>
-                                    </Td>
-                                    <Td>
-                                        <Flex direction='column'>
-                                            <Select onChange={(e) => get(e, 'thursday')} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {staff?.map((elm, i) => (
-                                                    <option key={i} value={elm.id}>{elm.name}</option>
-                                                ))}
-                                            </Select>
-                                            <Select value={thursdaySubject} onChange={(e) => setThursdaySubject(e.target.value)} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {
-                                                    thursdayStore?.map((subject) => (
-                                                        <option>{subject}</option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Flex>
-                                    </Td>
-                                    <Td>
-                                        <Flex direction='column'>
-                                            <Select onChange={(e) => get(e, 'friday')} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {staff?.map((elm, i) => (
-                                                    <option key={i} value={elm.id}>{elm.name}</option>
-                                                ))}
-                                            </Select>
-                                            <Select value={fridaySubject} onChange={(e) => setFridaySubject(e.target.value)} disabled={disabledCheck}>
-                                                <option>Select</option>
-                                                {
-                                                    fridayStore?.map((subject) => (
-                                                        <option>{subject}</option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Flex>
-                                    </Td>
-                                    <Td display="flex" flexDir="column" justifyContent="space-between" >
-                                        <Button onClick={() => timeTable()} margin="4%">Save</Button>
-                                        <Button onClick={() => setcreateNew(false)} >Cancel</Button>
-                                    </Td>
+                                        </Td>
+                                        <Td><Input type="time" value={currentStartTime} onChange={(e) => setStartTime(e.target.value)} disabled style={{ fontWeight: 'bolder' }} /></Td>
+                                        <Td><Input type="time" value={currentEndTime} onChange={(e) => setEndTime(e.target.value)} disabled style={{ fontWeight: 'bolder' }} /></Td>
+
+
+                                        {/* for monday */}
+                                        {
+                                            daysMap?.find((day) => day == 'M o n d a y') ? <Td  >
+                                                <Flex direction='column'>
+                                                    <Select onChange={(e) => get(e, 'monday')} disabled={disabledCheck}>
+                                                        <option>Select</option>
+                                                        {staff?.map((elm, i) => (
+                                                            <option key={i} value={elm.id}>{elm.name}</option>
+                                                        ))}
+                                                    </Select>
+                                                    <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)} disabled={disabledCheck} required>
+                                                        <option>Select</option>
+                                                        {
+                                                            mondayStore?.map((subject) => (
+                                                                <option>{subject}</option>
+                                                            ))
+                                                        }
+                                                    </Select>
+                                                </Flex>
+                                            </Td> : ""
+                                        }
+
+
+                                        {/* for tuesday */}
+                                        {daysMap?.find((day) => day == 'T u e s d a y') ?
+                                            <Td>
+                                                <Flex direction='column'>
+                                                    <Select onChange={(e) => get(e, 'tuesday')} disabled={disabledCheck}>
+                                                        <option>Select</option>
+                                                        {staff?.map((elm, i) => (
+                                                            <option key={i} value={elm.id}>{elm.name}</option>
+                                                        ))}
+                                                    </Select>
+                                                    <Select value={tuesdaySubject} onChange={(e) => setTuesdaySubject(e.target.value)} disabled={disabledCheck}>
+                                                        <option>Select</option>
+                                                        {
+                                                            tuesdayStore?.map((subject) => (
+                                                                <option>{subject}</option>
+                                                            ))
+                                                        }
+                                                    </Select>
+                                                </Flex>
+                                            </Td> : ''
+                                        }
+
+
+                                        {/* for wednesday */}
+                                        {
+                                            daysMap?.find((day) => day == 'W e d n e s d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'wednesday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={wednesdaySubject} onChange={(e) => setWednesdaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                wednesdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ''
+
+                                        }
+
+                                        {/* for thursday */}
+                                        {
+                                            daysMap?.find((day) => day == 'T h u r s d a y') ? <Td>
+                                                <Flex direction='column'>
+                                                    <Select onChange={(e) => get(e, 'thursday')} disabled={disabledCheck}>
+                                                        <option>Select</option>
+                                                        {staff?.map((elm, i) => (
+                                                            <option key={i} value={elm.id}>{elm.name}</option>
+                                                        ))}
+                                                    </Select>
+                                                    <Select value={thursdaySubject} onChange={(e) => setThursdaySubject(e.target.value)} disabled={disabledCheck}>
+                                                        <option>Select</option>
+                                                        {
+                                                            thursdayStore?.map((subject) => (
+                                                                <option>{subject}</option>
+                                                            ))
+                                                        }
+                                                    </Select>
+                                                </Flex>
+                                            </Td> : ""
+                                        }
+
+                                        {/* for friday */}
+                                        {
+                                            daysMap?.find((day) => day == 'F r i d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'friday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={fridaySubject} onChange={(e) => setFridaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                fridayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ""
+                                        }
+
+                                        <Td display="flex" flexDir="column" justifyContent="space-between" >
+                                            <Button onClick={() => timeTable()} margin="4%">Save</Button>
+                                            <Button onClick={() => setcreateNew(false)} >Cancel</Button>
+                                        </Td>
 
 
 
-                                </Tr>
-                            </Tbody> : ''
+                                    </Tr>
+                                </Tbody>
+                                : ''
                         }
+
 
                     </Table>
 
+                    {
+                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.Please click "Add New" button to add time table for this class.</Text> : ''
+                    }
 
                 </TableContainer>
+
                 <Stack marginLeft="85%" >
                     {
                         AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
@@ -1013,13 +1701,10 @@ const Classtimetable = () => {
 
             </Flex>
 
-
-
-
-            <Flex margin='2% 0 0 0' width="30vw">
+            <Flex margin='0.5% 0 0 5%' width="30vw">
                 <TableContainer>
                     <Table size='sm' variant="simple">
-                        <caption style={{ backgroundColor: 'lightgreen' }}>Class Time Table {classValue == 'Select' ? '' : classValue} </caption>
+                        <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue.toUpperCase()} </caption>
                         <Thead>
                             <Tr>
                                 <Th>S.No</Th>
@@ -1029,25 +1714,15 @@ const Classtimetable = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {subjectsArray?.map((elm, i) => {
-                                let count = 0;
-                                totalSubjects?.map((e, i) => {
-                                    if (e == elm) {
-
-                                        count++;
-                                    }
-                                }
-                                )
-                                return (<Tr key={i}>
+                            {Object.entries(totalSubjects).map(([subject, count], i) => (
+                                <Tr key={subject}>
                                     <Td>{i + 1}</Td>
-                                    <Td>{elm}</Td>
+                                    <Td>{subject}</Td>
                                     <Td>{count}</Td>
+                                </Tr>
+                            ))}
 
 
-
-                                </Tr>)
-                            }
-                            )}
                         </Tbody>
                     </Table>
                 </TableContainer>

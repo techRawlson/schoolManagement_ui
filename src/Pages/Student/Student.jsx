@@ -14,7 +14,7 @@ const Student = () => {
     const set = new Set()
     const getData = async () => {
         try {
-            const data = await fetch("http://192.168.1.81:8082/api/students/savedData");
+            const data = await fetch("http://localhost:8082/api/students/savedData");
             const fdata = await data.json();
 
             setClassData(fdata)

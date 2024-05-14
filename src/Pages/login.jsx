@@ -31,7 +31,7 @@ function Login({setToken}) {
       
   
       try {
-          const data = await fetch('http://192.168.1.81:8081/auth/login', {
+          const data = await fetch('http://localhost:8081/auth/login', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

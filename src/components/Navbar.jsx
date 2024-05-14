@@ -14,7 +14,7 @@ const Navbar = () => {
   }
   return (
     // <div style={{ backgroundColor: "#FFBF00" }}>
-      <Stack bgColor='#FFBF00' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center",width:'100vw',height:'7vw' }} mb={5}    >
+      <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center",width:'100vw',height:'7vw' }} mb={5}    >
 
         <AvatarGroup spacing='1rem'>
           <Avatar bg='red.500' />

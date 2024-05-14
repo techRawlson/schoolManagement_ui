@@ -103,7 +103,7 @@ const Subject = () => {
     const [staff, setStaff] = useState([])
     const getMainTable = async () => {
         try {
-            const data = await fetch('http://192.168.1.10:8083/api/staff/saved-Staff')
+            const data = await fetch('http://localhost:8083/api/staff/saved-Staff')
             const fdata = await data.json()
             console.log(fdata)
             setStaff(fdata)
@@ -119,7 +119,7 @@ const Subject = () => {
     const deleteSubject = async (id) => {
         try {
             console.log(id)
-            const data = await fetch(`http://192.168.1.10:8083/api/staff/delete-Subject/${id}`, {
+            const data = await fetch(`http://localhost:8083/api/staff/delete-Subject/${id}`, {
                 method: 'DELETE'
             })
 
@@ -138,7 +138,7 @@ const Subject = () => {
     const deleteClass = async (id) => {
         try {
             console.log(id)
-            const data = await fetch(`http://192.168.1.10:8082/api/students/delete-class/${id}`, {
+            const data = await fetch(`http://localhost:8082/api/students/delete-class/${id}`, {
                 method: 'DELETE'
             })
 

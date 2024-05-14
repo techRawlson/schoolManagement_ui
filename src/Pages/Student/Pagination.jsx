@@ -56,8 +56,14 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     const [isClose, setIsClose] = useState(false)
     const initialRef = useRef()
     const finalRef = useRef()
-
+    const [clas, setClas] = useState([])
     console.log(classData)
+      // Extract unique sessions
+      const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
+      // Extract unique class names
+      const uniqueClassNames = [...new Set(clas.map(elm => elm.className))].sort();
+       // Extract unique sections
+      const uniqueSections = [...new Set(clas.map(elm => elm.section))].sort();
 
     const [isOpenFile, setIsOpenFile] = useState(false)
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -304,7 +310,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     }
 
 
-    const [clas, setClas] = useState([])
+   
 
 
     //for class
@@ -336,8 +342,8 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                             <Flex width="50%" paddingRight="1" justifyContent="space-between">
                                 <Select placeholder='Session' maxW="20%" onChange={handleFilterYear} ref={admYearRef}>
                                     {
-                                        clas?.map((sub, i) => (
-                                            <option value={sub.session}>{sub.session}</option>
+                                        uniqueSessions?.map((session, i) => (
+                                            <option value={session}>{session}</option>
                                         ))
                                     }
 
@@ -345,16 +351,16 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                 </Select>
                                 <Select placeholder='Class' maxW="20%" onChange={handleFilter} ref={clasRef}>
                                     {
-                                        clas?.map((sub, i) => (
-                                            <option value={sub.className}>{sub.className}</option>
+                                        uniqueClassNames?.map((className, i) => (
+                                            <option value={className}>{className}</option>
                                         ))
                                     }
 
                                 </Select>
                                 <Select placeholder='Section' maxW="20%" onChange={handleSectionFilter} ref={secFilter}>
                                     {
-                                        clas?.map((sub, i) => (
-                                            <option value={sub.section}>{sub.section}</option>
+                                        uniqueSections?.map((section, i) => (
+                                            <option value={section}>{section}</option>
                                         ))
                                     }
 
@@ -560,8 +566,8 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                 <Select ref={classRef} isRequired >
                                                     <option >Select</option>
                                                     {
-                                                        clas?.map((sub, i) => (
-                                                            <option value={sub.className}>{sub.className}</option>
+                                                        uniqueClassNames?.map((className, i) => (
+                                                            <option value={className}>{className}</option>
                                                         ))
                                                     }
 
@@ -578,8 +584,8 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                 <Select ref={sectionRef} isRequired>
                                                     <option >Select</option>
                                                     {
-                                                        clas?.map((sub, i) => (
-                                                            <option value={sub.section}>{sub.section}</option>
+                                                        uniqueSections?.map((section, i) => (
+                                                            <option value={section}>{section}</option>
                                                         ))
                                                     }
 
@@ -645,8 +651,8 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                                 <Select ref={sessionRef} isRequired>
                                                     <option >Select</option>
                                                     {
-                                                        clas?.map((sub, i) => (
-                                                            <option value={sub.session}>{sub.session}</option>
+                                                        uniqueSessions?.map((sub, i) => (
+                                                            <option value={sub}>{sub}</option>
                                                         ))
                                                     }
 

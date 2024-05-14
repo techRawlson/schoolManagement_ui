@@ -39,26 +39,30 @@ const StaffDetails = () => {
         getStudent()
     }, [id])
 
-
+    const [image, setImage] = useState(null);
     const [dis, setdis] = useState(true)
     const editStudent = () => {
         setdis(!dis)
     }
+    let picture;
     const handleFieldChange = async (event, index, fieldName) => {
-        try {
-            const { value } = event.target;
-            console.log(value)
-            const updatedStudents = [...student]; // Create a copy of the student array
-            updatedStudents[index] = { ...updatedStudents[index], [fieldName]: value }; // Update the specified field of the specific student
-            setStudent(updatedStudents);
-            if (fieldName == 'subject') {
-                console.log('event', event.target.value, index)
+        if (fieldName === 'profilePicture') {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image')) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    picture = reader.result;
+                    console.log(reader.result); // Check the image data
+                    setImage(reader.result); // Update the image state
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Handle non-image file selection
             }
-        } catch (error) {
-            console.log(error);
         }
     };
 
+    
     const submitStudent = async () => {
         try {
             // Create a new FormData object
@@ -69,21 +73,21 @@ const StaffDetails = () => {
                     if (key !== 'profilePicture') {
                         formData.append(key, value);
                     }
-                    
+
                 });
             });
             //for subject items
-            
-           
-            
+
+
+
             // Clear existing 'subjects' property in formData
             formData.delete('subjects');
-            
+
             // Append the new 'subjects' array to formData
             selectedItems.forEach(item => {
-              formData.append('subjects', item);
+                formData.append('subjects', item);
             });
-            
+
             console.log(student[0])
             const data = await fetch(`http://localhost:8083/api/staff/update/${id}`, {
                 method: 'PUT',
@@ -95,14 +99,23 @@ const StaffDetails = () => {
 
             const file = imageRef.current.files[0];
             let formData2 = new FormData()
-           
-           formData2.append('file', file);
 
-           const picture = await fetch(`http://localhost:8083/api/StaffImage/${id}`, {
-            method: 'put',
-            body: formData2,
-        })
-        console.log(picture)
+            formData2.append('file', file);
+
+            const pictureCheck = await fetch(`http://localhost:8083/api/staff-images/${id}`)
+            console.log(pictureCheck.status)
+            if (pictureCheck.status >= 200 && pictureCheck.status < 300) {
+                const picture = await fetch(`http://localhost:8083/api/staff-images/${id}`, {
+                    method: 'put',
+                    body: formData2,
+                })
+            } else {
+                const picture = await fetch(`http://localhost:8083/api/staff-images/${id}`, {
+                    method: 'post',
+                    body: formData2,
+                })
+
+            }
 
 
 
@@ -127,17 +140,17 @@ const StaffDetails = () => {
 
     const handleDeleteItem = async (index) => {
         try {
-           
+
             setSelectedItems((prevItems) => {
                 // Create a new array excluding the item to be deleted
                 return prevItems.filter((_, i) => i !== index);
-              });
-           
+            });
+
         } catch (error) {
             console.log(error)
         }
     }
-  
+
 
     const handleMenuClose = () => {
         setIsMenuOpen(false);
@@ -174,10 +187,10 @@ const StaffDetails = () => {
         // const uniqueArray=new Set()
 
     };
-    
+
     useEffect(() => {
         getSubjects()
-       
+
     }, [])
     // console.log(imageRef.current.value=='')
     return (
@@ -190,27 +203,27 @@ const StaffDetails = () => {
                     <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
                 </Stack> */}
                 <Flex >
-                        <label htmlFor={`avatar-upload-${id}`}>
-                            <Avatar
-                                src={ `http://localhost:8083/api/StaffImage/${id}`}
-                                alt="Avatar"
-                                style={dis ? {} : { cursor: 'pointer' }}
-                                width="100px"
-                                height="100px"
+                    <label htmlFor={`avatar-upload-${id}`}>
+                        <Avatar
+                            src={image||`http://localhost:8083/api/staff-images/${id}`}
+                            alt="Avatar"
+                            style={dis ? {} : { cursor: 'pointer' }}
+                            width="100px"
+                            height="100px"
 
-                            />
-                            <input
-                                id={`avatar-upload-${id}`}
-                                type={dis?'':'file'}
-                                accept='image/jpeg'
-                                style={{ display: 'none' }}
-                                // onChange={(e) => handleFieldChange(e, 0, 'profilePicture')}
-                                // disabled={dis}
-                                ref={imageRef}
-                                encType="multipart/form-data"
-                            />
-                        </label>
-                    </Flex>
+                        />
+                        <input
+                            id={`avatar-upload-${id}`}
+                            type={dis ? '' : 'file'}
+                            accept='image/jpeg'
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleFieldChange(e, 0, 'profilePicture')}
+                            disabled={dis}
+                            ref={imageRef}
+                            encType="multipart/form-data"
+                        />
+                    </label>
+                </Flex>
 
                 <Stack>
                     {
@@ -331,8 +344,8 @@ const StaffDetails = () => {
                                                                 <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
                                                                     <Checkbox
                                                                         isChecked={selectedItems.includes(option.name)}
-                                                                       
-                                                                         onChange={(e) => handleItemClick(e, option.name)}
+
+                                                                        onChange={(e) => handleItemClick(e, option.name)}
                                                                         size="sm"
                                                                     >
                                                                         {option.name}
@@ -345,39 +358,26 @@ const StaffDetails = () => {
                                                 </FormControl>
                                             </>
                                     } </FormControl>
-                               <FormControl>
-            <FormLabel>Subject</FormLabel>
-            <Flex>
-                {selectedItems.map((item, index) => (
-                    <Button
-                        key={index}
-                        m={1}
-                        colorScheme="teal"
-                        variant="outline"
-                        size="sm"
-                        rightIcon={<Icon as={MdClose} />}
-                        onClick={dis?"":() => handleDeleteItem(index)}
-                        disabled={dis} // Set the disabled prop based on the dis variable
-                        cursor={dis ? 'not-allowed' : 'pointer'} // Set cursor based on dis
-                    >
-                        {item}
-                    </Button>
-                ))}
-            </Flex>
-        </FormControl>
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                <FormControl>
+                                    <FormLabel>Subject</FormLabel>
+                                    <Flex>
+                                        {selectedItems.map((item, index) => (
+                                            <Button
+                                                key={index}
+                                                m={1}
+                                                colorScheme="teal"
+                                                variant="outline"
+                                                size="sm"
+                                                rightIcon={<Icon as={MdClose} />}
+                                                onClick={dis ? "" : () => handleDeleteItem(index)}
+                                                disabled={dis} // Set the disabled prop based on the dis variable
+                                                cursor={dis ? 'not-allowed' : 'pointer'} // Set cursor based on dis
+                                            >
+                                                {item}
+                                            </Button>
+                                        ))}
+                                    </Flex>
+                                </FormControl>
                             </Grid>
 
                         ))

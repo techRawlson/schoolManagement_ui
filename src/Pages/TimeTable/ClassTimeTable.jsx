@@ -240,10 +240,10 @@ const Classtimetable = () => {
 
             console.log(check)
             //create timetable for teachers
-            arr.map(async (teach, i) => {
+            arr.map(async (teach, i) => { 
                 console.log('hello')
                 if (teach == undefined || teach == '') {
-                    console.log("do nothing")
+                 toast('Please select teachers')
                 } else {
                     console.log(i)
                     if (i == 0) {
@@ -444,9 +444,11 @@ const Classtimetable = () => {
     const [showMsg, setShowMsg] = useState(false)
 
     //filteratrion part
+     // Extract unique sessions
     const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
     // Extract unique class names
     const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
+     // Extract unique sections
     const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
     console.log(uniqueClassNames)
     console.log(detail)

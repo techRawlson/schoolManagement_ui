@@ -248,7 +248,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             console.log(fdata)
 
 
-            const picture = await fetch(`http://localhost:8083/api/StaffImage/${fdata.id}`, {
+            const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {
                 method: 'post',
                 body: formData2,
             })

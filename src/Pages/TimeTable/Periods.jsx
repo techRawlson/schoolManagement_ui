@@ -205,7 +205,70 @@ const Periods = () => {
         getPeriods()
         getDays()
     }, [])
-    console.log(days);
+    // console.log(days);
+
+
+
+
+
+    //Logic part for lecture days
+    // State to track switch status for each day
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const [switchStatus, setSwitchStatus] = useState({});
+
+    // Function to fetch current status of each day from API
+    const fetchDayStatus = async () => {
+        try {
+            const dayStatusMap = {};
+            for (const dayName of daysOfWeek) {
+                const response = await fetch(`http://localhost:8086/api/days/days/${dayName}`);
+                const d = await response.json(); 
+                const data= d.switchStatus
+                // Assuming API returns 'on' or 'off' as plain text
+            
+                dayStatusMap[dayName] = data === 'on'; // Store status in boolean format
+            }
+            setSwitchStatus(dayStatusMap); // Update switchStatus state with fetched data
+        } catch (error) {
+            console.error('Error fetching day status:', error);
+        }
+    };
+
+    // Function to toggle switch status for a specific day
+    const toggleSwitch = async (dayName) => {
+        try {
+            const newStatus = !switchStatus[dayName]; // Toggle current status
+            const bodyData = newStatus ? 'on' : 'off'; // Convert boolean to 'on' or 'off'
+            const dayChange = await fetch(`http://localhost:8086/api/days/${dayName}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: bodyData
+            });
+
+            if (dayChange.ok) {
+                setSwitchStatus((prevStatus) => ({
+                    ...prevStatus,
+                    [dayName]: newStatus // Update local state with new status
+                }));
+                console.log(`Status change successful for ${dayName}`);
+            } else {
+                console.error(`Failed to change status for ${dayName}`);
+            }
+        } catch (error) {
+            console.error('Error occurred while changing status:', error);
+        }
+    };
+
+    // Fetch day status on component mount
+    useEffect(() => {
+        fetchDayStatus();
+    }, []); // Run once on mount
+
+
+
     return <Stack minH="100vh" alignItems="center" >
         <Navbar />
         <ToastContainer />
@@ -281,36 +344,23 @@ const Periods = () => {
                 <Table variant='simple'  >
                     <Thead>
                         <Tr>
-
                             <Th>Day Name</Th>
-
-                            {/* <Th>
-                                <Button onClick={() => setCreateDay(true)}>Add New</Button>
-                            </Th> */}
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {
-                            days?.map((elm, i) => (
-                                <Tr alignItems="center" justifyContent="space-around">
-
-                                    <Td>
-                                        <Input value={elm.day} disabled />
-                                    </Td>
-
-
-                                    <Td>
-                                        <Switch
-                                            colorScheme={switchColor}
-                                            trackColor={{ base: trackColor, md: trackColor }}
-                                            size='lg'
-                                            onClick={() => DeleteDay(elm.id)}
-                                        />
-                                        </Td>
-
-                                </Tr>
-                            ))
-                        }
+                        {daysOfWeek.map((dayName) => (
+                            <Tr key={dayName} alignItems="center" justifyContent="space-around">
+                                <Td>
+                                    <Input value={dayName} disabled />
+                                </Td>
+                                <Td>
+                                    <Switch
+                                        isChecked={switchStatus[dayName] || false} // Default to false if undefined
+                                        onChange={() => toggleSwitch(dayName)}
+                                    />
+                                </Td>
+                            </Tr>
+                        ))}
                         {createDay ? <Tr alignItems="center" justifyContent="space-around" >
 
                             <Td>

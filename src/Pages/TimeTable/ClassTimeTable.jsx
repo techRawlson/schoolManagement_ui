@@ -1012,7 +1012,8 @@ const Classtimetable = () => {
                                 const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
-                                        console.log('no updataes')
+                                        
+                                        console.log('no updataes',teach)
                                     } else {
                                         console.log('lets update this', teach, i)
                                         const body = {
@@ -1327,6 +1328,7 @@ const Classtimetable = () => {
                                                         {elm.teachers[elm.days.indexOf('Friday')]}
                                                         <Select onChange={(e) => get(e, 'friday')} >
                                                             <option>Select</option>
+                                                          
                                                             {staff?.map((elm, i) => (
                                                                 <option key={i} value={elm.id}>{elm.name}</option>
                                                             ))}
@@ -1656,6 +1658,7 @@ const Classtimetable = () => {
                                                     <Flex direction='column'>
                                                         <Select onChange={(e) => get(e, 'friday')} disabled={disabledCheck}>
                                                             <option>Select</option>
+                                                          
                                                             {staff?.map((elm, i) => (
                                                                 <option key={i} value={elm.id}>{elm.name}</option>
                                                             ))}

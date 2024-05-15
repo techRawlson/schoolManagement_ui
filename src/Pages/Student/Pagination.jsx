@@ -58,12 +58,12 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     const finalRef = useRef()
     const [clas, setClas] = useState([])
     console.log(classData)
-      // Extract unique sessions
-      const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
-      // Extract unique class names
-      const uniqueClassNames = [...new Set(clas.map(elm => elm.className))].sort();
-       // Extract unique sections
-      const uniqueSections = [...new Set(clas.map(elm => elm.section))].sort();
+    // Extract unique sessions
+    const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
+    // Extract unique class names
+    const uniqueClassNames = [...new Set(clas.map(elm => elm.className))].sort();
+    // Extract unique sections
+    const uniqueSections = [...new Set(clas.map(elm => elm.section))].sort();
 
     const [isOpenFile, setIsOpenFile] = useState(false)
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -239,14 +239,13 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                 body: formData
             });
             const fdata = await data.json()
-
-            const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
-                method: 'post',
-                body: formData2,
-            })
-            console.log(picture)
-
-
+            if (fdata.status >= 200 && fdata.status < 300) {
+                const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
+                    method: 'post',
+                    body: formData2,
+                })
+                console.log(picture)
+            }
             if (data.ok) {
                 toast.success("Student created successfully");
                 setOpen(false)
@@ -310,7 +309,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     }
 
 
-   
+
 
 
     //for class

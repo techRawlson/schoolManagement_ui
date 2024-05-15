@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Input, Select, Stack, Text } from "@chakra-ui/react"
+import { Button, Flex, Heading, Icon, Input, Select, Stack, Text } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import {
@@ -18,11 +18,15 @@ import { useEffect, useRef, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { MdClose } from "react-icons/md";
 const Subject = () => {
     //for subjects
+    const [staff, setStaff] = useState([])
     const [subjects, setSubjects] = useState([])
     console.log(subjects)
     const [clas, setClas] = useState([])
+    const uniqeIds = [...new Set(staff.map(elm => elm.staffId))].sort();
+
     const getSubjects = async () => {
         try {
             const data = await fetch('http://localhost:8083/api/staff/all-subjects')
@@ -83,15 +87,15 @@ const Subject = () => {
             console.log('Response Redirected:', data.redirected);
             console.log('Response Text:', data.statusText);
             console.log('Response Body Used:', data.bodyUsed);
-           
+
             if (!data.ok) {
-               
+
                 toast.error('Oops! Something went wrong');
-            }else{
+            } else {
                 toast.success('Class added successfully');
                 getClass();
             }
-            
+
 
         } catch (error) {
             console.error('Error:', error);
@@ -100,7 +104,7 @@ const Subject = () => {
 
 
     //main table
-    const [staff, setStaff] = useState([])
+
     const getMainTable = async () => {
         try {
             const data = await fetch('http://localhost:8083/api/staff/saved-Staff')
@@ -169,6 +173,8 @@ const Subject = () => {
 
     });
     console.log(filters)
+    console.log(staff
+    )
     const dataFilter = () => {
         let filterData = staff;
 
@@ -222,12 +228,15 @@ const Subject = () => {
                 (ele) => ele.name === filters.staffName
             );
         }
+        console.log(filterData)
+
         //filter the data based on staffId
         if (filters.staffId !== "") {
             filterData = filterData.filter(
                 (ele) => ele.staffId === filters.staffId
             );
         }
+        console.log(filterData)
 
         //filter the data based on subject
         // Filter the data based on subject
@@ -292,6 +301,38 @@ const Subject = () => {
     const goback = () => {
         navigate(-1)
     }
+
+
+
+
+
+
+    //for staff subjects only
+    const [staffsubjects, setStaffsubjects] = useState({});
+    console.log(staffsubjects)
+    useEffect(() => {
+        // Function to fetch subjects based on staff IDs
+        const fetchSubjects = async () => {
+            const subjectsData = {};
+
+            // Loop through each staff member to fetch subjects
+            for (const elm of staff) {
+                try {
+                    const response = await fetch(`http://localhost:8083/api/staff/${elm.id}/subjects `);
+                    const data = await response.json();
+                    subjectsData[elm.id] = data; // Store subjects data by staff ID
+                } catch (error) {
+                    console.error(`Error fetching subjects for staff ID ${elm.id}:`, error);
+                }
+            }
+
+            // Update state with fetched subjects data
+            setStaffsubjects(subjectsData);
+        };
+
+        // Call fetchSubjects function when component mounts
+        fetchSubjects();
+    }, [staff]);
     return (
 
         <Stack minH="100vh" maxW='100vw'>
@@ -372,7 +413,7 @@ const Subject = () => {
                 <Stack width="30%">
 
                     <Formik
-                        initialValues={{ class: "", section: "",session:"" }}
+                        initialValues={{ class: "", section: "", session: "" }}
                         onSubmit={(values, actions) => {
                             createClass(values);
                             actions.resetForm(); // Reset form after submission
@@ -471,8 +512,8 @@ const Subject = () => {
                                         <option value='8'>1</option>
                                         <option value='9'>9</option>
                                         {
-                                            staff?.map((elm, i) => (
-                                                <option value={elm.staffId}>{elm.staffId}</option>
+                                            uniqeIds?.map((elm, i) => (
+                                                <option value={elm}>{elm}</option>
                                             ))
                                         }
 
@@ -496,37 +537,76 @@ const Subject = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filters.staffData ? staff?.map((elm, i) => (
-                                    elm.subjects?.length > 0 ? elm.subjects.map((e, j) => (
-                                        <Tr key={`${i}-${j}`}>
+                                {filters.staffData ?
+                                    staff?.map((elm, i) => {
+
+                                        return <Tr key={`${i}`}>
                                             <Td>{i + 1}</Td>
                                             <Td>{elm.id}</Td>
                                             <Td>{elm.name}</Td>
-                                            <Td>{e}</Td>
+                                            <Td>
+                                                {staffsubjects[elm.id] ? (
+                                                    <ul>
+                                                        {staffsubjects[elm.id].map((subject) => (
+
+                                                            <Button
+                                                                key={subject}
+                                                                m={1}
+                                                                colorScheme="black"
+                                                                variant="outline"
+                                                                size="sm"
+
+                                                                cursor="default"
+                                                            >
+                                                                {subject}
+                                                            </Button>
+                                                        ))}
+                                                    </ul>
+
+
+
+                                                ) : (
+                                                    <span>Loading subjects...</span>
+                                                )}
+                                            </Td>
                                         </Tr>
-                                    )) :
-                                        <Tr key={i}>
+                                    }
+                                    )
+
+                                    : filteredData?.map((elm, i) => {
+
+                                        return <Tr key={`${i}`}>
                                             <Td>{i + 1}</Td>
                                             <Td>{elm.id}</Td>
                                             <Td>{elm.name}</Td>
-                                            <Td>No subjects</Td>
+                                            <Td>
+                                                {staffsubjects[elm.id] ? (
+                                                    <ul>
+                                                        {staffsubjects[elm.id].map((subject) => (
+
+                                                            <Button
+                                                                key={subject}
+                                                                m={1}
+                                                                colorScheme="black"
+                                                                variant="outline"
+                                                                size="sm"
+
+                                                                cursor="default"
+                                                            >
+                                                                {subject}
+                                                            </Button>
+                                                        ))}
+                                                    </ul>
+
+
+
+                                                ) : (
+                                                    <span>Loading subjects...</span>
+                                                )}
+                                            </Td>
                                         </Tr>
-                                )) : filteredData?.map((elm, i) => (
-                                    elm.subjects?.length > 0 ? elm.subjects.map((e, j) => (
-                                        <Tr key={`${i}-${j}`}>
-                                            <Td>{i + 1}</Td>
-                                            <Td>{elm.id}</Td>
-                                            <Td>{elm.name}</Td>
-                                            <Td>{e}</Td>
-                                        </Tr>
-                                    )) :
-                                        <Tr key={i}>
-                                            <Td>{i + 1}</Td>
-                                            <Td>{elm.id}</Td>
-                                            <Td>{elm.name}</Td>
-                                            <Td>No subjects</Td>
-                                        </Tr>
-                                ))
+                                    }
+                                    )
 
                                 }
 

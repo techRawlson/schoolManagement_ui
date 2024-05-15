@@ -24,7 +24,7 @@ const StaffDetails = () => {
             const fdata = await data.json()
             console.log(fdata)
 
-            if (data.ok) {
+            if (data.status>=200&& data.status<300) {
                 setStudent([fdata])
                 setSelectedItems(fdata.subjects)
             }

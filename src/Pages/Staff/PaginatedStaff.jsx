@@ -23,7 +23,8 @@ import {
     MenuButton,
     Menu,
     MenuList,
-    MenuItem
+    MenuItem,
+    Icon
 
 } from '@chakra-ui/react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -48,6 +49,7 @@ import {
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
+import { MdClose } from 'react-icons/md';
 // import Student from '../Pages/Student';
 function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -234,11 +236,8 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             // Append the image file to the FormData object
             const file = image.current.files[0];
             let formData2 = new FormData()
-           
-           formData2.append('file', file);
-           
-            
 
+            formData2.append('file', file);
 
             const data = await fetch("http://localhost:8083/api/staff/create-staff", {
                 method: 'POST',
@@ -255,12 +254,12 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             console.log(picture)
 
 
-            if (data.ok) {
+            if (data.status>=200&&data.status<300) {
                 toast.success("Staff created successfully")
                 setOpen(false)
-                getData()
+                await getData()
             } else {
-                toast.error("Staff created successfully")
+                toast.error("Something went wrong")
             }
 
         } catch (error) {
@@ -357,7 +356,18 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     }, [])
 
 
+    const handleDeleteItem = async (index) => {
+        try {
 
+            setSelectedItems((prevItems) => {
+                // Create a new array excluding the item to be deleted
+                return prevItems.filter((_, i) => i !== index);
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div>
             <>
@@ -592,24 +602,44 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             </FormControl>
                                             <FormControl isRequired m="1">
                                                 <FormLabel >Subject</FormLabel>
-                                                <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
-                                                    <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
-                                                        Select Items
-                                                    </MenuButton>
-                                                    <MenuList onClick={(e) => e.stopPropagation()}>
-                                                        {subjects.map((option) => (
-                                                            <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
-                                                                <Checkbox
-                                                                    isChecked={selectedItems.includes(option.name)}
-                                                                    onChange={(e) => handleItemClick(e, option.name)}
-                                                                    size="sm"
-                                                                >
-                                                                    {option.name}
-                                                                </Checkbox>
-                                                            </MenuItem>
+                                                <Flex>
+                                                    <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
+                                                        <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>
+                                                            Select Items
+                                                        </MenuButton>
+                                                        <MenuList onClick={(e) => e.stopPropagation()}>
+                                                            {subjects.map((option) => (
+                                                                <MenuItem key={option.name} onClick={(e) => e.stopPropagation()}>
+                                                                    <Checkbox
+                                                                        isChecked={selectedItems.includes(option.name)}
+                                                                        onChange={(e) => handleItemClick(e, option.name)}
+                                                                        size="sm"
+                                                                    >
+                                                                        {option.name}
+                                                                    </Checkbox>
+                                                                </MenuItem>
+                                                            ))}
+                                                        </MenuList>
+                                                    </Menu>
+                                                    <Flex>
+                                                        {selectedItems.map((item, index) => (
+                                                            <Button
+                                                                key={index}
+                                                                m={1}
+                                                                colorScheme="teal"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                rightIcon={<Icon as={MdClose} />}
+                                                                onClick={ () => handleDeleteItem(index)}
+                                                                // Set the disabled prop based on the dis variable
+                                                                 // Set cursor based on dis
+                                                            >
+                                                                {item}
+                                                            </Button>
                                                         ))}
-                                                    </MenuList>
-                                                </Menu>
+                                                    </Flex>
+                                                </Flex>
+
 
                                             </FormControl>
 
@@ -632,7 +662,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             </FormControl>
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Upload Image</FormLabel>
-                                                <Input placeholder='Upload Image' type='file' ref={image}  accept='image/jpeg' />
+                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
                                             </FormControl>
                                         </Flex>
 

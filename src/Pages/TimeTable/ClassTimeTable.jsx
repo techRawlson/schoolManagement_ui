@@ -240,10 +240,11 @@ const Classtimetable = () => {
 
             console.log(check)
             //create timetable for teachers
-            arr.map(async (teach, i) => { 
+            arr.map(async (teach, i) => {
                 console.log('hello')
                 if (teach == undefined || teach == '') {
-                 toast('Please select teachers')
+                    toast('Please select teachers')
+
                 } else {
                     console.log(i)
                     if (i == 0) {
@@ -444,11 +445,11 @@ const Classtimetable = () => {
     const [showMsg, setShowMsg] = useState(false)
 
     //filteratrion part
-     // Extract unique sessions
+    // Extract unique sessions
     const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
     // Extract unique class names
     const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
-     // Extract unique sections
+    // Extract unique sections
     const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
     console.log(uniqueClassNames)
     console.log(detail)
@@ -810,7 +811,12 @@ const Classtimetable = () => {
 
 
         try {
+            //delete from class time table data
             const del = await fetch(`http://localhost:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
+                method: 'delete'
+            })
+            //delete from staff time table data
+            const del2 = await fetch(`http://localhost:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             await getData()
@@ -1012,8 +1018,8 @@ const Classtimetable = () => {
                                 const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
-                                        
-                                        console.log('no updataes',teach)
+
+                                        console.log('no updataes', teach)
                                     } else {
                                         console.log('lets update this', teach, i)
                                         const body = {
@@ -1029,7 +1035,17 @@ const Classtimetable = () => {
                                                 body: JSON.stringify(body)
                                             })
                                             const fdata = await data.json()
-                                            console.log(fdata)
+
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://localhost:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
+
                                         } else if (i == 1) {
                                             const body = {
                                                 teacherName: teach,
@@ -1044,6 +1060,15 @@ const Classtimetable = () => {
                                             })
                                             const fdata = await data.json()
                                             console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://localhost:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
                                         } else if (i == 2) {
 
                                             const body = {
@@ -1061,6 +1086,15 @@ const Classtimetable = () => {
                                             })
                                             const fdata = await data.json()
                                             console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://localhost:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
                                         } else if (i == 3) {
 
                                             const body = {
@@ -1078,6 +1112,15 @@ const Classtimetable = () => {
                                             })
                                             const fdata = await data.json()
                                             console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://localhost:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
                                         } else if (i == 4) {
                                             const body = {
                                                 teacherName: teach,
@@ -1092,6 +1135,15 @@ const Classtimetable = () => {
                                             })
                                             const fdata = await data.json()
                                             console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://localhost:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
 
                                         }
                                     }
@@ -1328,7 +1380,7 @@ const Classtimetable = () => {
                                                         {elm.teachers[elm.days.indexOf('Friday')]}
                                                         <Select onChange={(e) => get(e, 'friday')} >
                                                             <option>Select</option>
-                                                          
+
                                                             {staff?.map((elm, i) => (
                                                                 <option key={i} value={elm.id}>{elm.name}</option>
                                                             ))}
@@ -1658,7 +1710,7 @@ const Classtimetable = () => {
                                                     <Flex direction='column'>
                                                         <Select onChange={(e) => get(e, 'friday')} disabled={disabledCheck}>
                                                             <option>Select</option>
-                                                          
+
                                                             {staff?.map((elm, i) => (
                                                                 <option key={i} value={elm.id}>{elm.name}</option>
                                                             ))}

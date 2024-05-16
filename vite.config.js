@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000 // Change this to the desired port number
-  }
+  },
+  optimizeDeps: {
+    include: ['redux', 'react-redux', 'redux-thunk'],
+  },
 })
 

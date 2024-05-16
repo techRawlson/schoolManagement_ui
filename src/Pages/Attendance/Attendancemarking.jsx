@@ -20,15 +20,17 @@ import { useNavigate } from "react-router-dom";
 // import Stafftimetable from "./StaffTimeTable";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
-const AttendanceMarking = () => {
-
+import { useSelector } from 'react-redux';
+const AttendanceMarking = ({ user }) => {
+    // const user = useSelector(state => state);
+    console.log(user)
 
     const [data, setData] = useState([])
     console.log(data)
 
     const [detail, setDetail,] = useState([])
     const [createNew, setcreateNew] = useState(false)
-    const [create, setcreate] = useState(false)
+    const [create, setcreate] = useState(true)
     const getData = async () => {
         try {
             const data = await fetch('http://localhost:8082/api/students/savedData')
@@ -97,8 +99,20 @@ const AttendanceMarking = () => {
     console.log(wednesdayStore)
 
     //getting current date
-    const date = new Date().toLocaleDateString()
-    console.log(date)
+    const [date, setDate] = useState('')
+    // Create a new Date object to represent the current local date and time
+    const currentDate = new Date();
+
+    // Get the current local time components
+    const hours = currentDate.getHours(); // Get the current hour (0-23)
+    const minutes = currentDate.getMinutes(); // Get the current minute (0-59)
+    const seconds = currentDate.getSeconds(); // Get the current second (0-59)
+
+    // Format the current local time as HH:mm:ss (e.g., 10:30:45)
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+
+
 
 
 
@@ -106,19 +120,26 @@ const AttendanceMarking = () => {
 
 
     //store all staff
+    // const submittedDate
     const [Attendance, setAttendance] = useState([])
-    const getStaff = async () => {
+    const getAttendance = async () => {
         console.log(classValue)
         console.log(section)
         console.log(session)
-        try {
-            const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}`);
-            const fdata = await data.json();
-
-            setAttendance(fdata)
-        } catch (error) {
-            console.log(error)
+        console.log(date)
+        console.log(slot)
+        if (classValue != '' && section != '' && session != '' && date != '' & slot != '') {
+            console.log(classValue, section, session)
+            try {
+                const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`);
+                const fdata = await data.json();
+                console.log(fdata)
+                setAttendance(fdata)
+            } catch (error) {
+                console.log(error)
+            }
         }
+
     }
 
     const [filters, setFilters] = useState({
@@ -126,6 +147,9 @@ const AttendanceMarking = () => {
         class: "",
         section: "",
         year: "",
+        slot: '',
+        date: ''
+
 
     });
 
@@ -134,8 +158,8 @@ const AttendanceMarking = () => {
     const [modifiedData, setModifiedData] = useState([]);
     const [dis, setDis] = useState(false)
     const [days, setDays] = useState([])
-
-
+    const [dbTeacherName, setDbTeacherName] = useState('')
+    const [dbTime, setDbTime] = useState(null)
 
     const [showMsg, setShowMsg] = useState(false)
 
@@ -148,42 +172,41 @@ const AttendanceMarking = () => {
     const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
     console.log(uniqueClassNames)
     console.log(detail)
+    console.log(Attendance)
     const dataFilter = (data) => {
 
         let filterData;
         if (Attendance.length > 0) {
             filterData = Attendance;
+            console.log('first block')
+            setDbTeacherName(filterData[0].teacherName)
+            setDbTime(filterData[0].time)
+            setcreate(false)
         } else {
-            // filterData = data
-            //write logic to add checkBox  property and remove  rest of unused properties from main student data
+            setcreate(true)
             const newData = [];
+
             data?.map((student) => {
                 const obj = {}
-                obj.attendance = null,
+                obj.attendance = 'true',
                     obj.className = student.className,
                     obj.fathersName = student.fathersName,
                     obj.section = student.section,
                     obj.session = student.session,
                     obj.studentId = student.id,
                     obj.studentName = student.name,
-                    obj.rollNumber = student.rollNumber
-                obj.date = date,
-                    obj.firstHalf = slot == '1st' ? '1st' : ''
-                obj.secondHalf = slot == '2nd' ? '2nd' : ''
-                newData.push(obj)
+                    obj.rollNumber = student.rollNumber,
+                    obj.date = date,
+                    obj.time = formattedTime,
+                    obj.slot = slot == '1st' ? '1st' : '2nd',
+                    obj.teacherName = localStorage.getItem("username"),
+                    newData.push(obj)
             })
             console.log(newData)
             filterData = newData
         }
 
         console.log(filterData)
-
-
-
-
-
-
-
 
         //filter for session
         if (filters.year !== "") {
@@ -208,17 +231,17 @@ const AttendanceMarking = () => {
 
         console.log(filterData)
 
-        if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
+        if (filters.class !== "" && filters.year !== "" && filters.section !== "" && filters.slot != '' && filters.date != '') {
 
             if (filterData.length > 0) {
-                setcreate(true)
+                // setcreate(true)
                 setDis(false)
 
 
                 setFilteredData(filterData)
                 // Object to store aggregated data
                 console.log(filterData)
-                setShowMsg(false)
+
 
 
 
@@ -257,7 +280,7 @@ const AttendanceMarking = () => {
                 // toast.error("This data is not available.if you want to create,click on the add new button", {
                 //     style: customToastStyle
                 // })
-                setShowMsg(true)
+
                 setDis(true)
                 setFilteredData([])
                 // setTotalSubjects([])
@@ -269,7 +292,7 @@ const AttendanceMarking = () => {
         }
 
     };
-
+    console.log(filteredData)
     //filter change for class  query
     const handleFilterClass = (value) => {
         setClassValue(value)
@@ -301,12 +324,41 @@ const AttendanceMarking = () => {
         }));
     };
 
+    //filter change for slot
+    const handleFilterSlot = (value) => {
+        console.log(value)
+        setSlot(value)
+        setFilters((prev) => ({
+            ...prev,
+            // classData: false,
+            slot: value,
+        }));
+    };
+    //filter change for date
+    const handleFilterDate = (value) => {
+        //console.log(value)
+        setDate(value)
+        setFilters((prev) => ({
+            ...prev,
+            // classData: false,
+            date: value,
+        }));
+    };
+
+    console.log(filters)
+
+
+
+
+
+
+
 
 
     useEffect(() => {
         dataFilter(data);
         //console.log("trigeered")
-    }, [filters, data]);
+    }, [filters, data, slot, date, Attendance]);
 
     // const [daysMap, setDaysMap] = useState([])
     const daysMap = ['Sr.No', 'Student Id', 'Student', 'F Name', 'Roll Number', 'Attendance'];
@@ -317,9 +369,14 @@ const AttendanceMarking = () => {
     useEffect(() => {
         getData()
         getDetails()
-        getStaff()
+        getAttendance()
 
-    }, [])
+    }, [filters])
+
+    // useEffect(() => {
+    //     getAttendance()
+    //     dataFilter(data)
+    // }, [data])
 
 
 
@@ -420,7 +477,7 @@ const AttendanceMarking = () => {
     const createNewEntry = () => {
         try {
             setcreateNew(true)
-            setShowMsg(false)
+
         } catch (error) {
             console.log(error)
         }
@@ -433,19 +490,45 @@ const AttendanceMarking = () => {
 
 
 
-    const create1 = async () => {
-
+    const create1 = async (d) => {
+        console.log(filteredData)
         try {
-            const data = await fetch('http://localhost:8088/api/Attendance/attendance/bulk', {
+            const response = await fetch('http://localhost:8088/api/Attendance/attendance/bulk', {
                 method: 'POST',
-                headers: '',
-                body: JSON.stringify()
-            })
+                headers: {
+                    'Content-Type': 'application/json' // Specify the content type as JSON
+                },
+                body: JSON.stringify(filteredData) // Convert filteredData to JSON string
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            toast.success('attendance submitted')
+            await getAttendance()
+            // const responseData = await response.json(); // Parse response data as JSON
+            // console.log(responseData); // Log the parsed JSON data
         } catch (error) {
-
+            console.error('Error:', error); // Log any errors that occur during fetch or parsing
         }
+    };
+    //update exsisting entries of the data
+    const update1 = async () => {
+        console.log(filteredData)
+        try {
+            const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' // Specify the content type as JSON
+                },
+                body: JSON.stringify(filteredData) // Co
+            })
 
+        } catch (error) {
+            console.log(error)
+        }
     }
+
 
 
 
@@ -553,6 +636,35 @@ const AttendanceMarking = () => {
         padding: '8px',
         textAlign: 'left'
     };
+
+    const changeCheckBox = (item, index, event) => {
+        try {
+            let val = event.target.checked
+            console.log(val)
+            let updatedStudent = [...filteredData];
+            updatedStudent[index].attendance = String(val)
+            console.log(updatedStudent)
+            //   console.log(data)
+            setFilteredData(updatedStudent)
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    console.log(filteredData)
+    const cellStyle = {
+        padding: '8px',        // Adjust padding for cell content
+        border: '1px solid #ccc',  // Add border around cells
+        textAlign: 'left',     // Align cell content to the left
+        minWidth: '100px',     // Set minimum width for each cell
+        maxWidth: '200px',     // Set maximum width for each cell
+        overflow: 'hidden',    // Hide content overflow within cells
+        whiteSpace: 'nowrap',  // Prevent line breaks within cells
+        textOverflow: 'ellipsis',// Display ellipsis (...) for overflowed text
+        textAlign:'center'  
+      };
+
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -570,7 +682,7 @@ const AttendanceMarking = () => {
                 direction="column" width="65vw" maxW="80vw">
                 <Flex justifyContent='space-around' alignItems='center'>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                        <FormLabel>Session</FormLabel>
+                        <FormLabel textAlign="center">Session</FormLabel>
                         <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)}>
                             <option>Select</option>
                             {uniqueSessions?.map((elm, i) => (
@@ -579,7 +691,7 @@ const AttendanceMarking = () => {
                         </Select>
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                        <FormLabel>Class</FormLabel>
+                        <FormLabel textAlign="center">Class</FormLabel>
                         <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
                             <option>Select</option>
                             {uniqueClassNames?.map((elm, i) => (
@@ -588,7 +700,7 @@ const AttendanceMarking = () => {
                         </Select>
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                        <FormLabel>Section</FormLabel>
+                        <FormLabel textAlign="center">Section</FormLabel>
                         <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
                             <option>Select</option>
                             {uniqueSections?.map((elm, i) => (
@@ -598,18 +710,19 @@ const AttendanceMarking = () => {
                     </FormControl>
                     <FormControl isRequired alignItems="center" m="1">
                         <FormLabel textAlign="center">Choose Slot</FormLabel >
-                        <Flex direction='row' justifyContent="space-around">
-                            <Button colorScheme={slot == '1st' ? 'green' : 'yellow'} onClick={() => setSlot('1st')}>1st</Button>
-                            <Button colorScheme={slot == '2nd' ? 'green' : 'yellow'} onClick={() => setSlot('2nd')}>2nd</Button>
+                        <Flex direction='row' justifyContent="space-around" >
+                            <Button colorScheme={slot == '1st' ? 'green' : 'teal'} value={slot} onClick={() => handleFilterSlot('1st')} width="30%">1st</Button>
+                            <Button colorScheme={slot == '2nd' ? 'green' : 'teal'} value={slot} onClick={() => handleFilterSlot('2nd')} width="30%">2nd</Button>
                         </Flex>
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center">
-                        <FormLabel>Current Date</FormLabel>
-                        <Input value={date} />
+                        <FormLabel textAlign="center">Date</FormLabel>
+
+                        <Input value={date} type="date" onChange={(e) => handleFilterDate(e.target.value)} max={new Date().toISOString().split('T')[0]}/>
 
                     </FormControl>
 
-                    <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
+                    {/* <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
                         {
                             dis ? <div>
                                 {createNew ?
@@ -632,7 +745,7 @@ const AttendanceMarking = () => {
                         }
 
 
-                    </FormControl>
+                    </FormControl> */}
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
                     <Table size='sm' variant="simple" style={tableStyle}>
@@ -647,7 +760,7 @@ const AttendanceMarking = () => {
 
                                             {
                                                 daysMap?.map((day, i) => (
-                                                    <Th key={i} style={thStyle}>{day}</Th>
+                                                    <Th key={i} style={cellStyle}>{day}</Th>
                                                 ))
                                             }
 
@@ -660,16 +773,21 @@ const AttendanceMarking = () => {
 
                         <Tbody>
                             {filteredData.map((item, index) => (
-                                <Tr key={index} >
-                                    <Td>{index + 1}</Td>
-                                    <Td>{item.studentId}</Td>
-                                    <Td>{item.studentName}</Td>
-                                    <Td>{item.fathersName}</Td>
-                                    <Td>{item.rollNumber}</Td>
-                                    <Td>
-                                        <Checkbox defaultChecked={item.checked} onChange={()=>changeCheckBox(item,indez)}  size="lg" />
-                                    </Td>
-                                </Tr>
+                                 <tr key={index}>
+                                 <td style={cellStyle}>{index + 1}</td>
+                                 <td style={cellStyle}>{item.studentId}</td>
+                                 <td style={cellStyle}>{item.studentName}</td>
+                                 <td style={cellStyle}>{item.fathersName}</td>
+                                 <td style={cellStyle}>{item.rollNumber}</td>
+                                 <td style={cellStyle}>
+                                   {/* Assuming Checkbox component is imported and used correctly */}
+                                   <Checkbox
+                                     isChecked={item.attendance === 'true'}
+                                     onChange={(event) => changeCheckBox(item, index, event)}
+                                     size="lg"
+                                   />
+                                 </td>
+                               </tr>
                             ))}
                         </Tbody>
 
@@ -687,13 +805,29 @@ const AttendanceMarking = () => {
                     }
 
                 </TableContainer>
-                <Stack marginLeft="90%" marginTop="0.3%" width="10%">
+                <Stack display="flex" flexDirection="row" width="100%" justifyContent="space-between" alignItems="center">
+
                     {
-                        AddNew ? <Button onClick={() => create1()} bgColor="green">Submit</Button> : ''
+                        create ? "" : <Stack gap="0.0rem">
 
+                            <Badge colorScheme="red" textColor="black" fontSize="small">Submitted By: {dbTeacherName}</Badge>
+                            <Badge colorScheme="red" textColor="black" fontSize="small">Submitted At: {dbTime}</Badge>
+
+
+                        </Stack>
                     }
+                    {
+                        filteredData?.length > 0 ? <Stack width="10%">
+                            {
+                                create ? <Button onClick={() => create1()} bgColor="green">Submit</Button> : <Button onClick={() => update1()} bgColor="green">Update</Button>
 
+                            }
+
+                        </Stack> : ''
+                    }
                 </Stack>
+
+
 
 
             </Flex>

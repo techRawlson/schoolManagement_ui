@@ -16,6 +16,9 @@ import TimeTable from './Pages/TimeTable/TimeTable';
 import Classtimetable from './Pages/TimeTable/ClassTimeTable';
 import Stafftimetable from './Pages/TimeTable/StaffTimeTable';
 import Periods from './Pages/TimeTable/Periods';
+import Attendance from './Pages/Attendance/Attendances';
+import AttendanceMarking from './Pages/Attendance/Attendancemarking';
+import Attendancerecord from './Pages/Attendance/Attendancerecord';
 
 
 
@@ -39,6 +42,9 @@ function App() {
           <Route  path='/studentdetails/:id' element={tok?<StudentDetails/>:<Login setToken={setToken}/>}/>
           <Route  path='/staffdetails/:id' element={tok?<StaffDetails/>:<Login setToken={setToken}/>}/>
           <Route  path='/periods' element={tok?<Periods/>:<Login setToken={setToken}/>}/>
+          <Route  path='/attendance' element={tok?<Attendance/>:<Login setToken={setToken}/>}/>
+          <Route  path='/attedancemarking' element={tok?<AttendanceMarking/>:<Login setToken={setToken}/>}/>
+          <Route  path='/attendancerecord' element={tok?<Attendancerecord/>:<Login setToken={setToken}/>}/>
         </Routes>
       </AuthProvider>
     </Router>

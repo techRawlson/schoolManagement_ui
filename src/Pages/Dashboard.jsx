@@ -21,7 +21,7 @@ const Dashboard = () => {
       console.log(data)
       navigate(`/${data}`)
     } catch (error) {
-console.log(error)
+      console.log(error)
     }
   }
 
@@ -50,7 +50,8 @@ console.log(error)
 
           </CardBody>
 
-        </Card> <Card cursor="pointer" onClick={() => nextPage("staff")}>
+        </Card> 
+        <Card cursor="pointer" onClick={() => nextPage("staff")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Staff</Heading>
           </CardHeader>
@@ -60,7 +61,7 @@ console.log(error)
             </Stack>
           </CardBody>
 
-        </Card> 
+        </Card>
         <Card cursor="pointer" onClick={() => nextPage("subjects")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Subjects</Heading>
@@ -71,9 +72,21 @@ console.log(error)
             </Stack>
           </CardBody>
 
-        </Card><Card cursor="pointer" onClick={() => nextPage("timetable")}>
+        </Card>
+        <Card cursor="pointer" onClick={() => nextPage("timetable")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Time Table</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <SlCalender size={95} />
+            </Stack>
+          </CardBody>
+
+        </Card>
+        <Card cursor="pointer" onClick={() => nextPage("attendance")}>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Attendance</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">

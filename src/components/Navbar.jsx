@@ -14,16 +14,16 @@ const Navbar = () => {
   }
   return (
     // <div style={{ backgroundColor: "#FFBF00" }}>
-      <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center",width:'100vw',height:'7vw' }} mb={5}    >
+      <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center",width:'100vw',padding:'1.5%' }}     >
 
         <AvatarGroup spacing='1rem'>
-          <Avatar bg='red.500' />
+          <Avatar bg='red.500'  />
         </AvatarGroup>
 
-        <Box w='50%' h='40px' style={{ textAlign: "center" }} >
+       
           <Text fontSize="4vh">Student Management System</Text>
-        </Box>
-        <FiLogOut size="30px" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
+    
+        <FiLogOut fontSize="4vh" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
 
       </Stack>
       //

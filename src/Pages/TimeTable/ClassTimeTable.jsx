@@ -174,34 +174,6 @@ const Classtimetable = () => {
             });
 
             console.log(bodyEntries)
-            //this code is for Class time table entries
-
-            // const existingEntriesResponse = await fetch('http://localhost:8086/api/lecture_data');
-            // const existingEntries = await existingEntriesResponse.json();
-
-            // // Check for duplicates
-            // const duplicateEntry = bodyEntries.find(newEntry => {
-            //     return existingEntries.some(existingEntry => {
-            //         return newEntry.lectureNumber === existingEntry.lectureNumber &&
-            //             newEntry.startTime === existingEntry.startTime &&
-            //             newEntry.endTime === existingEntry.endTime &&
-            //             newEntry.className === existingEntry.className &&
-            //             newEntry.session === existingEntry.session &&
-            //             newEntry.section === existingEntry.section &&
-            //             newEntry.day === existingEntry.day &&
-            //             newEntry.teacherName === existingEntry.teacherName &&
-            //             newEntry.subject === existingEntry.subject;
-            //     });
-            // });
-
-            // if (duplicateEntry) {
-            //     console.log("Duplicate entry found. Stopping further execution.");
-            //     return; // Stop further execution
-            // }
-
-
-
-
             let status = 0;
             let check = [true, true, true, true, true]
             // Create an array to store promises
@@ -454,11 +426,8 @@ const Classtimetable = () => {
     console.log(uniqueClassNames)
     console.log(detail)
     const dataFilter = (data) => {
-
         let filterData = data;
         console.log(filterData)
-
-
         const modifiedData = Object.values(data.reduce((acc, obj) => {
             const key = `${obj.className}-${obj.section}-${obj.session}-${obj.lectureNumber}`;
             if (!acc[key]) {
@@ -535,32 +504,6 @@ const Classtimetable = () => {
                 // Object to store aggregated data
                 console.log(filterData)
                 setShowMsg(false)
-
-
-
-
-                // // Create an array to store the subjects temporarily
-                // let tempSubjects = [];
-
-                // filterData.forEach(elm => {
-                //     const stringToSplit1 = elm.monday;
-                //     const stringToSplit2 = elm.tuesday;
-                //     const stringToSplit3 = elm.wednesday;
-                //     const stringToSplit4 = elm.thursday;
-                //     const stringToSplit5 = elm.friday;
-                //     const arr = [stringToSplit1, stringToSplit2, stringToSplit3, stringToSplit4, stringToSplit5];
-
-                //     arr.forEach(e => {
-                //         const parts = e.split(" ");
-                //         if (parts.length > 1) {
-                //             const laterPart = parts.slice(1).join(" ");
-                //             tempSubjects.push(laterPart);
-                //         }
-                //     });
-                // });
-
-                // After processing all subjects, update totalSubjects
-                // setTotalSubjects(tempSubjects);
                 setUpdateButton('Update')
                 setAddNew(true)
             }
@@ -736,8 +679,6 @@ const Classtimetable = () => {
 
 
 
-    //filter the time table
-    //console.log(totalSubjects)
 
     const editModeOn = (id) => {
         //console.log(id)
@@ -781,21 +722,7 @@ const Classtimetable = () => {
 
 
 
-    // Function to split the day name into parts after the second space
-    const splitDayName = (dayName) => {
-        // const parts = dayName.split(" ");
-        // if (parts.length > 1) {
-        //     return {
-        //         firstLine: parts.slice(0, 1).join(" "),
-        //         secondLine: parts.slice(1).join(" ")
-        //     };
-        // } else {
-        //     return {
-        //         firstLine: parts.join(" "),
-        //         secondLine: ""
-        //     };
-        // }
-    };
+   
 
 
 
@@ -1153,56 +1080,8 @@ const Classtimetable = () => {
 
                                 console.log(data)
                                 console.log('reached')
-                                // const newData = await fetch(`http://localhost:8086/api/timetable/get-timetable/${session}/${classValue}/${section}/monday`)
-                                // const fNewData = await newData.json()
-
-                                // console.log(fNewData)
-
-                                // const mon = splitDayName(fNewData.monday)
-                                // const tue = splitDayName(fNewData.tuesday)
-                                // const wed = splitDayName(fNewData.wednesday)
-                                // const thu = splitDayName(fNewData.thursday)
-                                // const fri = splitDayName(fNewData.friday)
-                                // const monday = mon.firstLine + " " + mon.secondLine
-                                // const tuesday = tue.firstLine + " " + tue.secondLine
-                                // const wednesday = wed.firstLine + " " + wed.secondLine
-                                // const thursday = thu.firstLine + " " + thu.secondLine
-                                // const friday = fri.firstLine + " " + fri.secondLine
-                                // const body = {
-                                //     monday: mondayTeacher == '' || mondayTeacher == undefined ? monday : mondayTeacher + " " + mondaySubject,
-                                //     tuesday: tuesdayTeacher == '' || tuesdayTeacher == undefined ? tuesday : tuesdayTeacher + " " + tuesdaySubject,
-                                //     wednesday: wednesdayTeacher == '' || wednesdayTeacher == undefined ? wednesday : wednesdayTeacher + " " + wednesdaySubject,
-                                //     thursday: thursdayTeacher == '' || thursdayTeacher == undefined ? thursday : thursdayTeacher + " " + thursdaySubject,
-                                //     friday: fridayTeacher == '' || fridayTeacher == undefined ? friday : fridayTeacher + " " + fridaySubject,
-                                // }
-                                // console.log(body)
-                                // Implement save functionality here, e.g., update database or state
-
-
-
-
-
-
                                 try {
-                                    // const data = await fetch(`http://localhost:8086/api/timetable/update-timetable/${className}/${section}/${session}/${lectureNumber}/${day}`, {
-                                    //     method: 'put',
-                                    //     headers: {
-                                    //         'Content-Type': 'application/json' // Specify the content type as JSON
-                                    //     },
-                                    //     body: JSON.stringify(body)
-                                    // })
-                                    // const fdata = await data.json()
-
-                                    // const data1 = await fetch('http://localhost:8086/api/timetable/full-timetable')
-                                    // const fdata1 = await data1.json()
-                                    // console.log(fdata1)
-                                    // // setData(fdata1)
-
-                                    // dataFilter(fdata1)
-
-
-                                    //empty all states
-
+                                
                                     setMondayTeacher('')
                                     setMondaySubject('')
                                     setMondayStore([])
@@ -1423,154 +1302,7 @@ const Classtimetable = () => {
 
 
 
-                                        {/* Render Monday */}
-                                        {/* <Td>
-
-                                            {
-                                                editMode == elm.id ? mondayParts.firstLine : ''
-                                            }
-                                            <div>{editMode == elm.id ?
-
-                                                <Select onChange={(e) => get(e, 'monday')}  >
-                                                    <option value="">Select</option>
-                                                    {staff?.map((elm, i) => (
-                                                        <option key={i} value={elm.id}>{elm.name}</option>
-                                                    ))}
-                                                </Select>
-
-                                                : mondayParts.firstLine}
-                                            </div>
-                                            {
-                                                editMode == elm.id ? mondayParts.secondLine : ''
-                                            }
-                                            <div>
-
-                                                {editMode == elm.id ?
-
-                                                    <Select value={mondaySubject} onChange={(e) => setMondaySubject(e.target.value)}>
-                                                        <option>Select</option>
-                                                        {
-                                                            mondayStore?.map((subject) => (
-                                                                <option>{subject}</option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                    : mondayParts.secondLine}</div>
-                                        </Td> */}
-                                        {/* Render Tuesday */}
-                                        {/* <Td>
-                                            {
-                                                editMode == elm.id ? tuesdayParts.firstLine : ''
-                                            }
-                                            <div>
-                                                {editMode == elm.id ?
-                                                    <Select onChange={(e) => get(e, 'tuesday')}>
-                                                        <option>Select</option>
-                                                        {staff?.map((elm, i) => (
-                                                            <option key={i} value={elm.id}>{elm.name}</option>
-                                                        ))}
-                                                    </Select>
-                                                    : tuesdayParts.firstLine}</div>
-                                            <div>
-                                                {
-                                                    editMode == elm.id ? tuesdayParts.secondLine : ''
-                                                }
-                                                {editMode == elm.id ?
-                                                    <Select value={tuesdaySubject} onChange={(e) => setTuesdaySubject(e.target.value)}>
-                                                        <option>Select</option>
-                                                        {
-                                                            tuesdayStore?.map((subject) => (
-                                                                <option>{subject}</option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                    : tuesdayParts.secondLine}</div>
-                                        </Td> */}
-                                        {/* Render Wednesday */}
-                                        {/* <Td>
-                                            {
-                                                editMode == elm.id ? wednesdayParts.firstLine : ''
-                                            }
-                                            <div>{editMode == elm.id ?
-                                                <Select onChange={(e) => get(e, 'wednesday')}>
-                                                    <option>Select</option>
-                                                    {staff?.map((elm, i) => (
-                                                        <option key={i} value={elm.id}>{elm.name}</option>
-                                                    ))}
-                                                </Select>
-                                                : wednesdayParts.firstLine}</div>
-                                            <div>{
-                                                editMode == elm.id ? wednesdayParts.secondLine : ''
-                                            }
-                                                {editMode == elm.id ?
-
-                                                    <Select value={wednesdaySubject} onChange={(e) => setWednesdaySubject(e.target.value)}>
-                                                        <option>Select</option>
-                                                        {
-                                                            wednesdayStore?.map((subject) => (
-                                                                <option>{subject}</option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                    : wednesdayParts.secondLine}</div>
-                                        </Td> */}
-                                        {/* Render Thursday */}
-                                        {/* <Td >
-                                            {
-                                                editMode == elm.id ? thursdayParts.firstLine : ''
-                                            }
-                                            <div>{editMode == elm.id ?
-                                                <Select onChange={(e) => get(e, 'thursday')}>
-                                                    <option>Select</option>
-                                                    {staff?.map((elm, i) => (
-                                                        <option key={i} value={elm.id}>{elm.name}</option>
-                                                    ))}
-                                                </Select>
-                                                : thursdayParts.firstLine}</div>
-                                            <div>
-                                                {
-                                                    editMode == elm.id ? thursdayParts.secondLine : ''
-                                                }
-                                                {editMode == elm.id ?
-                                                    <Select value={thursdaySubject} onChange={(e) => setThursdaySubject(e.target.value)}>
-                                                        <option>Select</option>
-                                                        {
-                                                            thursdayStore?.map((subject) => (
-                                                                <option>{subject}</option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                    : thursdayParts.secondLine}</div>
-                                        </Td> */}
-                                        {/* Render Friday */}
-                                        {/* <Td>
-                                            {
-                                                editMode == elm.id ? fridayParts.firstLine : ''
-                                            }
-                                            <div>{editMode == elm.id ?
-                                                <Select onChange={(e) => get(e, 'friday')}>
-                                                    <option>Select</option>
-                                                    {staff?.map((elm, i) => (
-                                                        <option key={i} value={elm.id}>{elm.name}</option>
-                                                    ))}
-                                                </Select>
-                                                : fridayParts.firstLine}</div>
-                                            <div>
-                                                {
-                                                    editMode == elm.id ? fridayParts.secondLine : ''
-                                                }
-                                                {editMode == elm.id ?
-                                                    <Select value={fridaySubject} onChange={(e) => setFridaySubject(e.target.value)}>
-                                                        <option>Select</option>
-                                                        {
-                                                            fridayStore?.map((subject) => (
-                                                                <option>{subject}</option>
-                                                            ))
-                                                        }
-                                                    </Select>
-                                                    : fridayParts.secondLine}</div>
-                                        </Td> */}
-                                        {/* Render edit button or save button based on edit mode */}
+                    
                                         {
                                             update ? <Td>
                                                 {editMode == elm.id ? (

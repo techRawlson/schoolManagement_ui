@@ -18,6 +18,8 @@ import Periods from './Pages/TimeTable/Periods';
 import Attendance from './Pages/Attendance/Attendances';
 import AttendanceMarking from './Pages/Attendance/Attendancemarking';
 import Attendancerecord from './Pages/Attendance/Attendancerecord';
+import ClassRecord from './Pages/Attendance/ClassRecord';
+import StudentRecord from './Pages/Attendance/Studentrecord';
 
 
 
@@ -49,6 +51,8 @@ function App() {
           <Route path='/attendance' element={tok ? <Attendance /> : <Login setToken={setToken} />} />
           <Route path='/attedancemarking' element={tok ? <AttendanceMarking user={user}/> : <Login setToken={setToken} />} />
           <Route path='/attendancerecord' element={tok ? <Attendancerecord /> : <Login setToken={setToken} />} />
+          <Route path='/classrecord' element={tok ? <ClassRecord /> : <Login setToken={setToken} />} />
+          <Route path='/studentrecord' element={tok ? <StudentRecord /> : <Login setToken={setToken} />} />
         </Routes>
       </AuthProvider>
     </Router>

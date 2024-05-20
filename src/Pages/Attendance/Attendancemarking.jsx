@@ -36,9 +36,6 @@ const AttendanceMarking = ({ user }) => {
             const data = await fetch('http://localhost:8082/api/students/savedData')
             const fdata = await data.json()
             console.log(fdata)
-
-
-
             setData(fdata)
         } catch (error) {
             console.log(error)
@@ -131,9 +128,10 @@ const AttendanceMarking = ({ user }) => {
         if (classValue != '' && section != '' && session != '' && date != '' & slot != '') {
             console.log(classValue, section, session)
             try {
-                const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`);
+                const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/date/${date}/slot/${slot}`);
                 const fdata = await data.json();
                 console.log(fdata)
+                setSubmitVisible(true)
                 setAttendance(fdata)
             } catch (error) {
                 console.log(error)
@@ -483,7 +481,8 @@ const AttendanceMarking = ({ user }) => {
         }
     }
 
-
+    const [Edit, setEdit] = useState(false)
+    const [submitVisible, setSubmitVisible] = useState(false)
 
 
 
@@ -506,6 +505,7 @@ const AttendanceMarking = ({ user }) => {
             }
             toast.success('attendance submitted')
             await getAttendance()
+            setEdit(false)
             // const responseData = await response.json(); // Parse response data as JSON
             // console.log(responseData); // Log the parsed JSON data
         } catch (error) {
@@ -523,7 +523,7 @@ const AttendanceMarking = ({ user }) => {
                 },
                 body: JSON.stringify(filteredData) // Co
             })
-
+            setEdit(false)
         } catch (error) {
             console.log(error)
         }
@@ -662,8 +662,8 @@ const AttendanceMarking = ({ user }) => {
         overflow: 'hidden',    // Hide content overflow within cells
         whiteSpace: 'nowrap',  // Prevent line breaks within cells
         textOverflow: 'ellipsis',// Display ellipsis (...) for overflowed text
-        textAlign:'center'  
-      };
+        textAlign: 'center'
+    };
 
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
@@ -718,34 +718,11 @@ const AttendanceMarking = ({ user }) => {
                     <FormControl isRequired justifyContent="space-between" alignItems="center">
                         <FormLabel textAlign="center">Date</FormLabel>
 
-                        <Input value={date} type="date" onChange={(e) => handleFilterDate(e.target.value)} max={new Date().toISOString().split('T')[0]}/>
+                        <Input value={date} type="date" onChange={(e) => handleFilterDate(e.target.value)} max={new Date().toISOString().split('T')[0]} />
 
                     </FormControl>
 
-                    {/* <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
-                        {
-                            dis ? <div>
-                                {createNew ?
-                                    <div>
-                                        <Button onClick={() => setcreateNew(false)}>Cancel</Button>
-                                    </div>
-
-                                    : <div>
-                                        <Button onClick={() => createNewEntry()}>Add new</Button>
-                                    </div>}
-                            </div> : <div>
-                                {
-                                    create ? <Button onClick={() => showUpdate()}>{updateButton}</Button> : ''
-
-                                }
-
-                            </div>
-
-
-                        }
-
-
-                    </FormControl> */}
+                    
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
                     <Table size='sm' variant="simple" style={tableStyle}>
@@ -771,25 +748,60 @@ const AttendanceMarking = ({ user }) => {
                                 : ''
                         }
 
-                        <Tbody>
-                            {filteredData.map((item, index) => (
-                                 <tr key={index}>
-                                 <td style={cellStyle}>{index + 1}</td>
-                                 <td style={cellStyle}>{item.studentId}</td>
-                                 <td style={cellStyle}>{item.studentName}</td>
-                                 <td style={cellStyle}>{item.fathersName}</td>
-                                 <td style={cellStyle}>{item.rollNumber}</td>
-                                 <td style={cellStyle}>
-                                   {/* Assuming Checkbox component is imported and used correctly */}
-                                   <Checkbox
-                                     isChecked={item.attendance === 'true'}
-                                     onChange={(event) => changeCheckBox(item, index, event)}
-                                     size="lg"
-                                   />
-                                 </td>
-                               </tr>
-                            ))}
-                        </Tbody>
+                        {
+                            Edit ? <Tbody>
+                                {filteredData.map((item, index) => (
+                                    <tr key={index}>
+                                        <td style={cellStyle}>{index + 1}</td>
+                                        <td style={cellStyle}>{item.studentId}</td>
+                                        <td style={cellStyle}>{item.studentName}</td>
+                                        <td style={cellStyle}>{item.fathersName}</td>
+                                        <td style={cellStyle}>{item.rollNumber}</td>
+                                        <td style={cellStyle}>
+
+                                            <Checkbox
+                                                isChecked={item.attendance === 'true'}
+                                                onChange={(event) => changeCheckBox(item, index, event)}
+                                                size="lg"
+                                            />
+
+
+                                        </td>
+                                    </tr>
+
+
+                                ))}
+
+                            </Tbody> :
+                                <Tbody>
+                                    {filteredData.map((item, index) => (
+
+
+                                        <tr key={index}>
+                                            <td style={cellStyle}>{index + 1}</td>
+                                            <td style={cellStyle}>{item.studentId}</td>
+                                            <td style={cellStyle}>{item.studentName}</td>
+                                            <td style={cellStyle}>{item.fathersName}</td>
+                                            <td style={cellStyle}>{item.rollNumber}</td>
+                                            <td style={cellStyle} bgColor={item.attendance == 'true' ? 'green' : 'red'} >
+                                                {/* Assuming Checkbox component is imported and used correctly */}
+                                                {/* <Checkbox
+                                             isChecked={item.attendance === 'true'}
+                                             onChange={(event) => changeCheckBox(item, index, event)}
+                                             size="lg"
+                                         /> */}
+                                                {
+                                                    item.attendance == 'true' ? 'Present' : 'Absent'
+                                                }
+                                            </td>
+                                        </tr>
+
+
+                                    ))}
+
+                                </Tbody>
+                        }
+
 
 
 
@@ -808,21 +820,38 @@ const AttendanceMarking = ({ user }) => {
                 <Stack display="flex" flexDirection="row" width="100%" justifyContent="space-between" alignItems="center">
 
                     {
-                        create ? "" : <Stack gap="0.0rem">
+                        create ? "" : <Flex direction="row"  >
 
-                            <Badge colorScheme="red" textColor="black" fontSize="small">Submitted By: {dbTeacherName}</Badge>
-                            <Badge colorScheme="red" textColor="black" fontSize="small">Submitted At: {dbTime}</Badge>
+                            <Badge textColor="black" padding="2%" fontSize="100%">Submitted By: {dbTeacherName}</Badge>
+                            <Badge textColor="black" padding="2%" fontSize="100%x">Submitted At: {dbTime}</Badge>
 
 
-                        </Stack>
+                        </Flex>
                     }
-                    {
-                        filteredData?.length > 0 ? <Stack width="10%">
+
+                    {Attendance?.length==0 && submitVisible==true?
+                        <Stack>
                             {
-                                create ? <Button onClick={() => create1()} bgColor="green">Submit</Button> : <Button onClick={() => update1()} bgColor="green">Update</Button>
+                                Edit ? <Button onClick={() => create1()} bgColor="green">Submit</Button> : 
+                                <Button onClick={() => setEdit(true)} bgColor="teal">Edit</Button>
 
                             }
+                        </Stack>:''
 
+                    }
+                    {
+                        // <Button onClick={() => update1()} bgColor="green">Update</Button>
+                        filteredData?.length > 0 ? <Stack width="8%" margin="0 2% 0 0">
+                            {
+                                create ? "" : <Stack>
+                                    {
+                                        Edit ? <Button onClick={() => update1()} bgColor="green">Update</Button> :
+                                            <Button onClick={() => setEdit(true)} bgColor="teal">Edit</Button>
+                                    }
+
+                                </Stack>
+
+                            }
                         </Stack> : ''
                     }
                 </Stack>

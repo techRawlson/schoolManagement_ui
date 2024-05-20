@@ -2,6 +2,7 @@ import { Card, CardBody, CardHeader, Heading, SimpleGrid, Stack } from "@chakra-
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 const Attendance = () => {
     const navigate = useNavigate()
@@ -14,6 +15,7 @@ const Attendance = () => {
       }
     }
     return <Stack h="100vh">
+      <Navbar/>
        <SimpleGrid spacing={4} templateColumns='1fr 1fr' margin="auto" width="90vw" padding="0 8%">
         <Card cursor="pointer" onClick={() => nextPage("attedancemarking")}>
           <CardHeader>

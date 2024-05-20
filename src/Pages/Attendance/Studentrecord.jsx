@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Select, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
@@ -177,7 +177,7 @@ const StudentRecord = () => {
       <Flex justifyContent='space-around' alignItems='center'>
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Session</FormLabel>
-          <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)}>
+          <Select  value={session} onChange={(e) => handleFilterYear(e.target.value)}>
             <option>Select</option>
             {uniqueSessions?.map((elm, i) => (
               <option key={i} value={elm}>{elm}</option>
@@ -186,16 +186,16 @@ const StudentRecord = () => {
         </FormControl>
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Class</FormLabel>
-          <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
+          <Select  value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
             <option>Select</option>
             {uniqueClassNames?.map((elm, i) => (
               <option key={i} value={elm}>{elm}</option>
             ))}
           </Select>
         </FormControl>
-        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
+        <FormControl  justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Section</FormLabel>
-          <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
+          <Select  value={section} onChange={(e) => handleFiltersection(e.target.value)}>
             <option>Select</option>
             {uniqueSections?.map((elm, i) => (
               <option key={i} value={elm}>{elm}</option>
@@ -203,7 +203,16 @@ const StudentRecord = () => {
           </Select>
         </FormControl>
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Section</FormLabel>
+          <FormLabel>Student</FormLabel>
+          <Select  value={section} onChange={(e) => handleFiltersection(e.target.value)}>
+            <option>Select</option>
+            {uniqueSections?.map((elm, i) => (
+              <option key={i} value={elm}>{elm}</option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl  justifyContent="space-between" alignItems="center" m="1">
+          <FormLabel>Student Id</FormLabel>
           <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
             <option>Select</option>
             {uniqueSections?.map((elm, i) => (
@@ -211,8 +220,8 @@ const StudentRecord = () => {
             ))}
           </Select>
         </FormControl>
-        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Section</FormLabel>
+        <FormControl  justifyContent="space-between" alignItems="center" m="1">
+          <FormLabel>Roll Number</FormLabel>
           <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
             <option>Select</option>
             {uniqueSections?.map((elm, i) => (
@@ -220,14 +229,13 @@ const StudentRecord = () => {
             ))}
           </Select>
         </FormControl>
-        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Section</FormLabel>
-          <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
-            <option>Select</option>
-            {uniqueSections?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
+        <FormControl  justifyContent="space-between" alignItems="center" m="1">
+        <FormLabel>Date Range</FormLabel>
+          <Flex>
+          <Input type="date"/>
+          <Input type="date"/>
+          </Flex>
+       
         </FormControl>
         
       

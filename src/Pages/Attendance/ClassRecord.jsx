@@ -17,7 +17,12 @@ const ClassRecord = () => {
     const [createNew, setcreateNew] = useState(false)
     const [fDate, setFDate] = useState('')
     const [tDate, setTDate] = useState('')
+    const [totalDates, setTotalDates] = useState([])
     const daysMap = ['Sr.No', 'Student Id', 'Student', 'F Name', 'Roll Number',];
+
+
+
+
 
     const [filters, setFilters] = useState({
         data: false,
@@ -228,6 +233,27 @@ const ClassRecord = () => {
     const [uniqueDates, setUniqueDates] = useState([])
     const [Dates, setDates] = useState([])
     const [uniqueSortedDates, setuniqueSortedDates] = useState([])
+
+
+    //get dates 
+    function getDatesBetween(startDate, endDate) {
+        // Convert the input dates to Date objects
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        // Array to hold the dates
+        const dates = [];
+
+        // Loop to add dates to the array
+        while (start <= end) {
+            // Push the current date to the array
+            dates.push(new Date(start));
+            // Increment the date by one day
+            start.setDate(start.getDate() + 1);
+        }
+
+        return dates;
+    }
     const getAttendance = async () => {
         console.log(classValue)
         console.log(section)
@@ -257,6 +283,13 @@ const ClassRecord = () => {
                 setUniqueDates(unique)
                 setuniqueSortedDates(sorted)
                 setAttendance(fdata1)
+
+                const datesBetween = getDatesBetween(fDate, tDate);
+                const formattedDates = datesBetween.map(date => date.toISOString().split('T')[0]);
+                console.log(formattedDates)
+                setTotalDates(formattedDates)
+
+                setTotalDates
             } catch (error) {
                 console.log(error)
             }
@@ -395,7 +428,7 @@ const ClassRecord = () => {
                                                 ))
                                             }
                                             {
-                                                uniqueSortedDates?.map((day, i) => (
+                                                totalDates?.map((day, i) => (
                                                     <Th key={i} style={cellStyle}>{day}</Th>
                                                 ))
                                             }
@@ -409,64 +442,111 @@ const ClassRecord = () => {
                         {Attendance?.length > 0 ? (
                             <Tbody>
                                 {Attendance.map((item, index) => {
-                                    const countPresent = item.attendance.filter((elm) => elm == 'true')
-                                    return (<Tr key={index} textAlign="center">
-                                        <Td style={cellStyle}>{index + 1}</Td>
-                                        <Td style={cellStyle}>{item.studentId}</Td>
-                                        <Td style={cellStyle}>{item.studentName}</Td>
-                                        <Td style={cellStyle}>{item.fathersName}</Td>
-                                        <Td style={cellStyle}>{item.rollNumber}</Td>
-                                        {uniqueDates.map((att, i) => {
+                                    const countPresent = item.attendance
+                                    console.log(countPresent)
+                                    let count = [];
+                                    const attendanceByDate = {};
 
-                                            const dateIndex = item.date.indexOf(att);
-                                            const slot1 = item.slot[dateIndex] === '1st';
-                                            const slot4=item.slot[dateIndex+1]==='1st';
-                                            const slot2 = item.slot[dateIndex] === '2nd';
-                                            const slot3 = item.slot[dateIndex + 1] === '2nd';
-                                            let slot5=''
-                                            if (slot1) {
-                                                slot5 = 0;
-                                            } else if (slot4) {
-                                                slot5 = 1;
-                                            }
+                                    // Group attendance by date
+                                    for (let i = 0; i < item.date.length; i++) {
+                                        const date = item.date[i];
+                                        const attendance = item.attendance[i] === "true";
 
-                                            let slot = '';
+                                        if (!attendanceByDate[date]) {
+                                            attendanceByDate[date] = false;
+                                        }
+                                        attendanceByDate[date] = attendanceByDate[date] || attendance;
+                                    }
 
-                                            if (slot2) {
-                                                slot = 0;
-                                            } else if (slot3) {
-                                                slot = 1;
-                                            }
+                                    // Calculate present days
+                                    const presentDays = Object.values(attendanceByDate).filter(attended => attended).length;
+                                    const totalDays = Object.keys(attendanceByDate).length;
+
+                                    // Calculate present percentage
+                                    const presentPercentage = (presentDays / totalDays) * 100;
+                                    console.log(`${item.studentName} is present ${presentPercentage.toFixed(2)}% of the days.`);
+
+                                    return (
+                                        <>{
+                                            <Tr key={index} textAlign="center">
+                                                <Td style={cellStyle}>{index + 1}</Td>
+                                                <Td style={cellStyle}>{item.studentId}</Td>
+                                                <Td style={cellStyle}>{item.studentName}</Td>
+                                                <Td style={cellStyle}>{item.fathersName}</Td>
+                                                <Td style={cellStyle}>{item.rollNumber}</Td>
+                                                {totalDates.map((att, i) => {
+
+                                                    if (!item.date.find((d) => d == att)) {
+                                                        console.log("not found for,", att)
+                                                        return (
+                                                            <Td style={cellStyle} direction="row" key={i} textAlign="center">
+                                                                <Flex alignItems="center" textAlign="end" justifyContent="space-around">
+                                                                    <Td>No record</Td>
+                                                                    <Td>No record</Td>
+                                                                </Flex>
+                                                            </Td>
+                                                        )
+                                                    } else {
+                                                        const dateIndex = item.date.indexOf(att);
+
+                                                        const slot1 = item.slot[dateIndex] === '1st';
+                                                        const slot4 = item.slot[dateIndex + 1] === '1st';
+
+                                                        const slot2 = item.slot[dateIndex] === '2nd';
+                                                        const slot3 = item.slot[dateIndex + 1] === '2nd';
+
+                                                        //code for attendance%
+                                                        let slot5 = ''
+                                                        if (slot1) {
+                                                            slot5 = 0;
+                                                        } else if (slot4) {
+                                                            slot5 = 1;
+                                                        }
+
+                                                        let slot = '';
+
+                                                        if (slot2) {
+                                                            slot = 0;
+                                                        } else if (slot3) {
+                                                            slot = 1;
+                                                        }
 
 
-                                            //code for 1st slot
-                                            const attendance1 = item.attendance[dateIndex] === 'true' ? 'Present' : 'Absent';
-                                            const attendance4 = item.attendance[dateIndex+1] === 'true' ? 'Present' : 'Absent';
+                                                        //code for 1st slot
+                                                        const attendance1 = item.attendance[dateIndex] === 'true' ? 'Present' : 'Absent';
+                                                        const attendance4 = item.attendance[dateIndex + 1] === 'true' ? 'Present' : 'Absent';
 
-                                            //code for 2nd slot
-                                            const attendance2 = item.attendance[dateIndex] === 'true' ? 'Present' : 'Absent';
-                                            const attendance3 = item.attendance[dateIndex + 1] === 'true' ? 'Present' : 'Absent';
+                                                        //code for 2nd slot
+                                                        const attendance2 = item.attendance[dateIndex] === 'true' ? 'Present' : 'Absent';
+                                                        const attendance3 = item.attendance[dateIndex + 1] === 'true' ? 'Present' : 'Absent';
 
-                                            return (
-                                                <Td style={cellStyle} direction="row" key={i} textAlign="center">
-                                                    <Flex alignItems="center" textAlign="end" justifyContent="space-around">
-                                                        {slot5==0||slot5==1 ? (
-                                                            <Td>{slot5 === 0 ? attendance1 : attendance4}</Td>
-                                                        ) : (
-                                                            <Td>No record</Td>
+                                                        return (
+                                                            <Td style={cellStyle} direction="row" key={i} textAlign="center">
+                                                                <Flex alignItems="center" textAlign="end" justifyContent="space-around">
+                                                                    {slot5 === 0 || slot5 === 1 ? (
+                                                                        <Td>{slot5 === 0 ? attendance1 : attendance4}</Td>
+                                                                    ) : (
+                                                                        <Td>No record</Td>
 
-                                                        )}
-                                                        {slot === 0 || slot === 1 ? (
-                                                            <Td>{slot === 0 ? attendance2 : attendance3}</Td>
-                                                        ) : (
-                                                            <Td>No record</Td>
-                                                        )}
-                                                    </Flex>
-                                                </Td>
-                                            );
-                                        })}
-                                        <Td  alignItems="center" textAlign="center">{((countPresent.length / item.attendance.length) * 100).toFixed(2)}%</Td>
-                                    </Tr>)
+                                                                    )}
+                                                                    {slot === 0 || slot === 1 ? (
+                                                                        <Td>{slot === 0 ? attendance2 : attendance3}</Td>
+                                                                    ) : (
+                                                                        <Td>No record</Td>
+                                                                    )}
+                                                                </Flex>
+                                                            </Td>
+                                                        )
+                                                    };
+                                                })}
+                                                <Td alignItems="center" textAlign="center">{presentPercentage.toFixed(2)}%</Td>
+                                            </Tr>
+                                        }
+
+                                        </>
+                                    )
+
+
                                 })}
                             </Tbody>
                         ) : ''}

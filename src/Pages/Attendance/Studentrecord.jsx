@@ -53,23 +53,74 @@ const StudentRecord = () => {
   //filteratrion part
   const [filteredData, setFilteredData] = useState([]);
   // Extract unique sessions
-  const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
+  // const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
   // Extract unique class names
-  const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
+  // const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
+
+  const [uniqueClassNames, setUniqueClassNames] = useState([])
+  const [uniqueSections, setuniqueSections] = useState([])
+  const[uniqueStudentRollNumber,setuniqueStudentRollNumber]=useState([])
+console.log(uniqueStudentRollNumber)
   // Extract unique sections
-  const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
+  // const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
   // // Extract unique Student
   const uniqueStudent = [...new Set(data.map(elm => elm.name))].sort()
   // // Extract unique StudentId
-  const[uniqueStudentId,setuniqueStudentId]=useState([])
+  const [uniqueStudentId, setuniqueStudentId] = useState([])
   console.log(student)
   console.log(uniqueStudentId)
   // // Extract unique rollNumber
-  const uniqueStudentRollNumber = [...new Set(data.filter(elm => elm.rollNumber))].sort()
+  // const uniqueStudentRollNumber = [...new Set(data.filter(elm => elm.rollNumber))].sort()
 
   console.log(uniqueStudent)
   console.log(uniqueClassNames)
   console.log(detail)
+
+
+  //get classnames
+  const getClassNames = (student) => {
+    const ClassNames = data.filter(elm => elm.name == student).map((cl) => cl.className)
+    const uniqueClassNames = [...new Set(ClassNames)]
+    console.log(uniqueClassNames)
+    setUniqueClassNames(uniqueClassNames)
+  }
+  useEffect(() => {
+    getClassNames(student)
+  }, [student])
+
+  //get section names
+  const getSectionNames = (classValue) => {
+    const section = data.filter(elm => elm.name == student && elm.className==classValue).map((cl) => cl.section)
+    console.log(section)
+    const uniqueSection = [...new Set(section)]
+    console.log(uniqueSection)
+    setuniqueSections(uniqueSection)
+  }
+  useEffect(() => {
+   getSectionNames(classValue)
+  }, [classValue])
+
+  //get roll Number
+  const getRollNumber = (section) => {
+    const section1 = data.filter(elm => elm.name == student && elm.className==classValue && elm.section==section).map((cl) => cl.rollNumber)
+    console.log(section1)
+    const uniqueSection = [...new Set(section1)]
+    console.log(uniqueSection)
+    setuniqueStudentRollNumber(uniqueSection)
+  }
+  useEffect(() => {
+    getRollNumber(section)
+  }, [section])
+
+
+
+
+
+
+
+
+
+
   const [filters, setFilters] = useState({
     data: false,
     class: "",
@@ -301,7 +352,7 @@ const StudentRecord = () => {
   const getAttendance = async () => {
     console.log(filters)
 
-    if (filters.student !== "" &&  filters.section !== "" && filters.class!=='' && filters.rollNumber!==''  && filters.fdate !== '' && filters.tdate !== '') {
+    if (filters.student !== "" && filters.section !== "" && filters.class !== '' && filters.rollNumber !== '' && filters.fdate !== '' && filters.tdate !== '') {
       try {
         const data = await fetch(`http://localhost:8088/api/Attendance/search/${classValue}/${section}/${student}/${rollNumber}/${fdate}/${tdate}`);
         const fdata = await data.json()
@@ -449,26 +500,28 @@ const StudentRecord = () => {
               ))}
             </datalist>
           </Box>
-        </FormControl>  <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
+        </FormControl> 
+         <FormControl>
           <FormLabel>Roll Number</FormLabel>
           <Box>
             <Input
-              list="roll"
+              list="rollNumber"
               value={rollNumber}
               onChange={(e) => handleFilterRollNumber(e.target.value)}
               placeholder="Select a Roll Number"
 
             />
-            <datalist id="roll">
+            <datalist id="rollNumber">
               {uniqueStudentRollNumber.map((option, index) => (
-                <option key={index} value={option.rollNumber} />
+                <option key={index} value={option} />
               ))}
             </datalist>
           </Box>
-        </FormControl>
+
+         </FormControl>
 
 
-        
+
 
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel textAlign="center">Date Range</FormLabel>

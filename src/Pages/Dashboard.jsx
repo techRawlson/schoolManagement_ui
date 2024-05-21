@@ -5,9 +5,10 @@ import { Image } from '@chakra-ui/react'
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { SlCalender } from "react-icons/sl";
 import { ImBooks } from "react-icons/im";
+import { MdCastForEducation } from "react-icons/md";
 
 
-import { FcReading } from "react-icons/fc";
+import { FcLeave, FcReading } from "react-icons/fc";
 
 
 // import { AiOutlineUser } from '@ant-design/icons';
@@ -50,7 +51,7 @@ const Dashboard = () => {
 
           </CardBody>
 
-        </Card> 
+        </Card>
         <Card cursor="pointer" onClick={() => nextPage("staff")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Staff</Heading>
@@ -95,7 +96,18 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
+        <Card cursor="pointer" onClick={() => nextPage("lms")}>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> LMS</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <FcLeave
+                size={95} />
+            </Stack>
+          </CardBody>
 
+        </Card>
 
 
 

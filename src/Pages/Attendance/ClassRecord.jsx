@@ -289,7 +289,7 @@ const ClassRecord = () => {
                 console.log(formattedDates)
                 setTotalDates(formattedDates)
 
-                setTotalDates
+            
             } catch (error) {
                 console.log(error)
             }
@@ -477,7 +477,7 @@ const ClassRecord = () => {
                                                 {totalDates.map((att, i) => {
 
                                                     if (!item.date.find((d) => d == att)) {
-                                                        console.log("not found for,", att)
+                                                
                                                         return (
                                                             <Td style={cellStyle} direction="row" key={i} textAlign="center">
                                                                 <Flex alignItems="center" textAlign="end" justifyContent="space-around">

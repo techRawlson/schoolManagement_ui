@@ -1,37 +1,55 @@
-import { Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { useEffect, useState } from "react";
-
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
+import PieChart from "./Piechart";
 const StudentRecord = () => {
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
+  const [student, setStudent] = useState('');
+  const [sId, setSid] = useState('')
+  const [rollNumber, setRollNumber] = useState('')
+  const [fdate, setFdate] = useState('')
+  const [tdate, settdate] = useState('')
+
 
   const [data, setData] = useState([])
   const [detail, setDetail,] = useState([])
   const getData = async () => {
     try {
-        const data = await fetch('http://localhost:8086/api/timetable/full-timetable')
-        const fdata = await data.json()
-        //console.log(fdata)
-        setData(fdata)
+      const data = await fetch('http://localhost:8082/api/students/savedData')
+      const fdata = await data.json()
+      console.log(fdata)
+      setData(fdata)
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
+  }
   const getDetails = async () => {
     try {
-        const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
-        const fdata = await data.json()
-        //console.log(fdata)
-        setDetail(fdata)
+      const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+      const fdata = await data.json()
+      //console.log(fdata)
+      setDetail(fdata)
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
+  }
+
   //filteratrion part
   const [filteredData, setFilteredData] = useState([]);
   // Extract unique sessions
@@ -40,6 +58,16 @@ const StudentRecord = () => {
   const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
   // Extract unique sections
   const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
+  // // Extract unique Student
+  const uniqueStudent = [...new Set(data.map(elm => elm.name))].sort()
+  // // Extract unique StudentId
+  const[uniqueStudentId,setuniqueStudentId]=useState([])
+  console.log(student)
+  console.log(uniqueStudentId)
+  // // Extract unique rollNumber
+  const uniqueStudentRollNumber = [...new Set(data.filter(elm => elm.rollNumber))].sort()
+
+  console.log(uniqueStudent)
   console.log(uniqueClassNames)
   console.log(detail)
   const [filters, setFilters] = useState({
@@ -47,8 +75,14 @@ const StudentRecord = () => {
     class: "",
     section: "",
     year: "",
+    student: '',
+    sId: '',
+    rollNumber: '',
+    fdate: '',
+    tdate: ''
+  });
 
-});
+
   const dataFilter = (data) => {
     let filterData = data;
     console.log(filterData)
@@ -78,53 +112,37 @@ const StudentRecord = () => {
         (ele) => ele.section === filters.section
       );
     }
+    //filter for Student
+    if (filters.student !== "") {
+      filterData = filterData.filter(
+        (ele) => ele.name === filters.student
+      );
+    } //filter for section
+    if (filters.sId !== "") {
+      filterData = filterData.filter(
+        (ele) => ele.id === filters.sId
+      );
+    } //filter for section
+    if (filters.rollNumber !== "") {
+      filterData = filterData.filter(
+        (ele) => ele.rollNumber === filters.rollNumber
+      );
+    }
+
+    console.log(filteredData)
+
+
+
+
+
+
+
 
     console.log(filterData)
 
-    if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
+    if (filters.class !== "" && filters.year !== "" && filters.section !== "" && filters.student !== "" && filters.sId !== '' && filters.rollNumber !== '' && filters.fDate !== '' && filters.tDate !== '') {
 
-      if (filterData.length > 0) {
-        setcreate(true)
-        setDis(false)
-        // Iterate over each object in the data array
-        // Create an empty object to store the subject counts
-        const subjectCounts = {};
-        filterData.forEach(item => {
-          item.subjects.forEach(subject => {
-            if (subjectCounts[subject]) {
-              subjectCounts[subject]++;
-            } else {
-              subjectCounts[subject] = 1;
-            }
-          });
-        });
-
-        setTotalSubjects(subjectCounts)
-
-        setFilteredData(filterData)
-        // Object to store aggregated data
-        console.log(filterData)
-        setShowMsg(false)
-        setUpdateButton('Update')
-        setAddNew(true)
-      }
-
-      else {
-        const customToastStyle = {
-          fontFamily: 'Arial, sans-serif',
-          fontSize: '14px',
-        };
-        // toast.error("This data is not available.if you want to create,click on the add new button", {
-        //     style: customToastStyle
-        // })
-        setShowMsg(true)
-        setDis(true)
-        setFilteredData([])
-        setTotalSubjects([])
-        // setUpdateButton('')
-        setcreateNew(false)
-        setAddNew(false)
-      }
+      console.log("time to fire the api")
 
     }
 
@@ -160,87 +178,349 @@ const StudentRecord = () => {
       year: value,
     }));
   };
+  //filter change for student name
+  const handleFilterStudent = (value) => {
+    console.log(value)
+    setStudent(value)
+    setFilters((prev) => ({
+      ...prev,
+      // classData: false,
+      student: value
+    }));
+  };
+  //filter change for student name
+  const handleFilterStudentId = (value) => {
+    //console.log(value)
+    setSid(value)
+    setFilters((prev) => ({
+      ...prev,
+      // classData: false,
+      sId: value
+    }));
+  };
+  //filter change for student name
+  const handleFilterRollNumber = (value) => {
+    //console.log(value)
+    setRollNumber(value)
+    setFilters((prev) => ({
+      ...prev,
+      // classData: false,
+      rollNumber: value
+    }));
+  };
+  const handleFilterfDate = (value) => {
+
+    setFdate(value)
+    setFilters((prev) => ({
+      ...prev,
+      // classData: false,
+      fdate: value
+    }));
+  };
+  const handleFilterttDate = (value) => {
+    console.log(value)
+    settdate(value)
+    setFilters((prev) => ({
+      ...prev,
+      // classData: false,
+      tdate: value
+    }));
+  };
+
+
+  const [] = useState([])
+  //get dates 
+  function getDatesBetween(startDate, endDate) {
+    // Convert the input dates to Date objects
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Array to hold the dates
+    const dates = [];
+
+    // Loop to add dates to the array
+    while (start <= end) {
+      // Push the current date to the array
+      dates.push(new Date(start));
+      // Increment the date by one day
+      start.setDate(start.getDate() + 1);
+    }
+
+    return dates;
+  }
+  const removeDuplicatesAndMerge = (arr) => {
+    const resultMap = new Map();
+
+    arr.forEach(item => {
+      const identifier = JSON.stringify({
+        className: item.className,
+        section: item.section,
+        session: item.session,
+        studentName: item.studentName,
+        rollNumber: item.rollNumber,
+        fathersName: item.fathersName,
+        studentId: item.studentId,
+        teacherName: item.teacherName,
+      });
+
+      if (!resultMap.has(identifier)) {
+        resultMap.set(identifier, {
+          ...item,
+          attendance: [item.attendance],
+          date: [item.date],
+          //   time: [item.time],
+          slot: [item.slot]
+        });
+      } else {
+        const existingItem = resultMap.get(identifier);
+        existingItem.attendance.push(item.attendance);
+        existingItem.date.push(item.date);
+        // existingItem.time.push(item.time);
+        existingItem.slot.push(item.slot);
+      }
+
+    });
+
+    // Ensure every entry has exactly two values, filling with empty strings if necessary
+
+
+    return Array.from(resultMap.values());
+  };
+  const [totalDates, setTotalDates] = useState([])
+  console.log(totalDates)
+  const [attendance, setAttendance] = useState([])
+  console.log(attendance)
+
+  // Prepare the present and absent lists
+  const [presentAbsent, setPresentAbsent] = useState([])
+  console.log(presentAbsent)
+  const [present, setPresent] = useState([])
+  const [absent, setAbsent] = useState([])
+
+
+  const getAttendance = async () => {
+    console.log(filters)
+
+    if (filters.student !== "" &&  filters.section !== "" && filters.class!=='' && filters.rollNumber!==''  && filters.fdate !== '' && filters.tdate !== '') {
+      try {
+        const data = await fetch(`http://localhost:8088/api/Attendance/search/${classValue}/${section}/${student}/${rollNumber}/${fdate}/${tdate}`);
+        const fdata = await data.json()
+        console.log(fdata)
+        const fdata1 = removeDuplicatesAndMerge(fdata)
+        setAttendance(fdata1)
+        const datesBetween = getDatesBetween(fdate, tdate);
+        const formattedDates = datesBetween.map(date => date.toISOString().split('T')[0]);
+        console.log(formattedDates)
+        setTotalDates(formattedDates)
+
+        const attendanceDict = {};
+
+        // Iterate over the attendance records
+        for (let i = 0; i < fdata1[0].attendance.length; i++) {
+          const currentDate = fdata1[0].date[i];
+          const present = fdata1[0].attendance[i] === "true";
+
+          if (!(currentDate in attendanceDict)) {
+            attendanceDict[currentDate] = present;
+          } else {
+            attendanceDict[currentDate] = attendanceDict[currentDate] || present;
+          }
+        }
+
+
+        let present = [];
+        let absent = [];
+        for (const [date, status] of Object.entries(attendanceDict)) {
+          if (status) {
+            present.push(date);
+
+          } else {
+            absent.push(date);
+
+          }
+        }
+
+        setPresent(present)
+        setAbsent(absent)
+        setPresentAbsent([...present, ...absent, absent, present])
+        console.log("Present:", present);
+        console.log("Absent:", absent);
+
+
+
+
+
+      } catch (error) {
+        console.log(error)
+      }
+
+
+
+
+
+    } else {
+      console.log("missing")
+    }
+
+
+  }
+
+
+
+
 
 
 
   useEffect(() => {
-    dataFilter(data);
-    //console.log("trigeered")
-  }, [filters, data]);
+    console.log(filters)
+
+
+    getAttendance()
+  }, [filters]);
+
+
+  useEffect(() => {
+    getDetails()
+    getData()
+  }, [])
+
+
+
+
+
+
 
 
 
 
   return <Stack h="100vh">
     <Navbar />
-    <Stack height="100vh" width="100vw">
+    <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>
+
+
+
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Session</FormLabel>
-          <Select  value={session} onChange={(e) => handleFilterYear(e.target.value)}>
-            <option>Select</option>
-            {uniqueSessions?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
+          <FormLabel>Student</FormLabel>
+          <Box>
+            <Input
+              list="students"
+              value={student}
+              onChange={(e) => handleFilterStudent(e.target.value)}
+              placeholder="Select a Student"
+
+            />
+            <datalist id="students">
+              {uniqueStudent.map((option, index) => (
+                <option key={index} value={option} />
+              ))}
+            </datalist>
+          </Box>
         </FormControl>
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Class</FormLabel>
-          <Select  value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
-            <option>Select</option>
-            {uniqueClassNames?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl  justifyContent="space-between" alignItems="center" m="1">
+          <Box>
+            <Input
+              list="class"
+              value={classValue}
+              onChange={(e) => handleFilterClass(e.target.value)}
+              placeholder="Select a Class"
+
+            />
+            <datalist id="class">
+              {uniqueClassNames.map((option, index) => (
+                <option key={index} value={option} />
+              ))}
+            </datalist>
+          </Box>
+        </FormControl>  <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Section</FormLabel>
-          <Select  value={section} onChange={(e) => handleFiltersection(e.target.value)}>
-            <option>Select</option>
-            {uniqueSections?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Student</FormLabel>
-          <Select  value={section} onChange={(e) => handleFiltersection(e.target.value)}>
-            <option>Select</option>
-            {uniqueSections?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl  justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Student Id</FormLabel>
-          <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
-            <option>Select</option>
-            {uniqueSections?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl  justifyContent="space-between" alignItems="center" m="1">
+          <Box>
+            <Input
+              list="section"
+              value={section}
+              onChange={(e) => handleFiltersection(e.target.value)}
+              placeholder="Select a Section"
+
+            />
+            <datalist id="section">
+              {uniqueSections.map((option, index) => (
+                <option key={index} value={option} />
+              ))}
+            </datalist>
+          </Box>
+        </FormControl>  <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Roll Number</FormLabel>
-          <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
-            <option>Select</option>
-            {uniqueSections?.map((elm, i) => (
-              <option key={i} value={elm}>{elm}</option>
-            ))}
-          </Select>
+          <Box>
+            <Input
+              list="roll"
+              value={rollNumber}
+              onChange={(e) => handleFilterRollNumber(e.target.value)}
+              placeholder="Select a Roll Number"
+
+            />
+            <datalist id="roll">
+              {uniqueStudentRollNumber.map((option, index) => (
+                <option key={index} value={option.rollNumber} />
+              ))}
+            </datalist>
+          </Box>
         </FormControl>
-        <FormControl  justifyContent="space-between" alignItems="center" m="1">
-        <FormLabel>Date Range</FormLabel>
-          <Flex>
-          <Input type="date"/>
-          <Input type="date"/>
-          </Flex>
-       
-        </FormControl>
+
+
         
-      
+
+        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
+          <FormLabel textAlign="center">Date Range</FormLabel>
+          <Flex>
+            <Input type="date" m="1" value={fdate} onChange={(e) => handleFilterfDate(e.target.value)} />
+            <Input type="date" m="1" value={tdate} onChange={(e) => handleFilterttDate(e.target.value)} />
+          </Flex>
+
+        </FormControl>
+
+
       </Flex>
 
+      {
+        attendance?.length > 0 ?
+          <Flex justify="space-around" alignItems="center" minW="100%" margin="4% auto" >
+
+            <Box overflowY="auto" maxHeight="400px" width="75%" textAlign="center" alignItems="center" bgColor="teal" color="white" >
+              <TableContainer>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th textAlign="center" color="white" >Date</Th>
+                      <Th textAlign="center" color="white">Attendance</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {totalDates?.map((elm) => (
+                      <Tr key={elm}>
+                        <Td textAlign="center">{elm}</Td>
+                        {presentAbsent?.includes(elm) ? (
+                          present.includes(elm) ? (
+                            <Td textAlign="center">Present</Td>
+                          ) : (
+                            <Td textAlign="center">Absent</Td>
+                          )
+                        ) : (
+                          <Td textAlign="center">No Record</Td>
+                        )}
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Box>
+
+
+            <Box alignItems="center" height="100%" width="60%" justifyContent='space-around' display="flex">
+              <PieChart p={present} a={absent} pb={totalDates} />
+            </Box>
+          </Flex> : ""
+      }
     </Stack>
   </Stack>
 }

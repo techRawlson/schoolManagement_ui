@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/protectedRoutes';
-import Register from './Pages/register';
-import Login from './Pages/login';
+import Register from './Pages/Register/register';
+import Login from './Pages/Register/login';
 import Dashboard from './Pages/Dashboard';
 import Student from './Pages/Student/Student';
 import StudentDetails from './Pages/Student/StudentDetails'
@@ -23,6 +23,7 @@ import StudentRecord from './Pages/Attendance/Studentrecord';
 import Main from './Pages/LMS/MainPage';
 import LeaveDefinition from './Pages/LMS/LeaveDefintion';
 import LmsLeaveallotment from './Pages/LMS/LeaveAllotment';
+// import StaffLogin from './Pages/Register/StaffLogin';
 
 
 
@@ -39,7 +40,7 @@ function App() {
     <Router>
       <AuthProvider> {/* Wrap your routes with AuthProvider */}
         <Routes>
-          <Route exact path="/" element={<Register />} />
+          <Route exact path="/" element={<Login />} />
           <Route exact path="/login" element={<Login setToken={setToken} setUser={setUser} />} />
           <Route exact path='/dashboard' element={tok ? <Dashboard /> : <Login setToken={setToken} />} />
           <Route exact path='/staff' element={tok ? <Staff /> : <Login setToken={setToken} />} />

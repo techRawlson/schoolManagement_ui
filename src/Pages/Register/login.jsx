@@ -9,7 +9,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl, FormLabel, Input,Stack
+  FormControl, FormLabel, Input, Stack
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 // import { useDispatch } from 'react-redux';
@@ -32,12 +32,12 @@ function Login({ setToken, setUser }) {
 
 
     try {
-      const body={
-        email: emailRef.current.value,
+      const body = {
+        staffId: emailRef.current.value,
         password: passRef.current.value,
       }
       console.log(body)
-      const data = await fetch('http://localhost:8081/auth/login', {
+      const data = await fetch('http://localhost:8083/api/staff-login/login ', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,15 +45,13 @@ function Login({ setToken, setUser }) {
         body: JSON.stringify(body)
       });
 
-      if (data.ok) {
-        const fdata = await data.json();
-        console.log(fdata);
-        setUser(fdata)
+      if (data.status>=200 && data.status<300 ) {
+       console.log("ok",data)
         // dispatch(setUser(fdata));
-        console.log(fdata.username)
-        localStorage.setItem("token", fdata.jwtToken);
-        localStorage.setItem("username",fdata.username)
-        setToken(fdata.jwtToken)
+        // console.log(fdata.username)
+        localStorage.setItem("token", "fdata.username");
+        localStorage.setItem("username", "fdata.username")
+        // setToken(fdata.jwtToken)
 
         toast.success('wrong credentials')
         navigate("/dashboard");
@@ -94,8 +92,8 @@ function Login({ setToken, setUser }) {
 
 
             <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input ref={emailRef} placeholder='abc@gmail.com' type="email" />
+              <FormLabel>UserId</FormLabel>
+              <Input ref={emailRef} placeholder='name_id' type="text" />
             </FormControl>
 
             <FormControl mt={4}>

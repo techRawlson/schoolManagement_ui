@@ -12,7 +12,7 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify"
 const LmsLeaveallotment = () => {
     const [classData, setClassData] = useState([])
     const [LDetails, setLDetails] = useState([])
@@ -152,11 +152,10 @@ const LmsLeaveallotment = () => {
                     },
                     body: JSON.stringify(mainData[editId])
                 })
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                
                 if (dat.status >= 200 && dat.status < 300) {
                     toast.success('Updated')
+                    setEditId(null)
                 } else {
                     toast.error('something went wrong')
                 }
@@ -176,6 +175,7 @@ const LmsLeaveallotment = () => {
                 })
                 if (dat.status >= 200 && dat.status < 300) {
                     toast.success('created')
+             
                 } else {
                     toast.error('something went wrong')
                 }
@@ -196,6 +196,7 @@ const LmsLeaveallotment = () => {
 
         <Stack minW="100vw" maxW="100vw" minH="100vh">
             <Navbar />
+            <ToastContainer/>
             <Stack maxWidth="85%" margin="0 auto">
                 <TableContainer>
                     <Table size='sm' variant='striped' colorScheme="white">
@@ -283,7 +284,7 @@ const LmsLeaveallotment = () => {
                                     <Td>
                                         <Box>
                                             {
-                                                editId == i ? <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> : <Button onClick={() => setEditId(i)} bgColor="teal">Update</Button>
+                                                editId == i ? <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> : <Button onClick={() => setEditId(i)} bgColor="teal">Edit</Button>
                                             }
 
                                         </Box>

@@ -20,7 +20,9 @@ import AttendanceMarking from './Pages/Attendance/Attendancemarking';
 import Attendancerecord from './Pages/Attendance/Attendancerecord';
 import ClassRecord from './Pages/Attendance/ClassRecord';
 import StudentRecord from './Pages/Attendance/Studentrecord';
-import Main from './LMS/MainPage';
+import Main from './Pages/LMS/MainPage';
+import LeaveDefinition from './Pages/LMS/LeaveDefintion';
+import LmsLeaveallotment from './Pages/LMS/LeaveAllotment';
 
 
 
@@ -55,6 +57,9 @@ function App() {
           <Route path='/classrecord' element={tok ? <ClassRecord /> : <Login setToken={setToken} />} />
           <Route path='/studentrecord' element={tok ? <StudentRecord /> : <Login setToken={setToken} />} />
           <Route path='/lms' element={tok ? <Main /> : <Login setToken={setToken} />} />
+          <Route path='/lmsdefinition' element={tok ? <LeaveDefinition /> : <Login setToken={setToken} />} />
+          <Route path='/lmsleaveallotment' element={tok ? <LmsLeaveallotment /> : <Login setToken={setToken} />} />
+
         </Routes>
       </AuthProvider>
     </Router>

@@ -195,7 +195,7 @@ const AttendanceMarking = ({ user }) => {
                     obj.studentName = student.name,
                     obj.rollNumber = student.rollNumber,
                     obj.date = date,
-                    obj.time = formattedTime,
+                    obj.time = date+" "+formattedTime,
                     obj.slot = slot == '1st' ? '1st' : '2nd',
                     obj.teacherName = localStorage.getItem("username"),
                     newData.push(obj)
@@ -722,7 +722,7 @@ const AttendanceMarking = ({ user }) => {
 
                     </FormControl>
 
-                    
+
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
                     <Table size='sm' variant="simple" style={tableStyle}>
@@ -783,15 +783,13 @@ const AttendanceMarking = ({ user }) => {
                                             <td style={cellStyle}>{item.studentName}</td>
                                             <td style={cellStyle}>{item.fathersName}</td>
                                             <td style={cellStyle}>{item.rollNumber}</td>
-                                            <td style={cellStyle} bgColor={item.attendance == 'true' ? 'green' : 'red'} >
-                                                {/* Assuming Checkbox component is imported and used correctly */}
-                                                {/* <Checkbox
-                                             isChecked={item.attendance === 'true'}
-                                             onChange={(event) => changeCheckBox(item, index, event)}
-                                             size="lg"
-                                         /> */}
+                                            <td style={cellStyle}  bgColor={ Attendance.length > 0 ? item.attendance == 'true' ? 'green' : 'red':''}>
                                                 {
-                                                    item.attendance == 'true' ? 'Present' : 'Absent'
+                                                    Attendance.length > 0 ? item.attendance == 'true' ? 'Present' : 'Absent' :  <Checkbox
+                                                    isChecked={item.attendance === 'true'}
+                                                    onChange={(event) => changeCheckBox(item, index, event)}
+                                                    size="lg"
+                                                />
                                                 }
                                             </td>
                                         </tr>
@@ -829,14 +827,14 @@ const AttendanceMarking = ({ user }) => {
                         </Flex>
                     }
 
-                    {Attendance?.length==0 && submitVisible==true?
-                        <Stack>
+                    {Attendance?.length == 0 && submitVisible == true ?
+                        <Stack marginTop="0.3%">
                             {
-                                Edit ? <Button onClick={() => create1()} bgColor="green">Submit</Button> : 
-                                <Button onClick={() => setEdit(true)} bgColor="teal">Edit</Button>
+                                Edit ? "" :
+                                <Button onClick={() => create1()} bgColor="green">Submit</Button>
 
                             }
-                        </Stack>:''
+                        </Stack> : ''
 
                     }
                     {

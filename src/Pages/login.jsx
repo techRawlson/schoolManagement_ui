@@ -9,7 +9,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl, FormLabel, Input
+  FormControl, FormLabel, Input,Stack
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 // import { useDispatch } from 'react-redux';
@@ -72,7 +72,7 @@ function Login({ setToken, setUser }) {
 
 
   return (
-    <>
+    <Stack minH="100vh" minW="100vw">
       <ToastContainer />
       {/* <Button onClick={()=>setIsOpen(true)}>Open Modal</Button> */}
       {/* <Button ml={4} ref={finalRef}>
@@ -112,7 +112,7 @@ function Login({ setToken, setUser }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Stack>
   )
 
 }

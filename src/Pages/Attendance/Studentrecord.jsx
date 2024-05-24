@@ -55,66 +55,57 @@ const StudentRecord = () => {
   // Extract unique sessions
   // const uniqueSessions = [...new Set(detail.map(elm => elm.session))].sort();
   // Extract unique class names
-  // const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
+  const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
 
-  const [uniqueClassNames, setUniqueClassNames] = useState([])
+  const[uniqueStudent,setuniqueStudent]=useState([])
   const [uniqueSections, setuniqueSections] = useState([])
-  const[uniqueStudentRollNumber,setuniqueStudentRollNumber]=useState([])
-console.log(uniqueStudentRollNumber)
-  // Extract unique sections
-  // const uniqueSections = [...new Set(detail.map(elm => elm.section))].sort();
-  // // Extract unique Student
-  const uniqueStudent = [...new Set(data.map(elm => elm.name))].sort()
-  // // Extract unique StudentId
-  const [uniqueStudentId, setuniqueStudentId] = useState([])
-  console.log(student)
-  console.log(uniqueStudentId)
-  // // Extract unique rollNumber
-  // const uniqueStudentRollNumber = [...new Set(data.filter(elm => elm.rollNumber))].sort()
-
-  console.log(uniqueStudent)
-  console.log(uniqueClassNames)
-  console.log(detail)
-
-
+  const [uniqueStudentRollNumber, setuniqueStudentRollNumber] = useState([])
+  
   //get classnames
-  const getClassNames = (student) => {
-    const ClassNames = data.filter(elm => elm.name == student).map((cl) => cl.className)
-    const uniqueClassNames = [...new Set(ClassNames)]
-    console.log(uniqueClassNames)
-    setUniqueClassNames(uniqueClassNames)
-  }
-  useEffect(() => {
-    getClassNames(student)
-  }, [student])
+
+
 
   //get section names
-  const getSectionNames = (classValue) => {
-    const section = data.filter(elm => elm.name == student && elm.className==classValue).map((cl) => cl.section)
-    console.log(section)
-    const uniqueSection = [...new Set(section)]
+  const getSectionNames = () => {
+    const sect = data.filter(elm =>  elm.className == classValue).map((cl) => cl.section)
+    console.log(sect)
+    const uniqueSection = [...new Set(sect)]
     console.log(uniqueSection)
     setuniqueSections(uniqueSection)
   }
   useEffect(() => {
-   getSectionNames(classValue)
+    getSectionNames()
   }, [classValue])
 
   //get roll Number
-  const getRollNumber = (section) => {
-    const section1 = data.filter(elm => elm.name == student && elm.className==classValue && elm.section==section).map((cl) => cl.rollNumber)
+  const getRollNumber = () => {
+    console.log(student)
+    console.log(classValue)
+    console.log(section)
+
+    const section1 = data.filter(elm => elm.name == student && elm.className == classValue && elm.section == section).map((cl) => cl.rollNumber)
     console.log(section1)
     const uniqueSection = [...new Set(section1)]
     console.log(uniqueSection)
     setuniqueStudentRollNumber(uniqueSection)
   }
   useEffect(() => {
-    getRollNumber(section)
-  }, [section])
+    getRollNumber()
+  }, [student])
 
 
 
-
+//get Student names
+const getStudentNames = () => {
+  const sect = data.filter(elm => elm.className == classValue && elm.section == section).map((cl) => cl.name)
+  console.log(sect)
+  const uniqueSection = [...new Set(sect)]
+  console.log(uniqueSection)
+  setuniqueStudent(uniqueSection)
+}
+useEffect(() => {
+  getStudentNames()
+}, [section])
 
 
 
@@ -430,9 +421,10 @@ console.log(uniqueStudentRollNumber)
   }, [filters]);
 
 
-  useEffect(() => {
-    getDetails()
-    getData()
+  useEffect( () => {
+     getData()
+     getDetails()
+
   }, [])
 
 
@@ -451,23 +443,7 @@ console.log(uniqueStudentRollNumber)
 
 
 
-        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-          <FormLabel>Student</FormLabel>
-          <Box>
-            <Input
-              list="students"
-              value={student}
-              onChange={(e) => handleFilterStudent(e.target.value)}
-              placeholder="Select a Student"
 
-            />
-            <datalist id="students">
-              {uniqueStudent.map((option, index) => (
-                <option key={index} value={option} />
-              ))}
-            </datalist>
-          </Box>
-        </FormControl>
         <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
           <FormLabel>Class</FormLabel>
           <Box>
@@ -500,8 +476,25 @@ console.log(uniqueStudentRollNumber)
               ))}
             </datalist>
           </Box>
-        </FormControl> 
-         <FormControl>
+        </FormControl>
+        <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
+          <FormLabel>Student</FormLabel>
+          <Box>
+            <Input
+              list="students"
+              value={student}
+              onChange={(e) => handleFilterStudent(e.target.value)}
+              placeholder="Select a Student"
+
+            />
+            <datalist id="students">
+              {uniqueStudent.map((option, index) => (
+                <option key={index} value={option} />
+              ))}
+            </datalist>
+          </Box>
+        </FormControl>
+        <FormControl>
           <FormLabel>Roll Number</FormLabel>
           <Box>
             <Input
@@ -518,7 +511,7 @@ console.log(uniqueStudentRollNumber)
             </datalist>
           </Box>
 
-         </FormControl>
+        </FormControl>
 
 
 

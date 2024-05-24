@@ -9,6 +9,7 @@ import { IoReturnUpBackOutline } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 const StaffDetails = () => {
     const navigate = useNavigate()
+    const [classData, setClassData] = useState([])
     const notify = () => toast("Form Submitted Successfully");
     const [student, setStudent] = useState([])
     const [imageUrl, setImageUrl] = useState(false)
@@ -24,7 +25,7 @@ const StaffDetails = () => {
             const fdata = await data.json()
             console.log(fdata)
 
-            if (data.status>=200&& data.status<300) {
+            if (data.status >= 200 && data.status < 300) {
                 setStudent([fdata])
                 setSelectedItems(fdata.subjects)
             }
@@ -56,13 +57,19 @@ const StaffDetails = () => {
                     setImage(reader.result); // Update the image state
                 };
                 reader.readAsDataURL(file);
-            } else {
-                // Handle non-image file selection
             }
+        } else {
+            const { name, value } = event.target;
+            const newData = [...student];
+
+            newData[0][name] = value;
+
+            console.log(newData); // This will log the updated data to the console
+            setStudent(newData);
         }
     };
 
-    
+    console.log(student)
     const submitStudent = async () => {
         try {
             // Create a new FormData object
@@ -87,7 +94,7 @@ const StaffDetails = () => {
             selectedItems.forEach(item => {
                 formData.append('subjects', item);
             });
-
+            console.log(formData)
             console.log(student[0])
             const data = await fetch(`http://localhost:8083/api/staff/update/${id}`, {
                 method: 'PUT',
@@ -150,7 +157,16 @@ const StaffDetails = () => {
             console.log(error)
         }
     }
-
+    const getData = async () => {
+        try {
+            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
+            const fdata = await data.json();
+            console.log(fdata)
+            setClassData(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleMenuClose = () => {
         setIsMenuOpen(false);
@@ -176,21 +192,13 @@ const StaffDetails = () => {
             setSelectedItems([...selectedItems, value]);
         }
 
-        // if (Array.isArray(student[0].subjects)) {
-        //     const newArray = [...selectedItems, ...student[0].subjects];
-        //     const unique = new Set(newArray)
-        //     const original = Array.from(unique)
-        //     console.log(original);
-        // } else {
-        //     console.error('student.subjects is not an array');
-        // }
-        // const uniqueArray=new Set()
+
 
     };
 
     useEffect(() => {
         getSubjects()
-
+        getData()
     }, [])
     // console.log(imageRef.current.value=='')
     return (
@@ -198,14 +206,11 @@ const StaffDetails = () => {
             <Navbar />
             <ToastContainer /> {/* Add this line */}
             <Stack maxW="80vw" width="80vw" m="0 auto">
-                {/* <Stack direction='row' mb="5" width="80vw" justifyContent="space-between">
-                    <Avatar src={`http://localhost:8083/api/StaffImage/${id}`} borderRadius="6%" size="lg" />
-                    <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-                </Stack> */}
+
                 <Flex >
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar
-                            src={image||`http://localhost:8083/api/staff-images/${id}`}
+                            src={image || `http://localhost:8083/api/staff-images/${id}`}
                             alt="Avatar"
                             style={dis ? {} : { cursor: 'pointer' }}
                             width="100px"
@@ -230,25 +235,27 @@ const StaffDetails = () => {
                         student?.map((std, i) => (
                             <Grid templateColumns='repeat(4, 1fr)' gap={2} key={i} minH="55vh" >
 
-                                <FormControl id="name">
+                                <FormControl id="name" >
                                     <FormLabel>Name</FormLabel>
                                     <Input
                                         w='100%'
                                         h='10'
                                         bg='white.500'
                                         value={std.name}
+                                        name="name"
                                         onChange={(e) => handleFieldChange(e, i, 'name')}
                                         disabled={dis}
                                         fontWeight="bold"
                                     />
                                 </FormControl>
-                                <FormControl id="name">
+                                <FormControl id="name" name="name">
                                     <FormLabel>Designation</FormLabel>
                                     <Input
                                         w='100%' h='10' bg='white.500' value={std.designation}
                                         onChange={(e) => handleFieldChange(e, i, 'designation')}
                                         disabled={dis}
                                         fontWeight="bold"
+                                        name='designation'
                                     />
                                 </FormControl>
                                 <FormControl id="name">
@@ -257,6 +264,7 @@ const StaffDetails = () => {
                                         w='100%' h='10' bg='white.500' value={std.staffId} onChange={(e) => handleFieldChange(e, i, 'staffId')}
                                         disabled={dis}
                                         fontWeight="bold"
+                                        name='staffId'
                                     />
                                 </FormControl>
                                 <FormControl id="name">
@@ -267,19 +275,15 @@ const StaffDetails = () => {
                                         value={std.dateOfJoining} onChange={(e) => handleFieldChange(e, i, 'dateOfJoining')}
                                         disabled={dis}
                                         fontWeight="bold"
+                                        name='dateOfJoining'
 
                                     />
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Department</FormLabel>
                                     <Input fontWeight="bold"
+                                        name='department'
                                         w='100%' h='10' bg='white.500' value={std.department} onChange={(e) => handleFieldChange(e, i, 'department')} disabled={dis}
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Mobile</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.mobile} onChange={(e) => handleFieldChange(e, i, 'mobile')} disabled={dis}
                                     />
                                 </FormControl>
 
@@ -291,18 +295,22 @@ const StaffDetails = () => {
                                         w='100%'
                                         h='10'
                                         bg='white.500'
+                                        name='dob'
                                         value={std.dob} onChange={(e) => handleFieldChange(e, i, 'dob')} disabled={dis}
                                     />
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Email</FormLabel>
                                     <Input fontWeight="bold"
+                                        name="email"
+
                                         w='100%' h='10' bg='white.500' value={std.email} onChange={(e) => handleFieldChange(e, i, 'email')} disabled={dis}
                                     />
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Mobile</FormLabel>
                                     <Input fontWeight="bold"
+                                        name='mobile'
                                         w='100%' h='10' bg='white.500' value={std.mobile} onChange={(e) => handleFieldChange(e, i, 'mobile')} disabled={dis}
                                     />
                                 </FormControl>
@@ -310,6 +318,7 @@ const StaffDetails = () => {
                                 <FormControl id="name">
                                     <FormLabel>Address</FormLabel>
                                     <Input fontWeight="bold"
+                                        name='address'
                                         w='100%' h='10' bg='white.500' value={std.address} onChange={(e) => handleFieldChange(e, i, 'address')} disabled={dis}
                                     />
                                 </FormControl>
@@ -319,12 +328,31 @@ const StaffDetails = () => {
                                     <Select fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
+                                        name='gender'
                                         value={std.gender}
                                         onChange={(e) => handleFieldChange(e, i, 'gender')}
                                         disabled={dis}>
                                         <option value='Male'>Male</option>
                                         <option value='Female'>Female</option>
                                         <option value='Other'>Other</option>
+                                    </Select>
+
+
+                                </FormControl>
+                                <FormControl id="name">
+                                    <FormLabel>Approver</FormLabel>
+                                    <Select fontWeight="bold"
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        name='approver'
+                                        value={std.approver}
+                                        onChange={(e) => handleFieldChange(e, i, 'approver')}
+                                        disabled={dis}>
+                                        {
+                                            classData?.map((elm) => (
+                                                <option value={elm.name}>{elm.name}</option>
+                                            ))
+                                        }
                                     </Select>
 
 

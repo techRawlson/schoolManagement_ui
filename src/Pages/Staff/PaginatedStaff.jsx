@@ -57,6 +57,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [isOpen, setOpen] = useState(false)
     const [onOpen, setOnOpen] = useState(false)
     const [isClose, setIsClose] = useState(false)
+    const [classValue, setClassValue] = useState('');
     const initialRef = useRef()
     const finalRef = useRef()
     //////staff subject--------------------------
@@ -213,6 +214,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             date_of_joining: admRef.current.value,
             email: emailRef.current.value,
             staff_id: staffIdRef.current.value,
+            Approver:classValue,
             subjects: []
         }
         try {
@@ -254,7 +256,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             console.log(picture)
 
 
-            if (data.status>=200&&data.status<300) {
+            if (data.status >= 200 && data.status < 300) {
                 toast.success("Staff created successfully")
                 setOpen(false)
                 await getData()
@@ -368,6 +370,8 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             console.log(error)
         }
     }
+
+
     return (
         <div>
             <>
@@ -630,9 +634,9 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                                 variant="outline"
                                                                 size="sm"
                                                                 rightIcon={<Icon as={MdClose} />}
-                                                                onClick={ () => handleDeleteItem(index)}
-                                                                // Set the disabled prop based on the dis variable
-                                                                 // Set cursor based on dis
+                                                                onClick={() => handleDeleteItem(index)}
+                                                            // Set the disabled prop based on the dis variable
+                                                            // Set cursor based on dis
                                                             >
                                                                 {item}
                                                             </Button>
@@ -645,7 +649,22 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
 
                                         </Flex >
-                                        <Flex justifyContent="space-between" alignItems="center">
+                                        <Flex justifyContent="space-between" alignItems="center"  >
+                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="50%">
+                                                <FormLabel >Approver</FormLabel>
+                                                <Input
+                                                    list="class"
+                                                    value={classValue}
+                                                    onChange={(e) => setClassValue(e.target.value)}
+                                                    placeholder="Select a Class"
+
+                                                />
+                                                <datalist id="class">
+                                                    {classData.map((option, index) => (
+                                                        <option key={index} value={option.name} />
+                                                    ))}
+                                                </datalist>
+                                            </FormControl>
 
                                         </Flex>
 

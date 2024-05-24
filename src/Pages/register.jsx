@@ -9,7 +9,8 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    FormControl, FormLabel, Input
+    FormControl, FormLabel, Input,
+    Stack
 } from '@chakra-ui/react'
 import { ToastContainer } from 'react-toastify';
 
@@ -59,7 +60,7 @@ function Register() {
 
 
     return (
-        <>
+        <Stack minH="100vh" minW="100vw" backgroundColor="teal">
             {/* <Button onClick={()=>setIsOpen(true)}>Open Modal</Button> */}
             {/* <Button ml={4} ref={finalRef}>
       I'll receive focus on close
@@ -102,7 +103,7 @@ function Register() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </>
+        </Stack>
     )
 
 }

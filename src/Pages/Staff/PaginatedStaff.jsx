@@ -202,7 +202,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     let body;
     const saveButton = async () => {
         // Convert selectedItems array to a comma-separated string
-
+console.log(typeof(admRef.current.value))
         body = {
             name: nameRef.current.value,
             gender: sexRef.current.value,
@@ -211,10 +211,10 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             designation: classRef.current.value,
             dob: dobRef.current.value,
             department: depRef.current.value,
-            date_of_joining: admRef.current.value,
+            dateOfJoining: admRef.current.value,
             email: emailRef.current.value,
-            staff_id: staffIdRef.current.value,
-            Approver:classValue,
+            staffId: staffIdRef.current.value,
+            approver:classValue,
             subjects: selectedItems
         }
         try {
@@ -579,7 +579,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                                             <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Date Of Joining</FormLabel>
-                                                <Input placeholder='Admission Year'
+                                                <Input placeholder='date of joining'
                                                     type='date'
                                                     id="number"
                                                     name="number"

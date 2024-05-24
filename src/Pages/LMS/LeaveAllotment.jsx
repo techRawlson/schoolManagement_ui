@@ -12,52 +12,16 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 const LmsLeaveallotment = () => {
     const [classData, setClassData] = useState([])
-
-    const [data, setData] = useState([])
+    const [LDetails, setLDetails] = useState([])
     const [mainData, setMainData] = useState([])
-    const getLDetails = async () => {
-        try {
-            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
-            const fdata = await data.json()
-            console.log(fdata)
-            setData(fdata)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const getData = async () => {
-        try {
-            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
-            const fdata = await data.json();
-            console.log(fdata)
-            setClassData(fdata)
+    const [edit, setData] = useState(true)
+    const [editId, setEditId] = useState(null)
 
-            if (classData.length > 0) {
-                let result = classData.map(elm => {
-                    let obj = {};
-                    obj.id = elm.id;
-                    obj.staffName = elm.staffName;
-                    obj.staffId = elm.staffId;
-                    obj.department = elm.department;
-                    obj.approver = elm.approver;
-                    obj.leaveProvided = data?.map(slot => {
-                        let ob = {};
-                        ob.leaveName = slot.leaveName;
-                        ob.value = 0;
-                        return ob;
-                    });
-                    setMainData(obj);
-                })
-            }
-            console.log(mainData)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
-    console.log(classData)
+
 
 
     const [allotment, setAllotment] = useState([])
@@ -73,6 +37,76 @@ const LmsLeaveallotment = () => {
         }
     }
 
+    const getLDetails = async () => {
+        try {
+            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+            const fdata = await data.json()
+            console.log(fdata)
+            setLDetails(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getData = async () => {
+        console.log(LDetails)
+        try {
+            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
+            const fdata = await data.json();
+            console.log(fdata)
+            setClassData(fdata)
+
+
+
+            if (fdata.length > 0) {
+                const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+                const LD1 = await data.json()
+                const LD = await LD1.filter((elm) => elm.checkBox == true)
+                console.log(LD)
+
+                const dataFromAllotedTavle = await fetch('http://localhost:8090/api/Approval/All-Data')
+                const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
+                console.log(dataFromAllotedTavlejson)
+                let result = fdata.map(elm => {
+                    const foundData = dataFromAllotedTavlejson.find((e) => e.staffName == elm.name && e.approver == elm.approver && e.department == elm.department)
+                    console.log(foundData)
+                    if (foundData) {
+                        return foundData
+                    } else {
+                        let obj = {
+                            staffName: elm.name,
+                            staffId: elm.staffId,
+                            department: elm.department,
+                            approver: elm.approver,
+                            leaveProvided: LD?.map(slot => ({
+                                leaveName: slot.leaveType,
+                                value: null,
+
+                            })),
+                            leaveBalances: LD?.map(slot => ({
+                                leaveName: slot.leaveType,
+                                value: null,
+
+                            }))
+
+                        };
+                        return obj;
+                    }
+
+                });
+
+                // Update mainData once with the entire result array
+                setMainData([...mainData, ...result]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    }
+    console.log(mainData)
+
+
+
 
 
 
@@ -80,133 +114,86 @@ const LmsLeaveallotment = () => {
 
 
     useEffect(() => {
-        getData()
-        getLDetails()
         getAllotment()
+        getLDetails()
+        getData()
+
     }, [])
-    console.log(allotment)
+
+    // Handle change function to update state
+    const handleChange = (index, field, value) => {
+        const updatedStaffData = [...mainData];
+        updatedStaffData[index][field] = value;
+        setMainData(updatedStaffData);
+    };
+
+    // Handle change function for leaveProvided property
+    const handleLeaveChange = (staffIndex, leaveIndex, value) => {
+        console.log(staffIndex, leaveIndex, value)
+        const updatedStaffData = [...mainData];
+        updatedStaffData[staffIndex].leaveProvided[leaveIndex].value = value;
+        updatedStaffData[staffIndex].leaveBalances[leaveIndex].value = value;
+        setMainData(updatedStaffData);
+    };
+
+
+    const postAllotment = async () => {
+
+        const dataFromAllotedTavle = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`)
+        const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
+        console.log(dataFromAllotedTavlejson)
+        if (dataFromAllotedTavle.status >= 200 && dataFromAllotedTavle.status < 300) {
+            try {
+                console.log(mainData[editId])
+                const dat = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(mainData[editId])
+                })
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                if (dat.status >= 200 && dat.status < 300) {
+                    toast.success('Updated')
+                } else {
+                    toast.error('something went wrong')
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            try {
+                console.log(mainData[editId])
+                const dat = await fetch('http://localhost:8090/api/Approval/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(mainData[editId])
+                })
+                if (dat.status >= 200 && dat.status < 300) {
+                    toast.success('created')
+                } else {
+                    toast.error('something went wrong')
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+
+
+
+
+    }
+
+
     return <>
-        {/* <Stack  minW="100vw" maxW="100vw" minH="100vh">
-            <Navbar />
-            <Stack  maxWidth="70%" margin="0 auto">
-                <TableContainer >
-                    <Table size='sm' >
-                        <Thead>
 
-                            <Tr>
-                                <Th>Staff Name</Th>
-                                <Th>Staff Id</Th>
-                                <Th>Department</Th>
-                                <Th>Approver</Th>
-                                <Th alignItems="center" justifyContent="space-around">
-                                    Provided
-
-
-                                </Th>
-                                <Th alignItems="center" justifyContent="space-around">
-                                    Balance
-                                </Th>
-
-
-
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td></Td>
-                                <Td></Td>
-                                <Td></Td>
-                                <Td></Td>
-                                <Td>
-                                    {
-                                        data?.map((elm, index) => {
-                                            if (elm.checkBox) { // Changed to strict equality and check for truthiness
-                                                return (
-
-                                                    <Td>
-                                                        {elm.leaveType}
-                                                    </Td>
-
-                                                );
-                                            }
-                                            return null; // Ensure a value is returned for each iteration
-                                        })
-                                    }
-                                </Td>
-                                <Td>
-                                    {
-                                        data?.map((elm, index) => {
-                                            if (elm.checkBox) { // Changed to strict equality and check for truthiness
-                                                return (
-
-                                                    <Td>
-                                                        {elm.leaveType}
-                                                    </Td>
-
-                                                );
-                                            }
-                                            return null; // Ensure a value is returned for each iteration
-                                        })
-                                    }
-                                </Td>
-
-                            </Tr>
-                            {
-                                classData?.map((elm) => (
-                                    <Tr>
-
-                                        <Td>{elm.name}</Td>
-                                        <Td>{elm.staffId}</Td>
-                                        <Td>{elm.department}</Td>
-                                        <Td>{elm.approver}</Td>
-                                        <Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                        </Td>
-                                        <Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                            <Td>inches</Td>
-                                        </Td>
-
-                                    </Tr>
-                                ))
-                            }
-
-
-
-
-
-                            <Tr>
-
-                                <Td>inches</Td>
-                                <Td>inches</Td>
-                                <Td>inches</Td>
-                                <Td>inches</Td>
-                                <Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                </Td>
-                                <Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                    <Td>inches</Td>
-                                </Td>
-
-                            </Tr>
-
-                        </Tbody>
-
-                    </Table>
-                </TableContainer>
-            </Stack>
-        </Stack> */}
         <Stack minW="100vw" maxW="100vw" minH="100vh">
             <Navbar />
             <Stack maxWidth="85%" margin="0 auto">
@@ -219,7 +206,7 @@ const LmsLeaveallotment = () => {
                                 <Th fontSize="16px">Department</Th>
                                 <Th fontSize="16px">Approver</Th>
                                 <Th padding="0 1%">
-                                    {data?.map((elm, index) => {
+                                    {LDetails?.map((elm, index) => {
                                         if (elm.checkBox) {
                                             return (
                                                 <>
@@ -236,7 +223,7 @@ const LmsLeaveallotment = () => {
                                     })}
                                 </Th>
                                 <Th >
-                                    {data?.map((elm, index) => {
+                                    {LDetails?.map((elm, index) => {
                                         if (elm.checkBox) {
                                             return (
                                                 <>
@@ -260,42 +247,45 @@ const LmsLeaveallotment = () => {
                         </Thead>
                         <Tbody>
 
-                            {classData?.map((elm) => (
+                            {mainData?.map((elm, i) => (
                                 <Tr>
-                                    <Td fontSize="16px"  borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.name} </Td>
-                                    <Td fontSize="16px"  borderRight="1px solid black" borderLeft="1px solid black"  textAlign="center">{elm.staffId}</Td>
-                                    <Td fontSize="16px"  borderRight="1px solid black" borderLeft="1px solid black"  textAlign="center">{elm.department}</Td>
-                                    <Td fontSize="16px"  borderRight="1px solid black" borderLeft="1px solid black"  textAlign="center">{elm.approver}</Td>
+                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffName} </Td>
+                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffId}</Td>
+                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.department}</Td>
+                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.approver}</Td>
 
                                     <Td borderRight="1px solid black" borderLeft="1px solid black"  >
-                                        {data?.map((elm, index) => {
-                                            if (elm.checkBox) {
-                                                return (
-                                                    <Td fontSize="16px" border="none"  textAlign="center"> 
-                                                        
-                                                        <Input type="number"/>
-                                                    </Td>
-                                                );
-                                            }
-                                            return null;
+                                        {elm.leaveProvided?.map((el, index) => {
+                                            // if (el.checkBox) {
+                                            return (
+                                                <Td fontSize="16px" border="none" textAlign="center" key={index}>
+
+                                                    <Input type="number" value={el.value} onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))} disabled={editId == i ? false : true} />
+                                                </Td>
+                                            );
+                                            // }
+                                            // return null;
                                         })}
                                     </Td>
                                     <Td>
-                                        {data?.map((elm, index) => {
-                                            if (elm.checkBox) {
-                                                return (
-                                                    <Td fontSize="16px" border="none"   textAlign="center">
-                                                        <Input type="number" value="1"/>
-                                                        {/* <Td border="none"></Td> */}
-                                                    </Td>
-                                                );
-                                            }
-                                            return null;
+                                        {elm.leaveBalances?.map((el, index) => {
+                                            // if (el.checkBox) {
+                                            return (
+                                                <Td fontSize="16px" border="none" textAlign="center" key={index}>
+                                                    <Input type="number" value={el.value} disabled />
+
+                                                </Td>
+                                            );
+                                            // }
+                                            // return null;
                                         })}
                                     </Td>
                                     <Td>
                                         <Box>
-                                            <Button>Save</Button>
+                                            {
+                                                editId == i ? <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> : <Button onClick={() => setEditId(i)} bgColor="teal">Update</Button>
+                                            }
+
                                         </Box>
                                     </Td>
 

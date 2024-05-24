@@ -32,15 +32,17 @@ function Login({ setToken, setUser }) {
 
 
     try {
+      const body={
+        email: emailRef.current.value,
+        password: passRef.current.value,
+      }
+      console.log(body)
       const data = await fetch('http://localhost:8081/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: emailRef.current.value,
-          password: passRef.current.value,
-        })
+        body: JSON.stringify(body)
       });
 
       if (data.ok) {

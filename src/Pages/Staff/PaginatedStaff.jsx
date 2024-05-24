@@ -215,7 +215,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             email: emailRef.current.value,
             staff_id: staffIdRef.current.value,
             Approver:classValue,
-            subjects: []
+            subjects: selectedItems
         }
         try {
             console.log(body)
@@ -333,6 +333,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             setSelectedItems([...selectedItems, value]);
         }
     };
+    console.log(selectedItems)
 
     const handleMenuToggle = () => {
         setIsMenuOpen(!isMenuOpen);

@@ -35,21 +35,23 @@ const LmsLeaveallotment = () => {
             setClassData(fdata)
 
             if (classData.length > 0) {
-                let obj = {}
-                classData.map((elm) =>
-                    obj.id = elm.id,
-                    obj.staffName = elm.staffName,
-                    obj.staffId = elm.staffId,
-                    obj.department = elm.department,
-                    obj.approver = elm.approver,
-                    obj.leaveProvided = data?.map((slot) => {
-                        let ob = {}
-                        ob.leaveName=slot.leaveName
-                    }
-                    )
-                )
-
+                let result = classData.map(elm => {
+                    let obj = {};
+                    obj.id = elm.id;
+                    obj.staffName = elm.staffName;
+                    obj.staffId = elm.staffId;
+                    obj.department = elm.department;
+                    obj.approver = elm.approver;
+                    obj.leaveProvided = data?.map(slot => {
+                        let ob = {};
+                        ob.leaveName = slot.leaveName;
+                        ob.value = 0;
+                        return ob;
+                    });
+                    setMainData(obj);
+                })
             }
+            console.log(mainData)
         } catch (error) {
             console.log(error)
         }

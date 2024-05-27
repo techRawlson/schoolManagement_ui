@@ -18,7 +18,7 @@ const Main = () => {
         <Flex
             justifyContent="space-around"
             alignItems="center"
-            height="86vh"
+            
             justifySelf="center"
             padding="5%"
             flexWrap="wrap"
@@ -61,7 +61,7 @@ const Main = () => {
 
             <Card
                 cursor="pointer"
-                onClick={() => nextPage("lmsapplication")}
+                onClick={() => nextPage("lmsleaveapplication")}
                 width={['90%', '45%', '30%', '18%']}
                 height={['40%', '40%', '50%', '55%']}
                 bgColor="#33B1AB"

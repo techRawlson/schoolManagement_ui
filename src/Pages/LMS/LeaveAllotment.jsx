@@ -47,62 +47,121 @@ const LmsLeaveallotment = () => {
             console.log(error)
         }
     }
+    // const getData = async () => {
+    //     console.log(LDetails)
+    //     try {
+    //         const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
+    //         const fdata = await data.json();
+    //         console.log(fdata)
+    //         setClassData(fdata)
+
+
+
+    //         if (fdata.length > 0) {
+    //             const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+    //             const LD1 = await data.json()
+    //             const LD = await LD1.filter((elm) => elm.checkBox == true)
+    //             console.log(LD)
+
+    //             const dataFromAllotedTavle = await fetch('http://localhost:8090/api/Approval/All-Data')
+    //             const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
+    //             console.log(dataFromAllotedTavlejson)
+    //             let result = fdata.map(elm => {
+    //                 const foundData = dataFromAllotedTavlejson.find((e) => e.staffName == elm.name && e.approver == elm.approver && e.department == elm.department)
+    //                 console.log(foundData)
+    //                 if (foundData) {
+    //                     return foundData
+    //                 } else {
+    //                     let obj = {
+    //                         staffName: elm.name,
+    //                         staffId: elm.staffId,
+    //                         department: elm.department,
+    //                         approver: elm.approver,
+    //                         leaveProvided: LD?.map(slot => ({
+    //                             leaveName: slot.leaveType,
+    //                             value: null,
+
+    //                         })),
+    //                         leaveBalances: LD?.map(slot => ({
+    //                             leaveName: slot.leaveType,
+    //                             value: null,
+
+    //                         }))
+
+    //                     };
+    //                     return obj;
+    //                 }
+
+    //             });
+
+    //             // Update mainData once with the entire result array
+          
+    //             setMainData([...mainData, ...result]);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+
+
+    // }
     const getData = async () => {
-        console.log(LDetails)
+        console.log(LDetails);
         try {
-            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
-            const fdata = await data.json();
-            console.log(fdata)
-            setClassData(fdata)
-
-
-
-            if (fdata.length > 0) {
-                const data = await fetch('http://localhost:8090/api/LVM/All-Data')
-                const LD1 = await data.json()
-                const LD = await LD1.filter((elm) => elm.checkBox == true)
-                console.log(LD)
-
-                const dataFromAllotedTavle = await fetch('http://localhost:8090/api/Approval/All-Data')
-                const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
-                console.log(dataFromAllotedTavlejson)
-                let result = fdata.map(elm => {
-                    const foundData = dataFromAllotedTavlejson.find((e) => e.staffName == elm.name && e.approver == elm.approver && e.department == elm.department)
-                    console.log(foundData)
-                    if (foundData) {
-                        return foundData
-                    } else {
-                        let obj = {
-                            staffName: elm.name,
-                            staffId: elm.staffId,
-                            department: elm.department,
-                            approver: elm.approver,
-                            leaveProvided: LD?.map(slot => ({
-                                leaveName: slot.leaveType,
-                                value: null,
-
-                            })),
-                            leaveBalances: LD?.map(slot => ({
-                                leaveName: slot.leaveType,
-                                value: null,
-
-                            }))
-
-                        };
-                        return obj;
-                    }
-
-                });
-
-                // Update mainData once with the entire result array
-                setMainData([...mainData, ...result]);
-            }
+          const data = await fetch('http://localhost:8083/api/staff/saved-Staff');
+          const fdata = await data.json();
+          console.log(fdata);
+          setClassData(fdata);
+    
+          if (fdata.length > 0) {
+            const data = await fetch('http://localhost:8090/api/LVM/All-Data');
+            const LD1 = await data.json();
+            const LD = LD1.filter((elm) => elm.checkBox === true);
+            console.log(LD);
+    
+            const dataFromAllotedTable = await fetch('http://localhost:8090/api/Approval/All-Data');
+            const dataFromAllotedTableJson = await dataFromAllotedTable.json();
+            console.log(dataFromAllotedTableJson);
+    
+            let result = fdata.map((elm) => {
+              const foundData = dataFromAllotedTableJson.find(
+                (e) =>
+                  e.staffName === elm.name &&
+                  e.approver === elm.approver &&
+                  e.department === elm.department
+              );
+              console.log(foundData);
+              if (foundData) {
+                return foundData;
+              } else {
+                let obj = {
+                  staffName: elm.name,
+                  staffId: elm.staffId,
+                  department: elm.department,
+                  approver: elm.approver,
+                  leaveProvided: LD?.map((slot) => ({
+                    leaveName: slot.leaveType,
+                    value: null,
+                  })),
+                  leaveBalances: LD?.map((slot) => ({
+                    leaveName: slot.leaveType,
+                    value: null,
+                  })),
+                };
+                return obj;
+              }
+            });
+    
+            // Ensure no duplicates in mainData
+            const uniqueResult = result.filter(
+              (item) => !mainData.some((data) => data.staffId === item.staffId)
+            );
+    
+            setMainData((prevMainData) => [...prevMainData, ...uniqueResult]);
+          }
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-
-
-    }
+      };
     console.log(mainData)
 
 
@@ -152,7 +211,7 @@ const LmsLeaveallotment = () => {
                     },
                     body: JSON.stringify(mainData[editId])
                 })
-                
+
                 if (dat.status >= 200 && dat.status < 300) {
                     toast.success('Updated')
                     setEditId(null)
@@ -175,7 +234,8 @@ const LmsLeaveallotment = () => {
                 })
                 if (dat.status >= 200 && dat.status < 300) {
                     toast.success('created')
-             
+                    await getData()
+                    setEditId(null)
                 } else {
                     toast.error('something went wrong')
                 }
@@ -196,7 +256,7 @@ const LmsLeaveallotment = () => {
 
         <Stack minW="100vw" maxW="100vw" minH="100vh">
             <Navbar />
-            <ToastContainer/>
+            <ToastContainer />
             <Stack maxWidth="85%" margin="0 auto">
                 <TableContainer>
                     <Table size='sm' variant='striped' colorScheme="white">
@@ -213,6 +273,12 @@ const LmsLeaveallotment = () => {
                                                 <>
                                                     <Th fontSize="16px" border="none" >
                                                         {elm.shortForm}
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
                                                     </Th>
                                                     <Th border="none">
                                                     </Th>

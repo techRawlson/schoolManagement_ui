@@ -23,6 +23,7 @@ import StudentRecord from './Pages/Attendance/Studentrecord';
 import Main from './Pages/LMS/MainPage';
 import LeaveDefinition from './Pages/LMS/LeaveDefintion';
 import LmsLeaveallotment from './Pages/LMS/LeaveAllotment';
+import LeaveApplication from './Pages/LMS/LeaveApplication';
 // import StaffLogin from './Pages/Register/StaffLogin';
 
 
@@ -60,6 +61,7 @@ function App() {
           <Route path='/lms' element={tok ? <Main /> : <Login setToken={setToken} />} />
           <Route path='/lmsdefinition' element={tok ? <LeaveDefinition /> : <Login setToken={setToken} />} />
           <Route path='/lmsleaveallotment' element={tok ? <LmsLeaveallotment /> : <Login setToken={setToken} />} />
+          <Route path='/lmsleaveapplication' element={tok ? <LeaveApplication /> : <Login setToken={setToken} />} />
 
         </Routes>
       </AuthProvider>

@@ -95,12 +95,12 @@ function Login({ setToken, setUser }) {
 
             <FormControl mt={4}>
               <FormLabel>UserId</FormLabel>
-              <Input ref={emailRef} placeholder='name_id' type="text" />
+              <Input ref={emailRef} placeholder='name_id' type="text" autoComplete="new-password"/>
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Password</FormLabel>
-              <Input ref={passRef} placeholder='Password' />
+              <Input ref={passRef} placeholder='password' autoComplete='off' />
             </FormControl>
           </ModalBody>
 

@@ -51,6 +51,7 @@ function Login({ setToken, setUser }) {
         // dispatch(setUser(fdata));
         // console.log(fdata.username)
         localStorage.setItem("token", "fdata.username");
+        localStorage.setItem("staffName", dataf.staffName);
         localStorage.setItem("username", dataf.userId)
         // setToken(fdata.jwtToken)
 

@@ -25,7 +25,7 @@ import { useEffect, useState } from "react"
 import KeyValueTable from "./Table"
 import { ToastContainer, toast } from "react-toastify"
 const LeaveApplication = () => {
-    const [isAdmin, setisAdmin] = useState(false)
+    const [isAdmin, setisAdmin] = useState(true)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [fire, setFire] = useState(false)
     const [admin, setAdmin] = useState(false)
@@ -88,7 +88,7 @@ const LeaveApplication = () => {
 
     const adminPost = async (i) => {
         const body = {
-            approvedDate: currentDate,
+            approvedDate: data[i].status == 'Approved' || data[i].status == 'Rejected' ? currentDate : '',
             status: data[i].status
         }
         try {
@@ -128,6 +128,10 @@ const LeaveApplication = () => {
         }
     }
 
+    const adminAction = () => {
+        setOverlay(<OverlayTwo />)
+        onOpen()
+    }
 
 
 
@@ -136,19 +140,20 @@ const LeaveApplication = () => {
 
 
 
-    useEffect(() => {
-        getCurrentDate()
-        getDetails()
-        getLoggedInuserDetail()
-    }, [])
-    //
+useEffect(() => {
+    getCurrentDate()
+    getDetails()
+    getLoggedInuserDetail()
+}, [])
+//
 
 console.log(data)
-    return <Stack height="100vh" width="100vw">
-        <Navbar />
-        <ToastContainer />
-        {
-            isAdmin ? <TableContainer width="96vw" margin="0 auto">
+return <Stack height="100vh" width="100vw">
+    <Navbar />
+    <ToastContainer />
+    {
+        isAdmin ?
+            <TableContainer width="96vw" margin="0 auto">
                 <Table size='lg'>
                     <Thead>
                         <Tr>
@@ -176,20 +181,26 @@ console.log(data)
                                     <Td>{elm.totalDays}</Td>
                                     <Td>
                                         {
-                                            elm.status == null ? 'Pending' : elm.status 
+                                            elm.status == null ? 'Pending' : elm.status
                                         }
                                     </Td>
                                     <Td>{elm.approver}</Td>
                                     <Td><Input type="date" value={elm.approvedDate} disabled /></Td>
-                                    <Td>
+                                    {/* <Td>
                                         <Select onChange={(e) => handleChange(i, e.target.value)}>
                                             <option value="pending">Pending</option>
                                             <option value="Approved">Approved</option>
                                             <option value="Reject">Reject</option>
                                         </Select>
-                                    </Td>
+                                    </Td> */}
+                                    {/* onClick={() => adminPost(i)} */}
                                     <Td>
-                                        <Button bgColor="lightsteelblue" onClick={() => adminPost(i)}>Update</Button>
+                                        <Button bgColor="red"
+                                            onClick={() => {
+                                                adminAction()
+                                            }}
+                                        >Action</Button>
+                                        {/* <Button bgColor="red" onClick={()=>}>Action</Button> */}
                                     </Td>
                                 </Tr>
                             ))
@@ -225,60 +236,60 @@ console.log(data)
                                     <Td>{elm.status == null ? 'Pending' : elm.status}</Td>
                                     <Td>{elm.approver}</Td>
                                     <Td>{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
-                                    
+
                                 </Tr>
                             ))
                         }
                     </Tbody>
                 </Table>
             </TableContainer>
-        }
-        {
-            isAdmin ? "" : <Button bgColor="orangered" borderRadius="10px" height="5%" alignSelf="flex-end" marginRight="1%" onClick={() => {
-                setOverlay(<OverlayTwo />)
-                onOpen()
-            }}
-            >New Request</Button>
-        }
+    }
+    {
+        isAdmin ? "" : <Button bgColor="orangered" borderRadius="10px" height="5%" alignSelf="flex-end" marginRight="1%" onClick={() => {
+            setOverlay(<OverlayTwo />)
+            onOpen()
+        }}
+        >New Request</Button>
+    }
 
 
-        {/* <Stack> */}
-        <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
-                {overlay}
-                <ModalContent>
-                    <ModalHeader>
-                        <Badge colorScheme="red" fontSize="16px">  New Request</Badge>
+    {/* <Stack> */}
+    <>
+        <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
+            {overlay}
+            <ModalContent>
+                <ModalHeader>
+                    <Badge colorScheme="red" fontSize="16px">  New Request</Badge>
 
 
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Table>
-                            <TableContainer>
-                                <Table variant='striped' colorScheme='teal'>
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Table>
+                        <TableContainer>
+                            <Table variant='striped' colorScheme='teal'>
 
-                                    <Tbody>
-                                        <Box p={5}>
-                                            <KeyValueTable data={user} fire={fire} onClose={onClose} setFire={setFire} getDetails={getDetails} />
-                                        </Box>
+                                <Tbody>
+                                    <Box p={5}>
+                                        <KeyValueTable data={user} fire={fire} onClose={onClose} setFire={setFire} getDetails={getDetails} />
+                                    </Box>
 
-                                    </Tbody>
+                                </Tbody>
 
-                                </Table>
-                            </TableContainer>
-                        </Table>
-                    </ModalBody>
-                    <ModalFooter display="flex" justifyContent="space-between">
-                        <Button onClick={onClose} bgColor="lightskyblue">Close</Button>
-                        <Button onClick={() => setFire(true)} bgColor="lightgreen">Submit</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </>
+                            </Table>
+                        </TableContainer>
+                    </Table>
+                </ModalBody>
+                <ModalFooter display="flex" justifyContent="space-between">
+                    <Button onClick={onClose} bgColor="lightskyblue">Close</Button>
+                    <Button onClick={() => setFire(true)} bgColor="lightgreen">Submit</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    </>
 
 
-        {/* </Stack> */}
-    </Stack>
+    {/* </Stack> */}
+</Stack>
 }
 export default LeaveApplication

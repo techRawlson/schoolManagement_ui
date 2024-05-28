@@ -98,7 +98,7 @@ const Main = () => {
 
             <Card
                 cursor="pointer"
-                onClick={() => nextPage("lms")}
+                onClick={() => nextPage("lmsleaveapproval")}
                 width={['90%', '45%', '30%', '18%']}
                 height={['40%', '40%', '50%', '55%']}
                 bgColor="#E0B40F"

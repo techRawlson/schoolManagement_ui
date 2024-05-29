@@ -1,4 +1,4 @@
-import { Box, Table, Tbody, Tr, Td, Heading, Input, Select, ModalFooter, Button } from '@chakra-ui/react';
+import { Box, Table, Tbody, Tr, Td, Heading, Input, Select, ModalFooter, Button, Badge } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -42,7 +42,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     //             toast.success("New request created")
     //             onClose()
     //             setFire(false)
-           
+
     //         } else {
     //             toast.success("something went wrong")
     //         }
@@ -57,7 +57,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
         const body = {
             approvedDate: status == 'Approved' || status == 'Rejected' ? currentDate : '',
             status: status,
-            approverComment:approverComments
+            approverComment: approverComments
         }
         try {
             console.log(body)
@@ -115,7 +115,6 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
         getCurrentDate()
     }, [])
 
-
     return (
 
         <Box borderWidth="1px" borderRadius="md" overflow="hidden" p={5}>
@@ -141,24 +140,17 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
 
                         </Td>
                         <Td>
-                            <Select onChange={(e) => setLeave(e.target.value)} disabled value={user.leaveType}>
-                                <option>Select</option>
-                                {
-                                    leaveTypes?.map((elm) =>
-                                        <option>{elm.leaveName}</option>
-                                    )
-                                }
-                            </Select>
+                        {user.leaveType}
                         </Td>
                     </Tr>
 
                     <Tr >
                         <Td fontWeight="bold">Leave Start</Td>
-                        <Td><Input type="date" value={user.startDate} disabled /></Td>
+                        <Td>{user.startDate}</Td>
                     </Tr>
                     <Tr >
                         <Td fontWeight="bold">Leave Ends</Td>
-                        <Td><Input type="date" value={user.endDate} disabled /> </Td>
+                        <Td>{user.endDate}</Td>
                     </Tr>
                     <Tr >
                         <Td fontWeight="bold">Total Days</Td>
@@ -166,18 +158,38 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                     </Tr>
                     <Tr >
                         <Td fontWeight="bold">Comments</Td>
-                        <Td><Input type='text' border="1px solid lightskyblue" fontSize="18px" disabled value={user.comment} /></Td>
+                        <Td>{user.comment}</Td>
                     </Tr>
                     <Tr >
                         <Td fontWeight="bold">Approver Comment</Td>
-                        <Td><Input type='text' border="1px solid lightskyblue" onChange={(e) => setApprovercomments(e.target.value)} fontSize="18px" /></Td>
+                        <Td>
+                            {
+                                user.status == null || user.status == '' ? <Input
+                                    type='text'
+                                    border="1px solid lightskyblue"
+                                    onChange={(e) => setApprovercomments(e.target.value)}
+                                    fontSize="18px"
+                                /> : <>{user.approverComment}</>
+                            }</Td>
                     </Tr>
                 </Tbody>
             </Table>
-            <ModalFooter display="flex" justifyContent="space-between">
-                <Button  bgColor="Red" onClick={() => adminPost('Rejected')}>Reject</Button>
-                <Button onClick={() => adminPost('Approved')} bgColor="lightgreen">Approve</Button>
-            </ModalFooter>
+            {
+                user.status == null || user.status == '' ? <ModalFooter display="flex" justifyContent="space-between">
+                    <Button bgColor="Red" onClick={() => adminPost('Rejected')}>Reject</Button>
+                    <Button onClick={() => adminPost('Approved')} bgColor="lightgreen">Approve</Button>
+                </ModalFooter> :
+                    <Badge
+                        colorScheme={user.status=='Approved'?'green':'red'}
+                        px={4} 
+                        py={2} 
+                        fontSize="lg" 
+                       marginLeft="70%"
+                       marginTop="5%"
+                    >
+                        {user.status}
+                    </Badge>}
+
         </Box>
     );
 };

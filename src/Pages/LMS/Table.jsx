@@ -52,14 +52,16 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 body: JSON.stringify(body)
             })
             // const fusers = await users.json()
-          
+
             if (users.status >= 200 && users.status < 300) {
                 toast.success("New request created")
                 onClose()
                 setFire(false)
                 await getDetails()
             } else {
-                toast.error(users.text())
+                const tex = await users.text()
+                console.log(tex)
+                toast.error(tex)
             }
 
             console.log(body)
@@ -69,9 +71,19 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     }
 
     const updateEntry = async () => {
+        
+        const body = {
+            comment: user.comment,
+            leaveType: user.leaveType,
+            startDate:user.startDate,
+            endDate:user.endDate,
+            totalDays:user.totalDays
 
+        }
+        console.log(body)
+        console.log(applicantId)
         try {
-            const users = await fetch(`http://localhost:8090/api/staff-application/create`, {
+            const users = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,7 +93,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             const fusers = await users.json()
             console.log(fusers)
             if (users.status >= 200 && users.status < 300) {
-                toast.success("New request created")
+                toast.success("New request updated")
                 onClose()
                 setFire(false)
                 await getDetails()
@@ -186,14 +198,43 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
 
 
     const handleChange1 = (name, value) => {
-        console.log(name, value)
-        console.log(user)
-        setUser({
+        console.log(name, value);
+        console.log(user);
+        
+        // Update the user state with the new value
+        const updatedUser = {
             ...user,
             [name]: value
-        });
-        console.log(user)
+        };
+        
+        setUser(updatedUser);
+        
+        if (name === "startDate" || name === "endDate" ) {
+            let start = new Date(updatedUser.startDate);
+            let end = new Date(updatedUser.endDate);
+    
+            if(name === "startDate") {
+                start = new Date(value);
+            } else if(name === "endDate") {
+                end = new Date(value);
+            }
+    
+            console.log(name);
+            if (start <= end) {
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                console.log(diffDays);
+                setUser(prevUser => ({
+                    ...prevUser,
+                    totalDays: diffDays
+                }));
+            }
+        }
+    
+        console.log(user);
     };
+    console.log(user)
+    
 
     const [leaveTypesAvailavle, setleaveTypesAvailavle] = useState([])
     const getleaveTypesAvailavle = async () => {
@@ -298,7 +339,10 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                         />
                                     </Td>
                                 </Tr>
-
+                                <Tr className="font-size-22">
+                                    <Td fontWeight="bold" className="font-size-22">Total Days</Td>
+                                    <Td className="font-size-22">{user.totalDays}</Td>
+                                </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Comments</Td>
                                     <Td className="font-size-22">

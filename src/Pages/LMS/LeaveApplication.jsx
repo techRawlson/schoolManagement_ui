@@ -178,6 +178,7 @@ const reviewApplication=(id)=>{
                             <Th className="font-size-22">Status</Th>
                             <Th className="font-size-22">Approver</Th>
                             <Th className="font-size-22">Approved Date</Th>
+                            <Th className="font-size-22"> Comment</Th>
                             <Th className="font-size-22">Approver Comments</Th>
                             <Th className="font-size-22">Action</Th>
                         </Tr>
@@ -195,7 +196,8 @@ const reviewApplication=(id)=>{
                                     <Td className="font-size-22">{elm.status == null ? 'Pending' : elm.status}</Td>
                                     <Td className="font-size-22">{elm.approver}</Td>
                                     <Td className="font-size-22">{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
-                                    <Td className="font-size-22">{elm.approverComment}</Td>
+                                    <Td className="font-size-22">{elm.comment}</Td>
+                                    <Td className="font-size-22">{elm.approverComment==''||elm.approverComment==null?'pending':elm.approverComment}</Td>
                                     <Td className="font-size-22">
                                         <Button bgColor="lightgreen" onClick={() => reviewApplication(elm.id)}>Edit</Button>
                                     </Td>
@@ -223,7 +225,7 @@ const reviewApplication=(id)=>{
                 {overlay}
                 <ModalContent  height="85vh">
                     <ModalHeader>
-                        <Badge colorScheme="red" fontSize="16px">  New Request</Badge>
+                        <Badge colorScheme="red" fontSize="16px">  {edit==true?'':'New Request'}</Badge>
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody overflowY="auto">

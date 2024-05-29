@@ -27,7 +27,7 @@ const Navbar = () => {
     <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: '100vw', padding: '1.5%' }}     >
       <Flex justifyContent="space-between" width="6%" alignItems="center">
         {/* <Badge></Badge> */}
-        <Badge>{person.split(" ").at(0)}</Badge>
+        <Badge>{person.split(" ")?.at(0)}</Badge>
         <AvatarGroup spacing='1rem'>
 
           <Avatar bg='red.500' />

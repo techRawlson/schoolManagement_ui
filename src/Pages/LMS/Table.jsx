@@ -1,14 +1,15 @@
 import { Box, Table, Tbody, Tr, Td, Heading, Input, Select, ModalFooter, Button } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-
-const KeyValueTable = ({ data, fire, setFire, onClose, getDetails, applicantId }) => {
+import './LeaveApplication.css'
+const KeyValueTable = ({data, users, fire, setFire, onClose, getDetails, applicantId,edit }) => {
     const [user, setUser] = useState([])
     const [leave, setLeave] = useState("")
-    const leaveTypes = data?.leaveBalances.map((elm) => elm)
+    const leaveTypes = users?.leaveBalances.map((elm) => elm)
     const [leaveStart, setleaveStart] = useState("")
     const [leaveEnd, setLeaveEnd] = useState("")
-    const totalDays = Math.ceil(Math.abs(new Date(leaveStart) - new Date(leaveEnd)) / (1000 * 60 * 60 * 24)) + 1
+    const [totalDays,setTotalDays]=useState("")
+   
     const [comments, setcomments] = useState("")
     const [currentDate, setcurrentDate] = useState("")
     const getCurrentDate = () => {
@@ -22,9 +23,9 @@ const KeyValueTable = ({ data, fire, setFire, onClose, getDetails, applicantId }
     };
 
     const body = {
-        staffName: data.staffName,
-        staffId: data.staffId,
-        approver: data.approver,
+        staffName: users.staffName,
+        staffId: users.staffId,
+        approver: users.approver,
         appliedDate: currentDate,
         approvedDate: null,
         endDate: leaveEnd,
@@ -42,16 +43,16 @@ const KeyValueTable = ({ data, fire, setFire, onClose, getDetails, applicantId }
     const post = async () => {
         console.log(body)
         try {
-            const data = await fetch(`http://localhost:8090/api/staff-application/create`, {
+            const users = await fetch(`http://localhost:8090/api/staff-application/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(body)
             })
-            const fdata = await data.json()
-            console.log(fdata)
-            if (data.status >= 200 && data.status < 300) {
+            const fusers = await users.json()
+            console.log(fusers)
+            if (users.status >= 200 && users.status < 300) {
                 toast.success("New request created")
                 onClose()
                 setFire(false)
@@ -73,10 +74,10 @@ const KeyValueTable = ({ data, fire, setFire, onClose, getDetails, applicantId }
     const getUser = async () => {
         try {
             console.log(applicantId)
-            const data = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`)
-            const fdata = await data.json()
-            console.log(fdata)
-            setUser(fdata)
+            const users = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`)
+            const fusers = await users.json()
+            console.log(fusers)
+            setUser(fusers)
         } catch (error) {
             console.log(error)
         }
@@ -99,71 +100,231 @@ const KeyValueTable = ({ data, fire, setFire, onClose, getDetails, applicantId }
         }
 
     }, [fire])
-    console.log(data)
 console.log(user)
+console.log(data)
+
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'leave':
+        setLeave(value);
+        break;
+      case 'leaveStart':
+        setleaveStart(value);
+        break;
+      case 'leaveEnd':
+        setLeaveEnd(value);
+        break;
+      case 'comments':
+        setcomments(value);
+        break;
+      default:
+        break;
+    }
+
+   
+  };
+  useEffect(() => {
+    if (leaveStart && leaveEnd) {
+      const start = new Date(leaveStart);
+      const end = new Date(leaveEnd);
+      if (start <= end) {
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        setTotalDays(diffDays);
+      }
+    }
+  }, [leaveStart, leaveEnd]);
+  console.log(leave)
+
+
+
+
+
+const handleChange1 = (name, value) => {
+  // Update state or perform logic based on the changed input
+  // For example, you can update the state like this:
+  setUser({
+    ...user,
+    [name]: value
+  });
+};
+
+
     return (
 
-        <Box borderWidth="1px" borderRadius="md" overflow="hidden" p={5}>
-            <ToastContainer />
-            <Table variant="striped">
-                <Tbody>
+        <Box borderWidth="1px"  overflow="scroll" className="font-size-22"  height="100%" width="100%">
+    <ToastContainer />
+   {
+    edit?
+   <Box>
+   <Table variant="striped" className="font-size-22">
+      <Tbody className="font-size-22">
+        <Tr className="font-size-22">
+          <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
+          <Td className="font-size-22">
+            <Input
+              type="date"
+              name="leaveStart"
+              value={user.startDate}
+              onChange={(e) => {
+                handleChange1(e.target.name, e.target.value);
+              }}
+              min={currentDate}
+              className="font-size-22"
+            />
+          </Td>
+        </Tr>
+        <Tr className="font-size-22">
+          <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
+          <Td className="font-size-22">
+            <Input
+              type="date"
+              name="leaveEnd"
+              value={user.endDate}
+              onChange={(e) => {
+                handleChange1(e.target.name, e.target.value);
+              }}
+              min={currentDate}
+              className="font-size-22"
+            />
+          </Td>
+        </Tr>
+        <Tr className="font-size-22">
+          <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
+          <Td className="font-size-22">
+            <Select
+              name="leaveType"
+              onChange={(e) => {
+                handleChange1(e.target.name, e.target.value);
+              }}
+              value={user.leaveType}
+              className="font-size-22"
+            >
+              <option value="Sick Leave" className="font-size-22">Sick Leave</option>
+              {/* Add other options here */}
+            </Select>
+          </Td>
+        </Tr>
+        <Tr className="font-size-22">
+          <Td fontWeight="bold" className="font-size-22">Comments</Td>
+          <Td className="font-size-22">
+            <Input
+              type="text"
+              name="comments"
+              value={user.comment}
+              onChange={(e) => {
+                handleChange1(e.target.name, e.target.value);
+              }}
+              className="font-size-22"
+            />
+          </Td>
+        </Tr>
+        {/* Remaining table rows */}
+      </Tbody>
+    </Table>
 
-                    <Tr >
-                        <Td fontWeight="bold">Name</Td>
-                        <Td>{data.staffName}</Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Emp Id</Td>
-                        <Td>{data.staffId}</Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Approver</Td>
-                        <Td>{data.approver}</Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">
-                            LeaveType
+     </Box>
+    :
+    <Box>
+    <Table variant="striped" className="font-size-22">
+             <Tbody className="font-size-22">
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Name</Td>
+                 <Td className="font-size-22">{users.staffName}</Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Emp Id</Td>
+                 <Td className="font-size-22">{users.staffId}</Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Approver</Td>
+                 <Td className="font-size-22">{users.approver}</Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">LeaveType</Td>
+                 <Td className="font-size-22">
+                   <Select name="leave" onChange={handleChange} value={leave} className="font-size-22">
+                     <option className="font-size-22">Select</option>
+                     {leaveTypes?.map((elm) => (
+                       <option value={elm.leaveName} className="font-size-22">{elm.leaveName}</option>
+                     ))}
+                   </Select>
+                 </Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Leave Balance</Td>
+                 <Td className="font-size-22">{users?.leaveBalances?.find((elm)=>elm.leaveName==leave)!=undefined?users?.leaveBalances?.find((elm)=>elm.leaveName==leave).value:''}</Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
+                 <Td className="font-size-22">
+                   <Input
+                     type="date"
+                     name="leaveStart"
+                     value={leaveStart}
+                     onChange={handleChange}
+                     min={currentDate}
+                     className="font-size-22"
+                   />
+                 </Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
+                 <Td className="font-size-22">
+                   <Input
+                     type="date"
+                     name="leaveEnd"
+                     value={leaveEnd}
+                     onChange={handleChange}
+                     min={currentDate}
+                     className="font-size-22"
+                   />
+                 </Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Total Days</Td>
+                 <Td className="font-size-22">{totalDays}</Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Comments</Td>
+                 <Td className="font-size-22">
+                   <Input
+                     type="text"
+                     name="comments"
+                     border="1px solid lightskyblue"
+                     onChange={handleChange}
+                     value={comments}
+                     className="font-size-22"
+                   />
+                 </Td>
+               </Tr>
+               <Tr className="font-size-22">
+                 <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
+                 <Td className="font-size-22">
+                   <Input
+                     type="text"
+                     name="approverComment"
+                     border="1px solid lightskyblue"
+                     disabled
+                     className="font-size-22"
+                   />
+                 </Td>
+               </Tr>
+             </Tbody>
+           </Table>
+     <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+         <Button onClick={onClose} bgColor="red" className="font-size-22">Cancel</Button>
+         <Button onClick={() => setFire(true)} bgColor="lightgreen" className="font-size-22">Submit</Button>
+     </ModalFooter>
+    </Box>
+   }
+   
 
-                        </Td>
-                        <Td>
-                            <Select onChange={(e) => setLeave(e.target.value)} value={user.leaveType} >
-                                <option>Select</option>
-                                {
-                                    leaveTypes?.map((elm) =>
-                                        <option value={elm.leaveName}>{elm.leaveName}</option>
-                                    )
-                                }
-                            </Select>
-                        </Td>
-                    </Tr>
-                    
-                    <Tr >
-                        <Td fontWeight="bold">Leave Start</Td>
-                        <Td><Input type="date" value={user.endDate} onChange={(e) => setleaveStart(e.target.value)} min={currentDate} /></Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Leave Ends</Td>
-                        <Td><Input type="date" value={user.startDate} onChange={(e) => setLeaveEnd(e.target.value)} min={currentDate} /> </Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Total Days</Td>
-                        <Td>{user.totalDays}</Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Comments</Td>
-                        <Td><Input type='text' border="1px solid lightskyblue" fontSize="18px" onChange={(e) => setcomments(e.target.value)} value={user.comment}/></Td>
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold">Approver Comment</Td>
-                        <Td><Input type='text' border="1px solid lightskyblue" onChange={(e) => setcomments(e.target.value)} fontSize="18px" disabled /></Td>
-                    </Tr>
-                </Tbody>
-            </Table>
-            <ModalFooter display="flex" justifyContent="space-between">
-                <Button onClick={onClose} bgColor="red">Cancel</Button>
-                <Button onClick={() => setFire(true)} bgColor="lightgreen">Submit</Button>
-            </ModalFooter>
-        </Box>
+
+     
+</Box>
+
     );
 };
 

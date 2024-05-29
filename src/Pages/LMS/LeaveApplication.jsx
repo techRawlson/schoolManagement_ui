@@ -25,7 +25,9 @@ import { useEffect, useState } from "react"
 import KeyValueTable from "./Table"
 import { ToastContainer, toast } from "react-toastify"
 import KeyValueTableAdmin from "./Tableadmin"
+import './LeaveApplication.css'
 const LeaveApplication = () => {
+    const[edit,setEdit]=useState(false)
     const [applicantId, setapplicantId] = useState(null)
     const [isAdmin, setisAdmin] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -141,6 +143,7 @@ const LeaveApplication = () => {
 const reviewApplication=(id)=>{
     setOverlay(<OverlayTwo />)
     onOpen()
+    setEdit(true)
     setapplicantId(id)
 }
     
@@ -162,49 +165,51 @@ const reviewApplication=(id)=>{
         <Navbar />
         <ToastContainer />
         {
-                 <TableContainer width="96vw" margin="0 auto">
-                    <Table size='lg'>
-                        <Thead>
-                            <Tr>
-                                <Th>Type</Th>
-                                <Th>Staff</Th>
-                                <Th>Staff Id</Th>
-                                <Th>Start Date</Th>
-                                <Th>End Date</Th>
-                                <Th>Total Days</Th>
-                                <Th>Status</Th>
-                                <Th> Approver</Th>
-                                <Th>Approved Date</Th>
-                                <Th>Approver Comments</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {
-                                data?.map((elm) => (
-                                    <Tr>
-                                        <Td>{elm.leaveType}</Td>
-                                        <Td>{elm.staffName}</Td>
-                                        <Td>{elm.staffId}</Td>
-                                        <Td>{elm.startDate}</Td>
-                                        <Td>{elm.endDate}</Td>
-                                        <Td>{elm.totalDays}</Td>
-                                        <Td>{elm.status == null ? 'Pending' : elm.status}</Td>
-                                        <Td>{elm.approver}</Td>
-                                        <Td>{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
-                                        <Td>{elm.approverComment}</Td>
-<Td>
-    <Button bgColor="red" onClick={()=>reviewApplication(elm.id)}>Action</Button>
-</Td>
-                                    </Tr>
-                                ))
-                            }
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                <TableContainer width="96vw" margin="0 auto">
+                <Table size='lg' className="font-size-22">
+                    <Thead className="font-size-22">
+                        <Tr className="font-size-22">
+                            <Th className="font-size-22">Type</Th>
+                            <Th className="font-size-22">Staff</Th>
+                            <Th className="font-size-22">Staff Id</Th>
+                            <Th className="font-size-22">Start Date</Th>
+                            <Th className="font-size-22">End Date</Th>
+                            <Th className="font-size-22">Total Days</Th>
+                            <Th className="font-size-22">Status</Th>
+                            <Th className="font-size-22">Approver</Th>
+                            <Th className="font-size-22">Approved Date</Th>
+                            <Th className="font-size-22">Approver Comments</Th>
+                            <Th className="font-size-22">Action</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody className="font-size-22">
+                        {
+                            data?.map((elm) => (
+                                <Tr className="font-size-22">
+                                    <Td className="font-size-22">{elm.leaveType}</Td>
+                                    <Td className="font-size-22">{elm.staffName}</Td>
+                                    <Td className="font-size-22">{elm.staffId}</Td>
+                                    <Td className="font-size-22">{elm.startDate}</Td>
+                                    <Td className="font-size-22">{elm.endDate}</Td>
+                                    <Td className="font-size-22">{elm.totalDays}</Td>
+                                    <Td className="font-size-22">{elm.status == null ? 'Pending' : elm.status}</Td>
+                                    <Td className="font-size-22">{elm.approver}</Td>
+                                    <Td className="font-size-22">{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
+                                    <Td className="font-size-22">{elm.approverComment}</Td>
+                                    <Td className="font-size-22">
+                                        <Button bgColor="lightgreen" onClick={() => reviewApplication(elm.id)}>Edit</Button>
+                                    </Td>
+                                </Tr>
+                            ))
+                        }
+                    </Tbody>
+                </Table>
+            </TableContainer>
+            
         }
         {
             isAdmin ? "" : <Button bgColor="orangered" borderRadius="10px" height="5%" alignSelf="flex-end" marginRight="1%" onClick={() => {
+                setEdit(false)
                 setOverlay(<OverlayTwo />)
                 onOpen()
             }}
@@ -212,31 +217,35 @@ const reviewApplication=(id)=>{
         }
 
 
-        {/* <Stack> */}
+      
         <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
+            <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
                 {overlay}
-                <ModalContent>
+                <ModalContent  height="85vh">
                     <ModalHeader>
                         <Badge colorScheme="red" fontSize="16px">  New Request</Badge>
                     </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
+                    <ModalBody overflowY="auto">
                         <Table>
                             <TableContainer>
                                 <Table variant='striped' colorScheme='teal'>
 
                                     <Tbody>
-                                       <Box p={5}>
-                                                    <KeyValueTable
-                                                        data={user}
-                                                        fire={fire}
-                                                        onClose={onClose}
-                                                        setFire={setFire}
-                                                        getDetails={getDetails}
-                                                        applicantId={applicantId}
-                                                    />
-                                                </Box>
+                                       {
+                                       <KeyValueTable
+                                        edit={edit}
+                                        data={user}
+                                        users={user}
+                                        fire={fire}
+                                        onClose={onClose}
+                                        setFire={setFire}
+                                        getDetails={getLoggedInuserDetail}
+                                        applicantId={applicantId}
+                                    />
+                                       }
+                                                    
+                                                
                                         
 
 

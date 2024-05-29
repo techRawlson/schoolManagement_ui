@@ -151,17 +151,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                             </Select>
                         </Td>
                     </Tr>
-                    {/* <Tr >
-                        <Td fontWeight="bold">
-                            LeaveBalance
-                        </Td>
-                        <Td>
-                            <Select disabled>
-                                <option>{leaveBalances?.leaveBalances?.find((elm) => elm?.leaveName)?.value}</option>
 
-                            </Select>
-                        </Td>
-                    </Tr> */}
                     <Tr >
                         <Td fontWeight="bold">Leave Start</Td>
                         <Td><Input type="date" value={user.startDate} disabled /></Td>

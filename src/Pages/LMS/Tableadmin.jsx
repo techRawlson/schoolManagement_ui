@@ -21,7 +21,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
         // return `${yyyy}-${mm}-${dd}`;
     };
     console.log(data)
-
+    console.log(user)
     // const post = async (status) => {
     //     const body = {
     //         approver: data.approver,
@@ -57,7 +57,12 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
         const body = {
             approvedDate: status == 'Approved' || status == 'Rejected' ? currentDate : '',
             status: status,
-            approverComment: approverComments
+            approverComment: approverComments,
+            leaveType: user.leaveType,
+            startDate: user.startDate,
+            endDate: user.endDate,
+            totalDays: user.totalDays,
+            comment: user.comment
         }
         try {
             console.log(body)
@@ -140,7 +145,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
 
                         </Td>
                         <Td>
-                        {user.leaveType}
+                            {user.leaveType}
                         </Td>
                     </Tr>
 
@@ -174,22 +179,29 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                     </Tr>
                 </Tbody>
             </Table>
-            {
-                user.status == null || user.status == '' ? <ModalFooter display="flex" justifyContent="space-between">
-                    <Button bgColor="Red" onClick={() => adminPost('Rejected')}>Reject</Button>
-                    <Button onClick={() => adminPost('Approved')} bgColor="lightgreen">Approve</Button>
-                </ModalFooter> :
+            <>
+                {user.status == null || user.status === '' ? (
+                    <ModalFooter display="flex" justifyContent="space-between">
+                        <Button bgColor="red" onClick={() => adminPost('Rejected')}>
+                            Reject
+                        </Button>
+                        <Button onClick={() => adminPost('Approved')} bgColor="lightgreen">
+                            Approve
+                        </Button>
+                    </ModalFooter>
+                ) : (
                     <Badge
-                        colorScheme={user.status=='Approved'?'green':'red'}
-                        px={4} 
-                        py={2} 
-                        fontSize="lg" 
-                       marginLeft="70%"
-                       marginTop="5%"
+                        colorScheme={user.status === 'Approved' ? 'green' : 'red'}
+                        px={4}
+                        py={2}
+                        fontSize="lg"
+                        marginLeft="70%"
+                        marginTop="5%"
                     >
                         {user.status}
-                    </Badge>}
-
+                    </Badge>
+                )}
+            </>
         </Box>
     );
 };

@@ -45,20 +45,17 @@ function Login({ setToken, setUser }) {
         body: JSON.stringify(body)
       });
       const dataf = await data.json()
-      console.log(dataf)
+      // console.log(dataf)
       if (data.status >= 200 && data.status < 300) {
         console.log("ok", data)
-        // dispatch(setUser(fdata));
-        // console.log(fdata.username)
         localStorage.setItem("token", "fdata.username");
         localStorage.setItem("staffName", dataf.staffName);
         localStorage.setItem("username", dataf.userId)
-        // setToken(fdata.jwtToken)
-
-        toast.success('wrong credentials')
         navigate("/dashboard");
+        toast.success('welcome')
       } else {
-        toast.error('wrong credentials')
+        const er=await data.text()
+        toast.error(er)
         console.error("Login failed:", data.statusText);
         // Handle login failure here
       }

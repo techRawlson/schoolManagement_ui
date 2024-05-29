@@ -77,8 +77,10 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             leaveType: user.leaveType,
             startDate:user.startDate,
             endDate:user.endDate,
-            totalDays:user.totalDays
-
+            totalDays:user.totalDays,
+            approverComment: user.approverComment,
+            approvedDate:user.approvedDate,
+           status: user.status
         }
         console.log(body)
         console.log(applicantId)
@@ -150,12 +152,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     useEffect(() => {
         getCurrentDate()
     }, [])
-    useEffect(() => {
-        if (fire) {
-            post()
-        }
-
-    }, [fire])
+    
     console.log(user)
     console.log(data)
 
@@ -363,10 +360,13 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 </Tr>
                             </Tbody>
                         </Table>
-                        <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+                        {
+                            user.status==null || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
                             <Button bgColor="red" className="font-size-22" onClick={() => deleteEntry()}>Delete</Button>
                             <Button onClick={() => updateEntry()} bgColor="lightgreen" className="font-size-22">Update</Button>
-                        </ModalFooter>
+                        </ModalFooter>:''
+                        }
+                       
                     </Box>
                     :
                     <Box>
@@ -445,23 +445,12 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                         />
                                     </Td>
                                 </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
-                                    <Td className="font-size-22">
-                                        <Input
-                                            type="text"
-                                            name="approverComment"
-                                            border="1px solid lightskyblue"
-                                            disabled
-                                            className="font-size-22"
-                                        />
-                                    </Td>
-                                </Tr>
+                               
                             </Tbody>
                         </Table>
                         <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
                             <Button onClick={onClose} bgColor="red" className="font-size-22">Cancel</Button>
-                            <Button onClick={() => setFire(true)} bgColor="lightgreen" className="font-size-22">Submit</Button>
+                            <Button onClick={() => post()} bgColor="lightgreen" className="font-size-22">Submit</Button>
                         </ModalFooter>
                     </Box>
             }

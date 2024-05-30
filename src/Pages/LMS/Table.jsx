@@ -33,7 +33,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
         startDate: leaveStart,
         totalDays: totalDays,
         comment: comments,
-        status: 'pending',
+        status: null,
         leaveType: leave,
 
 

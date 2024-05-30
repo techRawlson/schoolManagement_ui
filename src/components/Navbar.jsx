@@ -19,7 +19,7 @@ const Navbar = () => {
   }, [])
   return (
     // <div style={{ backgroundColor: "#FFBF00" }}>
-    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: '98.7vw', padding: '1.5%' }}     >
+    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: '98.8vw', padding: '1.5%' }}     >
       <Flex justifyContent="space-between" width="6%" alignItems="center">
         {/* <Badge></Badge> */}
         <Badge>{person}</Badge>

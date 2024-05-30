@@ -1,4 +1,4 @@
-import { Box, Table, Tbody, Tr, Td, Heading, Input, Select, ModalFooter, Button } from '@chakra-ui/react';
+import { Box, Table, Tbody, Tr, Td, Heading, Input, Select, ModalFooter, Button, Badge } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import './LeaveApplication.css'
@@ -79,7 +79,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             endDate:user.endDate,
             totalDays:user.totalDays,
             approverComment: user.approverComment,
-            approvedDate:user.approvedDate,
+            approvedDate:currentDate,
            status: stat
         }
         console.log(body)
@@ -284,18 +284,19 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Status</Td>
-                                    <Td className="font-size-22">{user.status == 'pending' || user.status == '' ? 'Pending' : user.status}</Td>
+                                    <Td className="font-size-22">{user.status == null || user.status == '' ? '' : user.status}</Td>
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
                                     <Td className="font-size-22">
-                                        <Select
+                                        {/* <Select
                                             name="leaveType"
                                             onChange={(e) => {
                                                 handleChange1(e.target.name, e.target.value);
                                             }}
                                             value={user.leaveType}
                                             className="font-size-22"
+                                            disabled
                                         >
                                             {
                                                 leaveTypesAvailavle?.map((elm) =>
@@ -303,13 +304,14 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
 
                                                 )
                                             }
-                                        </Select>
+                                        </Select> */}
+                                         {user.leaveType}
                                     </Td>
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
                                     <Td className="font-size-22">
-                                        <Input
+                                        {/* <Input
                                             type="date"
                                             name="startDate"
                                             value={user.startDate}
@@ -318,13 +320,15 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                             }}
                                             min={currentDate}
                                             className="font-size-22"
-                                        />
+                                            disabled
+                                        /> */}
+                                        {user.startDate}
                                     </Td>
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
                                     <Td className="font-size-22">
-                                        <Input
+                                        {/* <Input
                                             type="date"
                                             name="endDate"
                                             value={user.endDate}
@@ -333,7 +337,9 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                             }}
                                             min={currentDate}
                                             className="font-size-22"
-                                        />
+                                            disabled
+                                        /> */}
+                                         {user.endDate}
                                     </Td>
                                 </Tr>
                                 <Tr className="font-size-22">
@@ -342,7 +348,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Comments</Td>
-                                    <Td className="font-size-22">
+                                    {/* <Td className="font-size-22">
                                         <Input
                                             type="text"
                                             name="comment"
@@ -351,12 +357,17 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                                 handleChange1(e.target.name, e.target.value);
                                             }}
                                             className="font-size-22"
+                                            disabled
                                         />
+                                    </Td> */}
+                                    <Td>
+                                    {user.comment}
                                     </Td>
+                                    
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
-                                    <Td className="font-size-22">{user.approverComment == null || user.approverComment == '' ? 'Pending' : user.approverComment}</Td>
+                                    <Td className="font-size-22">{user.approverComment}</Td>
                                 </Tr>
                             </Tbody>
                         </Table>
@@ -365,7 +376,19 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                             <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
                         </ModalFooter>:''
                         }
-                       
+                        {
+                            user.status==null?"": <Badge
+                            colorScheme={user.status === 'Approved' ? 'green' : 'red'}
+                            px={4}
+                            py={2}
+                            fontSize="lg"
+                            marginLeft="70%"
+                            marginTop="5%"
+                        >
+                            {user.status}
+                        </Badge>
+                        }
+                        
                     </Box>
                     :
                     <Box>

@@ -119,7 +119,7 @@ const LeaveApproval = () => {
                                         <Td>{elm.totalDays}</Td>
                                         <Td>
                                             {
-                                                elm.status == null ? 'Pending' : elm.status
+                                                elm.status == null ? '' : elm.status
                                             }
                                         </Td>
                                         <Td>{elm.approver}</Td>
@@ -151,7 +151,7 @@ const LeaveApproval = () => {
                 {overlay}
                 <ModalContent>
                     <ModalHeader>
-                        <Badge colorScheme="red" fontSize="16px">  New Request</Badge>
+                        {/* <Badge colorScheme="red" fontSize="16px">  New Request</Badge> */}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

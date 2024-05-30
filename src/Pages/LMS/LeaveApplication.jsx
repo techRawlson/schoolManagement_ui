@@ -193,11 +193,11 @@ const reviewApplication=(id)=>{
                                     <Td className="font-size-22">{elm.startDate}</Td>
                                     <Td className="font-size-22">{elm.endDate}</Td>
                                     <Td className="font-size-22">{elm.totalDays}</Td>
-                                    <Td className="font-size-22">{elm.status == null ? 'Pending' : elm.status}</Td>
+                                    <Td className="font-size-22">{elm.status == null ? '' : elm.status}</Td>
                                     <Td className="font-size-22">{elm.approver}</Td>
-                                    <Td className="font-size-22">{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
+                                    <Td className="font-size-22">{elm?.approvedDate == null ? '' : elm?.approvedDate}</Td>
                                     <Td className="font-size-22">{elm.comment}</Td>
-                                    <Td className="font-size-22">{elm.approverComment==''||elm.approverComment==null?'pending':elm.approverComment}</Td>
+                                    <Td className="font-size-22">{elm.approverComment}</Td>
                                     <Td className="font-size-22">
                                         <Button bgColor="lightgreen" onClick={() => reviewApplication(elm.id)}>Edit</Button>
                                     </Td>

@@ -47,144 +47,74 @@ const LmsLeaveallotment = () => {
             console.log(error)
         }
     }
-    // const getData = async () => {
-    //     console.log(LDetails)
-    //     try {
-    //         const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
-    //         const fdata = await data.json();
-    //         console.log(fdata)
-    //         setClassData(fdata)
+ 
 
-
-
-    //         if (fdata.length > 0) {
-    //             const data = await fetch('http://localhost:8090/api/LVM/All-Data')
-    //             const LD1 = await data.json()
-    //             const LD = await LD1.filter((elm) => elm.checkBox == true)
-    //             console.log(LD)
-
-    //             const dataFromAllotedTavle = await fetch('http://localhost:8090/api/Approval/All-Data')
-    //             const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
-    //             console.log(dataFromAllotedTavlejson)
-    //             let result = fdata.map(elm => {
-    //                 const foundData = dataFromAllotedTavlejson.find((e) => e.staffName == elm.name && e.approver == elm.approver && e.department == elm.department)
-    //                 console.log(foundData)
-    //                 if (foundData) {
-    //                     return foundData
-    //                 } else {
-    //                     let obj = {
-    //                         staffName: elm.name,
-    //                         staffId: elm.staffId,
-    //                         department: elm.department,
-    //                         approver: elm.approver,
-    //                         leaveProvided: LD?.map(slot => ({
-    //                             leaveName: slot.leaveType,
-    //                             value: null,
-
-    //                         })),
-    //                         leaveBalances: LD?.map(slot => ({
-    //                             leaveName: slot.leaveType,
-    //                             value: null,
-
-    //                         }))
-
-    //                     };
-    //                     return obj;
-    //                 }
-
-    //             });
-
-    //             // Update mainData once with the entire result array
-
-    //             setMainData([...mainData, ...result]);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-
-
-    // }
     const getData = async () => {
         console.log(LDetails);
         try {
-            const data = await fetch('http://localhost:8083/api/staff/saved-Staff');
-            const fdata = await data.json();
-            console.log(fdata);
-            setClassData(fdata);
-
-            if (fdata.length > 0) {
-                const data = await fetch('http://localhost:8090/api/LVM/All-Data');
-                const LD1 = await data.json();
-                const LD = LD1.filter((elm) => elm.checkBox === true);
-                console.log(LD);
-
-                const dataFromAllotedTable = await fetch('http://localhost:8090/api/Approval/All-Data');
-                const dataFromAllotedTableJson = await dataFromAllotedTable.json();
-                console.log(dataFromAllotedTableJson);
-
-                let result = fdata.map((elm) => {
-                    const foundData = dataFromAllotedTableJson.find(
-                        (e) =>
-                            e.staffName === elm.name &&
-                            e.approver === elm.approver &&
-                            e.department === elm.department
+            const staffResponse = await fetch('http://localhost:8083/api/staff/saved-Staff');
+            const staffData = await staffResponse.json();
+            console.log(staffData);
+            setClassData(staffData);
+    
+            if (staffData.length > 0) {
+                const lvmResponse = await fetch('http://localhost:8090/api/LVM/All-Data');
+                const lvmData = await lvmResponse.json();
+                const filteredLvmData = lvmData.filter(elm => elm.checkBox === true);
+                console.log(filteredLvmData);
+    
+                const approvalResponse = await fetch('http://localhost:8090/api/Approval/All-Data');
+                const approvalData = await approvalResponse.json();
+                console.log(approvalData);
+    
+                const processedData = staffData.map(staff => {
+                    const foundData = approvalData.find(
+                        e => e.staffName === staff.name &&
+                             e.approver === staff.approver &&
+                             e.department === staff.department
                     );
-                    console.log(foundData);
                     if (foundData) {
+                        foundData.leaveProvided = filteredLvmData.map(slot => {
+                            const match = foundData.leaveProvided.find(elm => elm.leaveName === slot.leaveType);
+                            return match || { leaveName: slot.leaveType, value: null };
+                        });
+                        foundData.leaveBalances = filteredLvmData.map(slot => {
+                            const match = foundData.leaveBalances.find(elm => elm.leaveName === slot.leaveType);
+                            return match || { leaveName: slot.leaveType, value: null };
+                        });
                         return foundData;
                     } else {
-                        let obj = {
-                            staffName: elm.name,
-                            staffId: elm.staffId,
-                            department: elm.department,
-                            approver: elm.approver,
-                            leaveProvided: LD?.map((slot) => ({
-                                leaveName: slot.leaveType,
-                                value: null,
-                            })),
-                            leaveBalances: LD?.map((slot) => ({
-                                leaveName: slot.leaveType,
-                                value: null,
-                            })),
+                        return {
+                            staffName: staff.name,
+                            staffId: staff.staffId,
+                            department: staff.department,
+                            approver: staff.approver,
+                            leaveProvided: filteredLvmData.map(slot => ({ leaveName: slot.leaveType, value: null })),
+                            leaveBalances: filteredLvmData.map(slot => ({ leaveName: slot.leaveType, value: null })),
                         };
-                        return obj;
                     }
                 });
-
-                // Ensure no duplicates in mainData
-                const uniqueResult = result.filter(
-                    (item) => !mainData.some((data) => data.staffId === item.staffId)
-                );
-
-                setMainData((prevMainData) => [...prevMainData, ...uniqueResult]);
+    console.log(processedData)
+                setMainData(prevMainData => {
+                    const uniqueResult = processedData.filter(
+                        item => !prevMainData.some(data => data.staffId === item.staffId)
+                    );
+                    console.log(uniqueResult)
+                    return [...prevMainData, ...uniqueResult];
+                });
             }
         } catch (error) {
             console.log(error);
         }
     };
-    console.log(mainData)
+    
 
 
 
 
+   
 
-
-
-
-
-    useEffect(() => {
-        getAllotment()
-        getLDetails()
-        getData()
-
-    }, [])
-
-    // Handle change function to update state
-    const handleChange = (index, field, value) => {
-        const updatedStaffData = [...mainData];
-        updatedStaffData[index][field] = value;
-        setMainData(updatedStaffData);
-    };
+    
 
     // Handle change function for leaveProvided property
     const handleLeaveChange = (staffIndex, leaveIndex, value) => {
@@ -195,9 +125,13 @@ const LmsLeaveallotment = () => {
         setMainData(updatedStaffData);
     };
 
-
+    const [editButtonDisable, setEditButtonDisable] = useState(false)
     const postAllotment = async () => {
-
+        console.log(editId)
+        console.log(mainData)
+        console.log(mainData[editId])
+        console.log(mainData[editId].id)
+       
         const dataFromAllotedTavle = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`)
         const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
         console.log(dataFromAllotedTavlejson)
@@ -214,7 +148,7 @@ const LmsLeaveallotment = () => {
 
                 if (dat.status >= 200 && dat.status < 300) {
                     toast.success('Updated')
-                    setEditId(null)
+                    setEditButtonDisable(true)
                 } else {
                     toast.error('something went wrong')
                 }
@@ -224,34 +158,38 @@ const LmsLeaveallotment = () => {
             }
         } else {
             try {
-                console.log(mainData[editId])
-                const dat = await fetch('http://localhost:8090/api/Approval/create', {
+                console.log(mainData[editId]);
+                const response = await fetch('http://localhost:8090/api/Approval/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(mainData[editId])
-                })
-                if (dat.status >= 200 && dat.status < 300) {
-                    toast.success('created')
-                    await getData()
-                    setEditId(null)
+                });
+        
+                if (response.status >= 200 && response.status < 300) {
+                    toast.success('Created successfully');
+                    await getData();
+                    setEditButtonDisable(true);
+                    window.location.reload();
                 } else {
-                    toast.error('something went wrong')
+                    toast.error('Something went wrong');
                 }
-
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
+
         }
-
-
-
-
-
     }
+    const trueLdetails = LDetails.filter((elm) => elm.checkBox == true)
+    console.log(mainData)
+    console.log(trueLdetails)
+    useEffect(() => {
+        getAllotment()
+        getLDetails()
+        getData()
 
-    console.log(LDetails)
+    }, [])
     return <>
 
         <Stack minW="100vw" maxW="100vw" minH="100vh">
@@ -323,26 +261,22 @@ const LmsLeaveallotment = () => {
 
                                     <Td borderRight="1px solid black" borderLeft="1px solid black"  >
 
-                                        {LDetails?.map((el, index) => {
-                                            if (el.checkBox) {
-                                                let leaveValue = elm.leaveProvided?.find((f) => f.leaveName == el.leaveType)?.value || 90;
-                                                return (
-                                                    <Td fontSize="16px" border="none" textAlign="center" key={index}>
-                                                        <Input
-                                                            type="number"
-                                                            value={leaveValue}
-                                                            onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))}
-                                                            disabled={editId === i ? false : true}
-                                                        />
-                                                    </Td>
-                                                );
-                                            }
-                                            return null;
+                                        {elm?.leaveProvided?.map((el, index) => {
+
+                                            return (
+                                                <Td fontSize="16px" border="none" textAlign="center" key={index}>
+
+                                                    <Input type="number" value={el.value} onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))} disabled={editId == i && editButtonDisable == false ? false : true} />
+                                                </Td>
+                                            );
+
+
                                         })}
 
 
 
-                                        {/* {elm.leaveProvided?.map((el, index) => {
+                                        {/* {
+                                            elm.leaveProvided?.map((el, index) => {
                                             // if (el.checkBox) {
                                             return (
                                                 <Td fontSize="16px" border="none" textAlign="center" key={index}>
@@ -387,8 +321,14 @@ const LmsLeaveallotment = () => {
                                     <Td>
                                         <Box>
                                             {
-                                                editId == i ? <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> : <Button onClick={() => setEditId(i)} bgColor="teal">Edit</Button>
+                                                editId === i && editButtonDisable == false ?
+                                                    <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> :
+                                                    <Button onClick={() => {
+                                                        setEditId(i);
+                                                        setEditButtonDisable(false);
+                                                    }} bgColor="teal">Edit</Button>
                                             }
+
 
                                         </Box>
                                     </Td>

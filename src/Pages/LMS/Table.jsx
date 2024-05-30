@@ -33,7 +33,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
         startDate: leaveStart,
         totalDays: totalDays,
         comment: comments,
-        status: null,
+        status: 'pending',
         leaveType: leave,
 
 
@@ -70,7 +70,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
         }
     }
 
-    const updateEntry = async () => {
+    const updateEntry = async (stat) => {
         
         const body = {
             comment: user.comment,
@@ -80,7 +80,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             totalDays:user.totalDays,
             approverComment: user.approverComment,
             approvedDate:user.approvedDate,
-           status: user.status
+           status: stat
         }
         console.log(body)
         console.log(applicantId)
@@ -284,7 +284,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Status</Td>
-                                    <Td className="font-size-22">{user.status == null || user.status == '' ? 'Pending' : user.status}</Td>
+                                    <Td className="font-size-22">{user.status == 'pending' || user.status == '' ? 'Pending' : user.status}</Td>
                                 </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
@@ -361,9 +361,8 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                             </Tbody>
                         </Table>
                         {
-                            user.status==null || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
-                            <Button bgColor="red" className="font-size-22" onClick={() => deleteEntry()}>Delete</Button>
-                            <Button onClick={() => updateEntry()} bgColor="lightgreen" className="font-size-22">Update</Button>
+                            user.status=='pending' || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+                            <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
                         </ModalFooter>:''
                         }
                        

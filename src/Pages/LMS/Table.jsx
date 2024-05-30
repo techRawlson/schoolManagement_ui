@@ -361,7 +361,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                             </Tbody>
                         </Table>
                         {
-                            user.status=='pending' || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+                            user.status==null || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
                             <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
                         </ModalFooter>:''
                         }

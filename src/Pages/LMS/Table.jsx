@@ -5,7 +5,7 @@ import './LeaveApplication.css'
 const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applicantId, edit }) => {
     const [user, setUser] = useState([])
     const [leave, setLeave] = useState("")
-    const leaveTypes = users?.leaveBalances.map((elm) => elm)
+   
     const [leaveStart, setleaveStart] = useState("")
     const [leaveEnd, setLeaveEnd] = useState("")
     const [totalDays, setTotalDays] = useState("")
@@ -71,7 +71,8 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     }
 
     const updateEntry = async (stat) => {
-        
+        const appBy=localStorage.getItem("staffName")
+        console.log(appBy)
         const body = {
             comment: user.comment,
             leaveType: user.leaveType,
@@ -80,7 +81,8 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             totalDays:user.totalDays,
             approverComment: user.approverComment,
             approvedDate:currentDate,
-           status: stat
+           status: stat,
+           approvedBy:appBy
         }
         console.log(body)
         console.log(applicantId)
@@ -365,6 +367,10 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                     </Td>
                                     
                                 </Tr>
+                                <Tr >
+                        <Td fontWeight="bold" className="font-size-22">Approved By</Td>
+                        <Td>{user.approvedBy}</Td>
+                    </Tr>
                                 <Tr className="font-size-22">
                                     <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
                                     <Td className="font-size-22">{user.approverComment}</Td>

@@ -1,42 +1,11 @@
-import { Box, Button, Flex, Input, Select, Stack, Text } from "@chakra-ui/react"
+import { Box, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useEditable } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
-} from '@chakra-ui/react'
-import { useEffect, useState } from "react"
-import { ToastContainer, toast } from "react-toastify"
-const LmsLeaveallotment = () => {
-    const [classData, setClassData] = useState([])
-    const [LDetails, setLDetails] = useState([])
+import { useEffect ,useState} from "react"
+
+const LeaveBalances=()=>{
+
     const [mainData, setMainData] = useState([])
-    const [edit, setData] = useState(true)
-    const [editId, setEditId] = useState(null)
-
-
-
-
-
-    const [allotment, setAllotment] = useState([])
-    const getAllotment = async () => {
-        try {
-            const data = await fetch('http://localhost:8090/api/Approval/All-Data')
-            const dataf = await data.json();
-            if (dataf.length > 0) {
-                setAllotment(dataf)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
+    const [LDetails, setLDetails] = useState([])
     const getLDetails = async () => {
         try {
             const data = await fetch('http://localhost:8090/api/LVM/All-Data')
@@ -47,15 +16,13 @@ const LmsLeaveallotment = () => {
             console.log(error)
         }
     }
- 
-
     const getData = async () => {
         console.log(LDetails);
         try {
             const staffResponse = await fetch('http://localhost:8083/api/staff/saved-Staff');
             const staffData = await staffResponse.json();
             console.log(staffData);
-            setClassData(staffData);
+            // setClassData(staffData);
     
             if (staffData.length > 0) {
                 const lvmResponse = await fetch('http://localhost:8090/api/LVM/All-Data');
@@ -100,102 +67,22 @@ const LmsLeaveallotment = () => {
                         item => !prevMainData.some(data => data.staffId === item.staffId)
                     );
                     console.log(uniqueResult)
-                    return [...prevMainData, ...uniqueResult];
+                    const unique=uniqueResult.filter((elm)=>elm.staffId==localStorage.getItem("username"))
+                    // console.log(unique)
+                    return [...prevMainData, ...unique];
                 });
             }
         } catch (error) {
             console.log(error);
         }
     };
-    
-
-
-
-
-   
-
-    
-
-    // Handle change function for leaveProvided property
-    const handleLeaveChange = (staffIndex, leaveIndex, value) => {
-        console.log(staffIndex, leaveIndex, value)
-        const updatedStaffData = [...mainData];
-        updatedStaffData[staffIndex].leaveProvided[leaveIndex].value = value;
-        updatedStaffData[staffIndex].leaveBalances[leaveIndex].value = value;
-        setMainData(updatedStaffData);
-    };
-
-    const [editButtonDisable, setEditButtonDisable] = useState(false)
-    const postAllotment = async () => {
-        console.log(editId)
-        console.log(mainData)
-        console.log(mainData[editId])
-        console.log(mainData[editId].id)
-       
-        const dataFromAllotedTavle = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`)
-        const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
-        console.log(dataFromAllotedTavlejson)
-        if (dataFromAllotedTavle.status >= 200 && dataFromAllotedTavle.status < 300) {
-            try {
-                console.log(mainData[editId])
-                const dat = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(mainData[editId])
-                })
-
-                if (dat.status >= 200 && dat.status < 300) {
-                    toast.success('Updated')
-                    setEditButtonDisable(true)
-                } else {
-                    toast.error('something went wrong')
-                }
-
-            } catch (error) {
-                console.log(error)
-            }
-        } else {
-            try {
-                console.log(mainData[editId]);
-                const response = await fetch('http://localhost:8090/api/Approval/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(mainData[editId])
-                });
-        
-                if (response.status >= 200 && response.status < 300) {
-                    toast.success('Created successfully');
-                    await getData();
-                    setEditButtonDisable(true);
-                    window.location.reload();
-                } else {
-                    toast.error('Something went wrong');
-                }
-            } catch (error) {
-                console.log(error);
-            }
-
-        }
-    }
-    const trueLdetails = LDetails.filter((elm) => elm.checkBox == true)
-    console.log(mainData)
-    console.log(trueLdetails)
-    useEffect(() => {
-        getAllotment()
+    useEffect(()=>{
         getLDetails()
         getData()
-
-    }, [])
-    return <>
-
-        <Stack minW="100vw" maxW="100vw" minH="100vh">
-            <Navbar />
-            <ToastContainer />
-            <Stack maxWidth="85%" margin="0 auto">
+    },[])
+    return <Box   minH="100vh">
+        <Navbar/>
+        <Stack  minH="95vh" >
                 <TableContainer>
                     <Table size='sm' variant='striped' colorScheme="white">
                         <Thead>
@@ -251,8 +138,7 @@ const LmsLeaveallotment = () => {
 
                         </Thead>
                         <Tbody>
-
-                            {mainData?.map((elm, i) => (
+                        {mainData?.map((elm, i) => (
                                 <Tr>
                                     <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffName} </Td>
                                     <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffId}</Td>
@@ -266,7 +152,7 @@ const LmsLeaveallotment = () => {
                                             return (
                                                 <Td fontSize="16px" border="none" textAlign="center" key={index}>
 
-                                                    <Input type="number" value={el.value} onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))} disabled={editId == i && editButtonDisable == false ? false : true} />
+                                                    <Input type="number" value={el.value}  />
                                                 </Td>
                                             );
 
@@ -286,31 +172,20 @@ const LmsLeaveallotment = () => {
                                             })
                                         }
                                     </Td>
-                                    <Td>
-                                        <Box>
-                                            {
-                                                editId === i && editButtonDisable == false ?
-                                                    <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> :
-                                                    <Button onClick={() => {
-                                                        setEditId(i);
-                                                        setEditButtonDisable(false);
-                                                    }} bgColor="teal">Edit</Button>
-                                            }
-
-
-                                        </Box>
-                                    </Td>
+                                   
 
                                 </Tr>
                             ))}
+                       
+                                   
+
+                                
+                           
 
                         </Tbody>
                     </Table>
                 </TableContainer>
             </Stack>
-        </Stack>
-
-
-    </>
+    </Box>
 }
-export default LmsLeaveallotment
+export default LeaveBalances

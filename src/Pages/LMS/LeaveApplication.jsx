@@ -144,6 +144,7 @@ const reviewApplication=(id)=>{
     setOverlay(<OverlayTwo />)
     onOpen()
     setEdit(true)
+    console.log(id)
     setapplicantId(id)
 }
     
@@ -194,7 +195,7 @@ const reviewApplication=(id)=>{
                                     <Td className="font-size-22">{elm.endDate}</Td>
                                     <Td className="font-size-22">{elm.totalDays}</Td>
                                     <Td className="font-size-22">{elm.status == null ? '' : elm.status}</Td>
-                                    <Td className="font-size-22">{elm.approver}</Td>
+                                    <Td className="font-size-22">{elm.approvedBy}</Td>
                                     <Td className="font-size-22">{elm?.approvedDate == null ? '' : elm?.approvedDate}</Td>
                                     <Td className="font-size-22">{elm.comment}</Td>
                                     <Td className="font-size-22">{elm.approverComment}</Td>

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applicantId, getLoggedInuserDetail }) => {
     const [user, setUser] = useState([])
     const [leave, setLeave] = useState("")
-    const leaveTypes = data?.leaveBalances.map((elm) => elm)
+    
     const [leaveStart, setleaveStart] = useState("")
     const [leaveEnd, setLeaveEnd] = useState("")
     const totalDays = Math.ceil(Math.abs(new Date(leaveStart) - new Date(leaveEnd)) / (1000 * 60 * 60 * 24)) + 1
@@ -54,6 +54,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     // }
 
     const adminPost = async (status) => {
+        const ap=localStorage.getItem('staffName')
         const body = {
             approvedDate: status == 'Approved' || status == 'Rejected' ? currentDate : '',
             status: status,
@@ -62,7 +63,8 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
             startDate: user.startDate,
             endDate: user.endDate,
             totalDays: user.totalDays,
-            comment: user.comment
+            comment: user.comment,
+            approvedBy:ap
         }
         try {
             console.log(body)
@@ -166,7 +168,11 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                         <Td>{user.comment}</Td>
                     </Tr>
                     <Tr >
-                        <Td fontWeight="bold">Approver Comment</Td>
+                        <Td fontWeight="bold">{user.status} By</Td>
+                        <Td>{user.approvedBy}</Td>
+                    </Tr>
+                    <Tr >
+                        <Td fontWeight="bold">{user.status} Comment</Td>
                         <Td>
                             {
                                 user.status == null || user.status == '' ? <Input

@@ -13,7 +13,7 @@ const Main = () => {
             console.log(error)
         }
     }
-    return <Stack minW="100vw" minH="200vh" >
+    return <Stack minW="98.7vw" minH="98vh" >
         <Navbar />
         <Flex
             justifyContent="space-around"
@@ -106,6 +106,23 @@ const Main = () => {
             >
                 <CardHeader>
                     <Heading size="md" textAlign="center">LEAVE APPROVALS</Heading>
+                </CardHeader>
+                <CardBody>
+                    <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                        <MdCastForEducation size={95} />
+                    </Stack>
+                </CardBody>
+            </Card>
+            <Card
+                cursor="pointer"
+                onClick={() => nextPage("lmsbalance")}
+                width={['90%', '45%', '30%', '18%']}
+                height={['40%', '40%', '50%', '55%']}
+                bgColor="orangered"
+                margin="1%"
+            >
+                <CardHeader>
+                    <Heading size="md" textAlign="center">LEAVE BALANCE</Heading>
                 </CardHeader>
                 <CardBody>
                     <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">

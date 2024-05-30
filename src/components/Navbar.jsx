@@ -13,18 +13,13 @@ const Navbar = () => {
     navigate('/')
   }
   const [person, setPerson] = useState("")
-  const getLoggedInPerson = async () => {
-    const data = await fetch(`http://localhost:8090/api/Approval/staff/${localStorage.getItem('username')}`)
-    const fdata = await data.json()
-    console.log(fdata)
-    setPerson(fdata.staffName)
-  }
+  
   useEffect(() => {
-    getLoggedInPerson()
+    setPerson(localStorage.getItem('username'))
   }, [])
   return (
     // <div style={{ backgroundColor: "#FFBF00" }}>
-    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: '100vw', padding: '1.5%' }}     >
+    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", width: '98.7vw', padding: '1.5%' }}     >
       <Flex justifyContent="space-between" width="6%" alignItems="center">
         {/* <Badge></Badge> */}
         <Badge>{person}</Badge>

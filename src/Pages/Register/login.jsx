@@ -45,7 +45,7 @@ function Login({ setToken, setUser }) {
         body: JSON.stringify(body)
       });
       const dataf = await data.json()
-      // console.log(dataf)
+      console.log(dataf)
       if (data.status >= 200 && data.status < 300) {
         console.log("ok", data)
         localStorage.setItem("token", "fdata.username");

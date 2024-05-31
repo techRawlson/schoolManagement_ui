@@ -192,7 +192,7 @@ const LmsLeaveallotment = () => {
     }, [])
     return <>
 
-        <Stack minW="100vw" maxW="100vw" minH="100vh">
+        <Stack minW="100vw" minH="100vh">
             <Navbar />
             <ToastContainer />
             <Stack maxWidth="85%" margin="0 auto">

@@ -80,11 +80,58 @@ const LeaveBalances=()=>{
         getLDetails()
         getData()
     },[])
-    return <Box   minH="100vh">
+    return <Stack   minH="100vh" minW="100vw" bgColor="white">
         <Navbar/>
-        <Stack  minH="95vh" >
-                <TableContainer>
-                    <Table size='sm' variant='striped' colorScheme="white">
+        <Stack  minH="95vh" maxW="95vw" margin="0 auto">
+                <TableContainer >
+                    <Table size='sm' variant='striped' colorScheme="white" >
+                    <Thead>
+                            <Tr>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th padding="0 1%">
+                                    {/* {LDetails?.map((elm, index) => { */}
+                                        {/* if (elm.checkBox) { */}
+                                            {/* return ( */}
+                                                <>
+                                                    <Th fontSize="16px" border="none" >
+                                                      
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none" fontSize="200%">  Alloted Balance
+                                                    </Th>
+                                                </>
+                                </Th>
+                                <Th >
+                                
+                                                <>
+                                                    <Th fontSize="16px" border="none">
+                                                        {/* {elm.shortForm} */}
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                                                                      
+                                                    <Th border="none" fontSize="200%"> Remaining  Balance
+                                                    </Th>
+                                                </>
+
+                                           
+                                </Th>
+
+
+
+                            </Tr>
+
+                        </Thead>
                         <Thead>
                             <Tr>
                                 <Th fontSize="16px">Staff Name</Th>
@@ -186,6 +233,6 @@ const LeaveBalances=()=>{
                     </Table>
                 </TableContainer>
             </Stack>
-    </Box>
+    </Stack>
 }
 export default LeaveBalances

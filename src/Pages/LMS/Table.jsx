@@ -43,6 +43,9 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     }
     const post = async () => {
         console.log(body)
+        const time=new Date().toISOString()
+        console.log(time)
+        const approver=users.approver
         try {
             const users = await fetch(`http://localhost:8090/api/staff-application/create`, {
                 method: 'POST',
@@ -51,7 +54,26 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 },
                 body: JSON.stringify(body)
             })
-            // const fusers = await users.json()
+         if(users.status>=200 && users.status<300){
+            const tim = await fetch(`http://localhost:8090/api-notifications/sendNotification `, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message:'New notification',
+                    approverName:approver,
+                    timestamp:time,
+                    isRead:false,
+                    staffName:localStorage.getItem("staffName")
+                })
+            })
+            console.log(tim.status)
+         }
+
+
+
+
 
             if (users.status >= 200 && users.status < 300) {
                 toast.success("New request created")

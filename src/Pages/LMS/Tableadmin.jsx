@@ -173,8 +173,8 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                             <Td>{user.approvedBy}</Td>
                         </Tr>
                     }
-                    {
-                        user.status == null ? "" : <Tr >
+                    
+                        <Tr >
                             <Td fontWeight="bold">{user.status} Comment</Td>
                             <Td>
                                 {
@@ -186,7 +186,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                                     /> : <>{user.approverComment}</>
                                 }</Td>
                         </Tr>
-                    }
+                    
 
                 </Tbody>
             </Table>

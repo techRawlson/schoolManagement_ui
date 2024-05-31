@@ -198,6 +198,53 @@ const LmsLeaveallotment = () => {
             <Stack maxWidth="85%" margin="0 auto">
                 <TableContainer>
                     <Table size='sm' variant='striped' colorScheme="white">
+                    <Thead>
+                            <Tr>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th fontSize="16px"></Th>
+                                <Th padding="0 1%">
+                                    {/* {LDetails?.map((elm, index) => { */}
+                                        {/* if (elm.checkBox) { */}
+                                            {/* return ( */}
+                                                <>
+                                                    <Th fontSize="16px" border="none" >
+                                                      
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                    <Th border="none" fontSize="200%">  Alloted Balance
+                                                    </Th>
+                                                </>
+                                </Th>
+                                <Th >
+                                
+                                                <>
+                                                    <Th fontSize="16px" border="none">
+                                                        {/* {elm.shortForm} */}
+                                                    </Th>
+                                                    <Th border="none">
+                                                    </Th>
+                                                                                                      
+                                                    <Th border="none" fontSize="200%"> Remaining  Balance
+                                                    </Th>
+                                                </>
+
+                                           
+                                </Th>
+
+
+
+                            </Tr>
+
+                        </Thead>
                         <Thead>
                             <Tr>
                                 <Th fontSize="16px">Staff Name</Th>

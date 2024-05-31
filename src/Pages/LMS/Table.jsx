@@ -5,7 +5,7 @@ import './LeaveApplication.css'
 const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applicantId, edit }) => {
     const [user, setUser] = useState([])
     const [leave, setLeave] = useState("")
-   
+
     const [leaveStart, setleaveStart] = useState("")
     const [leaveEnd, setLeaveEnd] = useState("")
     const [totalDays, setTotalDays] = useState("")
@@ -71,18 +71,18 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     }
 
     const updateEntry = async (stat) => {
-        const appBy=localStorage.getItem("staffName")
+        const appBy = localStorage.getItem("staffName")
         console.log(appBy)
         const body = {
             comment: user.comment,
             leaveType: user.leaveType,
-            startDate:user.startDate,
-            endDate:user.endDate,
-            totalDays:user.totalDays,
+            startDate: user.startDate,
+            endDate: user.endDate,
+            totalDays: user.totalDays,
             approverComment: user.approverComment,
-            approvedDate:currentDate,
-           status: stat,
-           approvedBy:appBy
+            approvedDate: currentDate,
+            status: stat,
+            approvedBy: appBy
         }
         console.log(body)
         console.log(applicantId)
@@ -154,7 +154,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     useEffect(() => {
         getCurrentDate()
     }, [])
-    
+
     console.log(user)
     console.log(data)
 
@@ -199,25 +199,25 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     const handleChange1 = (name, value) => {
         console.log(name, value);
         console.log(user);
-        
+
         // Update the user state with the new value
         const updatedUser = {
             ...user,
             [name]: value
         };
-        
+
         setUser(updatedUser);
-        
-        if (name === "startDate" || name === "endDate" ) {
+
+        if (name === "startDate" || name === "endDate") {
             let start = new Date(updatedUser.startDate);
             let end = new Date(updatedUser.endDate);
-    
-            if(name === "startDate") {
+
+            if (name === "startDate") {
                 start = new Date(value);
-            } else if(name === "endDate") {
+            } else if (name === "endDate") {
                 end = new Date(value);
             }
-    
+
             console.log(name);
             if (start <= end) {
                 const diffTime = Math.abs(end - start);
@@ -229,11 +229,11 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 }));
             }
         }
-    
+
         console.log(user);
     };
     console.log(user)
-    
+
 
     const [leaveTypesAvailavle, setleaveTypesAvailavle] = useState([])
     const getleaveTypesAvailavle = async () => {
@@ -261,129 +261,112 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             <ToastContainer />
             {
                 edit ?
-                    <Box>
+                <Table variant="striped" className="font-size-22">
+                <Tbody className="font-size-22">
 
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Name</Td>
+                        <Td className="font-size-22">{user.staffName}</Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Emp Id</Td>
+                        <Td className="font-size-22">{user.staffId}</Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Approver</Td>
+                        <Td className="font-size-22">{user.approver}</Td>
+                    </Tr>
+                    {/* <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Leave Balance</Td>
+                        <Td className="font-size-22">{d}</Td>
+                    </Tr> */}
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Status</Td>
+                        <Td className="font-size-22">{user.status == null || user.status == '' ? '' : user.status}</Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
+                        <Td className="font-size-22">
+                            {/* <Select
+                                name="leaveType"
+                                onChange={(e) => {
+                                    handleChange1(e.target.name, e.target.value);
+                                }}
+                                value={user.leaveType}
+                                className="font-size-22"
+                                disabled
+                            >
+                                {
+                                    leaveTypesAvailavle?.map((elm) =>
+                                        <option className="font-size-22" value={elm.leaveType}>{elm.leaveType}</option>
 
+                                    )
+                                }
+                            </Select> */}
+                            {user.leaveType}
+                        </Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
+                        <Td className="font-size-22">
+                            {/* <Input
+                                type="date"
+                                name="startDate"
+                                value={user.startDate}
+                                onChange={(e) => {
+                                    handleChange1(e.target.name, e.target.value);
+                                }}
+                                min={currentDate}
+                                className="font-size-22"
+                                disabled
+                            /> */}
+                            {user.startDate}
+                        </Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
+                        <Td className="font-size-22">
+                            {/* <Input
+                                type="date"
+                                name="endDate"
+                                value={user.endDate}
+                                onChange={(e) => {
+                                    handleChange1(e.target.name, e.target.value);
+                                }}
+                                min={currentDate}
+                                className="font-size-22"
+                                disabled
+                            /> */}
+                            {user.endDate}
+                        </Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Total Days</Td>
+                        <Td className="font-size-22">{user.totalDays}</Td>
+                    </Tr>
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Comments</Td>
+                        
+                        <Td>
+                            {user.comment}
+                        </Td>
 
-                        <Table variant="striped" className="font-size-22">
-                            <Tbody className="font-size-22">
-
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Name</Td>
-                                    <Td className="font-size-22">{user.staffName}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Emp Id</Td>
-                                    <Td className="font-size-22">{user.staffId}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Approver</Td>
-                                    <Td className="font-size-22">{user.approver}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Leave Balance</Td>
-                                    <Td className="font-size-22">{d}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Status</Td>
-                                    <Td className="font-size-22">{user.status == null || user.status == '' ? '' : user.status}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
-                                    <Td className="font-size-22">
-                                        {/* <Select
-                                            name="leaveType"
-                                            onChange={(e) => {
-                                                handleChange1(e.target.name, e.target.value);
-                                            }}
-                                            value={user.leaveType}
-                                            className="font-size-22"
-                                            disabled
-                                        >
-                                            {
-                                                leaveTypesAvailavle?.map((elm) =>
-                                                    <option className="font-size-22" value={elm.leaveType}>{elm.leaveType}</option>
-
-                                                )
-                                            }
-                                        </Select> */}
-                                         {user.leaveType}
-                                    </Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
-                                    <Td className="font-size-22">
-                                        {/* <Input
-                                            type="date"
-                                            name="startDate"
-                                            value={user.startDate}
-                                            onChange={(e) => {
-                                                handleChange1(e.target.name, e.target.value);
-                                            }}
-                                            min={currentDate}
-                                            className="font-size-22"
-                                            disabled
-                                        /> */}
-                                        {user.startDate}
-                                    </Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
-                                    <Td className="font-size-22">
-                                        {/* <Input
-                                            type="date"
-                                            name="endDate"
-                                            value={user.endDate}
-                                            onChange={(e) => {
-                                                handleChange1(e.target.name, e.target.value);
-                                            }}
-                                            min={currentDate}
-                                            className="font-size-22"
-                                            disabled
-                                        /> */}
-                                         {user.endDate}
-                                    </Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Total Days</Td>
-                                    <Td className="font-size-22">{user.totalDays}</Td>
-                                </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Comments</Td>
-                                    {/* <Td className="font-size-22">
-                                        <Input
-                                            type="text"
-                                            name="comment"
-                                            value={user.comment}
-                                            onChange={(e) => {
-                                                handleChange1(e.target.name, e.target.value);
-                                            }}
-                                            className="font-size-22"
-                                            disabled
-                                        />
-                                    </Td> */}
-                                    <Td>
-                                    {user.comment}
-                                    </Td>
-                                    
-                                </Tr>
-                                <Tr >
+                    </Tr>
+                    <Tr >
                         <Td fontWeight="bold" className="font-size-22">Approved By</Td>
                         <Td>{user.approvedBy}</Td>
                     </Tr>
-                                <Tr className="font-size-22">
-                                    <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
-                                    <Td className="font-size-22">{user.approverComment}</Td>
-                                </Tr>
-                            </Tbody>
-                        </Table>
-                        {
-                            user.status==null || user.status==''? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+                    <Tr className="font-size-22">
+                        <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
+                        <Td className="font-size-22">{user.approverComment}</Td>
+                    </Tr>
+                    {
+                        user.status == null || user.status == '' ? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
                             <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
-                        </ModalFooter>:''
-                        }
-                        {
-                            user.status==null?"": <Badge
+                        </ModalFooter> : ''
+                    }
+                    {
+                        user.status == null ? "" : <Badge
                             colorScheme={user.status === 'Approved' ? 'green' : 'red'}
                             px={4}
                             py={2}
@@ -393,9 +376,9 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                         >
                             {user.status}
                         </Badge>
-                        }
-                        
-                    </Box>
+                    }
+                </Tbody>
+            </Table>
                     :
                     <Box>
                         <Table variant="striped" className="font-size-22">
@@ -473,7 +456,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                         />
                                     </Td>
                                 </Tr>
-                               
+
                             </Tbody>
                         </Table>
                         <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">

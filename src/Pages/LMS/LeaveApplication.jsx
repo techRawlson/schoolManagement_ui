@@ -194,9 +194,9 @@ const reviewApplication=(id)=>{
                                     <Td className="font-size-22">{elm.startDate}</Td>
                                     <Td className="font-size-22">{elm.endDate}</Td>
                                     <Td className="font-size-22">{elm.totalDays}</Td>
-                                    <Td className="font-size-22">{elm.status == null ? '' : elm.status}</Td>
-                                    <Td className="font-size-22">{elm.approvedBy}</Td>
-                                    <Td className="font-size-22">{elm?.approvedDate == null ? '' : elm?.approvedDate}</Td>
+                                    <Td className="font-size-22">{elm.status == null ? 'Pending' : elm.status}</Td>
+                                    <Td className="font-size-22">{elm.approvedBy==null?elm.approver:elm.approvedBy}</Td>
+                                    <Td className="font-size-22">{elm?.approvedDate == null ? 'Pending' : elm?.approvedDate}</Td>
                                     <Td className="font-size-22">{elm.comment}</Td>
                                     <Td className="font-size-22">{elm.approverComment}</Td>
                                     <Td className="font-size-22">
@@ -222,9 +222,9 @@ const reviewApplication=(id)=>{
 
       
         <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
+            <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
                 {overlay}
-                <ModalContent  height="85vh">
+                <ModalContent  >
                     <ModalHeader>
                         <Badge colorScheme="red" fontSize="16px">  {edit==true?'':'New Request'}</Badge>
                     </ModalHeader>

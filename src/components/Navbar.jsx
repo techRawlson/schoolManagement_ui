@@ -6,6 +6,8 @@ import { Icon } from '@chakra-ui/react';
 import { FiLogOut } from "react-icons/fi";
 import { Divider } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
+import { IoNotifications } from "react-icons/io5";
+
 const Navbar = () => {
   const navigate = useNavigate()
   const logOut = () => {
@@ -13,28 +15,40 @@ const Navbar = () => {
     navigate('/')
   }
   const [person, setPerson] = useState("")
-  
+
   useEffect(() => {
     setPerson(localStorage.getItem('username'))
   }, [])
+  const style={
+    position: 'relative',
+    bottom: '4.8vh',
+    right: '-1vw',
+    backgroundColor:'red',
+    minHeight:'1.8vh',
+    maxWidth:'1vw',
+    borderRadius:'50%',
+
+
+  }
   return (
     // <div style={{ backgroundColor: "#FFBF00" }}>
-    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-around', alignItems: "center", minWidth: '99vw', padding: '1.5%' }}     >
-      <Flex justifyContent="space-between" width="6%" alignItems="center">
-        {/* <Badge></Badge> */}
-        <Badge>{person}</Badge>
-        <AvatarGroup spacing='1rem'>
+    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center", minWidth: '99vw', padding: '1.5%' }}     >
+      <FiLogOut fontSize="4vh" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
 
+      <Text fontSize="4vh">Student Management System</Text>
+      <Flex justifyContent="space-between"  alignItems="center" >
+        <AvatarGroup spacing='1rem'>
+          <Badge>{person}</Badge>
           <Avatar bg='red.500' />
 
         </AvatarGroup>
+        <Box>
+        <IoNotifications color="white" size="26"/>
+        <Box   style={style}></Box>
+        </Box>
+       
       </Flex>
 
-
-
-      <Text fontSize="4vh">Student Management System</Text>
-
-      <FiLogOut fontSize="4vh" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
 
     </Stack>
     //

@@ -122,7 +122,8 @@ const LeaveApproval = () => {
                                                 elm.status == null ? '' : elm.status
                                             }
                                         </Td>
-                                        <Td>{elm.approver}</Td>
+                                        <Td className="font-size-22">{elm.approvedBy==null?elm.approver:elm.approvedBy}</Td>
+
                                         <Td><Input type="date" value={elm.approvedDate} disabled /></Td>
                                         {/* <Td>
                                         <Select onChange={(e) => handleChange(i, e.target.value)}>

@@ -43,9 +43,9 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     }
     const post = async () => {
         console.log(body)
-        const time=new Date().toISOString()
+        const time = new Date().toISOString()
         console.log(time)
-        const approver=users.approver
+        const approver = users.approver
         try {
             const users = await fetch(`http://localhost:8090/api/staff-application/create`, {
                 method: 'POST',
@@ -54,22 +54,22 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 },
                 body: JSON.stringify(body)
             })
-         if(users.status>=200 && users.status<300){
-            const tim = await fetch(`http://localhost:8090/api-notifications/sendNotification `, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message:'New notification',
-                    approverName:approver,
-                    timestamp:time,
-                    isRead:false,
-                    staffName:localStorage.getItem("staffName")
+            if (users.status >= 200 && users.status < 300) {
+                const tim = await fetch(`http://localhost:8090/api-notifications/sendNotification `, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'New notification',
+                        approverName: approver,
+                        timestamp: time,
+                        isRead: false,
+                        staffName: localStorage.getItem("staffName")
+                    })
                 })
-            })
-            console.log(tim.status)
-         }
+                console.log(tim.status)
+            }
 
 
 
@@ -283,33 +283,33 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
             <ToastContainer />
             {
                 edit ?
-                <Table variant="striped" className="font-size-22">
-                <Tbody className="font-size-22">
+                    <Table variant="striped" className="font-size-22">
+                        <Tbody className="font-size-22">
 
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Name</Td>
-                        <Td className="font-size-22">{user.staffName}</Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Emp Id</Td>
-                        <Td className="font-size-22">{user.staffId}</Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Approver</Td>
-                        <Td className="font-size-22">{user.approver}</Td>
-                    </Tr>
-                    {/* <Tr className="font-size-22">
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Name</Td>
+                                <Td className="font-size-22">{user.staffName}</Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Emp Id</Td>
+                                <Td className="font-size-22">{user.staffId}</Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Approver</Td>
+                                <Td className="font-size-22">{user.approver}</Td>
+                            </Tr>
+                            {/* <Tr className="font-size-22">
                         <Td fontWeight="bold" className="font-size-22">Leave Balance</Td>
                         <Td className="font-size-22">{d}</Td>
                     </Tr> */}
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Status</Td>
-                        <Td className="font-size-22">{user.status == null || user.status == '' ? '' : user.status}</Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
-                        <Td className="font-size-22">
-                            {/* <Select
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Status</Td>
+                                <Td className="font-size-22">{user.status == null || user.status == '' ? '' : user.status}</Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Leave Type</Td>
+                                <Td className="font-size-22">
+                                    {/* <Select
                                 name="leaveType"
                                 onChange={(e) => {
                                     handleChange1(e.target.name, e.target.value);
@@ -325,13 +325,13 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                     )
                                 }
                             </Select> */}
-                            {user.leaveType}
-                        </Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
-                        <Td className="font-size-22">
-                            {/* <Input
+                                    {user.leaveType}
+                                </Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Leave Start</Td>
+                                <Td className="font-size-22">
+                                    {/* <Input
                                 type="date"
                                 name="startDate"
                                 value={user.startDate}
@@ -342,13 +342,13 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 className="font-size-22"
                                 disabled
                             /> */}
-                            {user.startDate}
-                        </Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
-                        <Td className="font-size-22">
-                            {/* <Input
+                                    {user.startDate}
+                                </Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Leave Ends</Td>
+                                <Td className="font-size-22">
+                                    {/* <Input
                                 type="date"
                                 name="endDate"
                                 value={user.endDate}
@@ -359,48 +359,55 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                                 className="font-size-22"
                                 disabled
                             /> */}
-                            {user.endDate}
-                        </Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Total Days</Td>
-                        <Td className="font-size-22">{user.totalDays}</Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Comments</Td>
-                        
-                        <Td>
-                            {user.comment}
-                        </Td>
+                                    {user.endDate}
+                                </Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Total Days</Td>
+                                <Td className="font-size-22">{user.totalDays}</Td>
+                            </Tr>
+                            <Tr className="font-size-22">
+                                <Td fontWeight="bold" className="font-size-22">Comments</Td>
 
-                    </Tr>
-                    <Tr >
-                        <Td fontWeight="bold" className="font-size-22">Approved By</Td>
-                        <Td>{user.approvedBy}</Td>
-                    </Tr>
-                    <Tr className="font-size-22">
-                        <Td fontWeight="bold" className="font-size-22">Approver Comment</Td>
-                        <Td className="font-size-22">{user.approverComment}</Td>
-                    </Tr>
-                    {
-                        user.status == null || user.status == '' ? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
-                            <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
-                        </ModalFooter> : ''
-                    }
-                    {
-                        user.status == null ? "" : <Badge
-                            colorScheme={user.status === 'Approved' ? 'green' : 'red'}
-                            px={4}
-                            py={2}
-                            fontSize="lg"
-                            marginLeft="70%"
-                            marginTop="5%"
-                        >
-                            {user.status}
-                        </Badge>
-                    }
-                </Tbody>
-            </Table>
+                                <Td>
+                                    {user.comment}
+                                </Td>
+
+                            </Tr>
+                            {
+                                user.status == null ? "" : <Tr >
+                                    <Td fontWeight="bold">{user.status} By</Td>
+                                    <Td>{user.approvedBy}</Td>
+                                </Tr>
+                            }
+                            {
+                                user.status == null ? "" :
+                                    <Tr className="font-size-22">
+                                        <Td fontWeight="bold" className="font-size-22">{user.status} Comment</Td>
+                                        <Td className="font-size-22">{user.approverComment}</Td>
+                                    </Tr>
+
+                            }
+
+                            {
+                                user.status == null || user.status == '' ? <ModalFooter display="flex" justifyContent="space-between" className="font-size-22">
+                                    <Button bgColor="red" className="font-size-22" onClick={() => updateEntry('Rejected')}>Reject</Button>
+                                </ModalFooter> : ''
+                            }
+                            {
+                                user.status == null ? "" : <Badge
+                                    colorScheme={user.status === 'Approved' ? 'green' : 'red'}
+                                    px={4}
+                                    py={2}
+                                    fontSize="lg"
+                                    marginLeft="70%"
+                                    marginTop="5%"
+                                >
+                                    {user.status}
+                                </Badge>
+                            }
+                        </Tbody>
+                    </Table>
                     :
                     <Box>
                         <Table variant="striped" className="font-size-22">

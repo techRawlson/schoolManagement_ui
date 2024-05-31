@@ -37,7 +37,7 @@ const Navbar = () => {
     try {
       const get = await fetch(`http://localhost:8090/api-notifications/${staffName}`)
       const getjson = await get.json()
-      const sortedAccToTime=getjson.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      const sortedAccToTime = getjson.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
       console.log(sortedAccToTime)
       setNotifications(sortedAccToTime)
     } catch (error) {
@@ -56,13 +56,13 @@ const Navbar = () => {
   console.log(notifications)
   notifications.map((not) => console.log(not.message))
 
- 
+
 
   const handleNotificationClick = async (id) => {
     try {
 
 
-      
+
       const updateToRead = await fetch(`http://localhost:8090/api-notifications/markAsRead/${id}`, {
         method: 'PUT',
         body: {
@@ -94,8 +94,8 @@ const Navbar = () => {
         <AvatarGroup spacing='1rem'>
           <Badge>{person}</Badge>
           <Avatar bg='red.500' />
-          <MenuButton colorScheme='pink'>
-            <Box style={{ cursor: 'pointer' }}  >
+          <MenuButton colorScheme='pink' style={{ outline: 'none' }}  >
+            <Box style={{ cursor: 'pointer', outline:'none !important' }}>
               <IoNotifications color="white" size="26" />
               <Box style={style}></Box>
             </Box>

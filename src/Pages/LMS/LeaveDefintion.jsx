@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import Navbar from "../../components/Navbar"
+import { IoReturnUpBackOutline } from "react-icons/io5"
 
 
 const LeaveDefinition = () => {
@@ -80,10 +81,19 @@ const LeaveDefinition = () => {
         }
     }
 
-
+    const goback = () => {
+        navigate(-1)
+    }
 
     return <Stack minH="100vh" minW="100vw" fontSize="16px">
         <Navbar/>
+        <IoReturnUpBackOutline
+            size={35}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+        />
         <ToastContainer/>
         <Box >
             <Stack maxW="60vw" margin="0 auto" >

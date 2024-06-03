@@ -16,6 +16,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react'
 import PieChart from "./Piechart";
+import { IoReturnUpBackOutline } from "react-icons/io5";
 const StudentRecord = () => {
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
@@ -428,7 +429,9 @@ useEffect(() => {
   }, [])
 
 
-
+  const goback = () => {
+    navigate(-1)
+}
 
 
 
@@ -438,6 +441,13 @@ useEffect(() => {
 
   return <Stack h="100vh">
     <Navbar />
+
+    <IoReturnUpBackOutline
+            size={50}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+        />
     <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>
 

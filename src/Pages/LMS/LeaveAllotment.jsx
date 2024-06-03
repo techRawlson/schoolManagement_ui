@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
+import { IoReturnUpBackOutline } from "react-icons/io5"
 const LmsLeaveallotment = () => {
     const [classData, setClassData] = useState([])
     const [LDetails, setLDetails] = useState([])
@@ -109,7 +110,9 @@ const LmsLeaveallotment = () => {
     };
     
 
-
+    const goback = () => {
+        navigate(-1)
+    }
 
 
    
@@ -192,170 +195,151 @@ const LmsLeaveallotment = () => {
     }, [])
     return <>
 
-        <Stack minW="100vw" minH="100vh">
+<Stack minH="100vh" minW="100%" overflow="scroll" bgColor="white">
             <Navbar />
+            <IoReturnUpBackOutline
+            size={35}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+        />
             <ToastContainer />
-            <Stack maxWidth="85%" margin="0 auto">
+            <Stack   >
                 <TableContainer>
-                    <Table size='sm' variant='striped' colorScheme="white">
-                    <Thead>
+                    <Table size="sm" variant="striped" colorScheme="white">
+                        <Thead>
                             <Tr>
-                                <Th fontSize="16px"></Th>
-                                <Th fontSize="16px"></Th>
-                                <Th fontSize="16px"></Th>
-                                <Th fontSize="16px"></Th>
+                                <Th fontSize={['12px', '14px', '16px']}></Th>
+                                <Th fontSize={['12px', '14px', '16px']}></Th>
+                                <Th fontSize={['12px', '14px', '16px']}></Th>
+                                <Th fontSize={['12px', '14px', '16px']}></Th>
                                 <Th padding="0 1%">
-                                    {/* {LDetails?.map((elm, index) => { */}
-                                        {/* if (elm.checkBox) { */}
-                                            {/* return ( */}
-                                                <>
-                                                    <Th fontSize="16px" border="none" >
-                                                      
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none" fontSize="200%">  Alloted Balance
-                                                    </Th>
-                                                </>
+                                    <>
+                                        <Th fontSize={['12px', '14px', '16px']} border="none"></Th>
+                                        <Th border="none"></Th>
+                                        <Th border="none"></Th>
+                                        <Th border="none"></Th>
+                                        <Th border="none"></Th>
+                                        <Th border="none" fontSize={['12px', '14px', '200%']}>
+                                            Alloted Balance
+                                        </Th>
+                                    </>
                                 </Th>
-                                <Th >
-                                
-                                                <>
-                                                    <Th fontSize="16px" border="none">
-                                                        {/* {elm.shortForm} */}
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                                                                      
-                                                    <Th border="none" fontSize="200%"> Remaining  Balance
-                                                    </Th>
-                                                </>
-
-                                           
+                                <Th>
+                                    <>
+                                        <Th fontSize={['12px', '14px', '16px']} border="none"></Th>
+                                        <Th border="none"></Th>
+                                        <Th border="none" fontSize={['12px', '14px', '200%']}>
+                                            Remaining Balance
+                                        </Th>
+                                    </>
                                 </Th>
-
-
-
                             </Tr>
-
                         </Thead>
                         <Thead>
                             <Tr>
-                                <Th fontSize="16px">Staff Name</Th>
-                                <Th fontSize="16px">Staff Id</Th>
-                                <Th fontSize="16px">Department</Th>
-                                <Th fontSize="16px">Approver</Th>
+                                <Th fontSize={['12px', '14px', '16px']}>Staff Name</Th>
+                                <Th fontSize={['12px', '14px', '16px']}>Staff Id</Th>
+                                <Th fontSize={['12px', '14px', '16px']}>Department</Th>
+                                <Th fontSize={['12px', '14px', '16px']}>Approver</Th>
                                 <Th padding="0 1%">
                                     {LDetails?.map((elm, index) => {
                                         if (elm.checkBox) {
                                             return (
                                                 <>
-                                                    <Th fontSize="16px" border="none" >
+                                                    <Th fontSize={['12px', '14px', '16px']} border="none">
                                                         {elm.shortForm}
                                                     </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
-                                                    <Th border="none">
-                                                    </Th>
+                                                    <Th border="none"></Th>
+                                                    <Th border="none"></Th>
+                                                    <Th border="none"></Th>
+                                                    <Th border="none"></Th>
                                                 </>
-
                                             );
                                         }
                                         return null;
                                     })}
                                 </Th>
-                                <Th >
+                                <Th>
                                     {LDetails?.map((elm, index) => {
                                         if (elm.checkBox) {
                                             return (
                                                 <>
-                                                    <Th fontSize="16px" border="none">
+                                                    <Th fontSize={['12px', '14px', '16px']} border="none">
                                                         {elm.shortForm}
                                                     </Th>
-                                                    <Th border="none">
-                                                    </Th>
+                                                    <Th border="none"></Th>
                                                 </>
-
                                             );
                                         }
                                         return null;
                                     })}
                                 </Th>
-
-
-
                             </Tr>
-
                         </Thead>
                         <Tbody>
-
                             {mainData?.map((elm, i) => (
-                                <Tr>
-                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffName} </Td>
-                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.staffId}</Td>
-                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.department}</Td>
-                                    <Td fontSize="16px" borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">{elm.approver}</Td>
-
-                                    <Td borderRight="1px solid black" borderLeft="1px solid black"  >
-
-                                        {elm?.leaveProvided?.map((el, index) => {
-
-                                            return (
-                                                <Td fontSize="16px" border="none" textAlign="center" key={index}>
-
-                                                    <Input type="number" value={el.value} onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))} disabled={editId == i && editButtonDisable == false ? false : true} />
-                                                </Td>
-                                            );
-
-
-                                        })}
+                                <Tr key={i}>
+                                    <Td fontSize={['12px', '14px', '16px']} borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">
+                                        {elm.staffName}
+                                    </Td>
+                                    <Td fontSize={['12px', '14px', '16px']} borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">
+                                        {elm.staffId}
+                                    </Td>
+                                    <Td fontSize={['12px', '14px', '16px']} borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">
+                                        {elm.department}
+                                    </Td>
+                                    <Td fontSize={['12px', '14px', '16px']} borderRight="1px solid black" borderLeft="1px solid black" textAlign="center">
+                                        {elm.approver}
+                                    </Td>
+                                    <Td borderRight="1px solid black" borderLeft="1px solid black">
+                                        {elm?.leaveProvided?.map((el, index) => (
+                                            <Td fontSize={['12px', '14px', '16px']} border="none" textAlign="center" key={index}>
+                                                <Input
+                                                    type="number"
+                                                    value={el.value}
+                                                    onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))}
+                                                    disabled={editId === i && !editButtonDisable}
+                                                />
+                                            </Td>
+                                        ))}
                                     </Td>
                                     <Td>
-
-                                        {
-                                            elm.leaveBalances?.map((el, index) => {
-                                                return (
-                                                    <Td fontSize="16px" border="none" textAlign="center" key={index}>
-                                                        <Input type="number" value={el.value} disabled />
-
-                                                    </Td>
-                                                );
-                                            })
-                                        }
+                                        {elm.leaveBalances?.map((el, index) => (
+                                            <Td fontSize={['12px', '14px', '16px']} border="none" textAlign="center" key={index}>
+                                                <Input type="number" value={el.value} disabled />
+                                            </Td>
+                                        ))}
                                     </Td>
                                     <Td>
                                         <Box>
-                                            {
-                                                editId === i && editButtonDisable == false ?
-                                                    <Button bgColor="greenyellow" onClick={postAllotment}>Save</Button> :
-                                                    <Button onClick={() => {
+                                            {editId === i && !editButtonDisable ? (
+                                                <Button bgColor="greenyellow" onClick={postAllotment} fontSize={['12px', '14px', '16px']}>
+                                                    Save
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    onClick={() => {
                                                         setEditId(i);
                                                         setEditButtonDisable(false);
-                                                    }} bgColor="teal">Edit</Button>
-                                            }
-
-
+                                                    }}
+                                                    bgColor="teal"
+                                                    fontSize={['12px', '14px', '16px']}
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )}
                                         </Box>
                                     </Td>
-
                                 </Tr>
                             ))}
-
                         </Tbody>
                     </Table>
                 </TableContainer>
             </Stack>
         </Stack>
+    
 
 
     </>

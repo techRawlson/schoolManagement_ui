@@ -26,7 +26,10 @@ import KeyValueTable from "./Table"
 import { ToastContainer, toast } from "react-toastify"
 import KeyValueTableAdmin from "./Tableadmin"
 import './LeaveApplication.css'
+import { IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 const LeaveApplication = () => {
+    const navigate = useNavigate()
     const[edit,setEdit]=useState(false)
     const [applicantId, setapplicantId] = useState(null)
     const [isAdmin, setisAdmin] = useState(false)
@@ -160,13 +163,23 @@ const reviewApplication=(id)=>{
         getLoggedInuserDetail()
     }, [])
     //
-
+    const goback = () => {
+        navigate(-1)
+    }
     console.log(data)
-    return <Stack height="100vh" width="100vw">
+    return <Stack height="100vh" width="100vw" >
         <Navbar />
+        <IoReturnUpBackOutline
+
+            size={35}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+        />
         <ToastContainer />
         {
-                <TableContainer width="96vw" margin="0 auto">
+                <TableContainer width="96vw" margin="0 auto" >
                 <Table size='lg' className="font-size-22">
                     <Thead className="font-size-22">
                         <Tr className="font-size-22">

@@ -84,7 +84,7 @@ const Navbar = () => {
 
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
-    <Stack bgColor='#2196F3' direction={['column', 'row']} style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center", minWidth: '99.8vw', padding: '1.5% 0' }} margin="0 auto"    >
+    <Box bgColor='#2196F3'  style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center",  padding: '1.5% 0', }} minW="100vw"    >
       <FiLogOut fontSize="4vh" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
 
       <Text fontSize="4vh">Student Management System</Text>
@@ -143,7 +143,7 @@ const Navbar = () => {
 
         </MenuList>
       </Menu>
-    </Stack >
+    </Box >
     //
   )
 }

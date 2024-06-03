@@ -14,6 +14,8 @@ import {
 
 
 import { useEffect, useState } from "react"
+import { IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 const Stafftimetable = () => {
 
 
@@ -262,8 +264,20 @@ const Stafftimetable = () => {
         padding: '8px',
         textAlign: 'center'
     };
+    const navigate = useNavigate()
+    const goback = () => {
+        navigate(-1)
+    }
     return <div style={{ minHeight: '100vh', Width: '100vw' }}>
         <Navbar />
+        <IoReturnUpBackOutline
+
+            size={35}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+        />
         <Stack style={{ maxWidth: '70vw', margin: '0 auto' }}>
             <Flex alignItems='center' >
                 <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="20%">

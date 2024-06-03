@@ -23,7 +23,10 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
 import KeyValueTableAdmin from "./Tableadmin"
+import { IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 const LeaveApproval = () => {
+    const navigate = useNavigate()
     const [applicantId, setapplicantId] = useState(null)
     const [data, setData] = useState([])
     const [fire, setFire] = useState(false)
@@ -86,11 +89,21 @@ const LeaveApproval = () => {
 
 
 
-
+    const goback = () => {
+        navigate(-1)
+    }
 
     return <Box minH="100vh">
         <Navbar />
-        <Box>
+        <IoReturnUpBackOutline
+
+size={35}
+cursor="pointer"
+onClick={goback}
+style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+/>
+        <Box >
         <TableContainer width="96vw" margin="0 auto">
                     <Table size='lg'>
                         <Thead>

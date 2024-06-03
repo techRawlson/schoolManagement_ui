@@ -2,9 +2,13 @@ import { Card, CardBody, CardHeader, Flex, Heading, Stack } from "@chakra-ui/rea
 import Navbar from "../../components/Navbar"
 import { MdCastForEducation } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
+import { IoReturnUpBackOutline } from "react-icons/io5"
 
 const Main = () => {
     const navigate = useNavigate()
+    const goback = () => {
+        navigate(-1)
+    }
     const nextPage = (data) => {
         try {
             console.log(data)
@@ -15,10 +19,17 @@ const Main = () => {
     }
     return <Stack minW="98.7vw" minH="98vh" >
         <Navbar />
+        <IoReturnUpBackOutline
+            size={35}
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: 'auto', marginRight: '7%' }}
+
+        />
         <Flex
             justifyContent="space-around"
             alignItems="center"
-            
+
             justifySelf="center"
             padding="5%"
             flexWrap="wrap"

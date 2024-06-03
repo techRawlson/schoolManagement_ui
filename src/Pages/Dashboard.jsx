@@ -33,7 +33,7 @@ const Dashboard = () => {
 
 
   return (
-    <Stack minH="100vh">
+    <Stack minH="100vh" minW="100vw">
       <Navbar />
 
       <SimpleGrid spacing={4} templateColumns='1fr 1fr 1fr' margin="auto" width="85%">

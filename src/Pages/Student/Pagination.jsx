@@ -327,6 +327,18 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
 
         getClass()
     }, [])
+
+
+
+    const downloadFile = () => {
+        const link = document.createElement('a');
+        link.href = '../public/aman.xlsx'; // URL to your Excel file
+        link.download = 'Sample.xlsx'; // Filename for the downloaded file
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+   
     return (
         <div>
             <>
@@ -683,9 +695,13 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                         <ModalHeader display="flex" justifyContent="space-between" alignItems="center">Upload File <Button onClick={() => setIsOpenFile(false)}>X</Button></ModalHeader>
                         <ModalBody>
                         </ModalBody>
-                        <ModalFooter display="flex" justifyContent="space-between" alignItems="center">
+                        <ModalFooter display="flex" justifyContent="space-between" alignItems="center" flexDir="column">
+                            <Box display="flex" justifyContent="space-between">
                             <Input type="file" maxW="50%" ref={excelFile} onChange={fileChange} accept=".xlsx,.xls" />
-                            <Button variant='ghost' onClick={uploadFileExcel}>Upload</Button>
+                            <Button colorScheme="green" onClick={uploadFileExcel}>Upload</Button>
+                           
+                            </Box>
+                            <a onClick={downloadFile} style={{whiteSpace:'noWrap',cursor:'pointer'}}>Download Sample File </a>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>

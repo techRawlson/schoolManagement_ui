@@ -300,7 +300,7 @@ const LmsLeaveallotment = () => {
                                                     type="number"
                                                     value={el.value}
                                                     onChange={(e) => handleLeaveChange(i, index, parseInt(e.target.value))}
-                                                    disabled={editId === i && !editButtonDisable}
+                                                    disabled={editId !== i && !editButtonDisable}
                                                 />
                                             </Td>
                                         ))}

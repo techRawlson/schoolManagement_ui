@@ -33,10 +33,10 @@ const Dashboard = () => {
 
 
   return (
-    <Stack minH="100vh" minW="100vw">
+    <Stack minH="100vh" W="100vw" margin="0" bgColor="white">
       <Navbar />
 
-      <SimpleGrid spacing={4} templateColumns='1fr 1fr 1fr' margin="auto" width="85%">
+      <SimpleGrid templateColumns='1fr 1fr 1fr' margin="0" >
         <Card cursor="pointer" onClick={() => nextPage("student")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Student </Heading>

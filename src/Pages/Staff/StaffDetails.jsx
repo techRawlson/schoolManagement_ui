@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, Toast, Icon, Menu, MenuButton, MenuList, MenuItem, Checkbox } from '@chakra-ui/react'
+import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, Toast, Icon, Menu, MenuButton, MenuList, MenuItem, Checkbox, IconButton } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IoReturnUpBackOutline } from 'react-icons/io5';
+import {ArrowLeftIcon } from '@chakra-ui/icons'
 import { MdClose } from 'react-icons/md';
+import { IoArrowBack } from "react-icons/io5";
 const StaffDetails = () => {
     const navigate = useNavigate()
     const [classData, setClassData] = useState([])
@@ -205,16 +206,22 @@ const StaffDetails = () => {
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-            <Stack maxW="80vw" width="80vw" m="0 auto">
+          
+                            
+            <Stack  width="95vw" m="0 auto">
+           
+                <Flex justifyContent="space-between" >
+                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
 
-                <Flex >
+
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar
                             src={image || `http://localhost:8083/api/staff-images/${id}`}
                             alt="Avatar"
                             style={dis ? {} : { cursor: 'pointer' }}
-                            width="100px"
-                            height="100px"
+                            
+                            
+                           
 
                         />
                         <input

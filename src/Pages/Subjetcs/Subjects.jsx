@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Icon, Input, Select, Stack, Text } from "@chakra-ui/react"
+import { Button, Flex, Heading, Icon, IconButton, Input, Select, Stack, Text } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import {
@@ -13,6 +13,7 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import * as Yup from "yup";
+import { IoArrowBack } from "react-icons/io5";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useRef, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
@@ -338,16 +339,13 @@ const Subject = () => {
         <Stack minH="100vh" maxW='100vw'>
             <Navbar />
             <ToastContainer />
-            <Flex alignSelf='end' width="7.5%" mt='-5'>
-                <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-            </Flex>
+            <Flex alignItems="center" margin="0 0 0 2%">
+                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                            </Flex>
             <Stack display="flex" flexDir="row" justifyContent="space-around" >
 
                 <Stack width="30%">
-                    {/* <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
-                        <Input type="text" ref={subjectRef} placeholder="subject" />
-                        <Button colorScheme='blue' onClick={() => createSubjects()}>Add</Button>
-                    </Stack> */}
+                    
                     <Formik
                         initialValues={{ subject: "" }}
                         onSubmit={(values, actions) => {

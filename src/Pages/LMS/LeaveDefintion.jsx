@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Input, Stack } from "@chakra-ui/react"
+import { Box, Button, Checkbox, IconButton, Input, Stack } from "@chakra-ui/react"
 import {
     Table,
     Thead,
@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import Navbar from "../../components/Navbar"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 
 
 const LeaveDefinition = () => {
@@ -87,7 +87,8 @@ const LeaveDefinition = () => {
 
     return <Stack minH="100vh" minW="100vw" fontSize="16px">
         <Navbar/>
-        <IoReturnUpBackOutline
+        <IconButton
+        as={IoArrowBack}
             size={35}
             cursor="pointer"
             onClick={goback}

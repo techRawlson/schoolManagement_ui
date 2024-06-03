@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select } from '@chakra-ui/react'
+import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, IconButton, Icon } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IoReturnUpBackOutline } from 'react-icons/io5';
+import { IoArrowBack } from "react-icons/io5";
+
 const StudentDetails = () => {
+    
+
     const notify = () => toast("Form Submitted Successfully");
     const [student, setStudent] = useState([])
     const [imageUrl, setImageUrl] = useState(false)
@@ -251,8 +254,11 @@ const StudentDetails = () => {
         <Stack minH="100vh">
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-            <Stack width="80vw" m="0 auto">
-                <Flex mb="5" justifyContent="space-between" alignItems="center" width="87vw">
+            <Stack width="95vw" margin="0 3%">
+                <Flex mb="5" justifyContent="space-between" alignItems="center" width="90vw">
+             
+                        <IconButton as={IoArrowBack}  cursor="pointer" onClick={goback} size="sm"/>
+                
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
@@ -275,9 +281,7 @@ const StudentDetails = () => {
                             />
                         </label>
                     </Flex>
-                    <Flex width="7.5%" >
-                        <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-                    </Flex>
+                    
 
                 </Flex>
 

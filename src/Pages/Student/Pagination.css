@@ -1,0 +1,29 @@
+.pagination-items {
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+  
+  .pagination-items > div {
+    width: 100%; /* Ensure the container expands to fit its content */
+  }
+  
+  .pagination-controls {
+    width: 100%; /* Ensure the controls span the full width */
+    margin: 1% auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+  }
+  
+  .pagination-controls button {
+    padding: 0; /* Remove extra padding on buttons */
+    background: none; /* Remove button background */
+    border: none; /* Remove button border */
+  }
+  
+  /* Style for the arrows */
+  .pagination-controls button:hover {
+    cursor: pointer;
+    color: blue;
+  }
+  

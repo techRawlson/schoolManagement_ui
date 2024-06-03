@@ -197,7 +197,7 @@ const LmsLeaveallotment = () => {
 
 <Stack minH="100vh" minW="100%" overflow="scroll" bgColor="white">
             <Navbar />
-            <IoReturnUpBackOutline
+            <Icon as={ArrowLeftIcon}
             size={35}
             cursor="pointer"
             onClick={goback}

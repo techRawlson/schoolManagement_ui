@@ -1,4 +1,4 @@
-import { Flex, FormControl, FormLabel, Select, Stack, Text, filter } from "@chakra-ui/react"
+import { Flex, FormControl, FormLabel, IconButton, Select, Stack, Text, filter } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -12,14 +12,11 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 
-
+import { IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react"
 import { IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 const Stafftimetable = () => {
-
-
-
     const [data, setData] = useState([])
     const getData = async () => {
         try {
@@ -270,14 +267,16 @@ const Stafftimetable = () => {
     }
     return <div style={{ minHeight: '100vh', Width: '100vw' }}>
         <Navbar />
-        <IoReturnUpBackOutline
+        <Flex >
+            <IconButton as={IoArrowBack}
+                background="none"
+                cursor="pointer"
+                onClick={goback}
+                style={{  marginLeft: '3%' }}
 
-            size={35}
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
-
-        />
+            />
+        </Flex>
+        
         <Stack style={{ maxWidth: '70vw', margin: '0 auto' }}>
             <Flex alignItems='center' >
                 <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="20%">

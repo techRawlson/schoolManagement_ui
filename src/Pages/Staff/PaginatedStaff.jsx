@@ -24,9 +24,11 @@ import {
     Menu,
     MenuList,
     MenuItem,
-    Icon
+    Icon,
+    IconButton
 
 } from '@chakra-ui/react'
+import { ArrowLeftIcon } from '@chakra-ui/icons'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
@@ -48,10 +50,11 @@ import {
 
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { IoReturnUpBackOutline } from 'react-icons/io5';
+import { IoArrowBack } from "react-icons/io5";
 import { MdClose } from 'react-icons/md';
 // import Student from '../Pages/Student';
 function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
     const [isOpen, setOpen] = useState(false)
@@ -96,18 +99,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const endIndex = startIndex + itemsPerPage;
 
 
-    // Render the items for the current page using the renderItems function
 
-
-    // useEffect(() => {
-    //     const keys = new Set();
-    //     classData?.forEach(obj => {
-    //         Object.keys(obj).forEach(key => {
-    //             keys.add(key);
-    //         });
-    //     });
-    //     setUniqueKeys(keys);
-    // }, [classData]);
 
 
     // Define the validation schema using Yup
@@ -202,7 +194,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     let body;
     const saveButton = async () => {
         // Convert selectedItems array to a comma-separated string
-console.log(typeof(admRef.current.value))
+        console.log(typeof (admRef.current.value))
         body = {
             name: nameRef.current.value,
             gender: sexRef.current.value,
@@ -214,7 +206,7 @@ console.log(typeof(admRef.current.value))
             dateOfJoining: admRef.current.value,
             email: emailRef.current.value,
             staffId: staffIdRef.current.value,
-            approver:classValue,
+            approver: classValue,
             subjects: selectedItems
         }
         try {
@@ -389,8 +381,12 @@ console.log(typeof(admRef.current.value))
                 <div>
                     <Navbar />
                     <ToastContainer />
+                 
                     <Stack width="95%" orientation="horizontal" marginX="auto">
                         <Flex justifyContent="space-between" width="100%" mt="1%">
+                            <Flex alignItems="center" >
+                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                            </Flex>
                             <Flex justifyContent="space-around">
                                 <Input maxWidth="60%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
                                 <Button maxW="30%" onClick={() => setOpen(true)}>
@@ -398,9 +394,7 @@ console.log(typeof(admRef.current.value))
                                 </Button>
                             </Flex>
 
-                            <Flex width="7.5%" >
-                                <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-                            </Flex>
+
                         </Flex>
 
                         <TableContainer minH="45vh">
@@ -719,11 +713,11 @@ console.log(typeof(admRef.current.value))
                         </ModalBody>
                         <ModalFooter display="flex" justifyContent="space-between" alignItems="center" flexDir="column">
                             <Box display="flex" justifyContent="space-between">
-                            <Input type="file" maxW="50%" ref={excelFile} onChange={fileChange} accept=".xlsx,.xls" />
-                            <Button colorScheme='green' onClick={uploadFileExcel}>Upload</Button>
+                                <Input type="file" maxW="50%" ref={excelFile} onChange={fileChange} accept=".xlsx,.xls" />
+                                <Button colorScheme='green' onClick={uploadFileExcel}>Upload</Button>
                             </Box>
-                            
-                            <a onClick={downloadFile} style={{whiteSpace:'noWrap',cursor:'pointer'}}>Download Sample File </a>
+
+                            <a onClick={downloadFile} style={{ whiteSpace: 'noWrap', cursor: 'pointer' }}>Download Sample File </a>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>

@@ -169,7 +169,7 @@ const reviewApplication=(id)=>{
     console.log(data)
     return <Stack height="100vh" width="100vw" >
         <Navbar />
-        <IoReturnUpBackOutline
+        <Icon as={ArrowLeftIcon}
 
             size={35}
             cursor="pointer"

@@ -1,9 +1,9 @@
-import { Button, Card, CardBody, CardHeader, Checkbox, Flex, FormControl, FormLabel, Heading, Input, Select, SimpleGrid, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { IoReturnUpBackOutline } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 
@@ -360,11 +360,11 @@ const ClassRecord = () => {
     return <Stack h="100vh">
         <Navbar />
         <Flex >
-            <IoReturnUpBackOutline
-                size={35}
+            <IconButton as={IoArrowBack}
+                background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{ marginLeft: 'auto', marginRight: '7%' }}
+                style={{  marginLeft: '3%' }}
 
             />
         </Flex>

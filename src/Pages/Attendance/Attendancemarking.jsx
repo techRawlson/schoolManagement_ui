@@ -1,5 +1,5 @@
 // import { Stack } from "@chakra-ui/react"
-import { Badge, Button, Checkbox, Flex, FormControl, FormLabel, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
+import { Badge, Button, Checkbox, Flex, FormControl, FormLabel, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { useSelector } from 'react-redux';
+import { IoArrowBack } from "react-icons/io5";
+
 const AttendanceMarking = ({ user }) => {
     // const user = useSelector(state => state);
     console.log(user)
@@ -668,11 +670,11 @@ const AttendanceMarking = ({ user }) => {
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
-            <IoReturnUpBackOutline
-                size={35}
+            <IconButton as={IoArrowBack}
+                background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{ marginLeft: 'auto', marginRight: '7%' }}
+                style={{  marginLeft: '3%' }}
 
             />
         </Flex>

@@ -20,7 +20,8 @@ import {
     Text,
     Avatar,
     Toast,
-    FormControl, FormLabel, FormErrorMessage
+    FormControl, FormLabel, FormErrorMessage,
+    IconButton
 
 } from '@chakra-ui/react'
 
@@ -40,11 +41,8 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-
 } from '@chakra-ui/react'
-import { IoReturnUpBackOutline } from "react-icons/io5";
-
-
+import { IoArrowBack } from "react-icons/io5";
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 // import Student from '../Pages/Student';
@@ -93,15 +91,6 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     // Render the items for the current page using the renderItems function
 
 
-    // useEffect(() => {
-    //     const keys = new Set();
-    //     classData?.forEach(obj => {
-    //         Object.keys(obj).forEach(key => {
-    //             keys.add(key);
-    //         });
-    //     });
-    //     setUniqueKeys(keys);
-    // }, [classData]);
 
 
 
@@ -341,16 +330,19 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
    
     return (
         <div>
-            <>
-
-            </>
+           
             <div className="pagination-items">
                 <div>
                     <Navbar />
                     <ToastContainer />
                     <Stack width="95%" orientation="horizontal" marginX="auto" >
                         <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
+                        <Flex width="7.5%" >
+                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                               
+                            </Flex>
                             <Flex width="50%" paddingRight="1" justifyContent="space-between">
+                                
                                 <Select placeholder='Session' maxW="20%" onChange={handleFilterYear} ref={admYearRef}>
                                     {
                                         uniqueSessions?.map((session, i) => (
@@ -381,19 +373,14 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                     Add New
                                 </Button>
                             </Flex>
-                            <Flex width="7.5%" >
-                                <IoReturnUpBackOutline size="35" cursor="pointer" onClick={goback} />
-                            </Flex>
+                           
                         </Flex>
 
-                        <TableContainer minH="45vh">
+                        <TableContainer >
                             <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
                                 <Thead>
                                     <Tr maxWidth="10%" border="1px solid">
-                                        {/* {[...uniqueKeys]?.map((key, index) => (
-                <Th key={index}>{key}</Th>
-              ))} */}
-                                        <Th border="1px solid">Sr.No.</Th>
+                                                    <Th border="1px solid">Sr.No.</Th>
                                         <Th border="1px solid">Enrollment No.</Th>
                                         <Th border="1px solid">Name</Th>
                                         <Th border="1px solid">Father Name</Th>

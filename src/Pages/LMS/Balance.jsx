@@ -87,7 +87,7 @@ const LeaveBalances=()=>{
     }
     return <Stack   minH="100vh" minW="100vw" bgColor="white">
         <Navbar/>
-        <IoReturnUpBackOutline
+        <Icon as={ArrowLeftIcon}
             size={35}
             cursor="pointer"
             onClick={goback}

@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Stack, Text, Toast } from "@chakra-ui/react"
+import { Button, Flex, IconButton, Input, Stack, Text, Toast } from "@chakra-ui/react"
 import {
     Table,
     Thead,
@@ -14,7 +14,7 @@ import {
     useColorModeValue
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 import Navbar from "../../components/Navbar"
@@ -269,19 +269,19 @@ const Periods = () => {
 
 
 
-    return <Stack minH="100vh" alignItems="center" >
+    return <Stack minH="100vh"  >
         <Navbar />
         <ToastContainer />
-        <Flex minW="100vw" alignItems="center" justifyContent="space-around" margin="0 0 1.5% 0">
-            <h1 s></h1>
-            <IoReturnUpBackOutline
-                size={35}
+        <Flex >
+            <IconButton as={IoArrowBack}
+                background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{ marginLeft: 'auto', marginRight: '7%' }}
+                style={{  marginLeft: '3%' }}
 
             />
         </Flex>
+        
         <Flex justifyContent="space-around" minWidth="80vw">
             <TableContainer>
                 <Text padding="0 40%" fontWeight="bolder">Lecture Schedule</Text>                <Table variant='simple'>

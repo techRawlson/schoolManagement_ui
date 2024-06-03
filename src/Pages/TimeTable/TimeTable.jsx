@@ -1,10 +1,10 @@
-import { Stack, Card, CardHeader, CardBody, Heading, Flex, SimpleGrid } from "@chakra-ui/react"
+import { Stack, Card, CardHeader, CardBody, Heading, Flex, SimpleGrid, IconButton } from "@chakra-ui/react"
 import { ImBooks } from "react-icons/im";
 import { SlCalender } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { IoArrowBack } from "react-icons/io5";
 
-import { IoReturnUpBackOutline } from 'react-icons/io5';
 const TimeTable = () => {
     const navigate = useNavigate()
     const nextPage = (data) => {
@@ -22,16 +22,16 @@ const TimeTable = () => {
     return <>
         <Navbar />
         <Flex >
-                <IoReturnUpBackOutline
-                    size={35}
-                    cursor="pointer"
-                    onClick={goback}
-                   style={{marginLeft:'auto',marginRight:'7%'}}
-                    
-                />
-            </Flex>
+            <IconButton
+                as={IoArrowBack}
+                size="sm"
+                cursor="pointer"
+                onClick={goback}
+                style={{  marginLeft:'5%' }}
+            />
+        </Flex>
         <Stack display='flex' flexDir='row' minH='80vh' minW='98vw'>
-          
+
 
 
             <SimpleGrid spacing={4} templateColumns='1fr 1fr' minW='100%' alignItems='center' justifyContent='space-around' >

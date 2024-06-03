@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react'
 import PieChart from "./Piechart";
-import { IoReturnUpBackOutline } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 const StudentRecord = () => {
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
@@ -439,15 +439,18 @@ useEffect(() => {
 
 
 
-  return <Stack h="100vh">
+  return <Stack width="100vw">
     <Navbar />
 
-    <IoReturnUpBackOutline
-            size={50}
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
-        />
+    <Flex >
+            <IconButton as={IoArrowBack}
+                background="none"
+                cursor="pointer"
+                onClick={goback}
+                style={{  marginLeft: '3%' }}
+
+            />
+        </Flex>
     <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>
 

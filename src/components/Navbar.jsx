@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider, Center } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
@@ -78,29 +78,52 @@ const Navbar = () => {
 
   };
 
-
+  const gridContainerStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gridGap: '10px',
+  }
 
 
 
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
-    <Box bgColor='#2196F3'  style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center",  padding: '1.5% 0', }} minW="100vw"    >
-      <FiLogOut fontSize="4vh" onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer' }} />
-
-      <Text fontSize="4vh">Student Management System</Text>
-
+    <Box
+      fontSize="150%"
+      bgColor='#2196F3'
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: "center",
+        padding: '1.5% 0',
+        width: '100vw',
+        margin: '0',  // Reset margin to 0
+        overflowX: 'hidden' // Hide horizontal scrollbar
+      }}
+    >
+     
+<Text>
+<FiLogOut onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer',marginLeft:'2.4rem' }}  />
+</Text>
+      <Text textAlign="center" >
+      
+        Student Management System
+        </Text>
 
       <Menu>
-        <AvatarGroup spacing='1rem'>
-          <Badge>{person}</Badge>
-          <Avatar bg='red.500' />
-          <MenuButton colorScheme='pink' style={{ outline: 'none' }}  >
-            <Box style={{ cursor: 'pointer', outline:'none !important' }}>
-              <IoNotifications color="white" size="26" />
-              <Box style={style}></Box>
-            </Box>
-          </MenuButton>
-        </AvatarGroup>
+
+      <div style={gridContainerStyle}>
+      <Center padding="0 1rem">
+        <Flex alignItems="center" justifyContent="space-between" padding="0 1rem">
+          <Text color="white" fontSize="80%">{person}</Text>
+          <Avatar bg="yellow.500"></Avatar>
+        </Flex>
+        <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
+          <IoNotifications color="white" size="26" />
+          <Box style={style}></Box>
+        </Box>
+      </Center>
+    </div>
 
         <MenuList>
           <MenuGroup title='Notifications'>
@@ -112,10 +135,9 @@ const Navbar = () => {
                       key={index}
                       as='a'
                       href='#'
-                      bgColor="#f0f0f0" // Correcting the color for read notifications
+                      bgColor="#f0f0f0"
                       color="#6c757d"
-                      onClick={() => handleNotificationClick(notification.id)
-                      }
+                      onClick={() => handleNotificationClick(notification.id)}
                     >
                       {notification.message} from {notification.staffName}
                     </MenuItem>
@@ -127,8 +149,7 @@ const Navbar = () => {
                       as='a'
                       href='#'
                       bgColor="#e0f7fa"
-                      onClick={() => handleNotificationClick(notification.id)
-                      }
+                      onClick={() => handleNotificationClick(notification.id)}
                     >
                       {notification.message} from {notification.staffName}
                     </MenuItem>
@@ -136,14 +157,12 @@ const Navbar = () => {
                 }
               })
             }
-
-
-
           </MenuGroup>
-
         </MenuList>
       </Menu>
-    </Box >
+    </Box>
+
+
     //
   )
 }

@@ -95,7 +95,7 @@ const LeaveApproval = () => {
 
     return <Box minH="100vh">
         <Navbar />
-        <IoReturnUpBackOutline
+        <Icon as={ArrowLeftIcon}
 
 size={35}
 cursor="pointer"

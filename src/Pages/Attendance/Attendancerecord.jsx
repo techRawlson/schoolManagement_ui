@@ -1,10 +1,10 @@
 
-import { Card, CardBody, CardHeader, Heading, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Heading, IconButton, SimpleGrid, Stack } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { IoReturnUpBackOutline } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 
 const Attendancerecord = () => {
     const navigate = useNavigate()
@@ -22,12 +22,14 @@ const Attendancerecord = () => {
    
     return <Stack h="100vh">
         <Navbar/>
-        <IoReturnUpBackOutline
-            size={35}
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
-        />
+        <IconButton as={IoArrowBack}
+                background="none"
+                size="md"
+                cursor="pointer"
+                onClick={goback}
+                style={{  marginLeft: '3%' }}
+
+            />
         <SimpleGrid spacing={4} templateColumns='1fr 1fr' margin="auto" width="90vw" padding="0 8%">
             <Card cursor="pointer" onClick={() => nextPage("classrecord")}>
                 <CardHeader>

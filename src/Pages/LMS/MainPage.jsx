@@ -1,8 +1,8 @@
-import { Card, CardBody, CardHeader, Flex, Heading, Stack } from "@chakra-ui/react"
+import { Card, CardBody, CardHeader, Flex, Heading, IconButton, Stack } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { MdCastForEducation } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack } from "react-icons/io5"
 
 const Main = () => {
     const navigate = useNavigate()
@@ -19,11 +19,11 @@ const Main = () => {
     }
     return <Stack minW="98.7vw" minH="98vh" >
         <Navbar />
-        <IoReturnUpBackOutline
-            size={35}
+        <IconButton as={IoArrowBack}
+            size="md"
             cursor="pointer"
             onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
+            style={{ marginLeft: '7%' }}
 
         />
         <Flex

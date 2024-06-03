@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormLabel, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
+import { Button, Flex, FormControl, FormLabel, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from "react"
 import { IoAddSharp, IoReturnUpBackOutline } from "react-icons/io5";
-
+import { IoArrowBack } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 import Stafftimetable from "./StaffTimeTable";
@@ -841,11 +841,11 @@ const Classtimetable = () => {
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
-            <IoReturnUpBackOutline
-                size={35}
+            <IconButton as={IoArrowBack}
+                size="md"
                 cursor="pointer"
                 onClick={goback}
-                style={{ marginLeft: 'auto', marginRight: '7%' }}
+                style={{  marginLeft: '3.1%',marginTop:'1%' ,marginBottom:'1%'}}
 
             />
         </Flex>

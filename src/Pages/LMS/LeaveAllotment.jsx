@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Select, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, IconButton, Input, Select, Stack, Text } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import {
     Table,
@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 const LmsLeaveallotment = () => {
     const [classData, setClassData] = useState([])
     const [LDetails, setLDetails] = useState([])
@@ -48,7 +48,7 @@ const LmsLeaveallotment = () => {
             console.log(error)
         }
     }
- 
+
 
     const getData = async () => {
         console.log(LDetails);
@@ -57,22 +57,22 @@ const LmsLeaveallotment = () => {
             const staffData = await staffResponse.json();
             console.log(staffData);
             setClassData(staffData);
-    
+
             if (staffData.length > 0) {
                 const lvmResponse = await fetch('http://localhost:8090/api/LVM/All-Data');
                 const lvmData = await lvmResponse.json();
                 const filteredLvmData = lvmData.filter(elm => elm.checkBox === true);
                 console.log(filteredLvmData);
-    
+
                 const approvalResponse = await fetch('http://localhost:8090/api/Approval/All-Data');
                 const approvalData = await approvalResponse.json();
                 console.log(approvalData);
-    
+
                 const processedData = staffData.map(staff => {
                     const foundData = approvalData.find(
                         e => e.staffName === staff.name &&
-                             e.approver === staff.approver &&
-                             e.department === staff.department
+                            e.approver === staff.approver &&
+                            e.department === staff.department
                     );
                     if (foundData) {
                         foundData.leaveProvided = filteredLvmData.map(slot => {
@@ -95,7 +95,7 @@ const LmsLeaveallotment = () => {
                         };
                     }
                 });
-    console.log(processedData)
+                console.log(processedData)
                 setMainData(prevMainData => {
                     const uniqueResult = processedData.filter(
                         item => !prevMainData.some(data => data.staffId === item.staffId)
@@ -108,16 +108,16 @@ const LmsLeaveallotment = () => {
             console.log(error);
         }
     };
-    
+
 
     const goback = () => {
         navigate(-1)
     }
 
 
-   
 
-    
+
+
 
     // Handle change function for leaveProvided property
     const handleLeaveChange = (staffIndex, leaveIndex, value) => {
@@ -134,7 +134,7 @@ const LmsLeaveallotment = () => {
         console.log(mainData)
         console.log(mainData[editId])
         console.log(mainData[editId].id)
-       
+
         const dataFromAllotedTavle = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`)
         const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
         console.log(dataFromAllotedTavlejson)
@@ -169,7 +169,7 @@ const LmsLeaveallotment = () => {
                     },
                     body: JSON.stringify(mainData[editId])
                 });
-        
+
                 if (response.status >= 200 && response.status < 300) {
                     toast.success('Created successfully');
                     await getData();
@@ -195,15 +195,15 @@ const LmsLeaveallotment = () => {
     }, [])
     return <>
 
-<Stack minH="100vh" minW="100%" overflow="scroll" bgColor="white">
+        <Stack minH="100vh" minW="100%" overflow="scroll" bgColor="white">
             <Navbar />
-            <Icon as={ArrowLeftIcon}
-            size={35}
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
+            <IconButton as={IoArrowBack}
+                size="md"
+                cursor="pointer"
+                onClick={goback}
+                style={{ marginLeft: '2%' }}
 
-        />
+            />
             <ToastContainer />
             <Stack   >
                 <TableContainer>
@@ -339,7 +339,7 @@ const LmsLeaveallotment = () => {
                 </TableContainer>
             </Stack>
         </Stack>
-    
+
 
 
     </>

@@ -14,20 +14,26 @@ import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import Navbar from "../../components/Navbar"
 import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 
 
 const LeaveDefinition = () => {
     const [data, setData] = useState([])
     const getDetails = async () => {
         try {
-            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
-            const fdata = await data.json()
-            console.log(fdata)
-            setData(fdata)
+            const response = await fetch('http://localhost:8090/api/LVM/All-Data');
+    
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+    
+            const fdata = await response.json();
+            console.log(fdata);
+            setData(fdata);
         } catch (error) {
-            console.log(error)
+            console.error('Failed to fetch details:', error);
         }
-    }
+    };
     const [edit, setEdit] = useState(false)
 
 
@@ -80,7 +86,7 @@ const LeaveDefinition = () => {
             console.log(error)
         }
     }
-
+const navigate=useNavigate()
     const goback = () => {
         navigate(-1)
     }
@@ -89,10 +95,10 @@ const LeaveDefinition = () => {
         <Navbar/>
         <IconButton
         as={IoArrowBack}
-            size={35}
+            size="md"
             cursor="pointer"
             onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
+            style={{ marginLeft :'7%' }}
 
         />
         <ToastContainer/>

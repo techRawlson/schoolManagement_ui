@@ -55,19 +55,16 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 body: JSON.stringify(body)
             })
             if (users.status >= 200 && users.status < 300) {
-                const tim = await fetch(`http://localhost:8090/api-notifications/sendNotification `, {
+                const formData = new FormData();
+                formData.append('message', 'New notification');
+                formData.append('approverName', approver);
+                formData.append('staffName', localStorage.getItem("staffName"));
+                
+                const tim = await fetch(`http://localhost:8090/api/notifications`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: 'New notification',
-                        approverName: approver,
-                        timestamp: time,
-                        isRead: false,
-                        staffName: localStorage.getItem("staffName")
-                    })
-                })
+                    body: formData // No need to set 'Content-Type', the browser will set it to 'multipart/form-data'
+                });
+                
                 console.log(tim.status)
             }
 

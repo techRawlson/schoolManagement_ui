@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Heading, Input, Select, Stack, Text, useDisclosure } from "@chakra-ui/react"
+import { Badge, Box, Button, Heading, IconButton, Input, Select, Stack, Text, useDisclosure } from "@chakra-ui/react"
 import {
     Table,
     Thead,
@@ -26,7 +26,7 @@ import KeyValueTable from "./Table"
 import { ToastContainer, toast } from "react-toastify"
 import KeyValueTableAdmin from "./Tableadmin"
 import './LeaveApplication.css'
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 const LeaveApplication = () => {
     const navigate = useNavigate()
@@ -169,12 +169,12 @@ const reviewApplication=(id)=>{
     console.log(data)
     return <Stack height="100vh" width="100vw" >
         <Navbar />
-        <Icon as={ArrowLeftIcon}
+        <IconButton as={IoArrowBack}
 
-            size={35}
+            size="md"
             cursor="pointer"
             onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
+            style={{ marginLeft:  '7%' }}
 
         />
         <ToastContainer />

@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Heading, Input, Select, useDisclosure } from "@chakra-ui/react"
+import { Badge, Box, Button, Heading, IconButton, Input, Select, useDisclosure } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import {
     Table,
@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from "react"
 import KeyValueTableAdmin from "./Tableadmin"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 const LeaveApproval = () => {
     const navigate = useNavigate()
@@ -95,12 +95,12 @@ const LeaveApproval = () => {
 
     return <Box minH="100vh">
         <Navbar />
-        <Icon as={ArrowLeftIcon}
+        <IconButton as={IoArrowBack}
 
-size={35}
+size="md"
 cursor="pointer"
 onClick={goback}
-style={{ marginLeft: 'auto', marginRight: '7%' }}
+style={{ marginLeft: '7%' }}
 
 />
         <Box >

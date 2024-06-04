@@ -114,7 +114,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
         try {
             // Define the URL of the API endpoint
-            const url = 'http://localhost:9091/api/download/excel';
+            const url = 'http://localhost:9091/download/staff/excel';
 
             // Make a GET request to the API endpoint
             const response = await fetch(url, {

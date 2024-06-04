@@ -33,11 +33,11 @@ function Login({ setToken, setUser }) {
 
     try {
       const body = {
-        staffId: emailRef.current.value,
+        userId: emailRef.current.value,
         password: passRef.current.value,
       }
       console.log(body)
-      const data = await fetch('http://localhost:8083/api/staff-login/login ', {
+      const data = await fetch('http://localhost:8081/api/Login/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ function Login({ setToken, setUser }) {
         console.log("ok", data)
         localStorage.setItem("token", "fdata.username");
         localStorage.setItem("staffName", dataf.staffName);
-        localStorage.setItem("username", dataf.userId)
+        localStorage.setItem("username", emailRef.current.value)
         navigate("/dashboard");
         toast.success('welcome')
       } else {

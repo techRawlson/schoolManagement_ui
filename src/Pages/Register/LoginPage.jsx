@@ -7,7 +7,7 @@ const Loginpage = () => {
         <Navbar />
         <Box W="100vw" minH="100vh"  >
             <video className='videoTag' src="../public/school.mp4"  autoPlay loop muted />
-                
+              
               
          
 

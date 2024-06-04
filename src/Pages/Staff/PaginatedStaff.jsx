@@ -248,7 +248,8 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                 body: JSON.stringify({
                     userId: fdata.staffId,
                     password: fdata.password,
-                    role: 'staff'
+                    role: 'staff',
+                    staffName:fdata.name,
                 })
             })
             const LoginJson = await Login.json()

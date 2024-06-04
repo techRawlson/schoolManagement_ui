@@ -240,12 +240,28 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             const fdata = await data.json()
             console.log(fdata)
 
+            const Login = await fetch("http://localhost:8081/api/Login/create", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: fdata.staffId,
+                    password: fdata.password,
+                    role: 'staff'
+                })
+            })
+            const LoginJson = await Login.json()
+
 
             const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {
                 method: 'post',
                 body: formData2,
             })
             console.log(picture)
+
+
+
 
 
             if (data.status >= 200 && data.status < 300) {
@@ -381,7 +397,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                 <div>
                     <Navbar />
                     <ToastContainer />
-                 
+
                     <Stack width="95%" orientation="horizontal" marginX="auto">
                         <Flex justifyContent="space-between" width="100%" mt="1%">
                             <Flex alignItems="center" >

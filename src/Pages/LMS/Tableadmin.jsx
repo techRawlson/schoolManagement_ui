@@ -77,6 +77,14 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
             })
             const fdata = await data1.json()
             console.log(fdata)
+            //clearing all notifiations here
+            const response = await fetch(`http://localhost:8090/api/all/read`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                // body: JSON.stringify({ isRead: true }),
+              });
             if (data1.ok) {
                 toast.success("request updated")
                 await getLoggedInuserDetail()
@@ -112,9 +120,6 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     useEffect(() => {
         getUser()
     }, [])
-
-
-
 
 
 

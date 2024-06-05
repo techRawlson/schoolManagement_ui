@@ -72,7 +72,8 @@ const Navbar = () => {
           if (!notificationSet.has(data.id)) {
             // Add the new notification only if its ID is not already in the set
             const notifi = [...prevNotifications, data];
-            return notifi.sort((a, b) =>   new Date(b.timestamp) -new Date(a.timestamp)).filter((fil)=>fil.status==0);
+            // const filter=notifi
+            return notifi.sort((a, b) =>   new Date(b.timestamp) -new Date(a.timestamp)).filter((fil)=>fil.read==0);
           }
           return prevNotifications; // If the notification already exists, return the previous state
         });
@@ -240,7 +241,10 @@ const Navbar = () => {
               <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
                 <MenuButton paddingTop="80%">
                   <IoNotifications color="white" size="30" />
-                  <Box style={style} id='dot' ></Box>
+                  {
+                    notifications.length>0? <Box style={style} id='dot' ></Box>:''
+                  }
+                 
                 </MenuButton>
 
               </Box>

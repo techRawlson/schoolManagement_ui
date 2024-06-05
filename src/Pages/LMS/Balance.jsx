@@ -1,8 +1,8 @@
-import { Box, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useEditable } from "@chakra-ui/react"
+import { Box, IconButton, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useEditable } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { useEffect ,useState} from "react"
 import { useNavigate } from "react-router-dom"
-import { IoReturnUpBackOutline } from "react-icons/io5"
+import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
 
 const LeaveBalances=()=>{
     const navigate = useNavigate()
@@ -87,11 +87,11 @@ const LeaveBalances=()=>{
     }
     return <Stack   minH="100vh" minW="100vw" bgColor="white">
         <Navbar/>
-        <Icon as={ArrowLeftIcon}
-            size={35}
+        <IconButton as={IoArrowBack}
+            size="md"
             cursor="pointer"
             onClick={goback}
-            style={{ marginLeft: 'auto', marginRight: '7%' }}
+            style={{ marginLeft: '7%' }}
 
         />
         <Stack  minH="95vh" maxW="95vw" margin="0 auto">

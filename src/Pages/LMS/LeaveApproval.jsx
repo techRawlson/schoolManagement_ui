@@ -147,7 +147,7 @@ style={{ marginLeft: '7%' }}
                                     </Td> */}
                                         {/* onClick={() => adminPost(i)} */}
                                         <Td>
-                                            <Button bgColor="red"
+                                            <Button bgColor={elm.status==null?'red':'grey'}
                                                 onClick={() => {
                                                     adminAction(elm.id)
                                                 }}

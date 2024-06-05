@@ -329,7 +329,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     };
    
     return (
-        <div>
+        <div style={{width:'100vw'}}>
            
             <div className="pagination-items">
                 <div>

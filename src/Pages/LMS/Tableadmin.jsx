@@ -78,13 +78,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
             const fdata = await data1.json()
             console.log(fdata)
             //clearing all notifiations here
-            const response = await fetch(`http://localhost:8090/api/all/read`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                // body: JSON.stringify({ isRead: true }),
-              });
+
             if (data1.ok) {
                 toast.success("request updated")
                 await getLoggedInuserDetail()
@@ -126,6 +120,24 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     useEffect(() => {
         getCurrentDate()
     }, [])
+
+    const notificationClear = async () => {
+        const response = await fetch(`http://localhost:8090/api/all/read`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // body: JSON.stringify({ isRead: true }),
+        });
+    }
+
+
+
+
+
+
+
+
 
     return (
 
@@ -178,20 +190,20 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
                             <Td>{user.approvedBy}</Td>
                         </Tr>
                     }
-                    
-                        <Tr >
-                            <Td fontWeight="bold">{user.status} Comment</Td>
-                            <Td>
-                                {
-                                    user.status == null || user.status == '' ? <Input
-                                        type='text'
-                                        border="1px solid lightskyblue"
-                                        onChange={(e) => setApprovercomments(e.target.value)}
-                                        fontSize="18px"
-                                    /> : <>{user.approverComment}</>
-                                }</Td>
-                        </Tr>
-                    
+
+                    <Tr >
+                        <Td fontWeight="bold">{user.status} Comment</Td>
+                        <Td>
+                            {
+                                user.status == null || user.status == '' ? <Input
+                                    type='text'
+                                    border="1px solid lightskyblue"
+                                    onChange={(e) => setApprovercomments(e.target.value)}
+                                    fontSize="18px"
+                                /> : <>{user.approverComment}</>
+                            }</Td>
+                    </Tr>
+
 
                 </Tbody>
             </Table>

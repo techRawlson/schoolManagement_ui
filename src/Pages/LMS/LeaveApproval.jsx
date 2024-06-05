@@ -32,7 +32,7 @@ const LeaveApproval = () => {
     const [fire, setFire] = useState(false)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    
+
     const [user, setUser] = useState({})
     const getLoggedInuserDetail = async () => {
         try {
@@ -50,7 +50,7 @@ const LeaveApproval = () => {
     }
     const getDetails = async () => {
         try {
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -93,114 +93,145 @@ const LeaveApproval = () => {
         navigate(-1)
     }
 
+
+    
+    useEffect(() => {
+        // Define the asynchronous function
+        const onPageLoad = async () => {
+          console.log("User has reached the specific page");
+          
+          try {
+            const response = await fetch(`http://localhost:8090/api/all/read`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              // body: JSON.stringify({ isRead: true }), // Uncomment and use if the body is required
+            });
+    
+            if (response.ok) {
+              const data = await response.json();
+              console.log('Response data:', data);
+            } else {
+              console.error('Failed to fetch:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+    
+        // Call the asynchronous function
+        onPageLoad();
+      }, []); 
+
     return <Box minH="100vh">
         <Navbar />
         <IconButton as={IoArrowBack}
 
-size="md"
-cursor="pointer"
-onClick={goback}
-style={{ marginLeft: '7%' }}
+            size="md"
+            cursor="pointer"
+            onClick={goback}
+            style={{ marginLeft: '7%' }}
 
-/>
+        />
         <Box >
-        <TableContainer width="96vw" margin="0 auto">
-                    <Table size='lg'>
-                        <Thead>
-                            <Tr>
-                                <Th>Type</Th>
-                                <Th>Staff</Th>
-                                <Th>Staff Id</Th>
-                                <Th>Start Date</Th>
-                                <Th>End Date</Th>
-                                <Th>Total Days</Th>
-                                <Th>Status</Th>
-                                <Th> Approver</Th>
-                                <Th>Approved Date</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {
-                                data?.map((elm, i) => (
-                                    <Tr>
-                                        <Td>{elm.leaveType}</Td>
-                                        <Td>{elm.staffName}</Td>
-                                        <Td>{elm.staffId}</Td>
-                                        <Td>{elm.startDate}</Td>
-                                        <Td>{elm.endDate}</Td>
-                                        <Td>{elm.totalDays}</Td>
-                                        <Td>
-                                            {
-                                                elm.status == null ? '' : elm.status
-                                            }
-                                        </Td>
-                                        <Td className="font-size-22">{elm.approvedBy==null?elm.approver:elm.approvedBy}</Td>
+            <TableContainer width="96vw" margin="0 auto">
+                <Table size='lg'>
+                    <Thead>
+                        <Tr>
+                            <Th>Type</Th>
+                            <Th>Staff</Th>
+                            <Th>Staff Id</Th>
+                            <Th>Start Date</Th>
+                            <Th>End Date</Th>
+                            <Th>Total Days</Th>
+                            <Th>Status</Th>
+                            <Th> Approver</Th>
+                            <Th>Approved Date</Th>
+                            <Th>Action</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {
+                            data?.map((elm, i) => (
+                                <Tr>
+                                    <Td>{elm.leaveType}</Td>
+                                    <Td>{elm.staffName}</Td>
+                                    <Td>{elm.staffId}</Td>
+                                    <Td>{elm.startDate}</Td>
+                                    <Td>{elm.endDate}</Td>
+                                    <Td>{elm.totalDays}</Td>
+                                    <Td>
+                                        {
+                                            elm.status == null ? '' : elm.status
+                                        }
+                                    </Td>
+                                    <Td className="font-size-22">{elm.approvedBy == null ? elm.approver : elm.approvedBy}</Td>
 
-                                        <Td><Input type="date" value={elm.approvedDate} disabled /></Td>
-                                        {/* <Td>
+                                    <Td><Input type="date" value={elm.approvedDate} disabled /></Td>
+                                    {/* <Td>
                                         <Select onChange={(e) => handleChange(i, e.target.value)}>
                                             <option value="pending">Pending</option>
                                             <option value="Approved">Approved</option>
                                             <option value="Reject">Reject</option>
                                         </Select>
                                     </Td> */}
-                                        {/* onClick={() => adminPost(i)} */}
-                                        <Td>
-                                            <Button bgColor={elm.status==null?'red':'grey'}
-                                                onClick={() => {
-                                                    adminAction(elm.id)
-                                                }}
-                                            >Action</Button>
-                                            {/* <Button bgColor="red" onClick={()=>}>Action</Button> */}
-                                        </Td>
-                                    </Tr>
-                                ))
-                            }
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-                <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
-                {overlay}
-                <ModalContent>
-                    <ModalHeader>
-                        {/* <Badge colorScheme="red" fontSize="16px">  New Request</Badge> */}
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Table>
-                            <TableContainer>
-                                <Table variant='striped' colorScheme='teal'>
+                                    {/* onClick={() => adminPost(i)} */}
+                                    <Td>
+                                        <Button bgColor={elm.status == null ? 'red' : 'grey'}
+                                            onClick={() => {
+                                                adminAction(elm.id)
+                                            }}
+                                        >Action</Button>
+                                        {/* <Button bgColor="red" onClick={()=>}>Action</Button> */}
+                                    </Td>
+                                </Tr>
+                            ))
+                        }
+                    </Tbody>
+                </Table>
+            </TableContainer>
+            <>
+                <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
+                    {overlay}
+                    <ModalContent>
+                        <ModalHeader>
+                            {/* <Badge colorScheme="red" fontSize="16px">  New Request</Badge> */}
+                        </ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Table>
+                                <TableContainer>
+                                    <Table variant='striped' colorScheme='teal'>
 
-                                    <Tbody>
-                                       
-                                                <Box p={5}>
-                                                    <KeyValueTableAdmin
-                                                        applicantId={applicantId}
-                                                        data={user}
-                                                        fire={fire}
-                                                        onClose={onClose}
-                                                        setFire={setFire}
-                                                        getLoggedInuserDetail={getLoggedInuserDetail}
-                                                      
-                                                    />
-                                                </Box>
+                                        <Tbody>
+
+                                            <Box p={5}>
+                                                <KeyValueTableAdmin
+                                                    applicantId={applicantId}
+                                                    data={user}
+                                                    fire={fire}
+                                                    onClose={onClose}
+                                                    setFire={setFire}
+                                                    getLoggedInuserDetail={getLoggedInuserDetail}
+
+                                                />
+                                            </Box>
 
 
-                                    </Tbody>
+                                        </Tbody>
 
-                                </Table>
-                            </TableContainer>
-                        </Table>
-                    </ModalBody>
-                    
-                     
-                    
+                                    </Table>
+                                </TableContainer>
+                            </Table>
+                        </ModalBody>
 
-                </ModalContent>
-            </Modal>
-        </>
+
+
+
+                    </ModalContent>
+                </Modal>
+            </>
         </Box>
     </Box>
 }

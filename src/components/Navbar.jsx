@@ -72,7 +72,7 @@ const Navbar = () => {
           if (!notificationSet.has(data.id)) {
             // Add the new notification only if its ID is not already in the set
             const notifi = [...prevNotifications, data];
-            return notifi.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            return notifi.sort((a, b) =>   new Date(b.timestamp) -new Date(a.timestamp)).filter((fil)=>fil.status==0);
           }
           return prevNotifications; // If the notification already exists, return the previous state
         });
@@ -113,12 +113,12 @@ const Navbar = () => {
 
     console.log(id)
     try {
-      const response = await fetch(`http://localhost:8090/api/${id}/read`, {
+      const response = await fetch(`http://localhost:8090/api/all/read`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ isRead: true }),
+        // body: JSON.stringify({ isRead: true }),
       });
 
       if (!response.ok) {

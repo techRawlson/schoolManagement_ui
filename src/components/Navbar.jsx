@@ -189,7 +189,12 @@ const Navbar = () => {
                     <Avatar bg="red.500" />
                     <MenuButton padding="11% 0 0 0">
                       <IoNotifications color="white" size="32" />
-                      <Box style={mobileStyle} id='dot' ></Box>
+                      
+                         {
+                          notifications.length>0?  <Box style={mobileStyle} id='dot' ></Box>:''
+                        }
+                      
+                     
                     </MenuButton>
 
                   </Box>

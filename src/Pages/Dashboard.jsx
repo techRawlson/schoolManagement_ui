@@ -6,8 +6,8 @@ import { PiChalkboardTeacher } from "react-icons/pi";
 import { SlCalender } from "react-icons/sl";
 import { ImBooks } from "react-icons/im";
 import { MdCastForEducation } from "react-icons/md";
-
-
+import { FcTodoList } from "react-icons/fc";
+import { FcOvertime } from "react-icons/fc";
 import { FcLeave, FcReading } from "react-icons/fc";
 
 
@@ -92,7 +92,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <SlCalender size={95} />
+              <FcOvertime size={95} />
             </Stack>
           </CardBody>
 
@@ -103,7 +103,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <SlCalender size={95} />
+              <FcTodoList size={95} />
             </Stack>
           </CardBody>
 

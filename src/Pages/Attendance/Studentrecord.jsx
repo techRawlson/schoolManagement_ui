@@ -15,9 +15,11 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react'
+
 import PieChart from "./Piechart";
 import { IoArrowBack } from "react-icons/io5";
 const StudentRecord = () => {
+  const Role=localStorage.getItem('Role')
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
@@ -58,17 +60,17 @@ const StudentRecord = () => {
   // Extract unique class names
   const uniqueClassNames = [...new Set(detail.map(elm => elm.className))].sort();
 
-  const[uniqueStudent,setuniqueStudent]=useState([])
+  const [uniqueStudent, setuniqueStudent] = useState([])
   const [uniqueSections, setuniqueSections] = useState([])
   const [uniqueStudentRollNumber, setuniqueStudentRollNumber] = useState([])
-  
+
   //get classnames
 
 
 
   //get section names
   const getSectionNames = () => {
-    const sect = data.filter(elm =>  elm.className == classValue).map((cl) => cl.section)
+    const sect = data.filter(elm => elm.className == classValue).map((cl) => cl.section)
     console.log(sect)
     const uniqueSection = [...new Set(sect)]
     console.log(uniqueSection)
@@ -96,17 +98,17 @@ const StudentRecord = () => {
 
 
 
-//get Student names
-const getStudentNames = () => {
-  const sect = data.filter(elm => elm.className == classValue && elm.section == section).map((cl) => cl.name)
-  console.log(sect)
-  const uniqueSection = [...new Set(sect)]
-  console.log(uniqueSection)
-  setuniqueStudent(uniqueSection)
-}
-useEffect(() => {
-  getStudentNames()
-}, [section])
+  //get Student names
+  const getStudentNames = () => {
+    const sect = data.filter(elm => elm.className == classValue && elm.section == section).map((cl) => cl.name)
+    console.log(sect)
+    const uniqueSection = [...new Set(sect)]
+    console.log(uniqueSection)
+    setuniqueStudent(uniqueSection)
+  }
+  useEffect(() => {
+    getStudentNames()
+  }, [section])
 
 
 
@@ -126,70 +128,70 @@ useEffect(() => {
   });
 
 
-  const dataFilter = (data) => {
-    let filterData = data;
-    console.log(filterData)
+  // const dataFilter = (data) => {
+  //   let filterData = data;
+  //   console.log(filterData)
 
 
 
 
 
 
-    //filter for session
-    if (filters.year !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.session == filters.year
-      );
-    }
-    console.log(filterData)
-    //filter for class
-    if (filters.class !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.className === filters.class
-      );
-    }
-    console.log(filterData)
-    //filter for section
-    if (filters.section !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.section === filters.section
-      );
-    }
-    //filter for Student
-    if (filters.student !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.name === filters.student
-      );
-    } //filter for section
-    if (filters.sId !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.id === filters.sId
-      );
-    } //filter for section
-    if (filters.rollNumber !== "") {
-      filterData = filterData.filter(
-        (ele) => ele.rollNumber === filters.rollNumber
-      );
-    }
+  //   //filter for session
+  //   if (filters.year !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.session == filters.year
+  //     );
+  //   }
+  //   console.log(filterData)
+  //   //filter for class
+  //   if (filters.class !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.className === filters.class
+  //     );
+  //   }
+  //   console.log(filterData)
+  //   //filter for section
+  //   if (filters.section !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.section === filters.section
+  //     );
+  //   }
+  //   //filter for Student
+  //   if (filters.student !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.name === filters.student
+  //     );
+  //   } //filter for section
+  //   if (filters.sId !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.id === filters.sId
+  //     );
+  //   } //filter for section
+  //   if (filters.rollNumber !== "") {
+  //     filterData = filterData.filter(
+  //       (ele) => ele.rollNumber === filters.rollNumber
+  //     );
+  //   }
 
-    console.log(filteredData)
-
-
+  //   console.log(filteredData)
 
 
 
 
 
 
-    console.log(filterData)
 
-    if (filters.class !== "" && filters.year !== "" && filters.section !== "" && filters.student !== "" && filters.sId !== '' && filters.rollNumber !== '' && filters.fDate !== '' && filters.tDate !== '') {
 
-      console.log("time to fire the api")
+  //   console.log(filterData)
 
-    }
+  //   if (filters.class !== "" && filters.year !== "" && filters.section !== "" && filters.student !== "" && filters.sId !== '' && filters.rollNumber !== '' && filters.fDate !== '' && filters.tDate !== '') {
 
-  };
+  //     console.log("time to fire the api")
+
+  //   }
+
+  // };
 
   //filter change for class  query
   const handleFilterClass = (value) => {
@@ -422,35 +424,70 @@ useEffect(() => {
   }, [filters]);
 
 
-  useEffect( () => {
-     getData()
-     getDetails()
+  useEffect(() => {
+    getData()
+    getDetails()
 
   }, [])
 
-
+  const navigate = useNavigate()
   const goback = () => {
     navigate(-1)
-}
+  }
 
 
 
 
+  const showStudentTimeTable = async () => {
+    try {
+      const studentId = localStorage.getItem('username');
+      const response = await fetch(`http://localhost:8082/api/students/id/${studentId}`);
+      const dataJson = await response.json();
+      console.log(dataJson);
+      // setSession(dataJson.session);
+      setStudent(dataJson.name)
+      setClassValue(dataJson.className);
+      setSection(dataJson.section);
+      setRollNumber(dataJson.rollNumber)
+      setFilters((prev) => ({
+        ...prev,
+        // classData: false,
+        student:dataJson.name,
+        section: dataJson.section,
+        class: dataJson.className,
+        rollNumber: dataJson.rollNumber,
+      }));
+      await getAttendance()
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    if (Role == 'student') {
+      const fetchData = async () => {
+        await showStudentTimeTable();
+        // await getData()
+      };
+      fetchData();
+    }
+
+  }, []);
 
 
   return <Stack width="100vw">
     <Navbar />
 
     <Flex >
-            <IconButton as={IoArrowBack}
-                background="none"
-                cursor="pointer"
-                onClick={goback}
-                style={{  marginLeft: '3%' }}
+      <IconButton as={IoArrowBack}
+        background="none"
+        cursor="pointer"
+        onClick={goback}
+        style={{ marginLeft: '3%' }}
 
-            />
-        </Flex>
+      />
+    </Flex>
     <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>
 
@@ -465,6 +502,7 @@ useEffect(() => {
               value={classValue}
               onChange={(e) => handleFilterClass(e.target.value)}
               placeholder="Select a Class"
+              disabled={Role=='student'?true:false}
 
             />
             <datalist id="class">
@@ -481,6 +519,7 @@ useEffect(() => {
               value={section}
               onChange={(e) => handleFiltersection(e.target.value)}
               placeholder="Select a Section"
+              disabled={Role=='student'?true:false}
 
             />
             <datalist id="section">
@@ -498,6 +537,7 @@ useEffect(() => {
               value={student}
               onChange={(e) => handleFilterStudent(e.target.value)}
               placeholder="Select a Student"
+              disabled={Role=='student'?true:false}
 
             />
             <datalist id="students">
@@ -515,6 +555,7 @@ useEffect(() => {
               value={rollNumber}
               onChange={(e) => handleFilterRollNumber(e.target.value)}
               placeholder="Select a Roll Number"
+              disabled={Role=='student'?true:false}
 
             />
             <datalist id="rollNumber">

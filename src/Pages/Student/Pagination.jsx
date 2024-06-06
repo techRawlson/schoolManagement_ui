@@ -245,6 +245,18 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                 })
                 console.log(picture)
             }
+            const Login = await fetch("http://localhost:8081/api/Login/create", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: fdata.studentId,
+                    password: fdata.password,
+                    role: 'student',
+                })
+            })
+            const LoginJson = await Login.json()
             if (data.status >= 200 && data.status < 300) {
                 await getStudentData()
                 toast.success("Student created successfully");
@@ -392,7 +404,7 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                                 <Thead>
                                     <Tr maxWidth="10%" border="1px solid">
                                                     <Th border="1px solid">Sr.No.</Th>
-                                                    <Th border="1px solid">Student Id</Th>        
+                                                           
                                         <Th border="1px solid">Enrollment No.</Th>
                                         <Th border="1px solid">Name</Th>
                                         <Th border="1px solid">Father Name</Th>
@@ -409,7 +421,7 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                                         classData?.slice(startIndex, endIndex).map((elm, i) => (
                                             <Tr key={i} border="1px solid">
                                                 <Td border="1px solid">{startIndex + i + 1}</Td>
-                                                <Td border="1px solid">{startIndex + i + 1}</Td>
+                                                
                                                 <Td border="1px solid">{elm.enrollmentNumber}</Td>
                                                 <Td border="1px solid">
                                                     <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/studentdetails/${elm.id}`}>

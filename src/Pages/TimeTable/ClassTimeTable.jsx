@@ -20,6 +20,7 @@ import Stafftimetable from "./StaffTimeTable";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 const Classtimetable = () => {
+    const Role=localStorage.getItem('Role')
     const [data, setData] = useState([])
     console.log(data)
 
@@ -426,6 +427,9 @@ const Classtimetable = () => {
     console.log(uniqueClassNames)
     console.log(detail)
     const dataFilter = (data) => {
+        console.log(section)
+        console.log(session)
+        console.log(classValue)
         let filterData = data;
         console.log(filterData)
         const modifiedData = Object.values(data.reduce((acc, obj) => {
@@ -456,7 +460,7 @@ const Classtimetable = () => {
         setModifiedData(modifiedData)
 
 
-
+console.log(filters)
         //filter for session
         if (filters.year !== "") {
             filterData = filterData.filter(
@@ -481,7 +485,7 @@ const Classtimetable = () => {
         console.log(filterData)
 
         if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
-
+console.log("here")
             if (filterData.length > 0) {
                 setcreate(true)
                 setDis(false)
@@ -562,10 +566,6 @@ const Classtimetable = () => {
 
 
 
-    useEffect(() => {
-        dataFilter(data);
-        //console.log("trigeered")
-    }, [filters, data]);
 
     const [daysMap, setDaysMap] = useState([])
 
@@ -722,7 +722,7 @@ const Classtimetable = () => {
 
 
 
-   
+
 
 
 
@@ -782,10 +782,7 @@ const Classtimetable = () => {
     }
 
 
-    useEffect(() => {
-        disableTest()
-    }
-        , [lecture])
+
 
 
     const goback = () => {
@@ -838,6 +835,59 @@ const Classtimetable = () => {
         padding: '8px',
         textAlign: 'left'
     };
+
+
+    useEffect(() => {
+        disableTest()
+    }
+        , [lecture])
+
+
+
+
+    const showStudentTimeTable = async () => {
+        try {
+            const studentId = localStorage.getItem('username');
+            const response = await fetch(`http://localhost:8082/api/students/id/${studentId}`);
+            const dataJson = await response.json();
+            console.log(dataJson);
+            setSession(dataJson.session);
+            setClassValue(dataJson.className);
+            setSection(dataJson.section);
+            setFilters((prev) => ({
+                ...prev,
+                // classData: false,
+                year: dataJson.session,
+                class:dataJson.className,
+                section:dataJson.section
+            }));
+            await getData()
+            await dataFilter(data)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if(Role=='student'){
+            const fetchData = async () => {
+                await showStudentTimeTable();
+                // await getData()
+            };
+            fetchData(); 
+        }
+        
+    }, []);
+
+
+
+    useEffect(() => {
+        dataFilter(data);
+        //console.log("trigeered")
+    }, [filters, data]);
+
+
+
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -845,18 +895,18 @@ const Classtimetable = () => {
                 size="md"
                 cursor="pointer"
                 onClick={goback}
-                style={{  marginLeft: '3.1%',marginTop:'1%' ,marginBottom:'1%'}}
+                style={{ marginLeft: '3.1%', marginTop: '1%', marginBottom: '1%' }}
 
             />
         </Flex>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"
-                direction="column" width="65vw" maxW="80vw">
-                <Flex justifyContent='space-around' alignItems='center'>
+                direction="column" width={Role=='student'?'100vw':'65vw'} maxW="100vw">
+                <Flex justifyContent='space-around' alignItems='center' >
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Session</FormLabel>
-                        <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)}>
+                        <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)} disabled={Role=='student'?true:false}>
                             <option>Select</option>
                             {uniqueSessions?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
@@ -865,7 +915,7 @@ const Classtimetable = () => {
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Class</FormLabel>
-                        <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)}>
+                        <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)} disabled={Role=='student'?true:false}>
                             <option>Select</option>
                             {uniqueClassNames?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
@@ -874,14 +924,15 @@ const Classtimetable = () => {
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Section</FormLabel>
-                        <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)}>
+                        <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)} disabled={Role=='student'?true:false}>
                             <option>Select</option>
                             {uniqueSections?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
+                    {
+                        Role=='student'?"":<FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
                         {
                             dis ? <div>
                                 {createNew ?
@@ -905,6 +956,8 @@ const Classtimetable = () => {
 
 
                     </FormControl>
+                    }
+                    
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
                     <Table size='sm' variant="simple" style={tableStyle}>
@@ -934,12 +987,7 @@ const Classtimetable = () => {
 
 
                         {filteredData?.map((elm, i) => {
-                            // Split the day names into parts
-                            const mondayParts = splitDayName(elm.monday);
-                            const tuesdayParts = splitDayName(elm.tuesday);
-                            const wednesdayParts = splitDayName(elm.wednesday);
-                            const thursdayParts = splitDayName(elm.thursday);
-                            const fridayParts = splitDayName(elm.friday);
+
                             // Function to save changes
                             const saveChanges = async (id) => {
                                 const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
@@ -1081,7 +1129,7 @@ const Classtimetable = () => {
                                 console.log(data)
                                 console.log('reached')
                                 try {
-                                
+
                                     setMondayTeacher('')
                                     setMondaySubject('')
                                     setMondayStore([])
@@ -1302,7 +1350,7 @@ const Classtimetable = () => {
 
 
 
-                    
+
                                         {
                                             update ? <Td>
                                                 {editMode == elm.id ? (
@@ -1475,47 +1523,58 @@ const Classtimetable = () => {
                     </Table>
 
                     {
-                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.Please click "Add New" button to add time table for this class.</Text> : ''
+                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.
+                        {
+                            ROle=='student'?"":'Please click "Add New" button to add time table for this class.'
+                        }
+                        </Text> : ''
                     }
 
                 </TableContainer>
-
-                <Stack marginLeft="85%" >
+                {
+                    Role=='student'?'': <Stack marginLeft="85%" >
                     {
                         AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
 
                     }
 
                 </Stack>
+                }
+
+               
 
             </Flex>
 
-            <Flex margin='0.5% 0 0 5%' width="30vw">
-                <TableContainer>
-                    <Table size='sm' variant="simple">
-                        <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue.toUpperCase()} </caption>
-                        <Thead>
-                            <Tr>
-                                <Th>S.No</Th>
-                                <Th>Subjects</Th>
-                                <Th>Total Lectures</Th>
 
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {Object.entries(totalSubjects).map(([subject, count], i) => (
-                                <Tr key={subject}>
-                                    <Td>{i + 1}</Td>
-                                    <Td>{subject}</Td>
-                                    <Td>{count}</Td>
-                                </Tr>
-                            ))}
+{
+    Role=='student'?"":<Flex margin='0.5% 0 0 5%' width="30vw">
+    <TableContainer>
+        <Table size='sm' variant="simple">
+            <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue.toUpperCase()} </caption>
+            <Thead>
+                <Tr>
+                    <Th>S.No</Th>
+                    <Th>Subjects</Th>
+                    <Th>Total Lectures</Th>
+
+                </Tr>
+            </Thead>
+            <Tbody>
+                {Object.entries(totalSubjects).map(([subject, count], i) => (
+                    <Tr key={subject}>
+                        <Td>{i + 1}</Td>
+                        <Td>{subject}</Td>
+                        <Td>{count}</Td>
+                    </Tr>
+                ))}
 
 
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </Flex>
+            </Tbody>
+        </Table>
+    </TableContainer>
+</Flex>
+}
+            
 
         </Stack>
     </div>

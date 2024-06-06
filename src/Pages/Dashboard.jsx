@@ -26,9 +26,9 @@ const Dashboard = () => {
     }
   }
 
+  const role = localStorage.getItem("Role");
 
-
-
+  console.log(role)
 
 
 
@@ -37,44 +37,56 @@ const Dashboard = () => {
       <Navbar />
 
       <SimpleGrid templateColumns='1fr 1fr 1fr' margin="0" >
-        <Card cursor="pointer" onClick={() => nextPage("student")}>
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Student </Heading>
-          </CardHeader>
-          <CardBody>
 
-            <Stack m={18} spacing={4} display="flex"
-              alignItems="center"
-              justifyContent="center">
-              <FcReading size={100} />
-            </Stack>
+        {
+          role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("student")}>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Student </Heading>
+            </CardHeader>
+            <CardBody>
 
-          </CardBody>
+              <Stack m={18} spacing={4} display="flex"
+                alignItems="center"
+                justifyContent="center">
+                <FcReading size={100} />
+              </Stack>
 
-        </Card>
-        <Card cursor="pointer" onClick={() => nextPage("staff")}>
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Staff</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <PiChalkboardTeacher size={100} />
-            </Stack>
-          </CardBody>
+            </CardBody>
 
-        </Card>
-        <Card cursor="pointer" onClick={() => nextPage("subjects")}>
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Subjects</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <ImBooks size={100} />
-            </Stack>
-          </CardBody>
+          </Card>
+        }
 
-        </Card>
-        <Card cursor="pointer" onClick={() => nextPage("timetable")}>
+
+        {
+          role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("staff")}>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Staff</Heading>
+            </CardHeader>
+            <CardBody>
+              <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                <PiChalkboardTeacher size={100} />
+              </Stack>
+            </CardBody>
+
+          </Card>
+        }
+        {
+          role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("subjects")}>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Subjects</Heading>
+            </CardHeader>
+            <CardBody>
+              <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                <ImBooks size={100} />
+              </Stack>
+            </CardBody>
+
+          </Card>
+        }
+
+
+
+        <Card cursor="pointer" onClick={() => nextPage(role=='student'?'classtimetable':"timetable")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Time Table</Heading>
           </CardHeader>
@@ -85,7 +97,7 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("attendance")}>
+        <Card cursor="pointer" onClick={() => nextPage(role=='student'?'studentrecord':"attendance")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Attendance</Heading>
           </CardHeader>
@@ -96,7 +108,8 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("lms")}>
+        {
+          role == 'student' ? "" :<Card cursor="pointer" onClick={() => nextPage("lms")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> LMS</Heading>
           </CardHeader>
@@ -108,6 +121,8 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
+        }
+        
 
 
 

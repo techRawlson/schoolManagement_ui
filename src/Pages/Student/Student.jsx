@@ -147,7 +147,7 @@ const Student = () => {
 
 
 
-
+console.log(classData)
 
 
     //form validation using formik

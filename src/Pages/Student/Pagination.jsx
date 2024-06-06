@@ -235,14 +235,17 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                 body: formData
             });
             const fdata = await data.json()
-            if (fdata.status >= 200 && fdata.status < 300) {
+            console.log(fdata)
+            console.log(data.status)
+            console.log(fdata.status)
+            if (data.status >= 200 && data.status < 300) {
                 const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
                     method: 'post',
                     body: formData2,
                 })
                 console.log(picture)
             }
-            if (data.ok) {
+            if (data.status >= 200 && data.status < 300) {
                 await getStudentData()
                 toast.success("Student created successfully");
                 setOpen(false)

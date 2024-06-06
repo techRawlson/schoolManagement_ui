@@ -50,16 +50,16 @@ const Student = () => {
         const length = val.length;
         console.log(length)
         console.log(classData)
-       
+
         const searchData =
             // (filters.classData ? classData : filteredData)
             classData.filter((ele) => {
-              
+
                 if (ele.name) { // Check if ele.name is not null
                     let searchQuery = ele.name.substring(0, length).toLowerCase();
                     return searchQuery === val;
                 }
-                
+
                 return false; // Return false if ele.name is null
             })
         console.log(searchData)
@@ -68,14 +68,14 @@ const Student = () => {
     //filteratrion part
     const dataFilter = () => {
         let filterData = classData;
-    
+
         //filter for class
         if (filters.class !== "") {
             filterData = filterData.filter(
                 (ele) => ele.className === filters.class
             );
         }
-       
+
         //filter for section
         if (filters.section !== "") {
             filterData = filterData.filter(
@@ -150,14 +150,14 @@ const Student = () => {
 
 
 
-//form validation using formik
+    //form validation using formik
 
 
     const itemsPerPage = 10;
     return (
         <Stack minH="100vh" >
             <Pagination
-
+                getStudentData={getData}
                 itemsPerPage={itemsPerPage}
                 totalItems={filters.classData ? classData.length : filteredData.length}
                 classData={filters.classData ? classData : filteredData}

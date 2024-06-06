@@ -46,7 +46,7 @@ import { IoArrowBack } from "react-icons/io5";
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 // import Student from '../Pages/Student';
-function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
     const [isOpen, setOpen] = useState(false)
@@ -173,7 +173,12 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
     const emailRef = useRef()
     const rollRef = useRef()
     const enrollRef = useRef()
-    const image = useRef()
+    const[image,setImage]=useState()
+    const handleChange = (e) => {
+        const file = e.target.files[0];
+        console.log("-----testing---", file);
+        setImage(file);
+      };
 
     let body;
 
@@ -217,8 +222,10 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
 
         // Append the image file to the FormData object
         let formData2 = new FormData()
-        const file = image.current.files[0];
+        const file = image
+        console.log(file)
         if (file) {
+            console.log(file)
             formData2.append('file', file);
         }
 
@@ -236,6 +243,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                 console.log(picture)
             }
             if (data.ok) {
+                await getStudentData()
                 toast.success("Student created successfully");
                 setOpen(false)
             } else {
@@ -381,6 +389,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                 <Thead>
                                     <Tr maxWidth="10%" border="1px solid">
                                                     <Th border="1px solid">Sr.No.</Th>
+                                                    <Th border="1px solid">Student Id</Th>        
                                         <Th border="1px solid">Enrollment No.</Th>
                                         <Th border="1px solid">Name</Th>
                                         <Th border="1px solid">Father Name</Th>
@@ -396,6 +405,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                     {
                                         classData?.slice(startIndex, endIndex).map((elm, i) => (
                                             <Tr key={i} border="1px solid">
+                                                <Td border="1px solid">{startIndex + i + 1}</Td>
                                                 <Td border="1px solid">{startIndex + i + 1}</Td>
                                                 <Td border="1px solid">{elm.enrollmentNumber}</Td>
                                                 <Td border="1px solid">
@@ -641,7 +651,7 @@ function Pagination({ searchRef, handleFilterSearch, itemsPerPage, totalItems, o
                                             </FormControl>
                                             <FormControl isRequired maxW="45%">
                                                 <FormLabel>Upload Image</FormLabel>
-                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' onChange={fileChange} />
+                                                <Input placeholder='Upload Image' type='file'  accept='image/jpeg' onChange={handleChange} />
                                             </FormControl>
                                             <FormControl isRequired>
                                                 <FormLabel>Session</FormLabel>

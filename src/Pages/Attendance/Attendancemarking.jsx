@@ -645,9 +645,11 @@ const AttendanceMarking = ({ user }) => {
         overflow: 'hidden',    // Hide content overflow within cells
         whiteSpace: 'nowrap',  // Prevent line breaks within cells
         textOverflow: 'ellipsis',// Display ellipsis (...) for overflowed text
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '24px',
+        textAlign: 'center', 
     };
-
+    
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -662,7 +664,7 @@ const AttendanceMarking = ({ user }) => {
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"
-                direction="column" width="65vw" maxW="80vw">
+                direction="column" width="100%">
                 <Flex justifyContent='space-around' alignItems='center'>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel textAlign="center">Session</FormLabel>
@@ -694,8 +696,8 @@ const AttendanceMarking = ({ user }) => {
                     <FormControl isRequired alignItems="center" m="1">
                         <FormLabel textAlign="center">Choose Slot</FormLabel >
                         <Flex direction='row' justifyContent="space-around" >
-                            <Button colorScheme={slot == '1st' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('1st')}>1st</Button>
-                            <Button colorScheme={slot == '2nd' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('2nd')} >2nd</Button>
+                            <Button colorScheme={slot == '1st' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('1st')} width="30%">first</Button>
+                            <Button colorScheme={slot == '2nd' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('2nd')} width="30%">second</Button>
                         </Flex>
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center">
@@ -708,7 +710,7 @@ const AttendanceMarking = ({ user }) => {
 
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
-                    <Table size='sm' variant="simple" style={tableStyle}>
+                    <Table size='xl' variant="simple" style={tableStyle}>
 
                         {
                             filteredData?.length > 0 || createNew == true ?
@@ -760,22 +762,54 @@ const AttendanceMarking = ({ user }) => {
                                     {filteredData.map((item, index) => (
 
 
+                                        // <tr key={index}>
+                                        //     <td style={cellStyle}>{index + 1}</td>
+                                        //     <td style={cellStyle}>{item.studentId}</td>
+                                        //     <td style={cellStyle}>{item.studentName}</td>
+                                        //     <td style={cellStyle}>{item.fathersName}</td>
+                                        //     <td style={cellStyle}>{item.rollNumber}</td>
+                                        //     <td style={cellStyle}  bgColor={ Attendance.length > 0 ? item.attendance == 'true' ? 'green' : 'red':''}>
+                                        //         {
+                                        //             Attendance.length > 0 ? item.attendance == 'true' ? 'Present' : 'Absent' :  <Checkbox
+                                        //             isChecked={item.attendance === 'true'}
+                                        //             onChange={(event) => changeCheckBox(item, index, event)}
+                                        //             size="lg"
+                                        //         />
+                                        //         }
+                                        //     </td>
+                                        // </tr>
                                         <tr key={index}>
-                                            <td style={cellStyle}>{index + 1}</td>
-                                            <td style={cellStyle}>{item.studentId}</td>
-                                            <td style={cellStyle}>{item.studentName}</td>
-                                            <td style={cellStyle}>{item.fathersName}</td>
-                                            <td style={cellStyle}>{item.rollNumber}</td>
-                                            <td style={cellStyle}  bgColor={ Attendance.length > 0 ? item.attendance == 'true' ? 'green' : 'red':''}>
-                                                {
-                                                    Attendance.length > 0 ? item.attendance == 'true' ? 'Present' : 'Absent' :  <Checkbox
-                                                    isChecked={item.attendance === 'true'}
-                                                    onChange={(event) => changeCheckBox(item, index, event)}
-                                                    size="lg"
-                                                />
-                                                }
-                                            </td>
-                                        </tr>
+                                        <td style={cellStyle}>{index + 1}</td>
+                                        <td style={cellStyle}>{item.studentId}</td>
+                                        <td style={cellStyle}>{item.studentName}</td>
+                                        <td style={cellStyle}>{item.fathersName}</td>
+                                        <td style={cellStyle}>{item.rollNumber}</td>
+                                        <td
+                                          style={{
+                                            ...cellStyle,
+                                            backgroundColor:
+                                              Attendance.length > 0
+                                                ? item.attendance === 'true'
+                                                  ? 'green'
+                                                  : 'red'
+                                                : '',
+                                          }}
+                                        >
+                                          {Attendance.length > 0 ? (
+                                            item.attendance === 'true' ? (
+                                              'Present'
+                                            ) : (
+                                              'Absent'
+                                            )
+                                          ) : (
+                                            <Checkbox
+                                              isChecked={item.attendance === 'true'}
+                                              onChange={(event) => changeCheckBox(item, index, event)}
+                                              size="lg"
+                                            />
+                                          )}
+                                        </td>
+                                      </tr>
 
 
                                     ))}

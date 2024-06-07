@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 const ClassRecord = () => {
     const navigate = useNavigate()
     const [session, setSession] = useState();
+    const [showMsg, setShowMsg] = useState(false)
     const [classValue, setClassValue] = useState('');
     const [section, setSection] = useState('');
     const [detail, setDetail,] = useState([])
@@ -267,6 +268,8 @@ const ClassRecord = () => {
                 const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/range/${fDate}/${tDate}`);
                 const fdata = await data.json();
                 console.log(fdata)
+
+
                 const fdata1 = removeDuplicatesAndMerge(fdata)
                 console.log(fdata1)
                 const arr = []
@@ -284,12 +287,21 @@ const ClassRecord = () => {
                 setuniqueSortedDates(sorted)
                 setAttendance(fdata1)
 
+                console.log(fdata1)
                 const datesBetween = getDatesBetween(fDate, tDate);
                 const formattedDates = datesBetween.map(date => date.toISOString().split('T')[0]);
                 console.log(formattedDates)
                 setTotalDates(formattedDates)
+                if (fdata1.length > 0) {
+                    setShowMsg(false)
+                } else {
+                    setShowMsg(true)
+                }
 
-            
+
+
+
+
             } catch (error) {
                 console.log(error)
             }
@@ -364,7 +376,7 @@ const ClassRecord = () => {
                 background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{  marginLeft: '3%' }}
+                style={{ marginLeft: '3%' }}
 
             />
         </Flex>
@@ -477,7 +489,7 @@ const ClassRecord = () => {
                                                 {totalDates.map((att, i) => {
 
                                                     if (!item.date.find((d) => d == att)) {
-                                                
+
                                                         return (
                                                             <Td style={cellStyle} direction="row" key={i} textAlign="center">
                                                                 <Flex alignItems="center" textAlign="end" justifyContent="space-around">
@@ -551,6 +563,9 @@ const ClassRecord = () => {
                             </Tbody>
                         ) : ''}
 
+                        {
+                            showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red', fontSize: '24px' }}>it seems that time table does not exist for the above class selection..</Text> : ''
+                        }
                     </Table>
                 </TableContainer>
             </Flex>

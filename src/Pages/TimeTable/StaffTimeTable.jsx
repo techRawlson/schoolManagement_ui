@@ -265,6 +265,61 @@ const Stafftimetable = () => {
     const goback = () => {
         navigate(-1)
     }
+
+
+
+    const Role = localStorage.getItem("Role")
+    const staffId = localStorage.getItem("username")
+
+    const showStudentTimeTable = async () => {
+        try {
+            const studentId = localStorage.getItem('username');
+            const response = await fetch(`http://localhost:8083/api/staff/staff/${staffId}`);
+            const dataJson = await response.json();
+            console.log(dataJson);
+
+            setEId(staffId)
+            setTeacher(dataJson.name)
+
+            setFilters((prev) => ({
+                ...prev,
+                // classData: false,
+                eId:staffId,
+                teacher: dataJson.name
+            }));
+            await getData()
+            await dataFilter(data)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (Role == 'staff') {
+            const fetchData = async () => {
+                await showStudentTimeTable();
+                // await getData()
+            };
+            fetchData();
+        }
+
+    }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return <div style={{ minHeight: '100vh', Width: '100vw' }}>
         <Navbar />
         <Flex >
@@ -272,11 +327,11 @@ const Stafftimetable = () => {
                 background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{  marginLeft: '3%' }}
+                style={{ marginLeft: '3%' }}
 
             />
         </Flex>
-        
+
         <Stack style={{ maxWidth: '70vw', margin: '0 auto' }}>
             <Flex alignItems='center' >
                 <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="20%">
@@ -306,13 +361,21 @@ const Stafftimetable = () => {
 
                 <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="20%">
                     <FormLabel>Employee Id</FormLabel>
-                    <Select isRequired value={eId} onChange={(e) => handleFilterEmpId(e.target.value)}>
-                        <option>Select</option>
-                        <option>1</option>
-                        <option>2</option>
+                    {
+                        Role == 'staff' ? <Select isRequired value={eId} >
+                            <option value={staffId}>{staffId}</option>
 
 
-                    </Select>
+
+                        </Select> : <Select isRequired value={eId} onChange={(e) => handleFilterEmpId(e.target.value)}>
+                            <option>Select</option>
+                            <option>1</option>
+                            <option>2</option>
+
+
+                        </Select>
+                    }
+
                 </FormControl>
 
 

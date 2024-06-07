@@ -15,7 +15,15 @@ const Navbar = () => {
   const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
 
-
+  
+  const nextPage = (data) => {
+    try {
+      console.log("data")
+      navigate(`/${data}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
 
@@ -179,14 +187,14 @@ const Navbar = () => {
               <span>
                 <FiLogOut onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '.08rem' }} />
               </span>
-              <Text textAlign="center" >
+              <Text textAlign="center"  >
                 Student Management System
               </Text>
 
               <Menu>
                 <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" flexDir="column">
                   <Box display="flex" gap="1rem" alignItems="center" >
-                    <Avatar bg="red.500" />
+                    <Avatar bg="red.500" onClick={()=>nextPage("hello")}/>
                     <MenuButton padding="11% 0 0 0">
                       <IoNotifications color="white" size="32" />
                       
@@ -198,7 +206,7 @@ const Navbar = () => {
                     </MenuButton>
 
                   </Box>
-                  <span style={{ color: 'white' }}>{person}</span>
+                  <span style={{ color: 'white' }} >{person}</span>
 
 
 

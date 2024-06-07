@@ -932,7 +932,7 @@ console.log("here")
                         </Select>
                     </FormControl>
                     {
-                        Role=='student'?"":<FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
+                        Role=='student'?"":Role=='staff'?'': <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
                         {
                             dis ? <div>
                                 {createNew ?
@@ -956,6 +956,7 @@ console.log("here")
 
 
                     </FormControl>
+                       
                     }
                     
                 </Flex>
@@ -1525,14 +1526,14 @@ console.log("here")
                     {
                         showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.
                         {
-                            ROle=='student'?"":'Please click "Add New" button to add time table for this class.'
+                            Role=='student'?"":'Please click "Add New" button to add time table for this class.'
                         }
                         </Text> : ''
                     }
 
                 </TableContainer>
                 {
-                    Role=='student'?'': <Stack marginLeft="85%" >
+                    Role=='student'?'':Role=='staff'?'': <Stack marginLeft="85%" >
                     {
                         AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
 

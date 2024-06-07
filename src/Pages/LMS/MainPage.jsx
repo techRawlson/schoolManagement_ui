@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { IoArrowBack } from "react-icons/io5"
 
 const Main = () => {
+    const Role = localStorage.getItem("Role")
     const navigate = useNavigate()
     const goback = () => {
         navigate(-1)
@@ -34,41 +35,46 @@ const Main = () => {
             padding="5%"
             flexWrap="wrap"
         >
-            <Card
-                cursor="pointer"
-                onClick={() => nextPage("lmsdefinition")}
-                width={['90%', '45%', '30%', '18%']}
-                height={['40%', '40%', '50%', '55%']}
-                bgColor="#3B8FF2"
-                margin="1%"
-            >
-                <CardHeader>
-                    <Heading size="md" textAlign="center">LEAVE DEFINITION</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-                        <MdCastForEducation size={95} />
-                    </Stack>
-                </CardBody>
-            </Card>
+            {
+                Role == 'staff' ? "" : <Card
+                    cursor="pointer"
+                    onClick={() => nextPage("lmsdefinition")}
+                    width={['90%', '45%', '30%', '18%']}
+                    height={['40%', '40%', '50%', '55%']}
+                    bgColor="#3B8FF2"
+                    margin="1%"
+                >
+                    <CardHeader>
+                        <Heading size="md" textAlign="center">LEAVE DEFINITION</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                            <MdCastForEducation size={95} />
+                        </Stack>
+                    </CardBody>
+                </Card>
+            }
 
-            <Card
-                cursor="pointer"
-                onClick={() => nextPage("lmsleaveallotment")}
-                width={['90%', '45%', '30%', '18%']}
-                height={['40%', '40%', '50%', '55%']}
-                bgColor="#F37A7E"
-                margin="1%"
-            >
-                <CardHeader>
-                    <Heading size="md" textAlign="center">LEAVES ALLOTMENT</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-                        <MdCastForEducation size={95} />
-                    </Stack>
-                </CardBody>
-            </Card>
+            {
+                Role == 'staff' ? "" : <Card
+                    cursor="pointer"
+                    onClick={() => nextPage("lmsleaveallotment")}
+                    width={['90%', '45%', '30%', '18%']}
+                    height={['40%', '40%', '50%', '55%']}
+                    bgColor="#F37A7E"
+                    margin="1%"
+                >
+                    <CardHeader>
+                        <Heading size="md" textAlign="center">LEAVES ALLOTMENT</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                            <MdCastForEducation size={95} />
+                        </Stack>
+                    </CardBody>
+                </Card>
+            }
+
 
             <Card
                 cursor="pointer"

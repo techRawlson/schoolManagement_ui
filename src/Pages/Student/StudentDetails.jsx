@@ -8,8 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoArrowBack } from "react-icons/io5";
 
 const StudentDetails = () => {
-    
 
+    const Role = localStorage.getItem("Role")
     const notify = () => toast("Form Submitted Successfully");
     const [student, setStudent] = useState([])
     const [imageUrl, setImageUrl] = useState(false)
@@ -256,9 +256,9 @@ const StudentDetails = () => {
             <ToastContainer /> {/* Add this line */}
             <Stack width="95vw" margin="0 3%">
                 <Flex mb="5" justifyContent="space-between" alignItems="center" width="90vw">
-             
-                        <IconButton as={IoArrowBack}  cursor="pointer" onClick={goback} size="sm"/>
-                
+
+                    <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" />
+
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
@@ -281,7 +281,7 @@ const StudentDetails = () => {
                             />
                         </label>
                     </Flex>
-                    
+
 
                 </Flex>
 
@@ -347,7 +347,7 @@ const StudentDetails = () => {
 
                                 <FormControl id="name">
                                     <FormLabel>Date of birth</FormLabel>
-                                  
+
                                     <Input fontWeight="bold" type='date'
                                         w='100%' h='10' bg='white.500' value={std.dob} onChange={(e) => handleFieldChange(e, i, 'dob')} disabled={dis}
                                     />
@@ -404,12 +404,12 @@ const StudentDetails = () => {
                                         onChange={(e) => handleFieldChange(e, i, 'session')}
                                     >
                                         {
-                                            clas?.map((std)=>(
+                                            clas?.map((std) => (
                                                 <option value={std.session}>{std.session}</option>
                                             ))
                                         }
-                                   
-                                        
+
+
                                     </Select>
 
                                 </FormControl>
@@ -420,13 +420,15 @@ const StudentDetails = () => {
 
                 </Stack>
 
+                {
+                    Role == 'staff' ? '' : <Flex direction='row' justifyContent="flex-end" >
+                        {
+                            dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
+                        }
 
-                <Flex direction='row' justifyContent="flex-end" >
-                    {
-                        dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
-                    }
+                    </Flex>
+                }
 
-                </Flex>
             </Stack>
 
         </Stack>

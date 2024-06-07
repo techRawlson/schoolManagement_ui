@@ -6,6 +6,7 @@ import Navbar from "../../components/Navbar";
 import { IoArrowBack } from "react-icons/io5";
 
 const TimeTable = () => {
+    const role = localStorage.getItem("Role");
     const navigate = useNavigate()
     const nextPage = (data) => {
         try {
@@ -58,17 +59,20 @@ const TimeTable = () => {
                     </CardBody>
 
                 </Card>
-                <Card cursor="pointer" onClick={() => nextPage("periods")} width='60%' margin="0 12%">
-                    <CardHeader>
-                        <Heading size='md' textAlign="center"> Periods</Heading>
-                    </CardHeader>
-                    <CardBody>
-                        <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-                            <SlCalender size={95} />
-                        </Stack>
-                    </CardBody>
 
-                </Card>
+             {
+                role=='staff'?'': <Card cursor="pointer" onClick={() => nextPage("periods")} width='60%' margin="0 12%">
+                <CardHeader>
+                    <Heading size='md' textAlign="center"> Periods</Heading>
+                </CardHeader>
+                <CardBody>
+                    <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                        <SlCalender size={95} />
+                    </Stack>
+                </CardBody>
+
+            </Card>
+             }  
             </SimpleGrid>
         </Stack>
     </>

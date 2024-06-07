@@ -173,6 +173,7 @@ const AttendanceMarking = ({ user }) => {
     console.log(uniqueClassNames)
     console.log(detail)
     console.log(Attendance)
+    
     const dataFilter = (data) => {
 
         let filterData;
@@ -183,6 +184,13 @@ const AttendanceMarking = ({ user }) => {
             setDbTime(filterData[0].time)
             setcreate(false)
         } else {
+            const currtDate = new Date();
+            const day = currtDate.getDate();
+            const month = currtDate.getMonth() + 1; // Months are zero-indexed
+            const year = currtDate.getFullYear();
+          
+            const formattedDate = `${day}/${month}/${year}`;
+            console.log(formattedDate)
             setcreate(true)
             const newData = [];
 
@@ -197,7 +205,7 @@ const AttendanceMarking = ({ user }) => {
                     obj.studentName = student.name,
                     obj.rollNumber = student.rollNumber,
                     obj.date = date,
-                    obj.time = date+" "+formattedTime,
+                    obj.time = formattedDate+" "+formattedTime,
                     obj.slot = slot == '1st' ? '1st' : '2nd',
                     obj.teacherName = localStorage.getItem("username"),
                     newData.push(obj)
@@ -241,33 +249,6 @@ const AttendanceMarking = ({ user }) => {
                 setFilteredData(filterData)
                 // Object to store aggregated data
                 console.log(filterData)
-
-
-
-
-
-                // // Create an array to store the subjects temporarily
-                // let tempSubjects = [];
-
-                // filterData.forEach(elm => {
-                //     const stringToSplit1 = elm.monday;
-                //     const stringToSplit2 = elm.tuesday;
-                //     const stringToSplit3 = elm.wednesday;
-                //     const stringToSplit4 = elm.thursday;
-                //     const stringToSplit5 = elm.friday;
-                //     const arr = [stringToSplit1, stringToSplit2, stringToSplit3, stringToSplit4, stringToSplit5];
-
-                //     arr.forEach(e => {
-                //         const parts = e.split(" ");
-                //         if (parts.length > 1) {
-                //             const laterPart = parts.slice(1).join(" ");
-                //             tempSubjects.push(laterPart);
-                //         }
-                //     });
-                // });
-
-                // After processing all subjects, update totalSubjects
-                // setTotalSubjects(tempSubjects);
                 setUpdateButton('Update')
                 setAddNew(true)
             }
@@ -713,8 +694,8 @@ const AttendanceMarking = ({ user }) => {
                     <FormControl isRequired alignItems="center" m="1">
                         <FormLabel textAlign="center">Choose Slot</FormLabel >
                         <Flex direction='row' justifyContent="space-around" >
-                            <Button colorScheme={slot == '1st' ? 'green' : 'teal'} value={slot} onClick={() => handleFilterSlot('1st')} width="30%">1st</Button>
-                            <Button colorScheme={slot == '2nd' ? 'green' : 'teal'} value={slot} onClick={() => handleFilterSlot('2nd')} width="30%">2nd</Button>
+                            <Button colorScheme={slot == '1st' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('1st')}>1st</Button>
+                            <Button colorScheme={slot == '2nd' ? 'facebook' : 'gray'} value={slot} onClick={() => handleFilterSlot('2nd')} >2nd</Button>
                         </Flex>
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center">

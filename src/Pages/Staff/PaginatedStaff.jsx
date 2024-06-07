@@ -252,7 +252,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     staffName:fdata.name,
                 })
             })
-            const LoginJson = await Login.json()
+            // const LoginJson = await Login.json()
 
 
             const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {

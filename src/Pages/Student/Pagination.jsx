@@ -47,6 +47,7 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 // import Student from '../Pages/Student';
 function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+    const Role=localStorage.getItem("Role")
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
     const [isOpen, setOpen] = useState(false)
@@ -237,7 +238,7 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
             const fdata = await data.json()
             console.log(fdata)
             console.log(data.status)
-            console.log(fdata.status)
+            
             if (data.status >= 200 && data.status < 300) {
                 const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
                     method: 'post',
@@ -256,7 +257,7 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                     role: 'student',
                 })
             })
-            const LoginJson = await Login.json()
+            // const LoginJson = await Login.json()
             if (data.status >= 200 && data.status < 300) {
                 await getStudentData()
                 toast.success("Student created successfully");
@@ -392,9 +393,12 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
 
                                 </Select>
                                 <Input maxW="20%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
-                                <Button maxW="22%" onClick={() => setOpen(true)}>
-                                    Add New
-                                </Button>
+                                {
+                                     Role=='staff'?'':  <Button maxW="22%" onClick={() => setOpen(true)}>
+                                     Add New
+                                 </Button>
+                                }
+                               
                             </Flex>
                            
                         </Flex>
@@ -467,7 +471,10 @@ function Pagination({ getStudentData,searchRef, handleFilterSearch, itemsPerPage
                                 justifyContent="space-around"
                             >
                                 <Button onClick={downloadPdf}>Download</Button>
-                                <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
+                                {
+                                    Role=='staff'?'': <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
+                                }
+                               
                             </Stack>
 
 

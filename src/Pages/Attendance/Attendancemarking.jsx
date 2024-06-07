@@ -1,5 +1,5 @@
 // import { Stack } from "@chakra-ui/react"
-import { Badge, Button, Checkbox, Flex, FormControl, FormLabel, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
+import { Badge, Button, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -251,6 +251,7 @@ const AttendanceMarking = ({ user }) => {
                 console.log(filterData)
                 setUpdateButton('Update')
                 setAddNew(true)
+                setShowMsg(false)
             }
 
             else {
@@ -268,9 +269,12 @@ const AttendanceMarking = ({ user }) => {
                 // setUpdateButton('')
                 setcreateNew(false)
                 setAddNew(false)
+                setShowMsg(true)
             }
 
         }
+           
+        
 
     };
     console.log(filteredData)
@@ -617,7 +621,8 @@ const AttendanceMarking = ({ user }) => {
     const tdStyle = {
         border: '1px solid black',
         padding: '8px',
-        textAlign: 'left'
+        textAlign: 'left',
+        fontSize: '24px',
     };
 
     const changeCheckBox = (item, index, event) => {
@@ -645,8 +650,6 @@ const AttendanceMarking = ({ user }) => {
         overflow: 'hidden',    // Hide content overflow within cells
         whiteSpace: 'nowrap',  // Prevent line breaks within cells
         textOverflow: 'ellipsis',// Display ellipsis (...) for overflowed text
-        textAlign: 'center',
-        fontSize: '24px',
         textAlign: 'center', 
     };
     
@@ -730,7 +733,8 @@ const AttendanceMarking = ({ user }) => {
                                         </Tr>
                                     </Thead>
                                 </>
-                                : ''
+                                : 
+                                ""
                         }
 
                         {
@@ -760,24 +764,6 @@ const AttendanceMarking = ({ user }) => {
                             </Tbody> :
                                 <Tbody>
                                     {filteredData.map((item, index) => (
-
-
-                                        // <tr key={index}>
-                                        //     <td style={cellStyle}>{index + 1}</td>
-                                        //     <td style={cellStyle}>{item.studentId}</td>
-                                        //     <td style={cellStyle}>{item.studentName}</td>
-                                        //     <td style={cellStyle}>{item.fathersName}</td>
-                                        //     <td style={cellStyle}>{item.rollNumber}</td>
-                                        //     <td style={cellStyle}  bgColor={ Attendance.length > 0 ? item.attendance == 'true' ? 'green' : 'red':''}>
-                                        //         {
-                                        //             Attendance.length > 0 ? item.attendance == 'true' ? 'Present' : 'Absent' :  <Checkbox
-                                        //             isChecked={item.attendance === 'true'}
-                                        //             onChange={(event) => changeCheckBox(item, index, event)}
-                                        //             size="lg"
-                                        //         />
-                                        //         }
-                                        //     </td>
-                                        // </tr>
                                         <tr key={index}>
                                         <td style={cellStyle}>{index + 1}</td>
                                         <td style={cellStyle}>{item.studentId}</td>
@@ -828,7 +814,7 @@ const AttendanceMarking = ({ user }) => {
                     </Table>
 
                     {
-                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.Please click "Add New" button to add time table for this class.</Text> : ''
+                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red',fontSize:'24px' }}>it seems that time table does not exist for the above class selection..</Text> : ''
                     }
 
                 </TableContainer>
@@ -848,7 +834,8 @@ const AttendanceMarking = ({ user }) => {
                         <Stack marginTop="0.3%">
                             {
                                 Edit ? "" :
-                                <Button onClick={() => create1()} bgColor="green">Submit</Button>
+                                Attendance?.length  == 0 && showMsg ?"":
+                                <Button onClick={() => create1()} bgColor="green">Submit1</Button>
 
                             }
                         </Stack> : ''

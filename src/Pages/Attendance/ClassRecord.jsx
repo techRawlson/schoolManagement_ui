@@ -285,7 +285,8 @@ const ClassRecord = () => {
                 const sorted = unique.sort()
                 setUniqueDates(unique)
                 setuniqueSortedDates(sorted)
-                setAttendance(fdata1)
+                const fdataSorted=fdata1.sort((a, b) => a.studentId - b.studentId)
+                setAttendance(fdataSorted)
 
                 console.log(fdata1)
                 const datesBetween = getDatesBetween(fDate, tDate);

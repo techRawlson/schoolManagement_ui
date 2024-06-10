@@ -3,9 +3,10 @@ import Navbar from "../../components/Navbar"
 import { MdCastForEducation } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { IoArrowBack } from "react-icons/io5"
+import { useData } from "../context/DataContext"
 
 const Main = () => {
-    const Role = localStorage.getItem("Role")
+   const{Role,updateData}=useData()
     const navigate = useNavigate()
     const goback = () => {
         navigate(-1)

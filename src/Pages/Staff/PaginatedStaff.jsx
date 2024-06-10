@@ -25,7 +25,8 @@ import {
     MenuList,
     MenuItem,
     Icon,
-    IconButton
+    IconButton,
+    FormErrorMessage
 
 } from '@chakra-ui/react'
 import { ArrowLeftIcon } from '@chakra-ui/icons'
@@ -102,11 +103,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
 
 
-    // Define the validation schema using Yup
-    const validationSchema = Yup.object({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string().email('Invalid email format').required('Email is required'),
-    });
+
 
 
 
@@ -196,28 +193,92 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         // Convert selectedItems array to a comma-separated string
         console.log(typeof (admRef.current.value))
         body = {
-            name: nameRef.current.value,
-            gender: sexRef.current.value,
-            mobile: parseInt(mobileRef.current.value),
-            address: addressRef.current.value,
-            designation: classRef.current.value,
-            dob: dobRef.current.value,
-            department: depRef.current.value,
-            dateOfJoining: admRef.current.value,
-            email: emailRef.current.value,
-            staffId: staffIdRef.current.value,
+            name: nameRef?.current?.value,
+            gender: sexRef?.current?.value,
+            mobile: parseInt(mobileRef?.current?.value),
+            address: addressRef?.current?.value,
+            designation: classRef?.current?.value,
+            dob: dobRef?.current?.value,
+            department: depRef?.current?.value,
+            dateOfJoining: admRef?.current?.value,
+            email: emailRef?.current?.value,
+            staffId: staffIdRef?.current?.value,
             approver: classValue,
             subjects: selectedItems
         }
-        try {
-            console.log(body)
+        // try {
+        //     console.log(body)
 
+        //     // Create a new FormData object
+        //     const formData = new FormData();
+        //     // Loop through the student data and append each field to the FormData object
+        //     // Loop through the student data and append each field to the FormData object
+        //     Object.entries(body).forEach(([key, value]) => {
+
+        //         if (Array.isArray(value)) {
+        //             // Append each item of the array as a separate value for the 'subjects' key
+        //             selectedItems.forEach(item => {
+        //                 formData.append('subjects', item);
+        //             });
+        //         } else {
+        //             formData.append(key, value);
+        //         }
+        //     });
+        //     // Append the image file to the FormData object
+        //     const file = image.current.files[0];
+        //     let formData2 = new FormData()
+
+        //     formData2.append('file', file);
+
+        //     const data = await fetch("http://localhost:8083/api/staff/create-staff", {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        //     const fdata = await data.json()
+        //     console.log(fdata)
+
+        //     const Login = await fetch("http://localhost:8081/api/Login/create", {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             userId: fdata.staffId,
+        //             password: fdata.password,
+        //             role: 'staff',
+        //             staffName: fdata.name,
+        //         })
+        //     })
+        //     // const LoginJson = await Login.json()
+
+
+        //     const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {
+        //         method: 'post',
+        //         body: formData2,
+        //     })
+        //     console.log(picture)
+
+
+
+
+
+        //     if (data.status >= 200 && data.status < 300) {
+        //         toast.success("Staff created successfully")
+        //         setOpen(false)
+        //         await getData()
+        //     } else {
+        //         toast.error("Something went wrong")
+        //     }
+
+        // } catch (error) {
+        //     console.log(error)
+        // }
+        try {
             // Create a new FormData object
             const formData = new FormData();
-            // Loop through the student data and append each field to the FormData object
+
             // Loop through the student data and append each field to the FormData object
             Object.entries(body).forEach(([key, value]) => {
-
                 if (Array.isArray(value)) {
                     // Append each item of the array as a separate value for the 'subjects' key
                     selectedItems.forEach(item => {
@@ -227,55 +288,62 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     formData.append(key, value);
                 }
             });
+
             // Append the image file to the FormData object
             const file = image.current.files[0];
-            let formData2 = new FormData()
-
+            let formData2 = new FormData();
             formData2.append('file', file);
 
-            const data = await fetch("http://localhost:8083/api/staff/create-staff", {
+            // Create staff entry
+            const staffResponse = await fetch("http://localhost:8083/api/staff/create-staff", {
                 method: 'POST',
                 body: formData
-            })
-            const fdata = await data.json()
-            console.log(fdata)
+            });
+            if (!staffResponse.ok) {
+                const errorMessage = await staffResponse.text() || 'Unknown error occurred';
+                throw new Error(errorMessage);
+            }
+            const staffData = await staffResponse.json();
 
-            const Login = await fetch("http://localhost:8081/api/Login/create", {
+            // Create login entry
+            const loginResponse = await fetch("http://localhost:8081/api/Login/create", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: fdata.staffId,
-                    password: fdata.password,
+                    userId: staffData.staffId,
+                    password: staffData.password,
                     role: 'staff',
-                    staffName:fdata.name,
+                    staffName: staffData.name,
                 })
-            })
-            // const LoginJson = await Login.json()
+            });
+            if (!loginResponse.ok) {
+                const errorMessage = await loginResponse.text() || 'Unknown error occurred';
+                throw new Error(errorMessage);
 
-
-            const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {
-                method: 'post',
-                body: formData2,
-            })
-            console.log(picture)
-
-
-
-
-
-            if (data.status >= 200 && data.status < 300) {
-                toast.success("Staff created successfully")
-                setOpen(false)
-                await getData()
-            } else {
-                toast.error("Something went wrong")
             }
 
+            // Upload staff image
+            const pictureResponse = await fetch(`http://localhost:8083/api/staff-images/${staffData.id}`, {
+                method: 'post',
+                body: formData2,
+            });
+            if (!pictureResponse.ok) {
+                const errorMessage = await pictureResponse.text() || 'Unknown error occurred';
+                throw new Error(errorMessage);
+
+            }
+
+            // If everything is successful, show success toast and close modal
+            toast.success("Staff created successfully");
+            setOpen(false);
+            await getData();
         } catch (error) {
-            console.log(error)
+            console.error(error);
+            toast.error(error.message || "Something went wrong");
         }
+
     }
     const excelFile = useRef()
     let form = new FormData()
@@ -532,98 +600,285 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                         <ModalHeader>Add New</ModalHeader>
                         <ModalCloseButton onClick={() => setOpen(false)} />
                         <ModalBody pb={3}>
-                            <Formik initialValues={body}
-                                validationSchema={validationSchema}
-                                onSubmit={saveButton}>
-                                {({ errors, touched }) => (
+                            <Formik initialValues={{
+                                name: '',
+                                approver: '',
+                                designation: '',
+                                department: '',
+                                mobile: '',
+                                address: '',
+                                doj: '',
+                                dob: '',
+                                gender: '',
+                                email: '',
+
+
+                            }}
+                                validate={(values) => {
+                                    const errors = {};
+
+                                    if (!values.name) {
+                                        errors.name = 'Required';
+                                    }
+
+                                    if (!values.approver) {
+                                        errors.approver = 'Required';
+                                    }
+
+                                    if (!values.designation) {
+                                        errors.designation = 'Required';
+                                    }
+
+                                    if (!values.department) {
+                                        errors.department = 'Required';
+                                    }
+
+                                    if (!values.mobile) {
+                                        errors.mobile = 'Required';
+                                    } else if (!/^\d{10}$/i.test(values.mobile)) {
+                                        errors.mobile = 'Invalid mobile number';
+                                    }
+
+                                    if (!values.address) {
+                                        errors.address = 'Required';
+                                    }
+
+                                    if (!values.doj) {
+                                        errors.doj = 'Required';
+                                    }
+
+                                    if (!values.dob) {
+                                        errors.dob = 'Required';
+                                    }
+
+                                    if (!values.gender) {
+                                        errors.gender = 'Required';
+                                    }
+
+                                    if (!values.email) {
+                                        errors.email = 'Required';
+                                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                                        errors.email = 'Invalid email address';
+                                    }
+
+                                    return errors;
+                                }}
+
+                                onSubmit={(values, { setSubmitting }) => {
+                                    setTimeout(() => {
+                                        saveButton()
+                                        setSubmitting(false);
+                                    }, 400);
+                                }}
+                            >
+                                {({ isSubmitting, isValid }) => (
                                     <Form>
                                         <Flex justifyContent="space-around" alignItems="center" >
-                                            <FormControl isRequired m="1">
-                                                <FormLabel >Full Name</FormLabel>
-                                                <Input id="name" name="name" placeholder="Your name" ref={nameRef} />
-                                            </FormControl>
+                                            <Field name="name">
+                                                {({ field, form }) => (
+                                                    <FormControl isInvalid={form.errors.name && form.touched.name} isRequired m="1">
+                                                        <FormLabel htmlFor="name">Full Name</FormLabel>
+                                                        <Input {...field} id="name" placeholder="Your name" ref={nameRef} />
+                                                        <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
 
-                                            <FormControl isRequired m="1">
-                                                <FormLabel >Staff Id</FormLabel>
-                                                <Input id="name" name="name" placeholder="name_0001" ref={staffIdRef} type='text' />
-                                            </FormControl>
+                                            <Field name="approver">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        maxW="50%"
+                                                        isInvalid={form.errors.approver && form.touched.approver}
+                                                    >
+                                                        <FormLabel>Approver</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            list="class"
+                                                            placeholder="Select a Class"
+                                                        />
+                                                        <datalist id="class">
+                                                            {classData.map((option, index) => (
+                                                                <option key={index} value={option.name} />
+                                                            ))}
+                                                        </datalist>
+                                                        <FormErrorMessage>{form.errors.approver}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
 
 
                                         </Flex>
 
                                         <Flex>
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Designation</FormLabel>
-                                                <Select ref={classRef} isRequired >
-                                                    <option >Select</option>
-                                                    <option value='softwaredeveloper'>Software Developer</option>
-                                                    <option value='mechanic'>Mechanic</option>
-                                                    <option value='electrician'>Electrician</option>
+                                            <Field name="designation">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.designation && form.touched.designation}
+                                                    >
+                                                        <FormLabel>Designation</FormLabel>
+                                                        <Select
+                                                            {...field}
+                                                            ref={classRef}
+                                                            placeholder="Select"
+                                                        >
 
-                                                </Select>
-                                            </FormControl>
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Department</FormLabel>
+                                                            <option value="softwaredeveloper">Software Developer</option>
+                                                            <option value="mechanic">Mechanic</option>
+                                                            <option value="electrician">Electrician</option>
+                                                        </Select>
+                                                        <FormErrorMessage>{form.errors.designation}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <Field name="department">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.department && form.touched.department}
+                                                    >
+                                                        <FormLabel>Department</FormLabel>
+                                                        <Select
+                                                            {...field}
+                                                            ref={depRef}
+                                                            placeholder="Select"
+                                                        >
 
-                                                <Select ref={depRef} isRequired>
-                                                    <option >Select</option>
-                                                    <option value='A'>A</option>
-                                                    <option value='B'>B</option>
-                                                    <option value='C'>C</option>
-
-                                                </Select>
-                                            </FormControl>
+                                                            <option value="A">A</option>
+                                                            <option value="B">B</option>
+                                                            <option value="C">C</option>
+                                                        </Select>
+                                                        <FormErrorMessage>{form.errors.department}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
 
                                         </Flex>
 
                                         <Flex justifyContent="space-between" alignItems="center">
 
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Mobile</FormLabel>
-                                                <Input
-                                                    placeholder='Mobile'
-                                                    type='Number'
-                                                    ref={mobileRef}
-                                                />
-                                            </FormControl>
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Address</FormLabel>
-                                                <Input placeholder='Address' ref={addressRef} />
-                                            </FormControl>
+                                            <Field name="mobile">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.mobile && form.touched.mobile}
+                                                    >
+                                                        <FormLabel>Mobile</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            placeholder="Mobile"
+                                                            type="number"
+                                                            ref={mobileRef}
+                                                        />
+                                                        <FormErrorMessage>{form.errors.mobile}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <Field name="address">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.address && form.touched.address}
+                                                    >
+                                                        <FormLabel>Address</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            placeholder="Address"
+                                                            ref={addressRef}
+                                                        />
+                                                        <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
 
                                         </Flex>
 
                                         <Flex justifyContent="space-between" alignItems="center">
 
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Date Of Joining</FormLabel>
-                                                <Input placeholder='date of joining'
-                                                    type='date'
-                                                    id="number"
-                                                    name="number"
-
-                                                    ref={admRef}
-
-                                                />
-                                            </FormControl>
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Date of birth</FormLabel>
-                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' />
-                                            </FormControl>
+                                            <Field name="doj">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.doj && form.touched.doj}
+                                                    >
+                                                        <FormLabel>Date Of Joining</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            placeholder="Date of joining"
+                                                            type="date"
+                                                            ref={admRef}
+                                                        />
+                                                        <FormErrorMessage>{form.errors.doj}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <Field name="dob">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.dob && form.touched.dob}
+                                                    >
+                                                        <FormLabel>Date of birth</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            placeholder="dob"
+                                                            type="date"
+                                                            ref={dobRef}
+                                                        />
+                                                        <FormErrorMessage>{form.errors.dob}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                         </Flex>
 
                                         <Flex justifyContent="space-between" alignItems="center">
 
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel>Gender</FormLabel>
-                                                <Select ref={sexRef}>
-                                                    <option >Select</option>
-                                                    <option value='Male'>Male</option>
-                                                    <option value='Female'>Female</option>
-                                                    <option value='Other'>Other</option>
-                                                </Select>
-                                            </FormControl>
-                                            <FormControl isRequired m="1">
+                                            <Field name="gender">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.gender && form.touched.gender}
+                                                    >
+                                                        <FormLabel>Gender</FormLabel>
+                                                        <Select
+                                                            {...field}
+                                                            ref={sexRef}
+                                                            placeholder="Select"
+                                                        >
+                                                            <option value="Male">Male</option>
+                                                            <option value="Female">Female</option>
+                                                            <option value="Other">Other</option>
+                                                        </Select>
+                                                        <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <FormControl m="1">
                                                 <FormLabel >Subject</FormLabel>
                                                 <Flex>
                                                     <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
@@ -668,54 +923,52 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
 
                                         </Flex >
-                                        <Flex justifyContent="space-between" alignItems="center"  >
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1" maxW="50%">
-                                                <FormLabel >Approver</FormLabel>
-                                                <Input
-                                                    list="class"
-                                                    value={classValue}
-                                                    onChange={(e) => setClassValue(e.target.value)}
-                                                    placeholder="Select a Class"
-
-                                                />
-                                                <datalist id="class">
-                                                    {classData.map((option, index) => (
-                                                        <option key={index} value={option.name} />
-                                                    ))}
-                                                </datalist>
-                                            </FormControl>
-
-                                        </Flex>
 
                                         <Flex justifyContent="space-around" alignItems="center" >
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
-                                                <FormLabel htmlFor="email">Email</FormLabel>
-                                                <Input
-                                                    placeholder='Email'
-                                                    ref={emailRef}
-                                                    id="email"
-                                                    name="email"
-                                                    type='email'
-                                                />
-                                            </FormControl>
-                                            <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
+                                            <Field name="email">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.email && form.touched.email}
+                                                    >
+                                                        <FormLabel htmlFor="email">Email</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            ref={emailRef}
+                                                            placeholder="Email"
+                                                            type="email"
+                                                            id="email"
+                                                            name="email"
+                                                        />
+                                                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <FormControl justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Upload Image</FormLabel>
                                                 <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
                                             </FormControl>
                                         </Flex>
 
+
+                                        <ModalFooter>
+                                            <Button colorScheme='blue' mr={3} type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                                                Save
+                                            </Button>
+                                            <Button type="button" onClick={() => setOpen(false)} disabled={isSubmitting}>
+                                                Cancel
+                                            </Button>
+                                        </ModalFooter>
                                     </Form>)}
 
 
                             </Formik>
                         </ModalBody>
 
-                        <ModalFooter>
-                            <Button colorScheme='blue' mr={3} onClick={() => saveButton()} >
-                                Save
-                            </Button>
-                            <Button onClick={() => setOpen(false)} >Cancel</Button>
-                        </ModalFooter>
+
                     </ModalContent>
                 </Modal>
             </>

@@ -253,14 +253,13 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     method: 'post',
                     body: formData2,
                 })
-                
+
                 if (!picture.ok) {
                     console.log(picture)
                     const errorMessage = await picture.text() || 'Unknown error occurred';
-                    console.log(errorMessage)
-                    toast.error(errorMessage);
+
                     throw new Error(errorMessage);
-    
+
                 }
 
             }
@@ -276,10 +275,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     role: 'student',
                 })
             })
-            
+
             if (!Login.ok) {
                 const errorMessage = await Login.text() || 'Unknown error occurred';
-                toast.error(errorMessage);
                 throw new Error(errorMessage);
 
             }
@@ -293,7 +291,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 toast.error("Something went wrong");
             }
         } catch (error) {
-            console.log(error)
+            toast.error(error.message || "Something went wrong");
         }
     };
 
@@ -702,9 +700,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                         <FormLabel htmlFor="section" >Section</FormLabel>
                                                         <Select {...field} ref={sectionRef} placeholder="Select">
                                                             {/* Empty option for placeholder */}
-                                                            
+
                                                             {uniqueSections?.map((section, i) => (
-                                                                  
+
                                                                 <option key={i} value={section}>{section}</option>
                                                             ))}
                                                         </Select>
@@ -796,7 +794,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     <FormControl isInvalid={form.errors.session && form.touched.session} isRequired>
                                                         <FormLabel htmlFor="session">Session</FormLabel>
                                                         <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
-                                                           
+
                                                             {uniqueSessions?.map((sub, i) => (
                                                                 <option key={i} value={sub}>{sub}</option>
                                                             ))}

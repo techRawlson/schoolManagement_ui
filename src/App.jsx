@@ -9,7 +9,7 @@ import Staff from './Pages/Staff/Staff';
 import StaffDetails from './Pages/Staff/StaffDetails';
 //for authentication
 import { AuthProvider } from './Pages/Auth/AuthContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Subject from './Pages/Subjetcs/Subjects';
 import TimeTable from './Pages/TimeTable/TimeTable';
 import Classtimetable from './Pages/TimeTable/ClassTimeTable';
@@ -30,21 +30,38 @@ import Loginpage from './Pages/Register/LoginPage';
 // import StaffLogin from './Pages/Register/StaffLogin';
 
 
-
+import { useData } from './Pages/context/DataContext';
 function App() {
+  const { data, updateData } = useData();
   const token = localStorage.getItem('token');
   const [tok, setToken] = useState(token)
   const [user, setUser] = useState([])
   console.log(user)
 
+  const getStudent = async () => {
+    const id = localStorage.getItem("username")
+    console.log(id)
+    try {
+      const data = await fetch(`http://localhost:8081/api/Login/users/${id}`)
+      const fdata = await data.json()
+      console.log(fdata)
 
+      await updateData(fdata.role)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getStudent()
+  }, [])
 
 
   return (
     <Router>
       <AuthProvider> {/* Wrap your routes with AuthProvider */}
         <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route exact path="/" element={tok ? <Dashboard /> : <Login setToken={setToken} />}/>
           <Route exact path="/login" element={<Login setToken={setToken} setUser={setUser} />} />
           <Route exact path='/dashboard' element={tok ? <Dashboard /> : <Login setToken={setToken} />} />
           <Route exact path='/staff' element={tok ? <Staff /> : <Login setToken={setToken} />} />

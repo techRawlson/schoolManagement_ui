@@ -4,9 +4,11 @@ import { SlCalender } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { IoArrowBack } from "react-icons/io5";
+import { useData } from "../context/DataContext";
 
 const TimeTable = () => {
-    const role = localStorage.getItem("Role");
+    const { Role, updateData } = useData();
+    console.log(Role)
     const navigate = useNavigate()
     const nextPage = (data) => {
         try {
@@ -61,7 +63,7 @@ const TimeTable = () => {
                 </Card>
 
              {
-                role=='staff'?'': <Card cursor="pointer" onClick={() => nextPage("periods")} width='60%' margin="0 12%">
+                Role=='staff'?'': <Card cursor="pointer" onClick={() => nextPage("periods")} width='60%' margin="0 12%">
                 <CardHeader>
                     <Heading size='md' textAlign="center"> Periods</Heading>
                 </CardHeader>

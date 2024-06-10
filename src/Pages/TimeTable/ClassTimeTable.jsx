@@ -19,8 +19,9 @@ import { useNavigate } from "react-router-dom";
 import Stafftimetable from "./StaffTimeTable";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import { useData } from "../context/DataContext";
 const Classtimetable = () => {
-    const Role=localStorage.getItem('Role')
+    const{Role,updateData}=useData()
     const [data, setData] = useState([])
     console.log(data)
 

@@ -24,7 +24,7 @@ import {
     IconButton
 
 } from '@chakra-ui/react'
-
+import { useData } from '../context/DataContext';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Link as ReactRouterLink } from 'react-router-dom'
@@ -45,9 +45,10 @@ import {
 import { IoArrowBack } from "react-icons/io5";
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+
 // import Student from '../Pages/Student';
 function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
-    const Role = localStorage.getItem("Role")
+    const { Role, updateData } = useData();
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
     const [isOpen, setOpen] = useState(false)
@@ -376,6 +377,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         document.body.removeChild(link);
     };
     const saveButtonRef = useRef(null);
+ 
+    
     return (
         <div style={{ width: '100vw' }}>
 

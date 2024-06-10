@@ -16,7 +16,9 @@ import { IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react"
 import { IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
+import { useData } from "../context/DataContext";
 const Stafftimetable = () => {
+    const{Role,updateData}=useData()
     const [data, setData] = useState([])
     const getData = async () => {
         try {
@@ -268,7 +270,7 @@ const Stafftimetable = () => {
 
 
 
-    const Role = localStorage.getItem("Role")
+   
     const staffId = localStorage.getItem("username")
 
     const showStudentTimeTable = async () => {

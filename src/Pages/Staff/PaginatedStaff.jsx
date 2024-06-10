@@ -48,11 +48,11 @@ import {
     FormControl,
     FormLabel
 } from '@chakra-ui/react'
-
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { IoArrowBack } from "react-icons/io5";
 import { MdClose } from 'react-icons/md';
+import { useData } from '../context/DataContext';
 // import Student from '../Pages/Student';
 function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
 
@@ -64,6 +64,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [classValue, setClassValue] = useState('');
     const initialRef = useRef()
     const finalRef = useRef()
+   
     //////staff subject--------------------------
     const options = [
         { value: 'HINDI', label: 'HINDI' },

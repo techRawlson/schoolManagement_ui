@@ -5,12 +5,17 @@ import './index.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux';
 // import store from './Pages/Redux/store.js';
+import { DataProvider } from './Pages/context/DataContext.jsx';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <Provider store={store}>
+  <DataProvider >
     <ChakraProvider>
       <App />
     </ChakraProvider>
+  </DataProvider>
+
   // </Provider>
   ,
 )

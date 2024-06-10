@@ -20,8 +20,9 @@ import { ToastContainer, toast } from "react-toastify"
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
+import { useData } from "../context/DataContext";
 const Subject = () => {
-    //for subjects
+  
     const [staff, setStaff] = useState([])
     const [subjects, setSubjects] = useState([])
     console.log(subjects)

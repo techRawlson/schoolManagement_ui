@@ -48,7 +48,7 @@ function Login({ setToken, setUser }) {
       console.log(dataf)
       if (data.status >= 200 && data.status < 300) {
         console.log("ok", data)
-        localStorage.setItem("Role", dataf.role);
+       
         localStorage.setItem("token", "fdata.username");
         localStorage.setItem("staffName", dataf.staffName);
         localStorage.setItem("username", emailRef.current.value)

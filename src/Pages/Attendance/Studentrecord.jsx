@@ -18,8 +18,10 @@ import {
 
 import PieChart from "./Piechart";
 import { IoArrowBack } from "react-icons/io5";
+import { useData } from "../context/DataContext";
 const StudentRecord = () => {
-  const Role=localStorage.getItem('Role')
+  const[Role,updateData]=useData()
+
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');

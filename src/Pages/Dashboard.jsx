@@ -10,13 +10,15 @@ import { FcTodoList } from "react-icons/fc";
 import { FcOvertime } from "react-icons/fc";
 import { FcLeave, FcReading } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
-
+import { useData } from './context/DataContext';
 
 // import { AiOutlineUser } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 const Dashboard = () => {
+  const { Role, updateData } = useData();
+ console.log(Role)
   const navigate = useNavigate()
   const nextPage = (data) => {
     try {
@@ -27,9 +29,9 @@ const Dashboard = () => {
     }
   }
 
-  const role = localStorage.getItem("Role");
+ 
 
-  console.log(role)
+  
 
 
 
@@ -40,7 +42,7 @@ const Dashboard = () => {
       <SimpleGrid templateColumns='1fr 1fr 1fr' margin="0" >
 
         {
-          role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("student")} >
+          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("student")} >
             <CardHeader>
               <Heading size='md' textAlign="center"> Student </Heading>
             </CardHeader>
@@ -59,7 +61,7 @@ const Dashboard = () => {
 
 
         {
-          role == 'student' ? "" : role=='staff'?'':<Card cursor="pointer" onClick={() => nextPage("staff")} >
+          Role == 'student' ? "" : Role=='staff'?'':<Card cursor="pointer" onClick={() => nextPage("staff")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Staff</Heading>
           </CardHeader>
@@ -72,7 +74,7 @@ const Dashboard = () => {
         </Card>
         }
         {
-          role == 'student' ? "" : role=='staff'?"":<Card cursor="pointer" onClick={() => nextPage("subjects")}>
+          Role == 'student' ? "" : Role=='staff'?"":<Card cursor="pointer" onClick={() => nextPage("subjects")}>
           <CardHeader>
             <Heading size='md' textAlign="center"> Subjects</Heading>
           </CardHeader>
@@ -87,7 +89,7 @@ const Dashboard = () => {
 
 
 
-        <Card cursor="pointer" onClick={() => nextPage(role=='student'?'classtimetable':"timetable")} >
+        <Card cursor="pointer" onClick={() => nextPage(Role=='student'?'classtimetable':"timetable")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Time Table</Heading>
           </CardHeader>
@@ -98,7 +100,7 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage(role=='student'?'studentrecord':"attendance")} >
+        <Card cursor="pointer" onClick={() => nextPage(Role=='student'?'studentrecord':"attendance")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Attendance</Heading>
           </CardHeader>
@@ -110,7 +112,7 @@ const Dashboard = () => {
 
         </Card>
         {
-          role == 'student' ? "" :<Card cursor="pointer" onClick={() => nextPage("lms")} >
+          Role == 'student' ? "" :<Card cursor="pointer" onClick={() => nextPage("lms")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> LMS</Heading>
           </CardHeader>

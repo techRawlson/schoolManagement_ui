@@ -556,6 +556,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                             >
                                 <Button onClick={downloadPdf}>Download</Button>
                                 <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
+                                <Button colorScheme='green' >Print</Button>
                             </Stack>
 
 
@@ -986,6 +987,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                             <Box display="flex" justifyContent="space-between">
                                 <Input type="file" maxW="50%" ref={excelFile} onChange={fileChange} accept=".xlsx,.xls" />
                                 <Button colorScheme='green' onClick={uploadFileExcel}>Upload</Button>
+                                <Button colorScheme='green' >Print</Button>
                             </Box>
 
                             <a onClick={downloadFile} style={{ whiteSpace: 'noWrap', cursor: 'pointer' }}>Download Sample File </a>

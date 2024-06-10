@@ -377,8 +377,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         document.body.removeChild(link);
     };
     const saveButtonRef = useRef(null);
- 
-    
+
+
     return (
         <div style={{ width: '100vw' }}>
 
@@ -501,7 +501,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 {
                                     Role == 'staff' ? '' : <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
                                 }
-
+                                <Button colorScheme='green' >Print</Button>
                             </Stack>
 
 

@@ -9,7 +9,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl, FormLabel, Input, Stack
+  FormControl, FormLabel, Input, Stack,
+  Toast
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 // import { useDispatch } from 'react-redux';
@@ -44,18 +45,32 @@ function Login({ setToken, setUser }) {
         },
         body: JSON.stringify(body)
       });
+      if (!data.ok) {
+        const er = await data.text()
+        console.log(er)
+        toast.error('wrong user id  or passoword')
+        throw new Error(er)
+      }
       const dataf = await data.json()
       console.log(dataf)
       if (data.status >= 200 && data.status < 300) {
-        console.log("ok", data)
-       
         localStorage.setItem("token", "fdata.username");
         localStorage.setItem("staffName", dataf.staffName);
-        localStorage.setItem("username", emailRef.current.value)
-        navigate("/dashboard");
-        toast.success('welcome')
+        localStorage.setItem("username", emailRef.current.value);
+
+        // Show success toast notification
+        toast.success('Login Successful', {
+          autoClose: 1500 ,
+          onClose: () => {
+            // Navigate to the next page after the toast is closed
+            navigate("/dashboard");
+          }
+        });
+
+
       } else {
-        const er=await data.text()
+        const er = await data.text()
+        console.log(er)
         toast.error(er)
         console.error("Login failed:", data.statusText);
         // Handle login failure here
@@ -74,10 +89,7 @@ function Login({ setToken, setUser }) {
   return (
     <Stack minH="100vh" minW="100vw">
       <ToastContainer />
-      {/* <Button onClick={()=>setIsOpen(true)}>Open Modal</Button> */}
-      {/* <Button ml={4} ref={finalRef}>
-      I'll receive focus on close
-    </Button> */}
+
 
       <Modal
         finalFocusRef={emailRef}
@@ -93,7 +105,7 @@ function Login({ setToken, setUser }) {
 
             <FormControl mt={4}>
               <FormLabel>UserId</FormLabel>
-              <Input ref={emailRef} placeholder='name_id' type="text" autoComplete="new-password"/>
+              <Input ref={emailRef} placeholder='name_id' type="text" autoComplete="new-password" />
             </FormControl>
 
             <FormControl mt={4}>

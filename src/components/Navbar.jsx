@@ -30,8 +30,8 @@ const Navbar = () => {
 
   const navigate = useNavigate()
   const logOut = () => {
-    localStorage.removeItem('token')
-    navigate('/')
+   localStorage.removeItem('token')
+    navigate('/login')
   }
   const [person, setPerson] = useState("")
 

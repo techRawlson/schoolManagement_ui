@@ -569,7 +569,7 @@ const ClassRecord = () => {
                         }
                     </Table>
                 </TableContainer>
-                <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">hello</Button>
+                <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
 
             </Flex>
         </Stack>

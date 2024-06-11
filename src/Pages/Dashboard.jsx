@@ -11,7 +11,7 @@ import { FcOvertime } from "react-icons/fc";
 import { FcLeave, FcReading } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { useData } from './context/DataContext';
-
+import { GiPoliceOfficerHead } from "react-icons/gi";
 // import { AiOutlineUser } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom'
@@ -126,7 +126,21 @@ const Dashboard = () => {
         </Card>
         }
         
+        {
+          Role == 'student' ? "" :  Role == 'staff' ? "":
+          <Card cursor="pointer" onClick={() => nextPage("role")} >
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Roles</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <GiPoliceOfficerHead
+                size={95} />
+            </Stack>
+          </CardBody>
 
+        </Card>
+        }
 
 
 

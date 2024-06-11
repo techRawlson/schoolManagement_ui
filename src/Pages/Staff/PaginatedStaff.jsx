@@ -64,7 +64,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [classValue, setClassValue] = useState('');
     const initialRef = useRef()
     const finalRef = useRef()
-   
+
     //////staff subject--------------------------
     const options = [
         { value: 'HINDI', label: 'HINDI' },
@@ -207,73 +207,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             approver: classValue,
             subjects: selectedItems
         }
-        // try {
-        //     console.log(body)
 
-        //     // Create a new FormData object
-        //     const formData = new FormData();
-        //     // Loop through the student data and append each field to the FormData object
-        //     // Loop through the student data and append each field to the FormData object
-        //     Object.entries(body).forEach(([key, value]) => {
-
-        //         if (Array.isArray(value)) {
-        //             // Append each item of the array as a separate value for the 'subjects' key
-        //             selectedItems.forEach(item => {
-        //                 formData.append('subjects', item);
-        //             });
-        //         } else {
-        //             formData.append(key, value);
-        //         }
-        //     });
-        //     // Append the image file to the FormData object
-        //     const file = image.current.files[0];
-        //     let formData2 = new FormData()
-
-        //     formData2.append('file', file);
-
-        //     const data = await fetch("http://localhost:8083/api/staff/create-staff", {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        //     const fdata = await data.json()
-        //     console.log(fdata)
-
-        //     const Login = await fetch("http://localhost:8081/api/Login/create", {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             userId: fdata.staffId,
-        //             password: fdata.password,
-        //             role: 'staff',
-        //             staffName: fdata.name,
-        //         })
-        //     })
-        //     // const LoginJson = await Login.json()
-
-
-        //     const picture = await fetch(`http://localhost:8083/api/staff-images/${fdata.id}`, {
-        //         method: 'post',
-        //         body: formData2,
-        //     })
-        //     console.log(picture)
-
-
-
-
-
-        //     if (data.status >= 200 && data.status < 300) {
-        //         toast.success("Staff created successfully")
-        //         setOpen(false)
-        //         await getData()
-        //     } else {
-        //         toast.error("Something went wrong")
-        //     }
-
-        // } catch (error) {
-        //     console.log(error)
-        // }
         try {
             // Create a new FormData object
             const formData = new FormData();
@@ -296,7 +230,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             formData2.append('file', file);
 
             // Create staff entry
-            const staffResponse = await fetch("http://localhost:8083/api/staff/create-staff", {
+            const staffResponse = await fetch("http://3.108.53.1:8083/api/staff/create-staff", {
                 method: 'POST',
                 body: formData
             });
@@ -324,17 +258,23 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                 throw new Error(errorMessage);
 
             }
+            if (image.current.files[0]) {
+                const pictureResponse = await fetch(`http://3.108.53.1:8083/api/staff-images/${staffData.id}`, {
+                    method: 'post',
+                    body: formData2,
+                });
+                if (!pictureResponse.ok) {
+                    const er=await pictureResponse.text() 
+                    console.log(er)
+                    const errorMessage = await pictureResponse.text() || 'Picture could not upload';
+                    setOpen(false)
+                    throw new Error(errorMessage);
 
-            // Upload staff image
-            const pictureResponse = await fetch(`http://localhost:8083/api/staff-images/${staffData.id}`, {
-                method: 'post',
-                body: formData2,
-            });
-            if (!pictureResponse.ok) {
-                const errorMessage = await pictureResponse.text() || 'Unknown error occurred';
-                throw new Error(errorMessage);
+                }
 
             }
+            // Upload staff image
+
 
             // If everything is successful, show success toast and close modal
             toast.success("Staff created successfully");
@@ -424,7 +364,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [subjects, setSubjects] = useState([])
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://localhost:8083/api/staff/all-subjects');
+            const data = await fetch('http://3.108.53.1:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -995,9 +935,9 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     </ModalContent>
                 </Modal>
             </>
-        
-                                
-                            
+
+
+
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { FcReading } from "react-icons/fc";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +20,8 @@ import PieChart from "./Piechart";
 import { IoArrowBack } from "react-icons/io5";
 import { useData } from "../context/DataContext";
 const StudentRecord = () => {
-  const{Role,updateData}=useData()
-
+  const { Role, updateData } = useData()
+  const [showMsg, setshowMsg] = useState(false)
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
@@ -353,6 +353,16 @@ const StudentRecord = () => {
         const data = await fetch(`http://localhost:8088/api/Attendance/search/${classValue}/${section}/${student}/${rollNumber}/${fdate}/${tdate}`);
         const fdata = await data.json()
         console.log(fdata)
+
+        if (fdata.length ==0) {
+          console.log(fdata.length)
+          setshowMsg(true)
+        }else{
+          console.log(fdata.length)
+          setshowMsg(false)
+        }
+
+        
         const fdata1 = removeDuplicatesAndMerge(fdata)
         setAttendance(fdata1)
         const datesBetween = getDatesBetween(fdate, tdate);
@@ -363,7 +373,7 @@ const StudentRecord = () => {
         const attendanceDict = {};
 
         // Iterate over the attendance records
-        for (let i = 0; i < fdata1[0].attendance.length; i++) {
+        for (let i = 0; i < fdata1[0]?.attendance?.length; i++) {
           const currentDate = fdata1[0].date[i];
           const present = fdata1[0].attendance[i] === "true";
 
@@ -454,13 +464,13 @@ const StudentRecord = () => {
       setFilters((prev) => ({
         ...prev,
         // classData: false,
-        student:dataJson.name,
+        student: dataJson.name,
         section: dataJson.section,
         class: dataJson.className,
         rollNumber: dataJson.rollNumber,
       }));
       await getAttendance()
-    
+
     } catch (error) {
       console.log(error);
     }
@@ -504,7 +514,7 @@ const StudentRecord = () => {
               value={classValue}
               onChange={(e) => handleFilterClass(e.target.value)}
               placeholder="Select a Class"
-              disabled={Role=='student'?true:false}
+              disabled={Role == 'student' ? true : false}
 
             />
             <datalist id="class">
@@ -521,7 +531,7 @@ const StudentRecord = () => {
               value={section}
               onChange={(e) => handleFiltersection(e.target.value)}
               placeholder="Select a Section"
-              disabled={Role=='student'?true:false}
+              disabled={Role == 'student' ? true : false}
 
             />
             <datalist id="section">
@@ -539,7 +549,7 @@ const StudentRecord = () => {
               value={student}
               onChange={(e) => handleFilterStudent(e.target.value)}
               placeholder="Select a Student"
-              disabled={Role=='student'?true:false}
+              disabled={Role == 'student' ? true : false}
 
             />
             <datalist id="students">
@@ -557,7 +567,7 @@ const StudentRecord = () => {
               value={rollNumber}
               onChange={(e) => handleFilterRollNumber(e.target.value)}
               placeholder="Select a Roll Number"
-              disabled={Role=='student'?true:false}
+              disabled={Role == 'student' ? true : false}
 
             />
             <datalist id="rollNumber">
@@ -583,6 +593,9 @@ const StudentRecord = () => {
 
 
       </Flex>
+      {
+        showMsg ==true? <Text color="red" textAlign="center">Data not available</Text> : ''
+      }
 
       {
         attendance?.length > 0 ?
@@ -612,6 +625,7 @@ const StudentRecord = () => {
                         )}
                       </Tr>
                     ))}
+                   
                   </Tbody>
                 </Table>
               </TableContainer>
@@ -622,10 +636,12 @@ const StudentRecord = () => {
               <PieChart p={present} a={absent} pb={totalDates} />
             </Box>
           </Flex> : ""
+          
       }
+      
     </Stack>
-    <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">hello</Button>
-
+    <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+    
   </Stack>
 }
 export default StudentRecord;

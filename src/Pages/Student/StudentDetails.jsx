@@ -143,7 +143,6 @@ const StudentDetails = () => {
 
 
 
-
     //new code 
     let picture;
     const handleFieldChange = async (event, index, fieldName) => {
@@ -196,7 +195,7 @@ const StudentDetails = () => {
 
             // Log the formData here to see the updated content
             console.log(student[0])
-            const data = await fetch(`http://localhost:8082/api/students/update-student/${id}`, {
+            const data = await fetch(`http://localhost:8082/api/students/update-student/${student[0]?.studentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -212,7 +211,7 @@ const StudentDetails = () => {
                 formData2.append('file', file);
             }
 
-            const picture = await fetch(`http://localhost:8082/api/images/${id}`, {
+            const picture = await fetch(`http://localhost:8082/api/images/${student[0]?.studentId}`, {
                 method: 'PUT',
                 body: formData2,
             })
@@ -262,7 +261,7 @@ const StudentDetails = () => {
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
-                                src={image || `http://localhost:8082/api/images/${id}`}
+                                src={image || `http://localhost:8082/api/images/${student[0]?.studentId}`}
                                 alt="Avatar"
                                 style={dis ? {} : { cursor: 'pointer' }}
                                 width="100px"

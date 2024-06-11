@@ -820,7 +820,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             <Button onClick={() => setOpen(false)}>Cancel</Button>
                                             <Button type="submit" ref={saveButtonRef} style={{ display: 'none' }}>Hidden submit button</Button>
                                         </ModalFooter>
-                                    </Form>)}
+                                    </Form>
+                                
+                                )}
 
 
                             </Formik>

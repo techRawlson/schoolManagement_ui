@@ -31,6 +31,7 @@ import Loginpage from './Pages/Register/LoginPage';
 
 
 import { useData } from './Pages/context/DataContext';
+import Role from './Pages/Role';
 function App() {
   const { data, updateData } = useData();
   const token = localStorage.getItem('token');
@@ -85,7 +86,7 @@ function App() {
           <Route path='/lmsleaveapproval' element={tok ? <LeaveApproval /> : <Login setToken={setToken} />} />
           <Route path='/lmsbalance' element={tok ? <LeaveBalances/> : <Login setToken={setToken} />} />
           <Route path='/loginpage' element={tok ? <Loginpage/> : <Login setToken={setToken} />} />
-
+          <Route path='/role' element={tok ? <Role/> : <Login setToken={setToken} />} />
         </Routes>
       </AuthProvider>
     </Router>

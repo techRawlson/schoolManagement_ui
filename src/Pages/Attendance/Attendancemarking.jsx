@@ -860,7 +860,7 @@ const AttendanceMarking = ({ user }) => {
 
 
 
-                <Button width="160px" colorScheme="green" position="absolute" bottom="1rem">hello</Button>
+                <Button width="160px" colorScheme="green" position="absolute" bottom="1rem">Print</Button>
             </Flex>
 
 

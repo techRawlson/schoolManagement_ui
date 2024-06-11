@@ -1,4 +1,4 @@
-import { Box, IconButton, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useEditable } from "@chakra-ui/react"
+import { Box, Button, IconButton, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useEditable } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { useEffect ,useState} from "react"
 import { useNavigate } from "react-router-dom"
@@ -245,6 +245,8 @@ const LeaveBalances=()=>{
                     </Table>
                 </TableContainer>
             </Stack>
+            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+
     </Stack>
 }
 export default LeaveBalances

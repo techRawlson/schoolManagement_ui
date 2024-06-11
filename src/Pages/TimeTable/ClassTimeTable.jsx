@@ -943,7 +943,10 @@ console.log("here")
 
                                     : <div>
                                         <Button onClick={() => createNewEntry()}>Add new</Button>
-                                    </div>}
+                                        <Button colorScheme="green">Print</Button>
+                                    </div>
+
+                                    }
                             </div> : <div>
                                 {
                                     create ? <Button onClick={() => showUpdate()}>{updateButton}</Button> : ''

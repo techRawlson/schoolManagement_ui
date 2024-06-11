@@ -425,9 +425,12 @@ const StudentDetails = () => {
                         {
                             dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
                         }
-
+                <Button colorScheme='green' margin="0 1rem">Print</Button>
                     </Flex>
                 }
+                
+
+
 
             </Stack>
 

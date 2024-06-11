@@ -1,4 +1,4 @@
-import { Flex, FormControl, FormLabel, IconButton, Select, Stack, Text, filter } from "@chakra-ui/react"
+import { Button, Flex, FormControl, FormLabel, Heading, IconButton, Select, Stack, Text, filter } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -18,7 +18,7 @@ import { IoReturnUpBackOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import { useData } from "../context/DataContext";
 const Stafftimetable = () => {
-    const{Role,updateData}=useData()
+    const { Role, updateData } = useData()
     const [data, setData] = useState([])
     const getData = async () => {
         try {
@@ -141,7 +141,7 @@ const Stafftimetable = () => {
 
 
 
-
+    const [showError, setshowError] = useState(false)
     const dataFilter = (data) => {
 
         let filterData = data;
@@ -169,7 +169,7 @@ const Stafftimetable = () => {
                 console.log(filterData)
                 setFilteredData(filterData)
 
-
+                setshowError(false)
 
                 // After processing all subjects, update totalSubjects
 
@@ -187,6 +187,7 @@ const Stafftimetable = () => {
                 setShow(false)
                 setDis(true)
                 setFilteredData([])
+                setshowError(true)
                 // setUpdateButton('')
             }
 
@@ -270,7 +271,7 @@ const Stafftimetable = () => {
 
 
 
-   
+
     const staffId = localStorage.getItem("username")
 
     const showStudentTimeTable = async () => {
@@ -286,7 +287,7 @@ const Stafftimetable = () => {
             setFilters((prev) => ({
                 ...prev,
                 // classData: false,
-                eId:staffId,
+                eId: staffId,
                 teacher: dataJson.name
             }));
             await getData()
@@ -420,8 +421,12 @@ const Stafftimetable = () => {
 
                         : ""
                 }
-
+                {
+                    showError && !show ? <Text color="red" fontWeight="bold">It seems no timetable present for this techer</Text>:''
+}
             </TableContainer>
+            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+
         </Stack>
     </div>
 

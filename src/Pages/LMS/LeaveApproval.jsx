@@ -191,6 +191,8 @@ const LeaveApproval = () => {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+
             <>
                 <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
                     {overlay}

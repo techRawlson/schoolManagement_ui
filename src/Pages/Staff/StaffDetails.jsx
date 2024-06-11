@@ -269,7 +269,7 @@ const StaffDetails = () => {
                                     <FormLabel>Staff Id</FormLabel>
                                     <Input
                                         w='100%' h='10' bg='white.500' value={std.staffId} onChange={(e) => handleFieldChange(e, i, 'staffId')}
-                                        disabled={dis}
+                                        disabled="true"
                                         fontWeight="bold"
                                         name='staffId'
                                     />
@@ -428,7 +428,7 @@ const StaffDetails = () => {
 
                 </Flex>
             </Stack>
-
+            <Button colorScheme="green">Print</Button>
         </Stack>
     )
 }

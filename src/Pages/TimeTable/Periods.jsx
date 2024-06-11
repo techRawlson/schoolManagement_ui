@@ -293,6 +293,7 @@ const Periods = () => {
                             <Th>
                                 <Button onClick={() => setcreate(true)}>Add New</Button>
                             </Th>
+                            
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -388,6 +389,8 @@ const Periods = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
+            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+
         </Flex>
 
 

@@ -20,7 +20,7 @@ import PieChart from "./Piechart";
 import { IoArrowBack } from "react-icons/io5";
 import { useData } from "../context/DataContext";
 const StudentRecord = () => {
-  const[Role,updateData]=useData()
+  const{Role,updateData}=useData()
 
   const [session, setSession] = useState();
   const [classValue, setClassValue] = useState('');
@@ -624,6 +624,8 @@ const StudentRecord = () => {
           </Flex> : ""
       }
     </Stack>
+    <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">hello</Button>
+
   </Stack>
 }
 export default StudentRecord;

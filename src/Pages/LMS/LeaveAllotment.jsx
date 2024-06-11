@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { IoArrowBack, IoReturnUpBackOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 const LmsLeaveallotment = () => {
     const [classData, setClassData] = useState([])
     const [LDetails, setLDetails] = useState([])
@@ -109,7 +110,7 @@ const LmsLeaveallotment = () => {
         }
     };
     
-
+const navigate=useNavigate()
     const goback = () => {
         navigate(-1)
     }
@@ -337,6 +338,8 @@ const LmsLeaveallotment = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
+                    <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+
             </Stack>
         </Stack>
     

@@ -131,16 +131,28 @@ const navigate=useNavigate()
                                     ))
 
                             }
+                            
                             {
                                 edit == false && data.length > 0 ?
-                                    <Td>
+                                    <Td > 
+                                       
                                         <Button onClick={() => setEdit(true)} bgColor="orangered">Edit</Button>
+                                        <Button colorScheme="green" margin="0 1rem">Print</Button>
+
                                     </Td> : ""
                             }
+                           
                             {
                                 edit == true ? <Td>
                                     <Button bgColor="green" onClick={() => Update()}>Update</Button>
                                 </Td> : ''
+                            }
+                            {
+                                <Td>
+                                               
+
+                                </Td>
+
                             }
 
 

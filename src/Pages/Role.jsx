@@ -11,15 +11,16 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { useData } from "./context/DataContext"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Navbar from "../components/Navbar"
 import { IoArrowBack } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 const Role = () => {
 
+    const [names, setNames] = useState([])
+    const [roles, setRoles] = useState([])
+    const [status, setStatus] = useState([])
 
-
-    
     const [data, setData] = useState([])
     const getData = async () => {
         try {
@@ -30,6 +31,20 @@ const Role = () => {
             const data1Json = await data1.json()
             console.log(data1Json)
             setData(data1Json)
+
+
+            const names = [...new Set(data1Json.map(elm => elm.staffName))];
+            const roles = [...new Set(data1Json.map(elm => elm.role))];
+
+
+            console.log(names);
+            console.log(roles);
+            // console.log(status);
+
+            setNames(names)
+            setRoles(roles)
+            setStatus(status)
+
         } catch (error) {
             console.log(error)
         }
@@ -47,92 +62,105 @@ const Role = () => {
         navigate(-1)
     }
 
-
+    const nameRef = useRef(null)
+    const roleRef = useRef(null)
+    const statusRef = useRef(null)
     //filter part
     const [classData, setClassData] = useState([])
     const [filteredData, setFilteredData] = useState([]);
     const [filters, setFilters] = useState({
         classData: true,
-        class: "",
-        section: "",
-        year: "",
-        search: false,
+        name: "",
+        role: "",
+        status: "",
+
     });
 
 
 
     //data filter
     const dataFilter = () => {
-        let filterData = classData;
+        let filterData = data;
 
         //filter for class
-        if (filters.class !== "") {
+        if (filters.name !== "") {
             filterData = filterData.filter(
-                (ele) => ele.className === filters.class
-            );
-        }
-
-        //filter for section
-        if (filters.section !== "") {
-            filterData = filterData.filter(
-                (ele) => ele.section === filters.section
-            );
-        }
-        //filter for year
-        if (filters.year !== "") {
-            console.log(filters.year)
-            filterData = filterData.filter(
-                (ele) => ele.session == filters.year
+                (ele) => ele.staffName === filters.name
             );
         }
         console.log(filterData)
-        if (!filters.search) {
-            setFilteredData(filterData);
-        }
-        if (filters.search) {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
-            setSearchTimeout(
-                setTimeout(() => {
-                    SearchData();
-                }, 500)
+        //filter for section
+        if (filters.role !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.role === filters.role
             );
         }
+        console.log(filterData)
+        //filter for year
+        if (filters.status !== "") {
+            console.log(filters.year)
+            filterData = filterData.filter(
+                (ele) => ele.enabled == filters.status
+            );
+        }
+        console.log(filterData)
+
+        setFilteredData(filterData);
+
+        // if (filters.search) {
+        //     if (searchTimeout) {
+        //         clearTimeout(searchTimeout);
+        //     }
+        //     setSearchTimeout(
+        //         setTimeout(() => {
+        //             SearchData();
+        //         }, 500)
+        //     );
+        // }
     };
 
     //filter change for class  query
-    const handleFilter = () => {
-        setFilters((prev) => ({
-            ...prev,
-            classData: false,
-            class: filterRef.current.value,
-        }));
-    };
+    // const handleFilter = () => {
+    //     setFilters((prev) => ({
+    //         ...prev,
+    //         classData: false,
+    //         class: nameRef.current.value,
+    //     }));
+    // };
     //filter change for section  query
-    const handleFiltersection = () => {
+    const handleFilterName = () => {
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            section: ageRef.current.value,
+            name: nameRef.current.value,
         }));
     };
     //filter change for admissionYear  query
-    const handleFilterYear = () => {
+    const handleFilterRole = () => {
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            year: admYearRef.current.value,
+            role: roleRef.current.value,
         }));
     };
-    //filter change for search input query
-    const handleSearch = () => {
+    //filter change for admissionYear  query
+    const handleFilterStatus = () => {
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            search: true,
+            status: statusRef.current.value,
         }));
-    }
+    };
+
+    console.log()
+    // //filter change for search input query
+    // const handleSearch = () => {
+    //     setFilters((prev) => ({
+    //         ...prev,
+    //         classData: false,
+    //         search: true,
+    //     }));
+    // }
     useEffect(() => {
         dataFilter();
     }, [filters]);
@@ -145,7 +173,8 @@ const Role = () => {
 
 
 
-    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box' }} >
+    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',height:'100vh'
+     }} >
         <Box >
             <Navbar />
             <Flex alignItems="center" >
@@ -156,62 +185,84 @@ const Role = () => {
                     <Thead>
                         <Tr>
                             <Th>
-                                <Select placeholder='Name' onChange={handleFilterYear} >
-                                    {/* {
-                                    Name?.map((session, i) => (
-                                        <option value={session}>{session}</option>
-                                    ))
-                                } */}
+                                <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
+                                    {
+                                        names?.map((session, i) => (
+                                            <option value={session}>{session}</option>
+                                        ))
+                                    }
 
 
                                 </Select>
                             </Th>
                             <Th>
-                                <Select placeholder='Role' onChange={handleFilterYear} >
-                                    {/* {
-                                    roles?.map((session, i) => (
-                                        <option value={session}>{session}</option>
-                                    ))
-                                } */}
+                                <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
+                                    {
+                                        roles?.map((session, i) => (
+                                            <option value={session}>{session}</option>
+                                        ))
+                                    }
 
 
                                 </Select>
                             </Th>
 
                             <Th>
-                                <Select placeholder='Status' onChange={handleFilterYear} >
-                                    {/* {
-                                    status?.map((session, i) => (
-                                        <option value={session}>{session}</option>
-                                    ))
-                                } */}
+                                <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
+
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+
+
 
 
                                 </Select>
                             </Th>
                             <Th>userId</Th>
                             <Th>password</Th>
-                          
+
                         </Tr>
                     </Thead>
-                    <Tbody >
-                        {
-                            data?.map((elm) => (
-                                <Tr>
-                                    <Td>{elm.staffName}</Td>
-                                    <Td>{elm.role}</Td>
-                                    <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
-                                    <Td>{elm.userId}</Td>
-                                    <Td >{elm.password}</Td>
+                    {
+                        filters.classData  ? <Tbody >
+                            {
+                                data?.map((elm) => (
+                                    <Tr>
+
+                                        <Td>{elm.staffName}</Td>
+                                        <Td>{elm.role}</Td>
+                                        <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
+                                        <Td>{elm.userId}</Td>
+                                        <Td >{elm.password}</Td>
 
 
-                                    
-                                </Tr>
-                            ))
-                        }
+
+                                    </Tr>
+                                ))
+                            }
 
 
-                    </Tbody>
+                        </Tbody> :
+                            <Tbody >
+                                {
+                                    filteredData?.map((elm) => (
+                                        <Tr>
+                                            <Td>{elm.staffName}</Td>
+                                            <Td>{elm.role}</Td>
+                                            <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
+                                            <Td>{elm.userId}</Td>
+                                            <Td >{elm.password}</Td>
+
+
+
+                                        </Tr>
+                                    ))
+                                }
+
+
+                            </Tbody>
+                    }
+
 
                 </Table>
             </TableContainer>

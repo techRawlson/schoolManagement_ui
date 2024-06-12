@@ -230,7 +230,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             formData2.append('file', file);
 
             // Create staff entry
-            const staffResponse = await fetch("http://3.108.53.1:8083/api/staff/create-staff", {
+            const staffResponse = await fetch("http://13.201.55.247:8083/api/staff/create-staff", {
                 method: 'POST',
                 body: formData
             });
@@ -259,7 +259,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
             }
             if (image.current.files[0]) {
-                const pictureResponse = await fetch(`http://3.108.53.1:8083/api/staff-images/${staffData.id}`, {
+                const pictureResponse = await fetch(`http://13.201.55.247:8083/api/staff-images/${staffData.id}`, {
                     method: 'post',
                     body: formData2,
                 });
@@ -364,7 +364,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [subjects, setSubjects] = useState([])
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://3.108.53.1:8083/api/staff/all-subjects');
+            const data = await fetch('http://13.201.55.247:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)

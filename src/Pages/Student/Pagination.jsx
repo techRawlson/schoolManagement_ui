@@ -232,7 +232,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         }
 
         try {
-            const data = await fetch("http://localhost:8082/api/students/create-student", {
+            const data = await fetch("http://3.111.52.90:8082/api/students/create-student", {
                 method: 'POST',
                 body: formData
             });
@@ -250,7 +250,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(data.status)
 
             if (data.status >= 200 && data.status < 300) {
-                const picture = await fetch(`http://localhost:8082/api/images/${fdata.id}`, {
+                const picture = await fetch(`http://3.111.52.90:8082/api/images/${fdata.id}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -312,7 +312,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
         try {
 
-            const response = await fetch('http://localhost:8082/api/students/upload-excel', {
+            const response = await fetch('http://3.111.52.90:8082/api/students/upload-excel', {
                 method: 'POST',
                 body: form,
             });
@@ -334,7 +334,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const uploadImage = async (req, res) => {
         try {
-            const upload = await fetch('http://localhost:8082/api/students/uploadImage')
+            const upload = await fetch('http://3.111.52.90:8082/api/students/uploadImage')
             const uploadf = await upload.json()
             console.log(uploadf)
         } catch (error) {
@@ -353,7 +353,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     //for class
     const getClass = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const data = await fetch('http://3.111.52.90:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)

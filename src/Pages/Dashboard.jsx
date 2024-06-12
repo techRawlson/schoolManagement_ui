@@ -12,13 +12,16 @@ import { FcLeave, FcReading } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { useData } from './context/DataContext';
 import { GiPoliceOfficerHead } from "react-icons/gi";
-// import { AiOutlineUser } from '@ant-design/icons';
+import { GoFileDirectoryFill } from "react-icons/go";
+import { MdPayment } from "react-icons/md"
+import { FcSms } from "react-icons/fc";
+
 
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 const Dashboard = () => {
   const { Role, updateData } = useData();
- console.log(Role)
+  console.log(Role)
   const navigate = useNavigate()
   const nextPage = (data) => {
     try {
@@ -29,9 +32,9 @@ const Dashboard = () => {
     }
   }
 
- 
 
-  
+
+
 
 
 
@@ -61,35 +64,35 @@ const Dashboard = () => {
 
 
         {
-          Role == 'student' ? "" : Role=='staff'?'':<Card cursor="pointer" onClick={() => nextPage("staff")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Staff</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <PiChalkboardTeacher size={100} />
-            </Stack>
-          </CardBody>
+          Role == 'student' ? "" : Role == 'staff' ? '' : <Card cursor="pointer" onClick={() => nextPage("staff")} >
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Staff</Heading>
+            </CardHeader>
+            <CardBody>
+              <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                <PiChalkboardTeacher size={100} />
+              </Stack>
+            </CardBody>
 
-        </Card>
+          </Card>
         }
         {
-          Role == 'student' ? "" : Role=='staff'?"":<Card cursor="pointer" onClick={() => nextPage("subjects")}>
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Subjects</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <ImBooks size={100} />
-            </Stack>
-          </CardBody>
+          Role == 'student' ? "" : Role == 'staff' ? "" : <Card cursor="pointer" onClick={() => nextPage("subjects")}>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Subjects</Heading>
+            </CardHeader>
+            <CardBody>
+              <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                <ImBooks size={100} />
+              </Stack>
+            </CardBody>
 
-        </Card>
+          </Card>
         }
 
 
 
-        <Card cursor="pointer" onClick={() => nextPage(Role=='student'?'classtimetable':"timetable")} >
+        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'classtimetable' : "timetable")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Time Table</Heading>
           </CardHeader>
@@ -100,7 +103,7 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage(Role=='student'?'studentrecord':"attendance")} >
+        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'studentrecord' : "attendance")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Attendance</Heading>
           </CardHeader>
@@ -112,25 +115,39 @@ const Dashboard = () => {
 
         </Card>
         {
-          Role == 'student' ? "" :<Card cursor="pointer" onClick={() => nextPage("lms")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> LMS</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <FcLeave
-                size={95} />
-            </Stack>
-          </CardBody>
+          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("lms")} >
+            <CardHeader>
+              <Heading size='md' textAlign="center"> LMS</Heading>
+            </CardHeader>
+            <CardBody>
+              <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                <FcLeave
+                  size={95} />
+              </Stack>
+            </CardBody>
 
-        </Card>
+          </Card>
         }
-        
+
         {
-          Role == 'student' ? "" :  Role == 'staff' ? "":
-          <Card cursor="pointer" onClick={() => nextPage("role")} >
+          Role == 'student' ? "" : Role == 'staff' ? "" :
+            <Card cursor="pointer" onClick={() => nextPage("role")} >
+              <CardHeader>
+                <Heading size='md' textAlign="center"> Roles</Heading>
+              </CardHeader>
+              <CardBody>
+                <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+                  <GiPoliceOfficerHead
+                    size={95} />
+                </Stack>
+              </CardBody>
+
+            </Card>
+        }
+
+        <Card cursor="pointer" onClick={() => nextPage("directory")} >
           <CardHeader>
-            <Heading size='md' textAlign="center"> Roles</Heading>
+            <Heading size='md' textAlign="center"> Directory</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
@@ -140,9 +157,54 @@ const Dashboard = () => {
           </CardBody>
 
         </Card>
-        }
+        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+          <CardHeader>
+            <Heading size='md' textAlign="center">HOLIDAYS</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <GiPoliceOfficerHead
+                size={95} />
+            </Stack>
+          </CardBody>
 
+        </Card>
+        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Annoucement</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <GiPoliceOfficerHead
+                size={95} />
+            </Stack>
+          </CardBody>
 
+        </Card>
+        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+          <CardHeader>
+            <Heading size='md' textAlign="center"> fees</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <GiPoliceOfficerHead
+                size={95} />
+            </Stack>
+          </CardBody>
+
+        </Card>
+        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+          <CardHeader>
+            <Heading size='md' textAlign="center"> sms</Heading>
+          </CardHeader>
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
+              <GiPoliceOfficerHead
+                size={95} />
+            </Stack>
+          </CardBody>
+
+        </Card>
 
 
 

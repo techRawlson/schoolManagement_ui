@@ -388,7 +388,7 @@ const Classtimetable = () => {
     const [staff, setStaff] = useState([])
     const getStaff = async () => {
         try {
-            const data = await fetch("http://3.108.53.1:8083/api/staff/saved-Staff");
+            const data = await fetch("http://13.201.55.247:8083/api/staff/saved-Staff");
             const fdata = await data.json();
 
             setStaff(fdata)
@@ -644,7 +644,7 @@ console.log("here")
         }
         else {
             try {
-                const ab = await fetch(`http://3.108.53.1:8083/api/staff/${id}`)
+                const ab = await fetch(`http://13.201.55.247:8083/api/staff/${id}`)
                 const fab = await ab.json()
                 if (day == 'monday') {
 

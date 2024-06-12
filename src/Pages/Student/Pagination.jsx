@@ -21,7 +21,8 @@ import {
     Avatar,
     Toast,
     FormControl, FormLabel, FormErrorMessage,
-    IconButton
+    IconButton,
+    Heading
 
 } from '@chakra-ui/react'
 import { useData } from '../context/DataContext';
@@ -232,7 +233,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         }
 
         try {
-            const data = await fetch("http://3.111.52.90:8082/api/students/create-student", {
+            const data = await fetch("http://3.109.209.230:8082/api/students/create-student", {
                 method: 'POST',
                 body: formData
             });
@@ -250,7 +251,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(data.status)
 
             if (data.status >= 200 && data.status < 300) {
-                const picture = await fetch(`http://3.111.52.90:8082/api/images/${fdata.id}`, {
+                const picture = await fetch(`http://3.109.209.230:8082/api/images/${fdata.id}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -312,7 +313,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
         try {
 
-            const response = await fetch('http://3.111.52.90:8082/api/students/upload-excel', {
+            const response = await fetch('http://3.109.209.230:8082/api/students/upload-excel', {
                 method: 'POST',
                 body: form,
             });
@@ -334,7 +335,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const uploadImage = async (req, res) => {
         try {
-            const upload = await fetch('http://3.111.52.90:8082/api/students/uploadImage')
+            const upload = await fetch('http://3.109.209.230:8082/api/students/uploadImage')
             const uploadf = await upload.json()
             console.log(uploadf)
         } catch (error) {
@@ -353,7 +354,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     //for class
     const getClass = async () => {
         try {
-            const data = await fetch('http://3.111.52.90:8082/api/students/get-AllClasses')
+            const data = await fetch('http://3.109.209.230:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)
@@ -378,7 +379,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     };
     const saveButtonRef = useRef(null);
 
-
+    const [isMinimized, setIsMinimized] = useState(false);
     return (
         <div style={{ width: '100vw' }}>
 
@@ -539,15 +540,22 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             </div>
             <>
 
+
                 <Modal
-                    isOpen={isOpen}
+                    isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
 
                 >
                     <ModalOverlay />
                     <ModalContent minW="60%">
-                        <ModalHeader>Add New</ModalHeader>
+
+                        <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
+                            {isMinimized ? "Maximize" : "Minimize"}
+                        </Button>
+                        <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
                         <ModalCloseButton onClick={() => setOpen(false)} />
-                        <ModalBody pb={3}>
+
+
+                        <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
                             <Formik
                                 initialValues={{
                                     name: '',
@@ -810,6 +818,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                         </Flex>
                                         <ModalFooter>
+
                                             <Button
                                                 colorScheme='blue'
                                                 mr={3}
@@ -822,7 +831,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             <Button type="submit" ref={saveButtonRef} style={{ display: 'none' }}>Hidden submit button</Button>
                                         </ModalFooter>
                                     </Form>
-                                
+
                                 )}
 
 
@@ -834,6 +843,12 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     </ModalContent>
                 </Modal>
             </>
+
+
+            {/** her modal modification */}
+
+
+
             <>
 
 

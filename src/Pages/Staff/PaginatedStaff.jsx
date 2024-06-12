@@ -398,6 +398,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         link.click();
         document.body.removeChild(link);
     };
+    const [isMinimized, setIsMinimized] = useState(false);
     return (
         <div>
             <>
@@ -534,14 +535,18 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             <>
 
                 <Modal
-                    isOpen={isOpen}
-
+                    isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
+                    
                 >
                     <ModalOverlay />
                     <ModalContent minW="60%">
-                        <ModalHeader>Add New</ModalHeader>
+                    <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
+                                {isMinimized ? "Maximize" : "Minimize"}
+                            </Button>
+                        
                         <ModalCloseButton onClick={() => setOpen(false)} />
-                        <ModalBody pb={3}>
+                        <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
+                        <ModalHeader textAlign="center" fontFamily="Roboto">Add New Staff</ModalHeader>
                             <Formik initialValues={{
                                 name: '',
                                 approver: '',

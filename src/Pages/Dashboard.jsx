@@ -71,7 +71,9 @@ const Dashboard = () => {
             </CardHeader>
             <CardBody>
               <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-                <PiChalkboardTeacher size={100} />
+                <PiChalkboardTeacher size={100} 
+                color='teal'
+                />
               </Stack>
             </CardBody>
 
@@ -84,7 +86,8 @@ const Dashboard = () => {
             </CardHeader>
             <CardBody>
               <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-                <ImBooks size={100} />
+                <ImBooks size={100} 
+                color='pink'/>
               </Stack>
             </CardBody>
 
@@ -139,7 +142,9 @@ const Dashboard = () => {
               <CardBody>
                 <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
                   <GiPoliceOfficerHead
-                    size={95} />
+                    size={95} 
+                    color='lightblue'
+                    />
                 </Stack>
               </CardBody>
 

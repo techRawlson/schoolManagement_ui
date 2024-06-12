@@ -35,7 +35,7 @@ const AttendanceMarking = ({ user }) => {
     const [create, setcreate] = useState(true)
     const getData = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/savedData')
+            const data = await fetch('http://192.168.1.118:8082/api/students/savedData')
             const fdata = await data.json()
             console.log(fdata)
             setData(fdata)
@@ -45,7 +45,7 @@ const AttendanceMarking = ({ user }) => {
     }
     const getDetails = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setDetail(fdata)
@@ -130,7 +130,7 @@ const AttendanceMarking = ({ user }) => {
         if (classValue != '' && section != '' && session != '' && date != '' & slot != '') {
             console.log(classValue, section, session)
             try {
-                const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/date/${date}/slot/${slot}`);
+                const data = await fetch(`http://192.168.1.118:8088/api/Attendance/attendance/${classValue}/${section}/${session}/date/${date}/slot/${slot}`);
                 const fdata = await data.json();
                 console.log(fdata)
                 setSubmitVisible(true)
@@ -173,7 +173,7 @@ const AttendanceMarking = ({ user }) => {
     console.log(uniqueClassNames)
     console.log(detail)
     console.log(Attendance)
-    
+
     const dataFilter = (data) => {
 
         let filterData;
@@ -188,7 +188,7 @@ const AttendanceMarking = ({ user }) => {
             const day = currtDate.getDate();
             const month = currtDate.getMonth() + 1; // Months are zero-indexed
             const year = currtDate.getFullYear();
-          
+
             const formattedDate = `${day}/${month}/${year}`;
             console.log(formattedDate)
             setcreate(true)
@@ -205,7 +205,7 @@ const AttendanceMarking = ({ user }) => {
                     obj.studentName = student.name,
                     obj.rollNumber = student.rollNumber,
                     obj.date = date,
-                    obj.time = formattedDate+" "+formattedTime,
+                    obj.time = formattedDate + " " + formattedTime,
                     obj.slot = slot == '1st' ? '1st' : '2nd',
                     obj.teacherName = localStorage.getItem("username"),
                     newData.push(obj)
@@ -273,8 +273,8 @@ const AttendanceMarking = ({ user }) => {
             }
 
         }
-           
-        
+
+
 
     };
     console.log(filteredData)
@@ -375,7 +375,7 @@ const AttendanceMarking = ({ user }) => {
             console.log(e.target.value)
 
             try {
-                const data = await fetch(`http://localhost:8086/api/periods/lecture/${id}`);
+                const data = await fetch(`http://192.168.1.118:8086/api/periods/lecture/${id}`);
                 const fdata = await data.json();
                 //console.log(fdata);
                 setLecture(e.target.value)
@@ -391,7 +391,7 @@ const AttendanceMarking = ({ user }) => {
         }
         else {
             try {
-                const ab = await fetch(`http://localhost:8083/api/staff/${id}`)
+                const ab = await fetch(`http://192.168.1.118:8083/api/staff/${id}`)
                 const fab = await ab.json()
                 if (day == 'monday') {
 
@@ -443,7 +443,7 @@ const AttendanceMarking = ({ user }) => {
     const [periods, setPeriods] = useState([])
     const getPeriods = async () => {
         try {
-            const data = await fetch('http://localhost:8086/api/periods/lectures');
+            const data = await fetch('http://192.168.1.118:8086/api/periods/lectures');
             const fdata = await data.json();
             //console.log(fdata);
             setPeriods(fdata)
@@ -479,7 +479,7 @@ const AttendanceMarking = ({ user }) => {
     const create1 = async (d) => {
         console.log(filteredData)
         try {
-            const response = await fetch('http://localhost:8088/api/Attendance/attendance/bulk', {
+            const response = await fetch('http://192.168.1.118:8088/api/Attendance/attendance/bulk', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -501,9 +501,21 @@ const AttendanceMarking = ({ user }) => {
     };
     //update exsisting entries of the data
     const update1 = async () => {
+        const currtDate = new Date();
+        const day = currtDate.getDate();
+        const month = currtDate.getMonth() + 1; // Months are zero-indexed
+        const year = currtDate.getFullYear();
+
+        const formattedDate = `${day}/${month}/${year}`;
         console.log(filteredData)
+        // Update the time property for each item
+        const dataToSend = filteredData.map((elm) => {
+            return { ...elm, time: `${formattedDate} ${formattedTime}` };
+        });
+
+        console.log(dataToSend);
         try {
-            const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`, {
+            const data = await fetch(`http://192.168.1.118:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -524,11 +536,11 @@ const AttendanceMarking = ({ user }) => {
 
         try {
             //delete from class time table data
-            const del = await fetch(`http://localhost:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
+            const del = await fetch(`http://192.168.1.118:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             //delete from staff time table data
-            const del2 = await fetch(`http://localhost:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
+            const del2 = await fetch(`http://192.168.1.118:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             await getData()
@@ -579,7 +591,7 @@ const AttendanceMarking = ({ user }) => {
 
     const getDataFromStaffTimeTable = async () => {
         try {
-            const data = await fetch('http://localhost:8086/api/LockedData/lecturedata')
+            const data = await fetch('http://192.168.1.118:8086/api/LockedData/lecturedata')
             const fdata = await data.json()
             //console.log(fdata)
             setStaffTimedata(fdata)
@@ -650,9 +662,9 @@ const AttendanceMarking = ({ user }) => {
         overflow: 'hidden',    // Hide content overflow within cells
         whiteSpace: 'nowrap',  // Prevent line breaks within cells
         textOverflow: 'ellipsis',// Display ellipsis (...) for overflowed text
-        textAlign: 'center', 
+        textAlign: 'center',
     };
-    
+
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -660,7 +672,7 @@ const AttendanceMarking = ({ user }) => {
                 background="none"
                 cursor="pointer"
                 onClick={goback}
-                style={{  marginLeft: '3%' }}
+                style={{ marginLeft: '3%' }}
 
             />
         </Flex>
@@ -733,7 +745,7 @@ const AttendanceMarking = ({ user }) => {
                                         </Tr>
                                     </Thead>
                                 </>
-                                : 
+                                :
                                 ""
                         }
 
@@ -765,37 +777,37 @@ const AttendanceMarking = ({ user }) => {
                                 <Tbody>
                                     {filteredData.map((item, index) => (
                                         <tr key={index}>
-                                        <td style={cellStyle}>{index + 1}</td>
-                                        <td style={cellStyle}>{item.studentId}</td>
-                                        <td style={cellStyle}>{item.studentName}</td>
-                                        <td style={cellStyle}>{item.fathersName}</td>
-                                        <td style={cellStyle}>{item.rollNumber}</td>
-                                        <td
-                                          style={{
-                                            ...cellStyle,
-                                            backgroundColor:
-                                              Attendance.length > 0
-                                                ? item.attendance === 'true'
-                                                  ? 'green'
-                                                  : 'red'
-                                                : '',
-                                          }}
-                                        >
-                                          {Attendance.length > 0 ? (
-                                            item.attendance === 'true' ? (
-                                              'Present'
-                                            ) : (
-                                              'Absent'
-                                            )
-                                          ) : (
-                                            <Checkbox
-                                              isChecked={item.attendance === 'true'}
-                                              onChange={(event) => changeCheckBox(item, index, event)}
-                                              size="lg"
-                                            />
-                                          )}
-                                        </td>
-                                      </tr>
+                                            <td style={cellStyle}>{index + 1}</td>
+                                            <td style={cellStyle}>{item.studentId}</td>
+                                            <td style={cellStyle}>{item.studentName}</td>
+                                            <td style={cellStyle}>{item.fathersName}</td>
+                                            <td style={cellStyle}>{item.rollNumber}</td>
+                                            <td
+                                                style={{
+                                                    ...cellStyle,
+                                                    backgroundColor:
+                                                        Attendance.length > 0
+                                                            ? item.attendance === 'true'
+                                                                ? 'green'
+                                                                : 'red'
+                                                            : '',
+                                                }}
+                                            >
+                                                {Attendance.length > 0 ? (
+                                                    item.attendance === 'true' ? (
+                                                        'Present'
+                                                    ) : (
+                                                        'Absent'
+                                                    )
+                                                ) : (
+                                                    <Checkbox
+                                                        isChecked={item.attendance === 'true'}
+                                                        onChange={(event) => changeCheckBox(item, index, event)}
+                                                        size="lg"
+                                                    />
+                                                )}
+                                            </td>
+                                        </tr>
 
 
                                     ))}
@@ -814,7 +826,7 @@ const AttendanceMarking = ({ user }) => {
                     </Table>
 
                     {
-                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red',fontSize:'24px' }}>it seems that time table does not exist for the above class selection..</Text> : ''
+                        showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red', fontSize: '24px' }}>it seems that time table does not exist for the above class selection..</Text> : ''
                     }
 
                 </TableContainer>
@@ -834,8 +846,8 @@ const AttendanceMarking = ({ user }) => {
                         <Stack marginTop="0.3%">
                             {
                                 Edit ? "" :
-                                Attendance?.length  == 0 && showMsg ?"":
-                                <Button onClick={() => create1()} bgColor="green">Submit1</Button>
+                                    Attendance?.length == 0 && showMsg ? "" :
+                                        <Button onClick={() => create1()} bgColor="green">Submit1</Button>
 
                             }
                         </Stack> : ''

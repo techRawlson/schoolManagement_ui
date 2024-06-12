@@ -22,7 +22,7 @@ const StaffDetails = () => {
     const imageRef = useRef()
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://13.201.55.247:8083/api/staff/${id}`)
+            const data = await fetch(`http://192.168.1.118:8083/api/staff/${id}`)
             const fdata = await data.json()
             console.log(fdata)
 
@@ -97,7 +97,7 @@ const StaffDetails = () => {
             });
             console.log(formData)
             console.log(student[0])
-            const data = await fetch(`http://13.201.55.247:8083/api/staff/update/${id}`, {
+            const data = await fetch(`http://192.168.1.118:8083/api/staff/update/${id}`, {
                 method: 'PUT',
                 body: formData,
             })
@@ -110,15 +110,15 @@ const StaffDetails = () => {
 
             formData2.append('file', file);
 
-            const pictureCheck = await fetch(`http://13.201.55.247:8083/api/staff-images/${id}`)
+            const pictureCheck = await fetch(`http://192.168.1.118:8083/api/staff-images/${id}`)
             console.log(pictureCheck.status)
             if (pictureCheck.status >= 200 && pictureCheck.status < 300) {
-                const picture = await fetch(`http://13.201.55.247:8083/api/staff-images/${id}`, {
+                const picture = await fetch(`http://192.168.1.118:8083/api/staff-images/${id}`, {
                     method: 'put',
                     body: formData2,
                 })
             } else {
-                const picture = await fetch(`http://13.201.55.247:8083/api/staff-images/${id}`, {
+                const picture = await fetch(`http://192.168.1.118:8083/api/staff-images/${id}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -155,7 +155,7 @@ const StaffDetails = () => {
     }
     const getData = async () => {
         try {
-            const data = await fetch("http://13.201.55.247:8083/api/staff/saved-Staff");
+            const data = await fetch("http://192.168.1.118:8083/api/staff/saved-Staff");
             const fdata = await data.json();
             console.log(fdata)
             setClassData(fdata)
@@ -172,7 +172,7 @@ const StaffDetails = () => {
     };
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://13.201.55.247:8083/api/staff/all-subjects');
+            const data = await fetch('http://192.168.1.118:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -211,7 +211,7 @@ const StaffDetails = () => {
 
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar
-                            src={image || `http://13.201.55.247:8083/api/staff-images/${id}`}
+                            src={image || `http://192.168.1.118:8083/api/staff-images/${id}`}
                             alt="Avatar"
                             style={dis ? {} : { cursor: 'pointer' }}
                             

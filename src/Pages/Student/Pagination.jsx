@@ -104,7 +104,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
         try {
             // Define the URL of the API endpoint
-            const url = 'http://localhost:9091/api/download/excel';
+            const url = 'http://192.168.1.118:9091/api/download/excel';
 
             // Make a GET request to the API endpoint
             const response = await fetch(url, {
@@ -176,7 +176,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     const emailRef = useRef()
     const rollRef = useRef()
     const enrollRef = useRef()
-    const [image, setImage] = useState()
+    const [image, setImage] = useState(null)
     const handleChange = (e) => {
         const file = e.target.files[0];
         console.log("-----testing---", file);
@@ -233,14 +233,13 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         }
 
         try {
-            const data = await fetch("http://3.109.209.230:8082/api/students/create-student", {
+            const data = await fetch("http://192.168.1.118:8082/api/students/create-student", {
                 method: 'POST',
                 body: formData
             });
 
             if (!data.ok) {
                 const errorMessage = await data.text() || 'Unknown error occurred';
-                toast.error(errorMessage);
                 throw new Error(errorMessage);
 
             }
@@ -250,8 +249,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(fdata)
             console.log(data.status)
 
-            if (data.status >= 200 && data.status < 300) {
-                const picture = await fetch(`http://3.109.209.230:8082/api/images/${fdata.id}`, {
+            if (data.status >= 200 && data.status < 300 && !image==null) {
+                const picture = await fetch(`http://192.168.1.118:8082/api/images/${fdata.id}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -259,14 +258,13 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 if (!picture.ok) {
                     console.log(picture)
                     const errorMessage = await picture.text() || 'Unknown error occurred';
-
                     throw new Error(errorMessage);
 
                 }
 
             }
 
-            const Login = await fetch("http://localhost:8081/api/Login/create", {
+            const Login = await fetch("http://192.168.1.118:8081/api/Login/create", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -293,7 +291,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 toast.error("Something went wrong");
             }
         } catch (error) {
+            console.log(error)
             toast.error(error.message || "Something went wrong");
+            setOpen(false)
         }
     };
 
@@ -313,7 +313,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
         try {
 
-            const response = await fetch('http://3.109.209.230:8082/api/students/upload-excel', {
+            const response = await fetch('http://192.168.1.118:8082/api/students/upload-excel', {
                 method: 'POST',
                 body: form,
             });
@@ -335,7 +335,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const uploadImage = async (req, res) => {
         try {
-            const upload = await fetch('http://3.109.209.230:8082/api/students/uploadImage')
+            const upload = await fetch('http://192.168.1.118:8082/api/students/uploadImage')
             const uploadf = await upload.json()
             console.log(uploadf)
         } catch (error) {
@@ -354,7 +354,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     //for class
     const getClass = async () => {
         try {
-            const data = await fetch('http://3.109.209.230:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)
@@ -543,7 +543,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                 <Modal
                     isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
-
+                    
                 >
                     <ModalOverlay />
                     <ModalContent minW="60%">
@@ -551,11 +551,12 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                         <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
                             {isMinimized ? "Maximize" : "Minimize"}
                         </Button>
-                        <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
                         <ModalCloseButton onClick={() => setOpen(false)} />
 
 
                         <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
+                        <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
+
                             <Formik
                                 initialValues={{
                                     name: '',
@@ -797,7 +798,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 <FormLabel>Enrollment No.</FormLabel>
                                                 <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
                                             </FormControl>
-                                            <FormControl isRequired maxW="45%">
+                                            <FormControl  maxW="45%">
                                                 <FormLabel>Upload Image</FormLabel>
                                                 <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
                                             </FormControl>

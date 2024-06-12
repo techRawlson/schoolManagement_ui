@@ -48,7 +48,7 @@ const ClassRecord = () => {
     }
     const getData = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/savedData')
+            const data = await fetch('http://192.168.1.118:8082/api/students/savedData')
             const fdata = await data.json()
             console.log(fdata)
             // setData(fdata)
@@ -58,7 +58,7 @@ const ClassRecord = () => {
     }
     const getDetails = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setDetail(fdata)
@@ -265,7 +265,7 @@ const ClassRecord = () => {
         if (classValue != '' && section != '' && session != '' && fDate != '' & tDate != '') {
             console.log(classValue, section, session)
             try {
-                const data = await fetch(`http://localhost:8088/api/Attendance/attendance/${classValue}/${section}/${session}/range/${fDate}/${tDate}`);
+                const data = await fetch(`http://192.168.1.118:8088/api/Attendance/attendance/${classValue}/${section}/${session}/range/${fDate}/${tDate}`);
                 const fdata = await data.json();
                 console.log(fdata)
 

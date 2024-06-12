@@ -112,7 +112,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
         try {
             // Define the URL of the API endpoint
-            const url = 'http://localhost:9091/download/staff/excel';
+            const url = 'http://192.168.1.118:9091/download/staff/excel';
 
             // Make a GET request to the API endpoint
             const response = await fetch(url, {
@@ -230,7 +230,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             formData2.append('file', file);
 
             // Create staff entry
-            const staffResponse = await fetch("http://13.201.55.247:8083/api/staff/create-staff", {
+            const staffResponse = await fetch("http://192.168.1.118:8083/api/staff/create-staff", {
                 method: 'POST',
                 body: formData
             });
@@ -241,7 +241,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             const staffData = await staffResponse.json();
 
             // Create login entry
-            const loginResponse = await fetch("http://localhost:8081/api/Login/create", {
+            const loginResponse = await fetch("http://192.168.1.118:8081/api/Login/create", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
             }
             if (image.current.files[0]) {
-                const pictureResponse = await fetch(`http://13.201.55.247:8083/api/staff-images/${staffData.id}`, {
+                const pictureResponse = await fetch(`http://192.168.1.118:8083/api/staff-images/${staffData.id}`, {
                     method: 'post',
                     body: formData2,
                 });
@@ -299,7 +299,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const uploadFileExcel = async () => {
         try {
             form.append('file', file);
-            const response = await fetch('http://localhost:5173/api/upload-excel', {
+            const response = await fetch('http://192.168.1.118:5173/api/upload-excel', {
                 method: 'POST',
                 body: form,
             });
@@ -322,7 +322,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
     const uploadImage = async (req, res) => {
         try {
-            const upload = await fetch('http://localhost:8082/api/students/uploadImage')
+            const upload = await fetch('http://192.168.1.118:8082/api/students/uploadImage')
             const uploadf = await upload.json()
             console.log(uploadf)
         } catch (error) {
@@ -364,7 +364,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [subjects, setSubjects] = useState([])
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://13.201.55.247:8083/api/staff/all-subjects');
+            const data = await fetch('http://192.168.1.118:8083/api/staff/all-subjects');
             const fdata = await data.json();
             console.log(fdata)
             setSubjects(fdata)
@@ -453,7 +453,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                 <Td border="1px solid">{elm.staffId}</Td>
                                                 <Td border="1px solid">{elm.id}</Td>
                                                 <Td border="1px solid">
-                                                    <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/staffdetails/${elm.id}`}>
+                                                    <ChakraLink as={ReactRouterLink} to={`http://192.168.1.118:3000/staffdetails/${elm.id}`}>
                                                         {elm.name}
                                                     </ChakraLink>
                                                 </Td>

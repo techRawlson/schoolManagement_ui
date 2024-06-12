@@ -36,7 +36,7 @@ const StudentRecord = () => {
   const [detail, setDetail,] = useState([])
   const getData = async () => {
     try {
-      const data = await fetch('http://localhost:8082/api/students/savedData')
+      const data = await fetch('http://192.168.1.118:8082/api/students/savedData')
       const fdata = await data.json()
       console.log(fdata)
       setData(fdata)
@@ -46,7 +46,7 @@ const StudentRecord = () => {
   }
   const getDetails = async () => {
     try {
-      const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+      const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
       const fdata = await data.json()
       //console.log(fdata)
       setDetail(fdata)
@@ -350,7 +350,7 @@ const StudentRecord = () => {
 
     if (filters.student !== "" && filters.section !== "" && filters.class !== '' && filters.rollNumber !== '' && filters.fdate !== '' && filters.tdate !== '') {
       try {
-        const data = await fetch(`http://localhost:8088/api/Attendance/search/${classValue}/${section}/${student}/${rollNumber}/${fdate}/${tdate}`);
+        const data = await fetch(`http://192.168.1.118:8088/api/Attendance/search/${classValue}/${section}/${student}/${rollNumber}/${fdate}/${tdate}`);
         const fdata = await data.json()
         console.log(fdata)
 
@@ -453,7 +453,7 @@ const StudentRecord = () => {
   const showStudentTimeTable = async () => {
     try {
       const studentId = localStorage.getItem('username');
-      const response = await fetch(`http://localhost:8082/api/students/id/${studentId}`);
+      const response = await fetch(`http://192.168.1.118:8082/api/students/id/${studentId}`);
       const dataJson = await response.json();
       console.log(dataJson);
       // setSession(dataJson.session);

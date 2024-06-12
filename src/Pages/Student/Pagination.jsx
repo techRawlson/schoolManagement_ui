@@ -435,8 +435,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 <Thead>
                                     <Tr maxWidth="10%" border="1px solid">
                                         <Th border="1px solid">Sr.No.</Th>
-
                                         <Th border="1px solid">Enrollment No.</Th>
+                                        <Th border="1px solid">studentId</Th>
                                         <Th border="1px solid">Name</Th>
                                         <Th border="1px solid">Father Name</Th>
                                         <Th border="1px solid">Class Name</Th>
@@ -454,6 +454,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 <Td border="1px solid">{startIndex + i + 1}</Td>
 
                                                 <Td border="1px solid">{elm.enrollmentNumber}</Td>
+                                                <Td border="1px solid">{elm.studentId}</Td>
                                                 <Td border="1px solid">
                                                     <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/studentdetails/${elm.id}`}>
                                                         {elm.name}

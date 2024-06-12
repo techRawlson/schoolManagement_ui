@@ -302,6 +302,15 @@ const StudentDetails = () => {
                                     />
                                 </FormControl>
                                 <FormControl id="name">
+                                    <FormLabel>StudentId</FormLabel>
+                                    <Input
+                                        w='100%' h='10' bg='white.500'
+                                        value={std.studentId}
+                                        fontWeight="bold"
+                                        disabled
+                                    />
+                                </FormControl>
+                                <FormControl id="name">
                                     <FormLabel>ClassName</FormLabel>
                                     <Input
                                         w='100%' h='10' bg='white.500' value={std.className}
@@ -424,10 +433,10 @@ const StudentDetails = () => {
                         {
                             dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
                         }
-                <Button colorScheme='green' margin="0 1rem">Print</Button>
+                        <Button colorScheme='green' margin="0 1rem">Print</Button>
                     </Flex>
                 }
-                
+
 
 
 

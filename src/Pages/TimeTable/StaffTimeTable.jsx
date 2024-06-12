@@ -108,7 +108,7 @@ const Stafftimetable = () => {
 
     const getTeachers = async () => {
         try {
-            const data = await fetch("http://localhost:8083/api/staff/saved-Staff");
+            const data = await fetch("http://3.108.53.1:8083/api/staff/saved-Staff");
             const fdata = await data.json();
 
             setClassData(fdata)
@@ -277,7 +277,7 @@ const Stafftimetable = () => {
     const showStudentTimeTable = async () => {
         try {
             const studentId = localStorage.getItem('username');
-            const response = await fetch(`http://localhost:8083/api/staff/staff/${staffId}`);
+            const response = await fetch(`http://3.108.53.1:8083/api/staff/staff/${staffId}`);
             const dataJson = await response.json();
             console.log(dataJson);
 

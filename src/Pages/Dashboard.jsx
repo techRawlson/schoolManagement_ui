@@ -15,7 +15,8 @@ import { GiPoliceOfficerHead } from "react-icons/gi";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { MdPayment } from "react-icons/md"
 import { FcSms } from "react-icons/fc";
-
+import { FaBell } from "react-icons/fa6";
+import { MdBeachAccess } from "react-icons/md";
 
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
@@ -151,55 +152,59 @@ const Dashboard = () => {
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <GiPoliceOfficerHead
+              <GoFileDirectoryFill
+              color='orange'
                 size={95} />
             </Stack>
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+        <Card cursor="pointer" onClick={() => nextPage("holidays")} >
           <CardHeader>
             <Heading size='md' textAlign="center">HOLIDAYS</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <GiPoliceOfficerHead
+              <MdBeachAccess
+              color='tomato'
                 size={95} />
             </Stack>
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+        <Card cursor="pointer" onClick={() => nextPage("annoucement")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> Annoucement</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <GiPoliceOfficerHead
+              <FaBell
+              color='orangered'
                 size={95} />
             </Stack>
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+        <Card cursor="pointer" onClick={() => nextPage("fees")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> fees</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <GiPoliceOfficerHead
+              <MdPayment
+              color='skyblue'
                 size={95} />
             </Stack>
           </CardBody>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("directory")} >
+        <Card cursor="pointer" onClick={() => nextPage("sms")} >
           <CardHeader>
             <Heading size='md' textAlign="center"> sms</Heading>
           </CardHeader>
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
-              <GiPoliceOfficerHead
+              <FcSms
                 size={95} />
             </Stack>
           </CardBody>

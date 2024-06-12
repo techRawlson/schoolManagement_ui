@@ -181,6 +181,8 @@ const AttendanceMarking = ({ user }) => {
             filterData = Attendance;
             console.log('first block')
             setDbTeacherName(filterData[0].teacherName)
+            console.log(filteredData)
+            console.log(filterData[0].time)
             setDbTime(filterData[0].time)
             setcreate(false)
         } else {
@@ -520,7 +522,7 @@ const AttendanceMarking = ({ user }) => {
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
                 },
-                body: JSON.stringify(filteredData) // Co
+                body: JSON.stringify(dataToSend) // Co
             })
             setEdit(false)
         } catch (error) {

@@ -71,7 +71,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        onPageChange(pageNumber);
+        // onPageChange(pageNumber);
     };
 
     const handlePreviousPage = () => {
@@ -190,7 +190,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
 
-
+    const today = new Date().toISOString().split('T')[0];
     console.log(sessionRef)
 
     const saveButton = async () => {
@@ -249,8 +249,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(fdata)
             console.log(data.status)
 
-            if (data.status >= 200 && data.status < 300 && !image==null) {
-                const picture = await fetch(`http://192.168.1.118:8082/api/images/${fdata.id}`, {
+            if (data.status >= 200 && data.status < 300 && image!=null) {
+                const picture = await fetch(`http://192.168.1.118:8082/api/images/${fdata.studentId}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -261,6 +261,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     throw new Error(errorMessage);
 
                 }
+                console.log(picture)
 
             }
 
@@ -738,12 +739,13 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     name="number"
                                                     type="Number"
                                                     ref={admRef}
+                                                    
 
                                                 />
                                             </FormControl>
                                             <FormControl isRequired>
                                                 <FormLabel>Date of birth</FormLabel>
-                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' />
+                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today}/>
                                             </FormControl>
                                         </Flex>
 

@@ -53,7 +53,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     const { Role, updateData } = useData();
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
-    const [isOpen, setOpen] = useState(false)
+
     const [onOpen, setOnOpen] = useState(false)
     const [isClose, setIsClose] = useState(false)
     const initialRef = useRef()
@@ -380,8 +380,14 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         document.body.removeChild(link);
     };
     const saveButtonRef = useRef(null);
-    const [isMinimized, setIsMinimized] = useState(false);
-    const [initialFormValues, setInitialFormValues] = useState({
+
+
+
+
+
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [initialFormData, setFormData] = useState({
         name: '',
         email: '',
         fathersname: '',
@@ -394,10 +400,33 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         category: '',
         session: '',
     });
-    console.log(initialFormValues)
-    const handleToggleMinimize = () => {
-        setIsMinimized(!isMinimized);
+    const [savedFormData, setSavedFormData] = useState(null);
+
+    const openModal = () => setIsOpen(true);
+    const closeModal = () => setIsOpen(false);
+
+    const handleMinimize = () => {
+        setSavedFormData(formData); // Save current form data
+        setFormData(initialFormData); // Clear form data to hide from modal
+        setIsOpen(false); // Hide the modal
     };
+
+    const handleRestore = () => {
+        setFormData(savedFormData); // Restore the form data
+        setIsOpen(true); // Show the modal
+    };
+
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData(prevData => ({
+    //         ...prevData,
+    //         [name]: value,
+    //     }));
+    // };
+
+
+
+
     return (
         <div style={{ width: '100vw' }}>
 
@@ -567,313 +596,298 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     <Draggable handle=".modal-header">
                         <ModalContent
                             minW="60%"
-                            style={{ opacity: isMinimized ? 0.6 : 1, cursor: isMinimized ? 'grab' : 'auto' }}
+
                         >
-
-
-
-                            <ModalCloseButton onClick={() => setOpen(false)} />
-
-
-                            <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
+                            <ModalCloseButton onClick={() => setIsOpen(false)} />
+                            <ModalBody pb={3} >
                                 <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
-
                                 <Formik
-                                initialValues={{
-                                    name: '',
-                                    email: '',
-                                    fathersname: '',
-                                    mobile: '',
-                                    address: '',
-                                    class: null,
-                                    section: '',
-                                    gender: '',
-                                    rollNo: '',
-                                    category: '',
-                                    session: '',
-                                }}
-                                validate={(values) => {
-                                    const errors = {};
-                                    if (!values.name) {
-                                        errors.name = 'Name is Required';
-                                    }
-                                    if (!values.email) {
-                                        errors.email = 'Email is required';
-                                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                                        errors.email = 'Invalid email address';
-                                    } if (!values.fathersname) {
-                                        errors.fathersname = 'Father\'s name is required';
-                                    } if (!values.mobile) {
-                                        errors.mobile = 'Mobile number is required';
-                                    } else if (!/^\d{10}$/.test(values.mobile)) {
-                                        errors.mobile = 'Mobile number must be 10 digits';
-                                    }
-                                    if (!values.class) {
-                                        errors.class = 'Class is required';
-                                    }
-                                    if (!values.section) {
-                                        errors.section = 'Section is required'; // Validation for section field
-                                    }
-                                    if (!values.gender) {
-                                        errors.gender = 'Gender is required'; // Validation for section field
-                                    }
-                                    if (!values.rollNo) {
-                                        errors.rollNo = 'Roll Number is required'; // Validation for section field
-                                    }
-                                    if (!values.category) {
-                                        errors.category = 'Category is Required'
-                                    }
-                                    if (!values.session) {
-                                        errors.session = 'Session is Required'
-                                    }
+                                    initialValues={{
+                                        name: '',
+                                        email: '',
+                                        fathersname: '',
+                                        mobile: '',
+                                        address: '',
+                                        class: null,
+                                        section: '',
+                                        gender: '',
+                                        rollNo: '',
+                                        category: '',
+                                        session: '',
+                                    }}
+                                    validate={(values) => {
+                                        const errors = {};
+                                        if (!values.name) {
+                                            errors.name = 'Name is Required';
+                                        }
+                                        if (!values.email) {
+                                            errors.email = 'Email is required';
+                                        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                                            errors.email = 'Invalid email address';
+                                        } if (!values.fathersname) {
+                                            errors.fathersname = 'Father\'s name is required';
+                                        } if (!values.mobile) {
+                                            errors.mobile = 'Mobile number is required';
+                                        } else if (!/^\d{10}$/.test(values.mobile)) {
+                                            errors.mobile = 'Mobile number must be 10 digits';
+                                        }
+                                        if (!values.class) {
+                                            errors.class = 'Class is required';
+                                        }
+                                        if (!values.section) {
+                                            errors.section = 'Section is required'; // Validation for section field
+                                        }
+                                        if (!values.gender) {
+                                            errors.gender = 'Gender is required'; // Validation for section field
+                                        }
+                                        if (!values.rollNo) {
+                                            errors.rollNo = 'Roll Number is required'; // Validation for section field
+                                        }
+                                        if (!values.category) {
+                                            errors.category = 'Category is Required'
+                                        }
+                                        if (!values.session) {
+                                            errors.session = 'Session is Required'
+                                        }
 
 
 
-                                    // Add validations for other fields
-                                    return errors;
-                                }}
-                                onSubmit={(values, { setSubmitting }) => {
-                                    setTimeout(() => {
-                                        // alert(JSON.stringify(values, null, 2));
-                                        console.log(values)
-                                        console.log(form)
-                                        saveButton()
-                                        setSubmitting(false);
-                                    }, 400);
-                                }}
-                            >
-                                {({ isSubmitting, isValid }) => (
-                                    <Form>
-                                        <Flex justifyContent="space-between" alignItems="center" >
-                                            <Field name="name">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.name && form.touched.name} isRequired>
-                                                        <FormLabel htmlFor="name">Name</FormLabel>
-                                                        <Input {...field} id="name" placeholder="Name" ref={nameRef} />
-                                                        <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-                                            <Field name="email" m="1">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.email && form.touched.email} isRequired>
-                                                        <FormLabel htmlFor="email">Email Address</FormLabel>
-                                                        <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
-                                                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-                                            <Field name="fathersname" m="1">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired m="1">
-                                                        <FormLabel htmlFor="fathersname">Father Name</FormLabel>
-                                                        <Input {...field} placeholder='Father name' ref={fatherRef} id="fathersname" name='fathersname' />
-                                                        <FormErrorMessage>{form.errors.fathersname}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-                                        </Flex>
+                                        // Add validations for other fields
+                                        return errors;
+                                    }}
+                                    onSubmit={(values, { setSubmitting }) => {
+                                        setTimeout(() => {
+                                            // alert(JSON.stringify(values, null, 2));
+                                            console.log(values)
+                                            console.log(form)
+                                            saveButton()
+                                            setSubmitting(false);
+                                        }, 400);
+                                    }}
+                                >
+                                    {({ isSubmitting, isValid }) => (
+                                        <Form>
+                                            <Flex justifyContent="space-between" alignItems="center" >
+                                                <Field name="name">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired>
+                                                            <FormLabel htmlFor="name">Name</FormLabel>
+                                                            <Input {...field} id="name" placeholder="Name" ref={nameRef} />
+                                                            <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+                                                <Field name="email" m="1">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired>
+                                                            <FormLabel htmlFor="email">Email Address</FormLabel>
+                                                            <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
+                                                            <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+                                                <Field name="fathersname" m="1">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired m="1">
+                                                            <FormLabel htmlFor="fathersname">Father Name</FormLabel>
+                                                            <Input {...field} placeholder='Father name' ref={fatherRef} id="fathersname" name='fathersname' />
+                                                            <FormErrorMessage>{form.errors.fathersname}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+                                            </Flex>
 
-                                        <Flex justifyContent="space-between" alignItems="center">
-                                            <Field name="mobile" m="1">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired m="1">
-                                                        <FormLabel htmlFor="fathersname">Mobile</FormLabel>
-                                                        <Input
-                                                            {...field}
-                                                            placeholder='Mobile'
-                                                            ref={mobileRef}
-                                                            id="mobile"
-                                                            name='mobile'
-                                                            maxLength={10} // Limit maximum length to 10 characters
-                                                            type="tel"
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit character with an empty string
-                                                                form.setFieldValue('mobile', value); // Update the form value
-                                                            }}
-                                                            value={field.value} // Ensure controlled input behavior
-                                                        />
-                                                        <FormErrorMessage>{form.errors.mobile}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
+                                            <Flex justifyContent="space-between" alignItems="center">
+                                                <Field name="mobile" m="1">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired m="1">
+                                                            <FormLabel htmlFor="fathersname">Mobile</FormLabel>
+                                                            <Input
+                                                                {...field}
+                                                                placeholder='Mobile'
+                                                                ref={mobileRef}
+                                                                id="mobile"
+                                                                name='mobile'
+                                                                maxLength={10} // Limit maximum length to 10 characters
+                                                                type="tel"
+                                                                onChange={(e) => {
+                                                                    const value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit character with an empty string
+                                                                    form.setFieldValue('mobile', value); // Update the form value
+                                                                }}
+                                                                value={field.value} // Ensure controlled input behavior
+                                                            />
+                                                            <FormErrorMessage>{form.errors.mobile}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
-                                            <Field name="address" m="1">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.address && form.touched.address} isRequired m="1">
-                                                        <FormLabel htmlFor="Address">Address</FormLabel>
-                                                        <Input {...field} placeholder='Address' ref={addressRef} id="address" name='address' />
-                                                        <FormErrorMessage>{form.errors.address}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
+                                                <Field name="address" m="1">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.address && form.touched.address} isRequired m="1">
+                                                            <FormLabel htmlFor="Address">Address</FormLabel>
+                                                            <Input {...field} placeholder='Address' ref={addressRef} id="address" name='address' />
+                                                            <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
-                                            <Field name="class" m="1">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired m="1">
-                                                        <FormLabel htmlFor="class">Class</FormLabel>
-                                                        <Select {...field} ref={classRef} isRequired id="class" name='class'>
-                                                            <option>Select</option>
-                                                            {
-                                                                uniqueClassNames?.map((className, i) => (
-                                                                    <option key={i} value={className}>{className}</option>
-                                                                ))
-                                                            }
-                                                        </Select>
-                                                        <FormErrorMessage>{form.errors['class']}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
+                                                <Field name="class" m="1">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired m="1">
+                                                            <FormLabel htmlFor="class">Class</FormLabel>
+                                                            <Select {...field} ref={classRef} isRequired id="class" name='class'>
+                                                                <option>Select</option>
+                                                                {
+                                                                    uniqueClassNames?.map((className, i) => (
+                                                                        <option key={i} value={className}>{className}</option>
+                                                                    ))
+                                                                }
+                                                            </Select>
+                                                            <FormErrorMessage>{form.errors['class']}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
-                                        </Flex>
+                                            </Flex>
 
-                                        <Flex>
-                                            <Field name="section">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.section && form.touched.section} isRequired>
-                                                        <FormLabel htmlFor="section" >Section</FormLabel>
-                                                        <Select {...field} ref={sectionRef} placeholder="Select">
-                                                            {/* Empty option for placeholder */}
+                                            <Flex>
+                                                <Field name="section">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired>
+                                                            <FormLabel htmlFor="section" >Section</FormLabel>
+                                                            <Select {...field} ref={sectionRef} placeholder="Select">
+                                                                {/* Empty option for placeholder */}
 
-                                                            {uniqueSections?.map((section, i) => (
+                                                                {uniqueSections?.map((section, i) => (
 
-                                                                <option key={i} value={section}>{section}</option>
-                                                            ))}
-                                                        </Select>
-                                                        <FormErrorMessage>{form.errors.section}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-
-
-
-
+                                                                    <option key={i} value={section}>{section}</option>
+                                                                ))}
+                                                            </Select>
+                                                            <FormErrorMessage>{form.errors.section}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
 
 
 
-                                            <FormControl isRequired m="1">
-                                                <FormLabel>Admission Year</FormLabel>
-                                                <Input placeholder='Admission Year'
-                                                    id="number"
-                                                    name="number"
-                                                    type="Number"
-                                                    ref={admRef}
 
 
-                                                />
-                                            </FormControl>
-                                            <FormControl isRequired>
-                                                <FormLabel>Date of birth</FormLabel>
-                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today} />
-                                            </FormControl>
-                                        </Flex>
-
-                                        <Flex>
-                                            <Field name="category">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.category && form.touched.category} isRequired>
-                                                        <FormLabel htmlFor="category">Category</FormLabel>
-                                                        <Select {...field} ref={catRef} id="category" placeholder="Select" onChange={(e) => form.setFieldValue('category', e.target.value)}>
-
-                                                            <option value='GENERAL'>GENERAL</option>
-                                                            <option value='OBC'>OBC</option>
-                                                            <option value='SC'>SC</option>
-                                                            <option value='ST'>ST</option>
-                                                            <option value='OTHER'>OTHER</option>
-                                                        </Select>
-                                                        <FormErrorMessage>{form.errors.category}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-
-                                            <Field name="gender">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired>
-                                                        <FormLabel htmlFor="gender">Gender</FormLabel>
-                                                        <Select {...field} ref={sexRef} id="gender" placeholder="Select" onChange={(e) => form.setFieldValue('gender', e.target.value)}>
-
-                                                            <option value='Male'>Male</option>
-                                                            <option value='Female'>Female</option>
-                                                            <option value='Other'>Other</option>
-                                                        </Select>
-                                                        <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
 
 
-                                            <Field name="rollNo">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired>
-                                                        <FormLabel htmlFor="rollNo">Roll No.</FormLabel>
-                                                        <Input {...field} ref={rollRef} id="rollNo" placeholder="Roll No." type="number" />
-                                                        <FormErrorMessage>{form.errors.rollNo}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-
-                                        </Flex>
-
-                                        <Flex justifyContent="space-around">
-                                            <FormControl isRequired maxW="45%">
-                                                <FormLabel>Enrollment No.</FormLabel>
-                                                <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
-                                            </FormControl>
-                                            <FormControl maxW="45%">
-                                                <FormLabel>Upload Image</FormLabel>
-                                                <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
-                                            </FormControl>
-                                            <Field name="session">
-                                                {({ field, form }) => (
-                                                    <FormControl isInvalid={form.errors.session && form.touched.session} isRequired>
-                                                        <FormLabel htmlFor="session">Session</FormLabel>
-                                                        <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
-
-                                                            {uniqueSessions?.map((sub, i) => (
-                                                                <option key={i} value={sub}>{sub}</option>
-                                                            ))}
-                                                        </Select>
-                                                        <FormErrorMessage>{form.errors.session}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
-
-                                        </Flex>
-                                        <ModalFooter>
-
-                                            <Button
-                                                colorScheme='blue'
-                                                mr={3}
-                                                onClick={() => saveButtonRef.current.click()}
-                                                disabled={!isValid || isSubmitting} // Disable if form is not valid or already submitting
-                                            >
-                                                Save
-                                            </Button>
-                                            <Button onClick={() => setOpen(false)}>Cancel</Button>
-                                            <Button type="submit" ref={saveButtonRef} style={{ display: 'none' }}>Hidden submit button</Button>
-                                        </ModalFooter>
-                                    </Form>
-
-                                )}
+                                                <FormControl isRequired m="1">
+                                                    <FormLabel>Admission Year</FormLabel>
+                                                    <Input placeholder='Admission Year'
+                                                        id="number"
+                                                        name="number"
+                                                        type="Number"
+                                                        ref={admRef}
 
 
-                            </Formik>
+                                                    />
+                                                </FormControl>
+                                                <FormControl isRequired>
+                                                    <FormLabel>Date of birth</FormLabel>
+                                                    <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today} />
+                                                </FormControl>
+                                            </Flex>
 
+                                            <Flex>
+                                                <Field name="category">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired>
+                                                            <FormLabel htmlFor="category">Category</FormLabel>
+                                                            <Select {...field} ref={catRef} id="category" placeholder="Select" onChange={(e) => form.setFieldValue('category', e.target.value)}>
+
+                                                                <option value='GENERAL'>GENERAL</option>
+                                                                <option value='OBC'>OBC</option>
+                                                                <option value='SC'>SC</option>
+                                                                <option value='ST'>ST</option>
+                                                                <option value='OTHER'>OTHER</option>
+                                                            </Select>
+                                                            <FormErrorMessage>{form.errors.category}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+
+                                                <Field name="gender">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired>
+                                                            <FormLabel htmlFor="gender">Gender</FormLabel>
+                                                            <Select {...field} ref={sexRef} id="gender" placeholder="Select" onChange={(e) => form.setFieldValue('gender', e.target.value)}>
+
+                                                                <option value='Male'>Male</option>
+                                                                <option value='Female'>Female</option>
+                                                                <option value='Other'>Other</option>
+                                                            </Select>
+                                                            <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+
+
+                                                <Field name="rollNo">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired>
+                                                            <FormLabel htmlFor="rollNo">Roll No.</FormLabel>
+                                                            <Input {...field} ref={rollRef} id="rollNo" placeholder="Roll No." type="number" />
+                                                            <FormErrorMessage>{form.errors.rollNo}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+
+                                            </Flex>
+
+                                            <Flex justifyContent="space-around">
+                                                <FormControl isRequired maxW="45%">
+                                                    <FormLabel>Enrollment No.</FormLabel>
+                                                    <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
+                                                </FormControl>
+                                                <FormControl maxW="45%">
+                                                    <FormLabel>Upload Image</FormLabel>
+                                                    <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
+                                                </FormControl>
+                                                <Field name="session">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired>
+                                                            <FormLabel htmlFor="session">Session</FormLabel>
+                                                            <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
+
+                                                                {uniqueSessions?.map((sub, i) => (
+                                                                    <option key={i} value={sub}>{sub}</option>
+                                                                ))}
+                                                            </Select>
+                                                            <FormErrorMessage>{form.errors.session}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+
+                                            </Flex>
+                                            <ModalFooter>
+
+                                                <Button
+                                                    colorScheme='blue'
+                                                    mr={3}
+                                                    onClick={() => saveButtonRef.current.click()}
+                                                    disabled={!isValid || isSubmitting} // Disable if form is not valid or already submitting
+                                                >
+                                                    Save
+                                                </Button>
+                                                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                                                <Button type="submit" ref={saveButtonRef} style={{ display: 'none' }}>Hidden submit button</Button>
+                                            </ModalFooter>
+                                        </Form>
+
+                                    )}
+
+
+                                </Formik>
                             </ModalBody>
 
 
                         </ModalContent>
                     </Draggable>
-                    <Button
-                        colorScheme="blue"
-                        position="fixed"
-                        bottom="20px"
-                        right="20px"
-                        onClick={handleToggleMinimize}
-                    >
-                        {isMinimized ? 'Maximize' : 'Minimize'}
-                    </Button>
+
                 </Modal>
             </>
 

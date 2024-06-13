@@ -31,7 +31,7 @@ const Subject = () => {
 
     const getSubjects = async () => {
         try {
-            const data = await fetch('http://localhost:8083/api/staff/all-subjects')
+            const data = await fetch('http://192.168.1.121:8083/api/staff/all-subjects')
             const fdata = await data.json()
             setSubjects(fdata)
         } catch (error) {
@@ -41,7 +41,7 @@ const Subject = () => {
     //for class
     const getClass = async () => {
         try {
-            const data = await fetch('http://localhost:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.121:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)
@@ -56,7 +56,7 @@ const Subject = () => {
 
         console.log(subjectRef.current.value)
         try {
-            const data = await fetch(`http://localhost:8083/api/staff/create-subject?name=${encodeURIComponent(subjectRef.current.value)}`, {
+            const data = await fetch(`http://192.168.1.121:8083/api/staff/create-subject?name=${encodeURIComponent(subjectRef.current.value)}`, {
                 method: 'POST',
             });
             const fdata = await data.json()
@@ -82,7 +82,7 @@ const Subject = () => {
 
         console.log(classRef.current.value)
         try {
-            const data = await fetch(`http://localhost:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}&session=${encodeURIComponent(sessionRef.current.value)}`, {
+            const data = await fetch(`http://192.168.1.121:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}&session=${encodeURIComponent(sessionRef.current.value)}`, {
                 method: 'POST',
             });
 
@@ -109,7 +109,7 @@ const Subject = () => {
 
     const getMainTable = async () => {
         try {
-            const data = await fetch('http://localhost:8083/api/staff/saved-Staff')
+            const data = await fetch('http://192.168.1.121:8083/api/staff/saved-Staff')
             const fdata = await data.json()
             console.log(fdata)
             setStaff(fdata)
@@ -125,7 +125,7 @@ const Subject = () => {
     const deleteSubject = async (id) => {
         try {
             console.log(id)
-            const data = await fetch(`http://localhost:8083/api/staff/delete-Subject/${id}`, {
+            const data = await fetch(`http://192.168.1.121:8083/api/staff/delete-Subject/${id}`, {
                 method: 'DELETE'
             })
 
@@ -144,7 +144,7 @@ const Subject = () => {
     const deleteClass = async (id) => {
         try {
             console.log(id)
-            const data = await fetch(`http://localhost:8082/api/students/delete-class/${id}`, {
+            const data = await fetch(`http://192.168.1.121:8082/api/students/delete-class/${id}`, {
                 method: 'DELETE'
             })
 
@@ -320,7 +320,7 @@ const Subject = () => {
             // Loop through each staff member to fetch subjects
             for (const elm of staff) {
                 try {
-                    const response = await fetch(`http://localhost:8083/api/staff/${elm.id}/subjects `);
+                    const response = await fetch(`http://192.168.1.121:8083/api/staff/${elm.id}/subjects `);
                     const data = await response.json();
                     subjectsData[elm.id] = data; // Store subjects data by staff ID
                 } catch (error) {

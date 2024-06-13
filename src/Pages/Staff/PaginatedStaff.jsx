@@ -289,8 +289,9 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     }
     const excelFile = useRef()
     let form = new FormData()
+    let file;
     const fileChange = async () => {
-        const file = excelFile.current.files[0];
+         file = excelFile.current.files[0];
         if (file) {
             console.log("File selected:", file);
         } else {
@@ -300,7 +301,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const uploadFileExcel = async () => {
         try {
             form.append('file', file);
-            const response = await fetch('http://192.168.1.121:5173/api/upload-excel', {
+            const response = await fetch('http://192.168.1.121:8083/api/staff/upload-excel', {
                 method: 'POST',
                 body: form,
             });
@@ -308,15 +309,18 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             if (response.ok) {
                 toast.success("file uploaded successfully")
                 console.log('File uploaded successfully');
+                setIsOpenFile(false)
                 // Handle successful upload (e.g. show a success message)
             } else {
-                toast.error("file uploaded successfully")
+                toast.error("file could not upload")
                 console.error('File upload failed');
+                setIsOpenFile(false)
                 // Handle error (e.g. show an error message)
             }
 
         } catch (error) {
             console.log(error)
+            setIsOpenFile(false)
         }
     }
 
@@ -393,7 +397,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
     const downloadFile = () => {
         const link = document.createElement('a');
-        link.href = '../public/aman.xlsx'; // URL to your Excel file
+        link.href = '../public/staff.xlsx'; // URL to your Excel file
         link.download = 'Sample.xlsx'; // Filename for the downloaded file
         document.body.appendChild(link);
         link.click();

@@ -322,15 +322,18 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             if (response.ok) {
                 toast.success("file uploaded successfully")
                 console.log('File uploaded successfully');
+                setIsOpenFile(false)
 
             } else {
                 toast.error("someething went wrong")
                 console.error('File upload failed');
                 // Handle error (e.g. show an error message)
+                setIsOpenFile(false)
             }
 
         } catch (error) {
             console.log(error)
+            setIsOpenFile(false)
         }
     }
 
@@ -373,7 +376,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const downloadFile = () => {
         const link = document.createElement('a');
-        link.href = '../public/aman.xlsx'; // URL to your Excel file
+        link.href = '../public/student.xlsx'; // URL to your Excel file
         link.download = 'Sample.xlsx'; // Filename for the downloaded file
         document.body.appendChild(link);
         link.click();
@@ -385,34 +388,51 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
 
-
+const initial={
+    name: '',
+    email: '',
+    fathersname: '',
+    mobile: '',
+    address: '',
+    class: null,
+    section: '',
+    gender: '',
+    rollNo: '',
+    category: '',
+    session: '',
+}
     const [isOpen, setIsOpen] = useState(false);
-    const [initialFormData, setFormData] = useState({
-        name: '',
-        email: '',
-        fathersname: '',
-        mobile: '',
-        address: '',
-        class: null,
-        section: '',
-        gender: '',
-        rollNo: '',
-        category: '',
-        session: '',
-    });
+    const [initialFormData, setinitialFormData] = useState(initial);
     const [savedFormData, setSavedFormData] = useState(null);
-
+console.log(savedFormData)
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
     const handleMinimize = () => {
-        setSavedFormData(formData); // Save current form data
-        setFormData(initialFormData); // Clear form data to hide from modal
-        setIsOpen(false); // Hide the modal
+        console.log(initialFormData)
+        setIsOpen(false); 
+        console.log(initialFormData)
+        setSavedFormData(initialFormData); // Save current form data
+        setinitialFormData({
+            name: '',
+            email: '',
+            fathersname: '',
+            mobile: '',
+            address: '',
+            class: null,
+            section: '',
+            gender: '',
+            rollNo: '',
+            category: '',
+            session: '',
+        }); // Clear form data to hide from modal
+       // Hide the modal
+      
     };
 
     const handleRestore = () => {
-        setFormData(savedFormData); // Restore the form data
+        console.log(savedFormData)
+        setinitialFormData(savedFormData); // Restore the form data
         setIsOpen(true); // Show the modal
     };
 
@@ -425,8 +445,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     // };
 
 
-
-
+console.log(savedFormData)
     return (
         <div style={{ width: '100vw' }}>
 
@@ -469,7 +488,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 </Select>
                                 <Input maxW="20%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
                                 {
-                                    Role == 'staff' ? '' : <Button maxW="22%" onClick={() => setOpen(true)}>
+                                    Role == 'staff' ? '' : <Button maxW="22%" onClick={() => setIsOpen(true)}>
                                         Add New
                                     </Button>
                                 }
@@ -602,20 +621,10 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                             <ModalBody pb={3} >
                                 <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
                                 <Formik
-                                    initialValues={{
-                                        name: '',
-                                        email: '',
-                                        fathersname: '',
-                                        mobile: '',
-                                        address: '',
-                                        class: null,
-                                        section: '',
-                                        gender: '',
-                                        rollNo: '',
-                                        category: '',
-                                        session: '',
-                                    }}
+                                    initialValues={initialFormData}
                                     validate={(values) => {
+                                        console.log(values)
+                                        setSavedFormData(values)
                                         const errors = {};
                                         if (!values.name) {
                                             errors.name = 'Name is Required';
@@ -864,7 +873,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                             </Flex>
                                             <ModalFooter>
-
+                                                {/* <Button variant="outline" onClick={handleMinimize}>
+                                                    Minimize
+                                                </Button> */}
                                                 <Button
                                                     colorScheme='blue'
                                                     mr={3}
@@ -889,6 +900,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     </Draggable>
 
                 </Modal>
+                {/* <Button onClick={handleRestore}>Restore Modal</Button> */}
             </>
 
 

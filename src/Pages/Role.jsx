@@ -173,7 +173,7 @@ const Role = () => {
 
 
 
-    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',height:'100vh'
+    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',
      }} >
         <Box >
             <Navbar />

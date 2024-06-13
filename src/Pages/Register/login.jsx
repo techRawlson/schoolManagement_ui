@@ -38,7 +38,7 @@ function Login({ setToken, setUser }) {
         password: passRef.current.value,
       }
       console.log(body)
-      const data = await fetch('http://3.110.94.137:8081/api/Login/login', {
+      const data = await fetch('http://192.168.1.121:8081/api/Login/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

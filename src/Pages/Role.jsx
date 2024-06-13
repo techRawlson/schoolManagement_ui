@@ -24,7 +24,7 @@ const Role = () => {
     const [data, setData] = useState([])
     const getData = async () => {
         try {
-            const data1 = await fetch('http://3.110.94.137:8081/api/Login/allUsersLog')
+            const data1 = await fetch('http://192.168.1.121:8081/api/Login/allUsersLog')
             if (!data1.ok) {
                 throw new Error('something went wrong')
             }

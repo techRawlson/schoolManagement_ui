@@ -14,6 +14,10 @@ export const DataProvider = ({ children }) => {
   const updateData = (newData) => {
     console.log(newData)
     setStudent(newData);
+
+
+
+    
   };
 
   return (

@@ -46,6 +46,7 @@ import {
 import { IoArrowBack } from "react-icons/io5";
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import Draggable from 'react-draggable';
 
 // import Student from '../Pages/Student';
 function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
@@ -249,7 +250,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(fdata)
             console.log(data.status)
 
-            if (data.status >= 200 && data.status < 300 && image!=null) {
+            if (data.status >= 200 && data.status < 300 && image != null) {
                 const picture = await fetch(`http://192.168.1.121:8082/api/images/${fdata.studentId}`, {
                     method: 'post',
                     body: formData2,
@@ -379,8 +380,24 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         document.body.removeChild(link);
     };
     const saveButtonRef = useRef(null);
-
     const [isMinimized, setIsMinimized] = useState(false);
+    const [initialFormValues, setInitialFormValues] = useState({
+        name: '',
+        email: '',
+        fathersname: '',
+        mobile: '',
+        address: '',
+        class: null,
+        section: '',
+        gender: '',
+        rollNo: '',
+        category: '',
+        session: '',
+    });
+    console.log(initialFormValues)
+    const handleToggleMinimize = () => {
+        setIsMinimized(!isMinimized);
+    };
     return (
         <div style={{ width: '100vw' }}>
 
@@ -543,22 +560,25 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
                 <Modal
-                    isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
-                    
+                    isOpen={isOpen} size="lg" closeOnOverlayClick={false}
+
                 >
-                    <ModalOverlay />
-                    <ModalContent minW="60%">
 
-                        <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
-                            {isMinimized ? "Maximize" : "Minimize"}
-                        </Button>
-                        <ModalCloseButton onClick={() => setOpen(false)} />
+                    <Draggable handle=".modal-header">
+                        <ModalContent
+                            minW="60%"
+                            style={{ opacity: isMinimized ? 0.6 : 1, cursor: isMinimized ? 'grab' : 'auto' }}
+                        >
 
 
-                        <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
-                        <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
 
-                            <Formik
+                            <ModalCloseButton onClick={() => setOpen(false)} />
+
+
+                            <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
+                                <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
+
+                                <Formik
                                 initialValues={{
                                     name: '',
                                     email: '',
@@ -739,13 +759,13 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     name="number"
                                                     type="Number"
                                                     ref={admRef}
-                                                    
+
 
                                                 />
                                             </FormControl>
                                             <FormControl isRequired>
                                                 <FormLabel>Date of birth</FormLabel>
-                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today}/>
+                                                <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today} />
                                             </FormControl>
                                         </Flex>
 
@@ -800,7 +820,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 <FormLabel>Enrollment No.</FormLabel>
                                                 <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
                                             </FormControl>
-                                            <FormControl  maxW="45%">
+                                            <FormControl maxW="45%">
                                                 <FormLabel>Upload Image</FormLabel>
                                                 <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
                                             </FormControl>
@@ -840,10 +860,20 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                             </Formik>
 
-                        </ModalBody>
+                            </ModalBody>
 
 
-                    </ModalContent>
+                        </ModalContent>
+                    </Draggable>
+                    <Button
+                        colorScheme="blue"
+                        position="fixed"
+                        bottom="20px"
+                        right="20px"
+                        onClick={handleToggleMinimize}
+                    >
+                        {isMinimized ? 'Maximize' : 'Minimize'}
+                    </Button>
                 </Modal>
             </>
 

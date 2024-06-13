@@ -364,6 +364,7 @@ console.log(student[0])
                                     <FormLabel>Email</FormLabel>
                                     <Input fontWeight="bold"
                                         w='100%' h='10' bg='white.500' value={std.email} onChange={(e) => handleFieldChange(e, i, 'email')} disabled={dis}
+                                        type='email'
                                     />
                                 </FormControl>
                                 <FormControl id="name">

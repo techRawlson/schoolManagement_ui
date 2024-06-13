@@ -45,7 +45,7 @@ function App() {
     const id = localStorage.getItem("username")
     console.log(id)
     try {
-      const data = await fetch(`http://localhost:8081/api/Login/users/${id}`)
+      const data = await fetch(`http://192.168.1.121:8081/api/Login/users/${id}`)
       const fdata = await data.json()
       console.log(fdata)
 

@@ -35,7 +35,7 @@ const AttendanceMarking = ({ user }) => {
     const [create, setcreate] = useState(true)
     const getData = async () => {
         try {
-            const data = await fetch('http://192.168.1.118:8082/api/students/savedData')
+            const data = await fetch('http://192.168.1.121:8082/api/students/savedData')
             const fdata = await data.json()
             console.log(fdata)
             setData(fdata)
@@ -45,7 +45,7 @@ const AttendanceMarking = ({ user }) => {
     }
     const getDetails = async () => {
         try {
-            const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.121:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setDetail(fdata)
@@ -130,7 +130,7 @@ const AttendanceMarking = ({ user }) => {
         if (classValue != '' && section != '' && session != '' && date != '' & slot != '') {
             console.log(classValue, section, session)
             try {
-                const data = await fetch(`http://192.168.1.118:8088/api/Attendance/attendance/${classValue}/${section}/${session}/date/${date}/slot/${slot}`);
+                const data = await fetch(`http://192.168.1.121:8088/api/Attendance/attendance/${classValue}/${section}/${session}/date/${date}/slot/${slot}`);
                 const fdata = await data.json();
                 console.log(fdata)
                 setSubmitVisible(true)
@@ -377,7 +377,7 @@ const AttendanceMarking = ({ user }) => {
             console.log(e.target.value)
 
             try {
-                const data = await fetch(`http://192.168.1.118:8086/api/periods/lecture/${id}`);
+                const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${id}`);
                 const fdata = await data.json();
                 //console.log(fdata);
                 setLecture(e.target.value)
@@ -393,7 +393,7 @@ const AttendanceMarking = ({ user }) => {
         }
         else {
             try {
-                const ab = await fetch(`http://192.168.1.118:8083/api/staff/${id}`)
+                const ab = await fetch(`http://192.168.1.121:8083/api/staff/${id}`)
                 const fab = await ab.json()
                 if (day == 'monday') {
 
@@ -445,7 +445,7 @@ const AttendanceMarking = ({ user }) => {
     const [periods, setPeriods] = useState([])
     const getPeriods = async () => {
         try {
-            const data = await fetch('http://192.168.1.118:8086/api/periods/lectures');
+            const data = await fetch('http://192.168.1.121:8086/api/periods/lectures');
             const fdata = await data.json();
             //console.log(fdata);
             setPeriods(fdata)
@@ -481,7 +481,7 @@ const AttendanceMarking = ({ user }) => {
     const create1 = async (d) => {
         console.log(filteredData)
         try {
-            const response = await fetch('http://192.168.1.118:8088/api/Attendance/attendance/bulk', {
+            const response = await fetch('http://192.168.1.121:8088/api/Attendance/attendance/bulk', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -517,7 +517,7 @@ const AttendanceMarking = ({ user }) => {
 
         console.log(dataToSend);
         try {
-            const data = await fetch(`http://192.168.1.118:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`, {
+            const data = await fetch(`http://192.168.1.121:8088/api/Attendance/attendance/${classValue}/${section}/${session}/${date}/${slot}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -538,11 +538,11 @@ const AttendanceMarking = ({ user }) => {
 
         try {
             //delete from class time table data
-            const del = await fetch(`http://192.168.1.118:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
+            const del = await fetch(`http://192.168.1.121:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             //delete from staff time table data
-            const del2 = await fetch(`http://192.168.1.118:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
+            const del2 = await fetch(`http://192.168.1.121:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             await getData()
@@ -593,7 +593,7 @@ const AttendanceMarking = ({ user }) => {
 
     const getDataFromStaffTimeTable = async () => {
         try {
-            const data = await fetch('http://192.168.1.118:8086/api/LockedData/lecturedata')
+            const data = await fetch('http://192.168.1.121:8086/api/LockedData/lecturedata')
             const fdata = await data.json()
             //console.log(fdata)
             setStaffTimedata(fdata)
@@ -726,7 +726,7 @@ const AttendanceMarking = ({ user }) => {
 
 
                 </Flex>
-                <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
+                <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none", maxHeight: '50vh' }}>
                     <Table size='xl' variant="simple" style={tableStyle}>
 
                         {
@@ -845,16 +845,25 @@ const AttendanceMarking = ({ user }) => {
                     }
 
                     {Attendance?.length == 0 && submitVisible == true ?
-                        <Stack marginTop="0.3%">
+                        <Stack marginTop="0.3%" >
                             {
                                 Edit ? "" :
                                     Attendance?.length == 0 && showMsg ? "" :
-                                        <Button onClick={() => create1()} bgColor="green">Submit1</Button>
+                                        <Flex >
+                                            <Button onClick={() => create1()} colorScheme="green" margin="0 1rem">Submit</Button>
+                                            <Button colorScheme="green"  >Print</Button>
+                                        </Flex>
+
+
+
 
                             }
+
                         </Stack> : ''
 
                     }
+
+
                     {
                         // <Button onClick={() => update1()} bgColor="green">Update</Button>
                         filteredData?.length > 0 ? <Stack width="8%" margin="0 2% 0 0">
@@ -870,11 +879,13 @@ const AttendanceMarking = ({ user }) => {
                             }
                         </Stack> : ''
                     }
+
+
                 </Stack>
 
 
 
-                <Button width="160px" colorScheme="green" position="absolute" bottom="1rem">Print</Button>
+
             </Flex>
 
 

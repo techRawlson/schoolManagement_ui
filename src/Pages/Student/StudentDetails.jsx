@@ -19,7 +19,7 @@ const StudentDetails = () => {
     const imageRef = useRef()
     const getStudent = async () => {
         try {
-            const data = await fetch(`http://192.168.1.118:8082/api/students/${id}`)
+            const data = await fetch(`http://192.168.1.121:8082/api/students/${id}`)
             const fdata = await data.json()
             console.log(fdata)
 
@@ -195,7 +195,7 @@ const StudentDetails = () => {
 
             // Log the formData here to see the updated content
             console.log(student[0])
-            const data = await fetch(`http://192.168.1.118:8082/api/students/update-student/${student[0]?.studentId}`, {
+            const data = await fetch(`http://192.168.1.121:8082/api/students/update-student/${student[0]?.studentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ const StudentDetails = () => {
                 formData2.append('file', file);
             }
 
-            const picture = await fetch(`http://192.168.1.118:8082/api/images/${student[0]?.studentId}`, {
+            const picture = await fetch(`http://192.168.1.121:8082/api/images/${student[0]?.studentId}`, {
                 method: 'PUT',
                 body: formData2,
             })
@@ -235,7 +235,7 @@ const StudentDetails = () => {
     const [clas, setClas] = useState([])
     const getClass = async () => {
         try {
-            const data = await fetch('http://192.168.1.118:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.121:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             console.log(fdata)
             setClas(fdata)
@@ -261,7 +261,7 @@ console.log(student[0])
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>
                             <Avatar
-                                src={image || `http://192.168.1.118:8082/api/images/${student[0]?.studentId}`}
+                                src={image || `http://192.168.1.121:8082/api/images/${student[0]?.studentId}`}
                                 alt="Avatar"
                                 style={dis ? {} : { cursor: 'pointer' }}
                                 width="100px"

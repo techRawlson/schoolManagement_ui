@@ -21,7 +21,7 @@ const Staff = () => {
 
     const getData = async () => {
         try {
-            const data = await fetch("http://192.168.1.118:8083/api/staff/saved-Staff");
+            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
             const fdata = await data.json();
 console.log(fdata)
             setClassData(fdata)

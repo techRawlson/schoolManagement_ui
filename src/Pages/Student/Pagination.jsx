@@ -376,8 +376,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
     const downloadFile = () => {
         const link = document.createElement('a');
-        link.href = '../public/student.xlsx'; // URL to your Excel file
-        link.download = 'Sample.xlsx'; // Filename for the downloaded file
+        link.href = '../public/students.xlsx'; // URL to your Excel file
+        link.download = 'studentsample.xlsx'; // Filename for the downloaded file
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

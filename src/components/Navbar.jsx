@@ -9,8 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { IoNotifications } from "react-icons/io5";
 import './Navbar.css'
 import { useMediaQuery } from 'react-responsive';
+import { useData } from '../Pages/context/DataContext';
+import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ChakraLink } from '@chakra-ui/react'
 const Navbar = () => {
   //for resposiveness
+  const { data, updateData } = useData();
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
@@ -25,7 +29,7 @@ const Navbar = () => {
     }
   }
 
-
+console.log(data)
 
 
   const navigate = useNavigate()
@@ -188,7 +192,7 @@ const Navbar = () => {
                 <FiLogOut onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '.08rem' }} />
               </span>
               <Text textAlign="center"  >
-                Student Management System
+                Rawlson Technologies
               </Text>
 
               <Menu>
@@ -248,12 +252,15 @@ const Navbar = () => {
           <div style={gridContainerStyle}>
             <Center padding="0 1rem">
               <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" gap="1rem">
-                <Avatar bg="red.500" />
+               
+                <ChakraLink as={ReactRouterLink} to={`http://192.168.1.121:3000/studentdetails/${data}`}>
+                <Avatar bg="red.500" cursor="pointer" />
+                                                    </ChakraLink>
                 <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
               </Flex>
               <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
-                <MenuButton paddingTop="80%">
-                  <IoNotifications color="white" size="30" />
+                <MenuButton paddingTop="32%" mr="1rem">
+                  <IoNotifications  size="32" color="yellow"/>
                   {
                     notifications.length>0? <Box style={style} id='dot' ></Box>:''
                   }

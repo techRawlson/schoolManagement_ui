@@ -454,6 +454,7 @@ console.log(savedFormData)
                     <Navbar />
                     <ToastContainer />
                     <Stack width="95%" orientation="horizontal" marginX="auto" >
+                        
                         <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
                             <Flex width="7.5%" >
                                 <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />

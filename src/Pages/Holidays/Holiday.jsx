@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, useEditable, Toast } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, useEditable, Toast, IconButton } from '@chakra-ui/react';
 import Navbar from '../../components/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import { date } from 'yup';
+import { IoArrowBack } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 const UserForm = ({ formData, handleChange, handleSubmit }) => (
   <Box as="form" onSubmit={handleSubmit}>
@@ -36,7 +38,7 @@ const Holiday = () => {
   });
   const [editingIndex, setEditingIndex] = useState(null);
 
-console.log(formData)
+  console.log(formData)
 
   const fetchEmployees = async () => {
     try {
@@ -138,7 +140,7 @@ console.log(formData)
 
 
       toast.success('Deleted Successfully')
-     await fetchEmployees()
+      await fetchEmployees()
     } catch (error) {
       console.error('Failed to delete:', error);
       toast.error('could not delete')
@@ -163,10 +165,18 @@ console.log(formData)
   useEffect(() => {
     fetchEmployees()
   }, [])
+  const navigate = useNavigate()
+  const goback = () => {
+    navigate(-1)
+  }
   return (
     <Box minH="100vh">
       <ToastContainer />
       <Navbar />
+      <Flex width="7.5%" >
+        <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+
+      </Flex>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -183,7 +193,7 @@ console.log(formData)
               <Td>{user.holidayName}</Td>
               <Td>{user.date}</Td>
               <Td>{user.dayOfWeek}</Td>
-             
+
               <Td>
                 <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index, user.id)}>Edit</Button>
                 <Button size="sm" colorScheme="red" ml={2} onClick={() => handleDelete(user.id)}>Delete</Button>

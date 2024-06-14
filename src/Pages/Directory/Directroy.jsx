@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, useEditable, Toast } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, useEditable, Toast, IconButton } from '@chakra-ui/react';
 import Navbar from '../../components/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { IoArrowBack } from 'react-icons/io5';
 
 const UserForm = ({ formData, handleChange, handleSubmit }) => (
   <Box as="form" onSubmit={handleSubmit}>
@@ -12,7 +14,7 @@ const UserForm = ({ formData, handleChange, handleSubmit }) => (
       </FormControl>
       <FormControl id="phoneNumber" isRequired>
         <FormLabel>phone</FormLabel>
-        <Input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} maxLength="10"/>
+        <Input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} maxLength="10" />
       </FormControl>
       <FormControl id="department" isRequired>
         <FormLabel>Department</FormLabel>
@@ -44,27 +46,27 @@ const App = () => {
 
   const fetchEmployees = async () => {
     try {
-        // Ensure the URL is properly formatted
-        const response = await fetch('http://192.168.1.121:8083/employees/all');
-        
-        // Check if the response status is OK (200)
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        // Parse the JSON data
-        const employeeData = await response.json();
-        
-        // Log the fetched data
-        console.log(employeeData);
-        
-        // Update the state with the fetched data
-        setUsers(employeeData);
+      // Ensure the URL is properly formatted
+      const response = await fetch('http://192.168.1.121:8083/employees/all');
+
+      // Check if the response status is OK (200)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Parse the JSON data
+      const employeeData = await response.json();
+
+      // Log the fetched data
+      console.log(employeeData);
+
+      // Update the state with the fetched data
+      setUsers(employeeData);
     } catch (error) {
-        // Provide a more descriptive error message
-        console.error('Error fetching employee data:', error);
+      // Provide a more descriptive error message
+      console.error('Error fetching employee data:', error);
     }
-};
+  };
 
 
 
@@ -107,7 +109,7 @@ const App = () => {
 
   };
 
-  const handleEdit = async (index,id) => {
+  const handleEdit = async (index, id) => {
     setEditingIndex(index);
     console.log(index)
     setFormData(users[index]);
@@ -138,9 +140,9 @@ const App = () => {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
 
-      
 
-     
+
+
       toast.success('Deleted Successfully')
       fetchEmployees()
     } catch (error) {
@@ -165,13 +167,21 @@ const App = () => {
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchEmployees()
-  },[])
+  }, [])
+  const navigate = useNavigate()
+  const goback = () => {
+    navigate(-1)
+  }
   return (
     <Box minH="100vh">
-<ToastContainer/>
+      <ToastContainer />
       <Navbar />
+      <Flex width="7.5%" >
+        <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+
+      </Flex>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -190,7 +200,7 @@ const App = () => {
               <Td>{user.department}</Td>
               <Td>{user.email}</Td>
               <Td>
-                <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index,user.id)}>Edit</Button>
+                <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index, user.id)}>Edit</Button>
                 <Button size="sm" colorScheme="red" ml={2} onClick={() => handleDelete(user.id)}>Delete</Button>
               </Td>
             </Tr>

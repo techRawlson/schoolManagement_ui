@@ -40,7 +40,7 @@ function App() {
   const [tok, setToken] = useState(token)
   const [user, setUser] = useState([])
   console.log(user)
-
+console.log(data)
   const getStudent = async () => {
     const id = localStorage.getItem("username")
     console.log(id)

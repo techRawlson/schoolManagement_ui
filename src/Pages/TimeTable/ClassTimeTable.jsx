@@ -30,7 +30,7 @@ const Classtimetable = () => {
     const [create, setcreate] = useState(false)
     const getData = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/timetable/full-timetable')
+            const data = await fetch('http://192.168.1.121:8086/api/timetable/full-timetable')
             const fdata = await data.json()
             //console.log(fdata)
             setData(fdata)
@@ -40,7 +40,7 @@ const Classtimetable = () => {
     }
     const getDetails = async () => {
         try {
-            const data = await fetch('http://3.111.52.90:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.121:8082/api/students/get-AllClasses')
             const fdata = await data.json()
             //console.log(fdata)
             setDetail(fdata)
@@ -182,7 +182,7 @@ const Classtimetable = () => {
             const promises = bodyEntries?.map(async (elm, i) => {
                 console.log(elm);
                 try {
-                    const response = await fetch('http://13.201.41.106:8086/api/timetable/create-timetable', {
+                    const response = await fetch('http://192.168.1.121:8086/api/timetable/create-timetable', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ const Classtimetable = () => {
                             session: session
                         };
                         if (check[i]) {
-                            const staffTimeTableEnntry = await fetch('http://13.201.41.106:8086/api/LockedData/teachersData', {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -258,7 +258,7 @@ const Classtimetable = () => {
                             session: session
                         };
                         if (check[i]) {
-                            const staffTimeTableEnntry = await fetch('http://13.201.41.106:8086/api/LockedData/teachersData', {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ const Classtimetable = () => {
                             session: session
                         };
                         if (check[i]) {
-                            const staffTimeTableEnntry = await fetch('http://13.201.41.106:8086/api/LockedData/teachersData', {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ const Classtimetable = () => {
                             session: session
                         };
                         if (check[i]) {
-                            const staffTimeTableEnntry = await fetch('http://13.201.41.106:8086/api/LockedData/teachersData', {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -330,7 +330,7 @@ const Classtimetable = () => {
                             session: session
                         };
                         if (check[i]) {
-                            const staffTimeTableEnntry = await fetch('http://13.201.41.106:8086/api/LockedData/teachersData', {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -572,7 +572,7 @@ console.log("here")
 
     const getDays = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/days/days');
+            const data = await fetch('http://192.168.1.121:8086/api/days/days');
             const fdata = await data.json();
             // console.log(fdata);
             // Sort the days array based on the day property
@@ -628,7 +628,7 @@ console.log("here")
             console.log(e.target.value)
 
             try {
-                const data = await fetch(`http://13.201.41.106:8086/api/periods/lecture/${id}`);
+                const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${id}`);
                 const fdata = await data.json();
                 //console.log(fdata);
                 setLecture(e.target.value)
@@ -694,7 +694,7 @@ console.log("here")
     const [periods, setPeriods] = useState([])
     const getPeriods = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/periods/lectures');
+            const data = await fetch('http://192.168.1.121:8086/api/periods/lectures');
             const fdata = await data.json();
             //console.log(fdata);
             setPeriods(fdata)
@@ -740,11 +740,11 @@ console.log("here")
 
         try {
             //delete from class time table data
-            const del = await fetch(`http://13.201.41.106:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
+            const del = await fetch(`http://192.168.1.121:8086/api/timetable/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             //delete from staff time table data
-            const del2 = await fetch(`http://13.201.41.106:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
+            const del2 = await fetch(`http://192.168.1.121:8086/api/LockedData/${classValue}/${section}/${session}/${lec}`, {
                 method: 'delete'
             })
             await getData()
@@ -792,7 +792,7 @@ console.log("here")
 
     const getDataFromStaffTimeTable = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/LockedData/lecturedata')
+            const data = await fetch('http://192.168.1.121:8086/api/LockedData/lecturedata')
             const fdata = await data.json()
             //console.log(fdata)
             setStaffTimedata(fdata)
@@ -849,7 +849,7 @@ console.log("here")
     const showStudentTimeTable = async () => {
         try {
             const studentId = localStorage.getItem('username');
-            const response = await fetch(`http://3.111.52.90:8082/api/students/id/${studentId}`);
+            const response = await fetch(`http://192.168.1.121:8082/api/students/id/${studentId}`);
             const dataJson = await response.json();
             console.log(dataJson);
             setSession(dataJson.session);
@@ -1007,7 +1007,7 @@ console.log("here")
                                             subject: mondaySubject
                                         };
                                         if (i == 0) {
-                                            const data = await fetch(`http://13.201.41.106:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1017,7 +1017,7 @@ console.log("here")
                                             const fdata = await data.json()
 
                                             //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://13.201.41.106:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1031,7 +1031,7 @@ console.log("here")
                                                 teacherName: teach,
                                                 subject: tuesdaySubject
                                             };
-                                            const data = await fetch(`http://13.201.41.106:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1041,7 +1041,7 @@ console.log("here")
                                             const fdata = await data.json()
                                             console.log(fdata)
                                             //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://13.201.41.106:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/tuesday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1057,7 +1057,7 @@ console.log("here")
                                             }
 
 
-                                            const data = await fetch(`http://13.201.41.106:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1067,7 +1067,7 @@ console.log("here")
                                             const fdata = await data.json()
                                             console.log(fdata)
                                             //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://13.201.41.106:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/wednesday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1083,7 +1083,7 @@ console.log("here")
                                             }
 
 
-                                            const data = await fetch(`http://13.201.41.106:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1093,7 +1093,7 @@ console.log("here")
                                             const fdata = await data.json()
                                             console.log(fdata)
                                             //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://13.201.41.106:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/thursday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1106,7 +1106,7 @@ console.log("here")
                                                 teacherName: teach,
                                                 subject: fridaySubject
                                             }
-                                            const data = await fetch(`http://13.201.41.106:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -1116,7 +1116,7 @@ console.log("here")
                                             const fdata = await data.json()
                                             console.log(fdata)
                                             //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://13.201.41.106:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/friday`, {
                                                 method: 'put',
                                                 headers: {
                                                     'Content-Type': 'application/json' // Specify the content type as JSON

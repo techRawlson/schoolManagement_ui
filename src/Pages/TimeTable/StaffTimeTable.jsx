@@ -22,7 +22,7 @@ const Stafftimetable = () => {
     const [data, setData] = useState([])
     const getData = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/LockedData/lecturedata')
+            const data = await fetch('http://192.168.1.121:8086/api/LockedData/lecturedata')
             const fdata = await data.json()
             console.log(fdata)
             setData(fdata)
@@ -119,7 +119,7 @@ const Stafftimetable = () => {
 
     const getClass = async () => {
         try {
-            const data = await fetch('http://3.111.52.90:8082/api/students/get-AllClasses')
+            const data = await fetch('http://192.168.1.121:8082/api/students/get-AllClasses')
             const fdata = await data.json()
 
             setClas(fdata)

@@ -39,7 +39,7 @@ const Periods = () => {
         }
         console.log(body)
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/periods/create-periods', {
+            const data = await fetch('http://192.168.1.121:8086/api/periods/create-periods', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type as JSON
@@ -69,7 +69,7 @@ const Periods = () => {
 
     const getPeriods = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/periods/lectures');
+            const data = await fetch('http://192.168.1.121:8086/api/periods/lectures');
             const fdata = await data.json();
             console.log(fdata);
             setPeriods(fdata)
@@ -81,7 +81,7 @@ const Periods = () => {
     }
     const Delete = async (id) => {
         try {
-            const data = await fetch(`http://13.201.41.106:8086/api/periods/delete/${id}`, {
+            const data = await fetch(`http://192.168.1.121:8086/api/periods/delete/${id}`, {
                 method: 'delete'
             });
             // const fdata = await data.json();
@@ -112,7 +112,7 @@ const Periods = () => {
             toast.error('please select day')
         } else {
             try {
-                const data = await fetch('http://13.201.41.106:8086/api/days/create-day', {
+                const data = await fetch('http://192.168.1.121:8086/api/days/create-day', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/json' // Specify the content type as JSON
@@ -145,7 +145,7 @@ const Periods = () => {
 
     const getDays = async () => {
         try {
-            const data = await fetch('http://13.201.41.106:8086/api/days/days');
+            const data = await fetch('http://192.168.1.121:8086/api/days/days');
             const fdata = await data.json();
             console.log(fdata);
             if (fdata.length > 0) {
@@ -180,7 +180,7 @@ const Periods = () => {
 
     const DeleteDay = async (id) => {
         try {
-            const data = await fetch(`http://13.201.41.106:8086/api/days/delete/${id}`, {
+            const data = await fetch(`http://192.168.1.121:8086/api/days/delete/${id}`, {
                 method: 'delete'
             });
             // const fdata = await data.json();
@@ -222,7 +222,7 @@ const Periods = () => {
         try {
             const dayStatusMap = {};
             for (const dayName of daysOfWeek) {
-                const response = await fetch(`http://13.201.41.106:8086/api/days/days/${dayName}`);
+                const response = await fetch(`http://192.168.1.121:8086/api/days/days/${dayName}`);
                 const d = await response.json(); 
                 const data= d.switchStatus
                 // Assuming API returns 'on' or 'off' as plain text
@@ -240,7 +240,7 @@ const Periods = () => {
         try {
             const newStatus = !switchStatus[dayName]; // Toggle current status
             const bodyData = newStatus ? 'on' : 'off'; // Convert boolean to 'on' or 'off'
-            const dayChange = await fetch(`http://13.201.41.106:8086/api/days/${dayName}`, {
+            const dayChange = await fetch(`http://192.168.1.121:8086/api/days/${dayName}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'text/plain'

@@ -207,11 +207,11 @@ const App = () => {
           ))}
         </Tbody>
       </Table>
-      <Button onClick={handleAddUser} colorScheme="blue" mb={4}>Add User</Button>
+      <Button onClick={handleAddUser} colorScheme="blue" m={2}>Add New</Button>
       <Modal isOpen={isOpen} onClose={() => { onClose(); setEditingIndex(null); }}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{editingIndex !== null ? 'Edit User' : 'Add User'}</ModalHeader>
+          <ModalHeader>{editingIndex !== null ? 'Edit User' : 'Add New'}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <UserForm

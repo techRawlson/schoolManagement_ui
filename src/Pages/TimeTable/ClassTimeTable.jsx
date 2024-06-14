@@ -190,6 +190,7 @@ const Classtimetable = () => {
                         body: JSON.stringify(elm),
                     });
                     status = response.status;
+                    console.log(response)
                     if (status >= 200 && status < 300) {
                         console.log(status);
                         check[i] = true

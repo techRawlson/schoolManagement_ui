@@ -6,7 +6,14 @@ import { date } from 'yup';
 import { IoArrowBack } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-const UserForm = ({ formData, handleChange, handleSubmit }) => (
+
+
+
+
+
+
+const UserForm = ({ formData, handleChange, handleSubmit, dayName }) => (
+
   <Box as="form" onSubmit={handleSubmit}>
     <Stack spacing={4}>
       <FormControl id="name" isRequired>
@@ -19,7 +26,7 @@ const UserForm = ({ formData, handleChange, handleSubmit }) => (
       </FormControl>
       <FormControl id="email" isRequired>
         <FormLabel>Day of week</FormLabel>
-        <Input type="text" name="dayOfWeek" value={formData.dayOfWeek} onChange={handleChange} />
+        <Input type="text" name="dayOfWeek" value={dayName} />
       </FormControl>
       <Flex justify="center">
         <Button type="submit" colorScheme="blue" minW="140px" mt={4}>Submit</Button>
@@ -29,6 +36,7 @@ const UserForm = ({ formData, handleChange, handleSubmit }) => (
 );
 
 const Holiday = () => {
+  const [dayName, setDayName] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
@@ -40,6 +48,14 @@ const Holiday = () => {
 
   console.log(formData)
 
+  async function getDayName(dateString) {
+    const date = new Date(dateString);
+    const options = { weekday: 'long' };
+    const d = new Intl.DateTimeFormat('en-US', options).format(date);
+    console.log(d)
+    
+    setDayName(d)
+  }
   const fetchEmployees = async () => {
     try {
       // Ensure the URL is properly formatted
@@ -71,9 +87,20 @@ const Holiday = () => {
 
 
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
+    console.log("called")
     const { name, value } = e.target;
+    console.log(name, value)
     setFormData({ ...formData, [name]: value });
+    if (name == 'date') {
+      await getDayName(e.target.value)
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        dayOfWeek: dayName,
+    }));
+    
+    }
+
   };
 
   const handleFormSubmit = async (e) => {
@@ -181,9 +208,8 @@ const Holiday = () => {
         <Thead>
           <Tr>
             <Th>Name</Th>
-            <Th>phone</Th>
-            <Th>Department</Th>
-
+            <Th>Date</Th>
+            <Th>Day of week</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -202,7 +228,7 @@ const Holiday = () => {
           ))}
         </Tbody>
       </Table>
-      <Button onClick={handleAddUser} colorScheme="blue" mb={4}>Add User</Button>
+      <Button onClick={handleAddUser} colorScheme="blue" mb={4}>Add Holiday</Button>
       <Modal isOpen={isOpen} onClose={() => { onClose(); setEditingIndex(null); }}>
         <ModalOverlay />
         <ModalContent>
@@ -213,6 +239,7 @@ const Holiday = () => {
               formData={formData}
               handleChange={handleChange}
               handleSubmit={handleFormSubmit}
+              dayName={dayName}
             />
           </ModalBody>
         </ModalContent>

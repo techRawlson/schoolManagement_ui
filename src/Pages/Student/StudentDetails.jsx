@@ -248,7 +248,13 @@ const StudentDetails = () => {
         getClass()
 
     }, [])
-console.log(student[0])
+    console.log(student[0])
+    const uniqueSections = [...new Set(clas.map(elm => elm.section))].sort();
+    // Extract unique class names
+    const uniqueClassNames = [...new Set(clas.map(elm => elm.className))].sort();
+     // Extract unique sessions
+     const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
+     const today = new Date().toISOString().split('T')[0];
     return (
         <Stack minH="100vh">
             <Navbar />
@@ -312,12 +318,19 @@ console.log(student[0])
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>ClassName</FormLabel>
-                                    <Input
-                                        w='100%' h='10' bg='white.500' value={std.className}
-                                        onChange={(e) => handleFieldChange(e, i, 'className')}
+                                    <Select
                                         disabled={dis}
                                         fontWeight="bold"
-                                    />
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        value={std.sex}
+                                        onChange={(e) => handleFieldChange(e, i, 'className')}
+                                    > {
+                                            uniqueClassNames?.map((className, i) => (
+                                                <option value={className}>{className}</option>
+                                            ))
+                                        }
+                                    </Select>
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Roll Number</FormLabel>
@@ -342,15 +355,38 @@ console.log(student[0])
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Section</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.section} onChange={(e) => handleFieldChange(e, i, 'section')} disabled={dis}
-                                    />
+
+                                    <Select
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        value={std.sex}
+                                        onChange={(e) => handleFieldChange(e, i, 'section')}
+                                    >
+                                        {
+                                            uniqueSections?.map((section, i) => (
+                                                <option value={section}>{section}</option>
+                                            ))
+                                        }
+                                    </Select>
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Category</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.category} onChange={(e) => handleFieldChange(e, i, 'category')} disabled={dis}
-                                    />
+                                    <Select
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        w='100%' h='10'
+                                        bg='white.500'
+                                        value={std.sex}
+                                        onChange={(e) => handleFieldChange(e, i, 'category')}
+                                    >
+                                        <option value='GENERAL'>GENERAL</option>
+                                        <option value='OBC'>OBC</option>
+                                        <option value='SC'>SC</option>
+                                        <option value='ST'>ST</option>
+                                        <option value='OTHER'>OTHER</option>
+                                    </Select>
                                 </FormControl>
 
                                 <FormControl id="name">
@@ -358,19 +394,22 @@ console.log(student[0])
 
                                     <Input fontWeight="bold" type='date'
                                         w='100%' h='10' bg='white.500' value={std.dob} onChange={(e) => handleFieldChange(e, i, 'dob')} disabled={dis}
+                                        max={today}
                                     />
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Email</FormLabel>
                                     <Input fontWeight="bold"
                                         w='100%' h='10' bg='white.500' value={std.email} onChange={(e) => handleFieldChange(e, i, 'email')} disabled={dis}
-                                        type='email'
+                                        type='Email'
                                     />
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Mobile</FormLabel>
                                     <Input fontWeight="bold"
                                         w='100%' h='10' bg='white.500' value={std.mobile} onChange={(e) => handleFieldChange(e, i, 'mobile')} disabled={dis}
+                                        maxLength="10"
+                                        minLength="10"
                                     />
                                 </FormControl>
                                 <FormControl id="name">
@@ -412,11 +451,11 @@ console.log(student[0])
                                         value={std.session}
                                         onChange={(e) => handleFieldChange(e, i, 'session')}
                                     >
-                                        {
-                                            clas?.map((std) => (
-                                                <option value={std.session}>{std.session}</option>
-                                            ))
-                                        }
+                                         {
+                                        uniqueSessions?.map((session, i) => (
+                                            <option value={session}>{session}</option>
+                                        ))
+                                    }
 
 
                                     </Select>

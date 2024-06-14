@@ -5,10 +5,10 @@ import Navbar from '../../components/Navbar';
 const UserForm = ({ formData, handleChange, handleSubmit }) => (
   <Box as="form" onSubmit={handleSubmit}>
     <Stack spacing={4}>
-      <FormControl id="name" isRequired>
+      {/* <FormControl id="name" isRequired>
         <FormLabel>Name</FormLabel>
         <Input type="text" name="name" value={formData.name} onChange={handleChange} />
-      </FormControl>
+      </FormControl> */}
       <FormControl id="phone" isRequired>
         <FormLabel>Holiday</FormLabel>
         <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
@@ -101,7 +101,7 @@ const Holiday = () => {
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th>Name</Th>
+            {/* <Th>Name</Th> */}
             <Th>holiday</Th>
             <Th>Date</Th>
             <Th>Day</Th>
@@ -111,7 +111,7 @@ const Holiday = () => {
         <Tbody>
           {users.map((user, index) => (
             <Tr key={index}>
-              <Td>{user.name}</Td>
+              {/* <Td>{user.name}</Td> */}
               <Td>{user.phone}</Td>
               <Td>{user.department}</Td>
               <Td>{user.dayOfWeek}</Td>

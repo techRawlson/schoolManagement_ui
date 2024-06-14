@@ -195,7 +195,7 @@ const Navbar = () => {
                 <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" flexDir="column">
                   <Box display="flex" gap="1rem" alignItems="center" >
                     <Avatar bg="red.500" onClick={()=>nextPage("hello")}/>
-                    <MenuButton padding="11% 0 0 0">
+                    <MenuButton padding="9% 0 0 0">
                       <IoNotifications color="white" size="32" />
                       
                          {
@@ -236,9 +236,9 @@ const Navbar = () => {
       }
 
       {
-        isDesktop || isTablet ? <Text textAlign="center" color="White" marginLeft="5rem">
+        isDesktop || isTablet ? <Text textAlign="center"  marginLeft="5rem" color='green.9000'>
 
-          Student Management System
+          Rawlson Technologies
         </Text> : ''
       }
 

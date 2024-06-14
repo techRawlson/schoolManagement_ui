@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Flex, FormControl, FormLabel, Input, Stack, Table, Tbody, Td, Th, Thead, Tr, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, useEditable, Toast } from '@chakra-ui/react';
 import Navbar from '../../components/Navbar';
+import { ToastContainer, toast } from 'react-toastify';
 
 const UserForm = ({ formData, handleChange, handleSubmit }) => (
   <Box as="form" onSubmit={handleSubmit}>
@@ -9,9 +10,9 @@ const UserForm = ({ formData, handleChange, handleSubmit }) => (
         <FormLabel>Name</FormLabel>
         <Input type="text" name="name" value={formData.name} onChange={handleChange} />
       </FormControl>
-      <FormControl id="phone" isRequired>
-        <FormLabel>Phone</FormLabel>
-        <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+      <FormControl id="phoneNumber" isRequired>
+        <FormLabel>phone</FormLabel>
+        <Input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} maxLength="10"/>
       </FormControl>
       <FormControl id="department" isRequired>
         <FormLabel>Department</FormLabel>
@@ -33,52 +34,126 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    phoneNumberNumber: '',
     department: '',
     email: ''
   });
   const [editingIndex, setEditingIndex] = useState(null);
+
+
+
+  const fetchEmployees = async () => {
+    try {
+        // Ensure the URL is properly formatted
+        const response = await fetch('http://192.168.1.121:8083/employees/all');
+        
+        // Check if the response status is OK (200)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Parse the JSON data
+        const employeeData = await response.json();
+        
+        // Log the fetched data
+        console.log(employeeData);
+        
+        // Update the state with the fetched data
+        setUsers(employeeData);
+    } catch (error) {
+        // Provide a more descriptive error message
+        console.error('Error fetching employee data:', error);
+    }
+};
+
+
+
+
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (editingIndex !== null) {
-      const updatedUsers = users.map((user, index) => 
-        index === editingIndex ? formData : user
-      );
-      setUsers(updatedUsers);
-    } else {
-      setUsers([...users, formData]);
+    console.log(formData)
+    const url = 'http://192.168.1.121:8083/employees/create';
+    // Log the URL to ensure it's correct
+    console.log('URL:', url);
+    try {
+      const data = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      console.log(data)
+      setFormData({
+        name: '',
+        phoneNumberNumber: '',
+        department: '',
+        email: ''
+      });
+      setEditingIndex(null);
+      onClose();
+      fetchEmployees()
+    } catch (error) {
+      console.log(error)
     }
-    setFormData({
-      name: '',
-      phone: '',
-      department: '',
-      email: ''
-    });
-    setEditingIndex(null);
-    onClose();
+
   };
 
-  const handleEdit = (index) => {
+  const handleEdit = async (index) => {
     setEditingIndex(index);
+    console.log(index)
     setFormData(users[index]);
-    onOpen();
+    console.log(users[index])
+
+    // const data = await fetch(`192.268.1.121:8083/employees/${id}/update`, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(student[0])
+    // });
+    // onOpen();
   };
 
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    setUsers(updatedUsers);
+  const handleDelete = async (id) => {
+    const url = `http://192.168.1.121:8083/employees/${id}/delete`;
+
+    try {
+      // Validate the URL using the URL constructor
+      new URL(url);
+
+      const response = await fetch(url, {
+        method: 'DELETE', // Assuming DELETE method for delete operation
+      });
+
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+
+      
+
+     
+      toast.success('Deleted Successfully')
+    } catch (error) {
+      console.error('Failed to delete:', error);
+      toast.error('could not delete')
+      // Optionally display an error message to the user
+    }
   };
+
 
   const handleAddUser = () => {
     setFormData({
       name: '',
-      phone: '',
+      phoneNumberNumber: '',
       department: '',
       email: ''
     });
@@ -86,15 +161,21 @@ const App = () => {
     onOpen();
   };
 
+
+
+
+  useEffect(()=>{
+    fetchEmployees()
+  },[])
   return (
-    <Box  minH="100vh">
-  
-      <Navbar/>
+    <Box minH="100vh">
+<ToastContainer/>
+      <Navbar />
       <Table variant="simple">
         <Thead>
           <Tr>
             <Th>Name</Th>
-            <Th>Phone</Th>
+            <Th>phone</Th>
             <Th>Department</Th>
             <Th>Email</Th>
             <Th>Actions</Th>
@@ -104,12 +185,12 @@ const App = () => {
           {users.map((user, index) => (
             <Tr key={index}>
               <Td>{user.name}</Td>
-              <Td>{user.phone}</Td>
+              <Td>{user.phoneNumber}</Td>
               <Td>{user.department}</Td>
               <Td>{user.email}</Td>
               <Td>
                 <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index)}>Edit</Button>
-                <Button size="sm" colorScheme="red" ml={2} onClick={() => handleDelete(index)}>Delete</Button>
+                <Button size="sm" colorScheme="red" ml={2} onClick={() => handleDelete(user.id)}>Delete</Button>
               </Td>
             </Tr>
           ))}

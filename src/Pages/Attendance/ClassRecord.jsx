@@ -565,7 +565,7 @@ const ClassRecord = () => {
                         ) : ''}
 
                         {
-                            showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red', fontSize: '24px' }}>it seems that time table does not exist for the above class selection..</Text> : ''
+                            showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red', fontSize: '24px' }}>it seems that record does not exist for the above class selection..</Text> : ''
                         }
                     </Table>
                 </TableContainer>

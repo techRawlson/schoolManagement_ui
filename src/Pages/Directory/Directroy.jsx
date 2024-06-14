@@ -107,20 +107,20 @@ const App = () => {
 
   };
 
-  const handleEdit = async (index) => {
+  const handleEdit = async (index,id) => {
     setEditingIndex(index);
     console.log(index)
     setFormData(users[index]);
     console.log(users[index])
+    onOpen();
+    const data = await fetch(`192.268.1.121:8083/employees/${id}/update`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(users[index])
+    });
 
-    // const data = await fetch(`192.268.1.121:8083/employees/${id}/update`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(student[0])
-    // });
-    // onOpen();
   };
 
   const handleDelete = async (id) => {
@@ -142,6 +142,7 @@ const App = () => {
 
      
       toast.success('Deleted Successfully')
+      fetchEmployees()
     } catch (error) {
       console.error('Failed to delete:', error);
       toast.error('could not delete')
@@ -189,7 +190,7 @@ const App = () => {
               <Td>{user.department}</Td>
               <Td>{user.email}</Td>
               <Td>
-                <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index)}>Edit</Button>
+                <Button size="sm" colorScheme="yellow" onClick={() => handleEdit(index,user.id)}>Edit</Button>
                 <Button size="sm" colorScheme="red" ml={2} onClick={() => handleDelete(user.id)}>Delete</Button>
               </Td>
             </Tr>

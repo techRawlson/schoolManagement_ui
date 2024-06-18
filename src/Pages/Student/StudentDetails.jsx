@@ -252,9 +252,9 @@ const StudentDetails = () => {
     const uniqueSections = [...new Set(clas.map(elm => elm.section))].sort();
     // Extract unique class names
     const uniqueClassNames = [...new Set(clas.map(elm => elm.className))].sort();
-     // Extract unique sessions
-     const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
-     const today = new Date().toISOString().split('T')[0];
+    // Extract unique sessions
+    const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
+    const today = new Date().toISOString().split('T')[0];
     return (
         <Stack minH="100vh">
             <Navbar />
@@ -316,20 +316,22 @@ const StudentDetails = () => {
                                         disabled
                                     />
                                 </FormControl>
-                                <FormControl id="name">
+                                <FormControl id={`className-${i}`}>
                                     <FormLabel>ClassName</FormLabel>
                                     <Select
                                         disabled={dis}
                                         fontWeight="bold"
-                                        w='100%' h='10'
+                                        w='100%'
+                                        h='10'
                                         bg='white.500'
-                                        value={std.sex}
+                                        value={std.className} // Ensure std.className is properly set
                                         onChange={(e) => handleFieldChange(e, i, 'className')}
-                                    > {
-                                            uniqueClassNames?.map((className, i) => (
-                                                <option value={className}>{className}</option>
-                                            ))
-                                        }
+                                    >
+                                        {uniqueClassNames?.map((className, index) => (
+                                            <option key={index} value={className}>
+                                                {className}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </FormControl>
                                 <FormControl id="name">
@@ -361,7 +363,7 @@ const StudentDetails = () => {
                                         fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
-                                        value={std.sex}
+                                        // value={std.sex}
                                         onChange={(e) => handleFieldChange(e, i, 'section')}
                                     >
                                         {
@@ -370,6 +372,7 @@ const StudentDetails = () => {
                                             ))
                                         }
                                     </Select>
+                                   
                                 </FormControl>
                                 <FormControl id="name">
                                     <FormLabel>Category</FormLabel>
@@ -378,7 +381,7 @@ const StudentDetails = () => {
                                         fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
-                                        value={std.sex}
+                                        // value={std.sex}
                                         onChange={(e) => handleFieldChange(e, i, 'category')}
                                     >
                                         <option value='GENERAL'>GENERAL</option>
@@ -432,7 +435,7 @@ const StudentDetails = () => {
                                         fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
-                                        value={std.sex}
+                                        // value={std.sex}
                                         onChange={(e) => handleFieldChange(e, i, 'sex')}
                                     >
                                         <option value='Male'>Male</option>
@@ -451,11 +454,11 @@ const StudentDetails = () => {
                                         value={std.session}
                                         onChange={(e) => handleFieldChange(e, i, 'session')}
                                     >
-                                         {
-                                        uniqueSessions?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
-                                    }
+                                        {
+                                            uniqueSessions?.map((session, i) => (
+                                                <option value={session}>{session}</option>
+                                            ))
+                                        }
 
 
                                     </Select>

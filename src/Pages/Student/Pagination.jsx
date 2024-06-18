@@ -53,7 +53,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     const { Role, updateData } = useData();
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
-
+    const [open, setOpen] = useState(false)
     const [onOpen, setOnOpen] = useState(false)
     const [isClose, setIsClose] = useState(false)
     const initialRef = useRef()
@@ -388,29 +388,29 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
 
-const initial={
-    name: '',
-    email: '',
-    fathersname: '',
-    mobile: '',
-    address: '',
-    class: null,
-    section: '',
-    gender: '',
-    rollNo: '',
-    category: '',
-    session: '',
-}
+    const initial = {
+        name: '',
+        email: '',
+        fathersname: '',
+        mobile: '',
+        address: '',
+        class: null,
+        section: '',
+        gender: '',
+        rollNo: '',
+        category: '',
+        session: '',
+    }
     const [isOpen, setIsOpen] = useState(false);
     const [initialFormData, setinitialFormData] = useState(initial);
     const [savedFormData, setSavedFormData] = useState(null);
-console.log(savedFormData)
+    console.log(savedFormData)
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
     const handleMinimize = () => {
         console.log(initialFormData)
-        setIsOpen(false); 
+        setIsOpen(false);
         console.log(initialFormData)
         setSavedFormData(initialFormData); // Save current form data
         setinitialFormData({
@@ -426,8 +426,8 @@ console.log(savedFormData)
             category: '',
             session: '',
         }); // Clear form data to hide from modal
-       // Hide the modal
-      
+        // Hide the modal
+
     };
 
     const handleRestore = () => {
@@ -445,7 +445,7 @@ console.log(savedFormData)
     // };
 
 
-console.log(savedFormData)
+    console.log(savedFormData)
     return (
         <div style={{ width: '100vw' }}>
 
@@ -454,7 +454,7 @@ console.log(savedFormData)
                     <Navbar />
                     <ToastContainer />
                     <Stack width="95%" orientation="horizontal" marginX="auto" >
-                        
+
                         <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
                             <Flex width="7.5%" >
                                 <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />

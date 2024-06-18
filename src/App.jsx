@@ -34,6 +34,7 @@ import { useData } from './Pages/context/DataContext';
 import Role from './Pages/Role';
 import Directory from './Pages/Directory/Directroy';
 import Holiday from './Pages/Holidays/Holiday';
+import Annoucement from './Pages/Annoucements/Annoucement';
 function App() {
   const { data, updateData } = useData();
   const token = localStorage.getItem('token');
@@ -41,9 +42,11 @@ function App() {
   const [user, setUser] = useState([])
   console.log(user)
 console.log(data)
+console.log(localStorage.getItem("token"))
   const getStudent = async () => {
     const id = localStorage.getItem("username")
     console.log(id)
+   
     try {
       const data = await fetch(`http://192.168.1.121:8081/api/Login/users/${id}`)
       const fdata = await data.json()
@@ -91,6 +94,7 @@ console.log(data)
           <Route path='/role' element={tok ? <Role/> : <Login setToken={setToken} />} />
           <Route path='/directory' element={tok ? <Directory/> : <Login setToken={setToken} />} />
           <Route path='/holidays' element={tok ? <Holiday/> : <Login setToken={setToken} />} />
+          <Route path='/annoucement' element={tok ? <Annoucement/> : <Login setToken={setToken} />} />
         </Routes>
       </AuthProvider>
     </Router>

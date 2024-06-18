@@ -458,7 +458,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                 <Td border="1px solid">{elm.staffId}</Td>
                                                 {/* <Td border="1px solid">{elm.id}</Td> */}
                                                 <Td border="1px solid">
-                                                    <ChakraLink as={ReactRouterLink} to={`http://192.168.1.121:3000/staffdetails/${elm.id}`}>
+                                                    <ChakraLink as={ReactRouterLink} to={`http://192.168.1.121:8083/staffdetails/${elm.id}`}>
                                                         {elm.name}
                                                     </ChakraLink>
                                                 </Td>

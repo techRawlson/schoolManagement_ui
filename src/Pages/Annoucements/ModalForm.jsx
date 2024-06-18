@@ -135,7 +135,7 @@ const ModalForm = () => {
                                             {item.date}
                                         </Box>
                                         {item.title}
-                                        <IoArrowDownCircleOutline size="30px" onClick={() => handleDelete(index)} />
+                                        <IoArrowDownCircleOutline size="30px" />
                                     </Flex>
                                     <IconButton
                                         backgroundColor="green"

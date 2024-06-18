@@ -524,7 +524,7 @@ console.log(savedFormData)
                                                 <Td border="1px solid">{elm.enrollmentNumber}</Td>
                                                 <Td border="1px solid">{elm.studentId}</Td>
                                                 <Td border="1px solid">
-                                                    <ChakraLink as={ReactRouterLink} to={`http://localhost:3000/studentdetails/${elm.id}`}>
+                                                    <ChakraLink as={ReactRouterLink} to={`/studentdetails/${elm.id}`}>
                                                         {elm.name}
                                                     </ChakraLink>
                                                 </Td>

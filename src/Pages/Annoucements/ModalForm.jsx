@@ -1,5 +1,5 @@
 // ModalForm.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Modal,
     ModalOverlay,
@@ -31,8 +31,9 @@ import { GoPlusCircle } from "react-icons/go";
 
 const ModalForm = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [date, setDate] = useState('');
     const [items, setItems] = useState([]);
-    const [formData, setFormData] = useState({ date: "", title: "", description: "" });
+    const [formData, setFormData] = useState({ date: '', title: "", description: "" });
     const [isEditing, setIsEditing] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(null);
 
@@ -41,6 +42,13 @@ const ModalForm = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+console.log(date)
+    // Set default date to today's date
+    useEffect(() => {
+      const today = new Date();
+      const formattedDate = today.toISOString().split('T')[0];
+      setDate(formattedDate);
+    }, []);
     const handleSave = () => {
         if (isEditing) {
             const updatedItems = items.map((item, index) =>
@@ -49,6 +57,9 @@ const ModalForm = () => {
             setItems(updatedItems);
             setIsEditing(false);
         } else {
+           
+            formData.date=date;
+            console.log(formData)
             setItems([...items, formData]);
         }
         setFormData({ date: "", title: "", description: "" });
@@ -66,7 +77,7 @@ const ModalForm = () => {
         const filteredItems = items.filter((_, i) => i !== index);
         setItems(filteredItems);
     };
-
+  
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
@@ -84,8 +95,9 @@ const ModalForm = () => {
                             <Input
                                 type="date"
                                 name="date"
-                                value={formData.date}
-                                onChange={handleChange}
+                                value={date}
+                                // onChange={handleChange}
+                                disabled
                             />
                         </FormControl>
                         <FormControl mt={4}>
@@ -132,7 +144,7 @@ const ModalForm = () => {
                                 <AccordionButton>
                                     <Flex as='span' flex='1' justifyContent="space-between" alignItems='center' margin="0 1rem">
                                         <Box bg='#2E8BC0' w='100px' p={1} color='white' whiteSpace="nowrap">
-                                            {item.date}
+                    {item.date}
                                         </Box>
                                         {item.title}
                                         <IoArrowDownCircleOutline size="30px" />

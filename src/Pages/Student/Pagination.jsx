@@ -1003,7 +1003,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 >
                                                     Save
                                                 </Button>
-                                                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                                                <Button onClick={() => setIsOpen(false)}>Cancel</Button>
                                                 <Button type="submit" ref={saveButtonRef} style={{ display: 'none' }}>Hidden submit button</Button>
                                             </ModalFooter>
                                         </Form>

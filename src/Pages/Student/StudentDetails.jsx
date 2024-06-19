@@ -381,7 +381,7 @@ const StudentDetails = () => {
                                         fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
-                                        // value={std.sex}
+                                        value={std.sex}
                                         onChange={(e) => handleFieldChange(e, i, 'category')}
                                     >
                                         <option value='GENERAL'>GENERAL</option>
@@ -435,7 +435,7 @@ const StudentDetails = () => {
                                         fontWeight="bold"
                                         w='100%' h='10'
                                         bg='white.500'
-                                        // value={std.sex}
+                                        value={std.sex}
                                         onChange={(e) => handleFieldChange(e, i, 'sex')}
                                     >
                                         <option value='Male'>Male</option>
@@ -453,6 +453,7 @@ const StudentDetails = () => {
                                         bg='white.500'
                                         value={std.session}
                                         onChange={(e) => handleFieldChange(e, i, 'session')}
+                                        
                                     >
                                         {
                                             uniqueSessions?.map((session, i) => (

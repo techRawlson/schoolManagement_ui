@@ -85,6 +85,7 @@ const Student = () => {
         //filter for year
         if (filters.year !== "") {
             console.log(filters.year)
+            console.log(filterData)
             filterData = filterData.filter(
                 (ele) => ele.session == filters.year
             );

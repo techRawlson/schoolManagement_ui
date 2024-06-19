@@ -47,6 +47,8 @@ import { IoArrowBack } from "react-icons/io5";
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import Draggable from 'react-draggable';
+import { useMediaQuery } from 'react-responsive';
+import './Pagination.css'
 
 // import Student from '../Pages/Student';
 function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
@@ -287,7 +289,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             if (data.status >= 200 && data.status < 300) {
                 await getStudentData()
                 toast.success("Student created successfully");
-                setOpen(false)
+                setIsOpen(false)
             } else {
                 console.log(data.status)
                 toast.error("Something went wrong");
@@ -295,7 +297,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
         } catch (error) {
             console.log(error)
             toast.error(error.message || "Something went wrong");
-            setOpen(false)
+            setIsOpen(false)
         }
     };
 
@@ -446,109 +448,227 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
     console.log(savedFormData)
-    return (
-        <div style={{ width: '100vw' }}>
 
-            <div className="pagination-items">
+
+
+    //making this page responsive
+    const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
+    const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
+    return (
+        <div style={{ width: '100vw' ,}}>
+
+            <div className="pagination-items" >
                 <div>
                     <Navbar />
                     <ToastContainer />
-                    <Stack width="95%" orientation="horizontal" marginX="auto" >
+                    <Stack orientation="horizontal" marginX="auto" >
+                        {
+                            isDesktop || isTablet ? <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
+                                <Flex as="button" p="0 3vw">
+                                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
 
-                        <Flex justifyContent="space-between" width="100%" mt="1%" alignItems="center">
-                            <Flex width="7.5%" >
-                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                                </Flex>
+                                <Flex justifyContent="space-between" padding="1rem"  >
+
+                                    <Select placeholder='Session'  onChange={handleFilterYear} ref={admYearRef} margin="0 1vh">
+                                        {
+                                            uniqueSessions?.map((session, i) => (
+                                                <option value={session}>{session}</option>
+                                            ))
+                                        }
+
+
+                                    </Select>
+                                    <Select placeholder='Class'  onChange={handleFilter} ref={clasRef} margin="0 1vh">
+                                        {
+                                            uniqueClassNames?.map((className, i) => (
+                                                <option value={className}>{className}</option>
+                                            ))
+                                        }
+
+                                    </Select>
+                                    <Select placeholder='Section'  onChange={handleSectionFilter} ref={secFilter} margin="0 1vh">
+                                        {
+                                            uniqueSections?.map((section, i) => (
+                                                <option value={section}>{section}</option>
+                                            ))
+                                        }
+
+                                    </Select>
+                                    <Input  placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch}  margin="0 1vh"/>
+                                    {
+                                        Role == 'staff' ? '' : <Button  onClick={() => setIsOpen(true)} minW="50%px" margin="0 1vh">
+                                            Add New
+                                        </Button>
+                                    }
+
+                                </Flex>
+
+                            </Flex> : ''
+                        }
+
+                       {
+                         isMobile?
+                         <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
+                                {/* <Flex as="button" p="0 3vw">
+                                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+
+                                </Flex> */}
+                                <Flex justifyContent="space-between" padding="1rem" flexWrap="wrap">
+
+                                    <Select placeholder='Session'  onChange={handleFilterYear} ref={admYearRef}  flexGrow="1" flexBasis="200px" m="1vh">
+                                        {
+                                            uniqueSessions?.map((session, i) => (
+                                                <option value={session}>{session}</option>
+                                            ))
+                                        }
+
+
+                                    </Select>
+                                    <Select placeholder='Class'  onChange={handleFilter} ref={clasRef} flexGrow="1" flexBasis="200px" m="1vh">
+                                        {
+                                            uniqueClassNames?.map((className, i) => (
+                                                <option value={className}>{className}</option>
+                                            ))
+                                        }
+
+                                    </Select>
+                                    <Select placeholder='Section'  onChange={handleSectionFilter} ref={secFilter} flexGrow="1" flexBasis="200px" m="1vh">
+                                        {
+                                            uniqueSections?.map((section, i) => (
+                                                <option value={section}>{section}</option>
+                                            ))
+                                        }
+
+                                    </Select>
+                                    <Input  placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} flexGrow="1" flexBasis="200px" m="1vh"/>
+                                    {
+                                        Role == 'staff' ? '' : <Button  onClick={() => setIsOpen(true)} minW="50%px" flexGrow="1" flexBasis="200px" m="1vh">
+                                            Add New
+                                        </Button>
+                                    }
+
+                                </Flex>
 
                             </Flex>
-                            <Flex width="50%" paddingRight="1" justifyContent="space-between">
+                         :""
+                       }
 
-                                <Select placeholder='Session' maxW="20%" onChange={handleFilterYear} ref={admYearRef}>
-                                    {
-                                        uniqueSessions?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
-                                    }
+                        {
+                            isDesktop || isTablet ? <TableContainer  margin="0 2vw">
+                                <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
+                                    <Thead>
+                                        <Tr maxWidth="10%" border="1px solid">
+                                            <Th border="1px solid">Sr.No.</Th>
+                                            <Th border="1px solid">Enrollment No.</Th>
+                                            <Th border="1px solid">studentId</Th>
+                                            <Th border="1px solid">Name</Th>
+                                            <Th border="1px solid">Father Name</Th>
+                                            <Th border="1px solid">Class Name</Th>
+                                            <Th border="1px solid">Session</Th>
+                                            <Th border="1px solid">Section</Th>
+                                            <Th border="1px solid">Roll Number</Th>
+                                            <Th border="1px solid">Gender</Th>
 
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {
+                                            classData?.slice(startIndex, endIndex).map((elm, i) => (
+                                                <Tr key={i} border="1px solid">
+                                                    <Td border="1px solid">{startIndex + i + 1}</Td>
 
-                                </Select>
-                                <Select placeholder='Class' maxW="20%" onChange={handleFilter} ref={clasRef}>
-                                    {
-                                        uniqueClassNames?.map((className, i) => (
-                                            <option value={className}>{className}</option>
-                                        ))
-                                    }
-
-                                </Select>
-                                <Select placeholder='Section' maxW="20%" onChange={handleSectionFilter} ref={secFilter}>
-                                    {
-                                        uniqueSections?.map((section, i) => (
-                                            <option value={section}>{section}</option>
-                                        ))
-                                    }
-
-                                </Select>
-                                <Input maxW="20%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
-                                {
-                                    Role == 'staff' ? '' : <Button maxW="22%" onClick={() => setIsOpen(true)}>
-                                        Add New
-                                    </Button>
-                                }
-
-                            </Flex>
-
-                        </Flex>
-
-                        <TableContainer >
-                            <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
-                                <Thead>
-                                    <Tr maxWidth="10%" border="1px solid">
-                                        <Th border="1px solid">Sr.No.</Th>
-                                        <Th border="1px solid">Enrollment No.</Th>
-                                        <Th border="1px solid">studentId</Th>
-                                        <Th border="1px solid">Name</Th>
-                                        <Th border="1px solid">Father Name</Th>
-                                        <Th border="1px solid">Class Name</Th>
-                                        <Th border="1px solid">Session</Th>
-                                        <Th border="1px solid">Section</Th>
-                                        <Th border="1px solid">Roll Number</Th>
-                                        <Th border="1px solid">Gender</Th>
-
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {
-                                        classData?.slice(startIndex, endIndex).map((elm, i) => (
-                                            <Tr key={i} border="1px solid">
-                                                <Td border="1px solid">{startIndex + i + 1}</Td>
-
-                                                <Td border="1px solid">{elm.enrollmentNumber}</Td>
-                                                <Td border="1px solid">{elm.studentId}</Td>
-                                                <Td border="1px solid">
-                                                    <ChakraLink as={ReactRouterLink} to={`/studentdetails/${elm.id}`}>
-                                                        {elm.name}
-                                                    </ChakraLink>
-                                                </Td>
-                                                <Td border="1px solid">{elm.fathersName}</Td>
-                                                <Td border="1px solid">{elm.className}</Td>
-                                                <Td border="1px solid">{elm.session}</Td>
-                                                <Td border="1px solid">{elm.section}</Td>
-                                                <Td border="1px solid">{elm.rollNumber}</Td>
-                                                <Td border="1px solid">{elm.sex}</Td>
+                                                    <Td border="1px solid">{elm.enrollmentNumber}</Td>
+                                                    <Td border="1px solid">{elm.studentId}</Td>
+                                                    <Td border="1px solid">
+                                                        <ChakraLink as={ReactRouterLink} to={`/studentdetails/${elm.id}`}>
+                                                            {elm.name}
+                                                        </ChakraLink>
+                                                    </Td>
+                                                    <Td border="1px solid">{elm.fathersName}</Td>
+                                                    <Td border="1px solid">{elm.className}</Td>
+                                                    <Td border="1px solid">{elm.session}</Td>
+                                                    <Td border="1px solid">{elm.section}</Td>
+                                                    <Td border="1px solid">{elm.rollNumber}</Td>
+                                                    <Td border="1px solid">{elm.sex}</Td>
 
 
-                                            </Tr>
-                                        ))
+                                                </Tr>
+                                            ))
 
-                                    }
+                                        }
 
 
 
-                                </Tbody>
-                                <Tfoot>
-                                </Tfoot>
+                                    </Tbody>
+                                    <Tfoot>
+                                    </Tfoot>
 
-                            </Table>
-                        </TableContainer>
+                                </Table>
+                            </TableContainer> : ''
+                        }
+
+
+
+{
+    isMobile?<TableContainer  margin="0 2vw" >
+    <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
+        <Thead>
+            <Tr maxWidth="10%" border="1px solid">
+                <Th border="1px solid">Sr.No.</Th>
+                <Th border="1px solid">Enrollment No.</Th>
+                <Th border="1px solid">studentId</Th>
+                <Th border="1px solid">Name</Th>
+                <Th border="1px solid">Father Name</Th>
+                <Th border="1px solid">Class Name</Th>
+                <Th border="1px solid">Session</Th>
+                <Th border="1px solid">Section</Th>
+                <Th border="1px solid">Roll Number</Th>
+                <Th border="1px solid">Gender</Th>
+
+            </Tr>
+        </Thead>
+        <Tbody>
+            {
+                classData?.slice(startIndex, endIndex).map((elm, i) => (
+                    <Tr key={i} border="1px solid">
+                        <Td border="1px solid">{startIndex + i + 1}</Td>
+
+                        <Td border="1px solid">{elm.enrollmentNumber}</Td>
+                        <Td border="1px solid">{elm.studentId}</Td>
+                        <Td border="1px solid">
+                            <ChakraLink as={ReactRouterLink} to={`/studentdetails/${elm.id}`}>
+                                {elm.name}
+                            </ChakraLink>
+                        </Td>
+                        <Td border="1px solid">{elm.fathersName}</Td>
+                        <Td border="1px solid">{elm.className}</Td>
+                        <Td border="1px solid">{elm.session}</Td>
+                        <Td border="1px solid">{elm.section}</Td>
+                        <Td border="1px solid">{elm.rollNumber}</Td>
+                        <Td border="1px solid">{elm.sex}</Td>
+
+
+                    </Tr>
+                ))
+
+            }
+
+
+
+        </Tbody>
+        <Tfoot>
+        </Tfoot>
+
+    </Table>
+</TableContainer>:''
+}
+
+
+
+
+
                         <Stack display="flex"
                             flexDirection="row"
                             width="96%"
@@ -581,13 +701,15 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             </div>
 
             <div className="pagination-controls" style={{
-                width: "12%",
-                margin: "1% auto",
+                width: "22%",
+                // margin: "1% auto",
                 display: "flex",
                 alignItems: "center",
                 alignContent: "center",
                 fontSize: "15px",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
+                margin: '0 auto 1rem'
+
             }}>
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     <FaArrowLeft />
@@ -595,6 +717,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 {pageNumbers.map((pageNumber) => (
                     <button
                         key={pageNumber}
+                        // className={currentPage === pageNumber ? 'active-page' : ''}
                         onClick={() => handlePageChange(pageNumber)}
                         disabled={currentPage === pageNumber}
                     >
@@ -678,9 +801,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                     {({ isSubmitting, isValid }) => (
                                         <Form>
                                             <Flex justifyContent="space-between" alignItems="center" >
-                                                <Field name="name">
+                                                <Field name="name" m="1">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired>
+                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired m="1">
                                                             <FormLabel htmlFor="name">Name</FormLabel>
                                                             <Input {...field} id="name" placeholder="Name" ref={nameRef} />
                                                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -689,7 +812,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
                                                 <Field name="email" m="1">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired>
+                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired m="1">
                                                             <FormLabel htmlFor="email">Email Address</FormLabel>
                                                             <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
                                                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
@@ -744,9 +867,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 <Field name="class" m="1">
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired m="1">
-                                                            <FormLabel htmlFor="class">Class</FormLabel>
-                                                            <Select {...field} ref={classRef} isRequired id="class" name='class'>
-                                                                <option>Select</option>
+                                                            <FormLabel htmlFor="class">Class Name</FormLabel>
+                                                            <Select {...field} ref={classRef} isRequired id="class" name='class' placeholder='class name'>
+                                                               
                                                                 {
                                                                     uniqueClassNames?.map((className, i) => (
                                                                         <option key={i} value={className}>{className}</option>
@@ -763,7 +886,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             <Flex>
                                                 <Field name="section">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired>
+                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired m="1">
                                                             <FormLabel htmlFor="section" >Section</FormLabel>
                                                             <Select {...field} ref={sectionRef} placeholder="Select">
                                                                 {/* Empty option for placeholder */}
@@ -796,7 +919,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                     />
                                                 </FormControl>
-                                                <FormControl isRequired>
+                                                <FormControl isRequired m="1">
                                                     <FormLabel>Date of birth</FormLabel>
                                                     <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today} />
                                                 </FormControl>
@@ -805,7 +928,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             <Flex>
                                                 <Field name="category">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired>
+                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired m="1">
                                                             <FormLabel htmlFor="category">Category</FormLabel>
                                                             <Select {...field} ref={catRef} id="category" placeholder="Select" onChange={(e) => form.setFieldValue('category', e.target.value)}>
 
@@ -822,7 +945,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="gender">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired>
+                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired m="1">
                                                             <FormLabel htmlFor="gender">Gender</FormLabel>
                                                             <Select {...field} ref={sexRef} id="gender" placeholder="Select" onChange={(e) => form.setFieldValue('gender', e.target.value)}>
 
@@ -836,9 +959,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
 
 
-                                                <Field name="rollNo">
+                                                <Field name="rollNo" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired>
+                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired m="1">
                                                             <FormLabel htmlFor="rollNo">Roll No.</FormLabel>
                                                             <Input {...field} ref={rollRef} id="rollNo" placeholder="Roll No." type="number" />
                                                             <FormErrorMessage>{form.errors.rollNo}</FormErrorMessage>
@@ -849,17 +972,17 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             </Flex>
 
                                             <Flex justifyContent="space-around">
-                                                <FormControl isRequired maxW="45%">
+                                                <FormControl isRequired maxW="45%" m="1">
                                                     <FormLabel>Enrollment No.</FormLabel>
                                                     <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
                                                 </FormControl>
-                                                <FormControl maxW="45%">
+                                                <FormControl maxW="45%" m="1">
                                                     <FormLabel>Upload Image</FormLabel>
                                                     <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
                                                 </FormControl>
                                                 <Field name="session">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired>
+                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired m="1">
                                                             <FormLabel htmlFor="session">Session</FormLabel>
                                                             <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
 
@@ -901,11 +1024,11 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     </Draggable>
 
                 </Modal>
-                {/* <Button onClick={handleRestore}>Restore Modal</Button> */}
+
             </>
 
 
-            {/** her modal modification */}
+
 
 
 

@@ -256,10 +256,10 @@ const StudentDetails = () => {
     const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
     const today = new Date().toISOString().split('T')[0];
     return (
-        <div style={{ height:'100vh'}} >
+        <div style={{ width:'100vw'}} >
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-            <Stack  width="100vw" height="100%" backgroundColor="white">
+            <Stack  width="100vw"  backgroundColor="white">
                 <Flex  justifyContent="space-between" alignItems="center"   width="100%" margin="0 auto" padding="2vh 2vw">
 
                     <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" />

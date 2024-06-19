@@ -465,7 +465,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     <Stack orientation="horizontal" marginX="auto" >
                         {
                             isDesktop || isTablet ? <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
-                                <Flex as="button" p="0 3vw">
+                                <Flex  p="0 3vw">
                                     <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
 
                                 </Flex>
@@ -612,7 +612,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
 {
-    isMobile?<TableContainer  margin="0 2vw" >
+    isMobile?<TableContainer  margin="0 1vw" >
     <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
         <Thead>
             <Tr maxWidth="10%" border="1px solid">

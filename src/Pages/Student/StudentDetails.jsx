@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, IconButton, Icon } from '@chakra-ui/react'
+import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, IconButton, Icon, Box } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -256,11 +256,11 @@ const StudentDetails = () => {
     const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
     const today = new Date().toISOString().split('T')[0];
     return (
-        <Stack minH="100vh">
+        <div style={{ height:'100vh'}} >
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-            <Stack width="95vw" margin="0 3%">
-                <Flex mb="5" justifyContent="space-between" alignItems="center" width="90vw">
+            <Stack  width="100vw" height="100%" backgroundColor="white">
+                <Flex  justifyContent="space-between" alignItems="center"   width="100%" margin="0 auto" padding="2vh 2vw">
 
                     <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" />
 
@@ -270,8 +270,7 @@ const StudentDetails = () => {
                                 src={image || `http://192.168.1.121:8082/api/images/${student[0]?.studentId}`}
                                 alt="Avatar"
                                 style={dis ? {} : { cursor: 'pointer' }}
-                                width="100px"
-                                height="100px"
+                                boxSize="100px"
 
                             />
                             <input
@@ -290,194 +289,202 @@ const StudentDetails = () => {
 
                 </Flex>
 
-                <Stack>
-                    {
-                        student?.map((std, i) => (
-                            <Grid templateColumns='repeat(4, 1fr)' gap={2} key={i} minH="55vh" >
-
-                                <FormControl id="name">
-                                    <FormLabel>Name</FormLabel>
-                                    <Input
-                                        w='100%'
-                                        h='10'
-                                        bg='white.500'
-                                        value={std.name}
-                                        onChange={(e) => handleFieldChange(e, i, 'name')}
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>StudentId</FormLabel>
-                                    <Input
-                                        w='100%' h='10' bg='white.500'
-                                        value={std.studentId}
-                                        fontWeight="bold"
-                                        disabled
-                                    />
-                                </FormControl>
-                                <FormControl id={`className-${i}`}>
-                                    <FormLabel>ClassName</FormLabel>
-                                    <Select
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                        w='100%'
-                                        h='10'
-                                        bg='white.500'
-                                        value={std.className} // Ensure std.className is properly set
-                                        onChange={(e) => handleFieldChange(e, i, 'className')}
-                                    >
-                                        {uniqueClassNames?.map((className, index) => (
-                                            <option key={index} value={className}>
-                                                {className}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Roll Number</FormLabel>
-                                    <Input
-                                        w='100%' h='10' bg='white.500' value={std.rollNumber} onChange={(e) => handleFieldChange(e, i, 'rollNumber')}
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Enrollment Number</FormLabel>
-                                    <Input w='100%' h='10' bg='white.500' value={std.enrollmentNumber} onChange={(e) => handleFieldChange(e, i, 'enrollmentNumber')}
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Father's Name</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.fathersName} onChange={(e) => handleFieldChange(e, i, 'fathersName')} disabled={dis}
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Section</FormLabel>
-
-                                    <Select
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                        w='100%' h='10'
-                                        bg='white.500'
-                                        // value={std.sex}
-                                        onChange={(e) => handleFieldChange(e, i, 'section')}
-                                    >
-                                        {
-                                            uniqueSections?.map((section, i) => (
-                                                <option value={section}>{section}</option>
-                                            ))
-                                        }
-                                    </Select>
-                                   
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Category</FormLabel>
-                                    <Select
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                        w='100%' h='10'
-                                        bg='white.500'
-                                        value={std.sex}
-                                        onChange={(e) => handleFieldChange(e, i, 'category')}
-                                    >
-                                        <option value='GENERAL'>GENERAL</option>
-                                        <option value='OBC'>OBC</option>
-                                        <option value='SC'>SC</option>
-                                        <option value='ST'>ST</option>
-                                        <option value='OTHER'>OTHER</option>
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl id="name">
-                                    <FormLabel>Date of birth</FormLabel>
-
-                                    <Input fontWeight="bold" type='date'
-                                        w='100%' h='10' bg='white.500' value={std.dob} onChange={(e) => handleFieldChange(e, i, 'dob')} disabled={dis}
-                                        max={today}
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Email</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.email} onChange={(e) => handleFieldChange(e, i, 'email')} disabled={dis}
-                                        type='Email'
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Mobile</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.mobile} onChange={(e) => handleFieldChange(e, i, 'mobile')} disabled={dis}
-                                        maxLength="10"
-                                        minLength="10"
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Admission year</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.admissionYear} onChange={(e) => handleFieldChange(e, i, 'admissionYear')} disabled={dis}
-                                    />
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Address</FormLabel>
-                                    <Input fontWeight="bold"
-                                        w='100%' h='10' bg='white.500' value={std.address} onChange={(e) => handleFieldChange(e, i, 'address')} disabled={dis}
-                                    />
-                                </FormControl>
-
-                                <FormControl id="name">
-                                    <FormLabel>Gender</FormLabel>
-                                    <Select
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                        w='100%' h='10'
-                                        bg='white.500'
-                                        value={std.sex}
-                                        onChange={(e) => handleFieldChange(e, i, 'sex')}
-                                    >
-                                        <option value='Male'>Male</option>
-                                        <option value='Female'>Female</option>
-                                        <option value='Other'>Other</option>
-                                    </Select>
-
-                                </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Session</FormLabel>
-                                    <Select
-                                        disabled={dis}
-                                        fontWeight="bold"
-                                        w='100%' h='10'
-                                        bg='white.500'
-                                        value={std.session}
-                                        onChange={(e) => handleFieldChange(e, i, 'session')}
-                                        
-                                    >
-                                        {
-                                            uniqueSessions?.map((session, i) => (
-                                                <option value={session}>{session}</option>
-                                            ))
-                                        }
-
-
-                                    </Select>
-
-                                </FormControl>
-                            </Grid>
-
-                        ))
-                    }
-
-                </Stack>
+                <Stack >
+            {student?.map((std, i) => (
+                <Box key={i}    boxShadow="sm" overflow="hidden" >
+                    <Flex wrap="wrap" gap={4} margin="0 4%" >
+                        <FormControl id={`name-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Name</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.name}
+                                onChange={(e) => handleFieldChange(e, i, 'name')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`studentId-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>StudentId</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.studentId}
+                                fontWeight="bold"
+                                disabled
+                            />
+                        </FormControl>
+                        <FormControl id={`className-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>ClassName</FormLabel>
+                            <Select
+                                disabled={dis}
+                                fontWeight="bold"
+                                bg="white.500"
+                                value={std.className}
+                                onChange={(e) => handleFieldChange(e, i, 'className')}
+                            >
+                                {uniqueClassNames?.map((className, index) => (
+                                    <option key={index} value={className}>
+                                        {className}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl id={`rollNumber-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Roll Number</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.rollNumber}
+                                onChange={(e) => handleFieldChange(e, i, 'rollNumber')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`enrollmentNumber-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>E. Number</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.enrollmentNumber}
+                                onChange={(e) => handleFieldChange(e, i, 'enrollmentNumber')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`fathersName-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Father's Name</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.fathersName}
+                                onChange={(e) => handleFieldChange(e, i, 'fathersName')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`section-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Section</FormLabel>
+                            <Select
+                                disabled={dis}
+                                fontWeight="bold"
+                                bg="white.500"
+                                onChange={(e) => handleFieldChange(e, i, 'section')}
+                            >
+                                {uniqueSections?.map((section, idx) => (
+                                    <option key={idx} value={section}>
+                                        {section}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl id={`category-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Category</FormLabel>
+                            <Select
+                                disabled={dis}
+                                fontWeight="bold"
+                                bg="white.500"
+                                value={std.sex}
+                                onChange={(e) => handleFieldChange(e, i, 'category')}
+                            >
+                                <option value="GENERAL">GENERAL</option>
+                                <option value="OBC">OBC</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OTHER">OTHER</option>
+                            </Select>
+                        </FormControl>
+                        <FormControl id={`dob-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Date of birth</FormLabel>
+                            <Input
+                                bg="white.500"
+                                type="date"
+                                value={std.dob}
+                                onChange={(e) => handleFieldChange(e, i, 'dob')}
+                                disabled={dis}
+                                max={today}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`email-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Email</FormLabel>
+                            <Input
+                                bg="white.500"
+                                type="email"
+                                value={std.email}
+                                onChange={(e) => handleFieldChange(e, i, 'email')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`mobile-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Mobile</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.mobile}
+                                onChange={(e) => handleFieldChange(e, i, 'mobile')}
+                                disabled={dis}
+                                maxLength="10"
+                                minLength="10"
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`admissionYear-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Adm. year</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.admissionYear}
+                                onChange={(e) => handleFieldChange(e, i, 'admissionYear')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`address-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Address</FormLabel>
+                            <Input
+                                bg="white.500"
+                                value={std.address}
+                                onChange={(e) => handleFieldChange(e, i, 'address')}
+                                disabled={dis}
+                                fontWeight="bold"
+                            />
+                        </FormControl>
+                        <FormControl id={`gender-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Gender</FormLabel>
+                            <Select
+                                disabled={dis}
+                                fontWeight="bold"
+                                bg="white.500"
+                                value={std.sex}
+                                onChange={(e) => handleFieldChange(e, i, 'sex')}
+                            >
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </Select>
+                        </FormControl>
+                        <FormControl id={`session-${i}`} flex="1 1 100%" flexBasis="240px">
+                            <FormLabel>Session</FormLabel>
+                            <Select
+                                disabled={dis}
+                                fontWeight="bold"
+                                bg="white.500"
+                                value={std.session}
+                                onChange={(e) => handleFieldChange(e, i, 'session')}
+                            >
+                                {uniqueSessions?.map((session, idx) => (
+                                    <option key={idx} value={session}>
+                                        {session}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Flex>
+                </Box>
+            ))}
+        </Stack>
 
                 {
-                    Role == 'staff' ? '' : <Flex direction='row' justifyContent="flex-end" >
+                    Role == 'staff' ? '' : <Flex direction='row' justifyContent="flex-end" margin="2vh 5vh"  >
                         {
-                            dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
+                            dis ? <Button bg="lightblue" onClick={() => editStudent()} margin="0 1vh">Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
                         }
-                        <Button colorScheme='green' margin="0 1rem">Print</Button>
+                        <Button colorScheme='green' >Print</Button>
                     </Flex>
                 }
 
@@ -486,7 +493,7 @@ const StudentDetails = () => {
 
             </Stack>
 
-        </Stack>
+        </div>
     )
 }
 

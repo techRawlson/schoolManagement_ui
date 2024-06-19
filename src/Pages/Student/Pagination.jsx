@@ -509,12 +509,18 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                         }
 
                         {
+                            isMobile ? <Flex marginTop="1vh" marginBottom="-2vh" padding="0 6vw">
+                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                            </Flex >
+                                : ''
+                        }
+
+
+
+                        {
                             isMobile ?
                                 <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
-                                    {/* <Flex as="button" p="0 3vw">
-                                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
 
-                                </Flex> */}
                                     <Flex justifyContent="space-between" padding="1rem" flexWrap="wrap">
 
                                         <Select placeholder='Session' onChange={handleFilterYear} ref={admYearRef} flexGrow="1" flexBasis="200px" m="1vh">
@@ -700,34 +706,70 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 </div>
             </div>
 
-            <div className="pagination-controls" style={{
-                width: "22%",
-                // margin: "1% auto",
-                display: "flex",
-                alignItems: "center",
-                alignContent: "center",
-                fontSize: "15px",
-                justifyContent: "space-between",
-                margin: '0 auto 1rem'
 
-            }}>
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    <FaArrowLeft />
-                </button>
-                {pageNumbers.map((pageNumber) => (
-                    <button
-                        key={pageNumber}
-                        // className={currentPage === pageNumber ? 'active-page' : ''}
-                        onClick={() => handlePageChange(pageNumber)}
-                        disabled={currentPage === pageNumber}
-                    >
-                        {pageNumber}
+            {
+                isDesktop || isTablet ? <div className="pagination-controls" style={{
+                    width: "22%",
+                    // margin: "1% auto",
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                    fontSize: "15px",
+                    justifyContent: "space-between",
+                    margin: '0 auto 1rem'
+
+                }}>
+                    <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                        <FaArrowLeft />
                     </button>
-                ))}
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    <FaArrowRight />
-                </button>
-            </div>
+                    {pageNumbers.map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            // className={currentPage === pageNumber ? 'active-page' : ''}
+                            onClick={() => handlePageChange(pageNumber)}
+                            disabled={currentPage === pageNumber}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                    <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                        <FaArrowRight />
+                    </button>
+                </div> : ''
+            }
+            {
+                isMobile?   <div className="pagination-controls" style={{
+                    width: "40%",
+                    margin: "2vh auto",
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                    fontSize: "15px",
+                    justifyContent: "space-between",
+                   fontSize:'22px'
+    
+                }}>
+                    <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                        <FaArrowLeft />
+                    </button>
+                    {pageNumbers.map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            // className={currentPage === pageNumber ? 'active-page' : ''}
+                            onClick={() => handlePageChange(pageNumber)}
+                            disabled={currentPage === pageNumber}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                    <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                        <FaArrowRight />
+                    </button>
+                </div>:''
+            }
+
+
+
             <>
 
 
@@ -803,7 +845,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                             <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
                                                 <Field name="name" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired   flexBasis="200px"  flexGrow="1"  > 
+                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired flexBasis="200px" flexGrow="1"  >
                                                             <FormLabel htmlFor="name">Name</FormLabel>
                                                             <Input {...field} id="name" placeholder="Name" ref={nameRef} />
                                                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -812,7 +854,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
                                                 <Field name="email" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired   flexBasis="200px"  flexGrow="1"  >
+                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired flexBasis="200px" flexGrow="1"  >
                                                             <FormLabel htmlFor="email">Email Address</FormLabel>
                                                             <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
                                                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
@@ -821,17 +863,17 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
                                                 <Field name="fathersname" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired   flexBasis="200px"  flexGrow="1" >
+                                                        <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired flexBasis="200px" flexGrow="1" >
                                                             <FormLabel htmlFor="fathersname">Father Name</FormLabel>
                                                             <Input {...field} placeholder='Father name' ref={fatherRef} id="fathersname" name='fathersname' />
                                                             <FormErrorMessage>{form.errors.fathersname}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
                                                 </Field>
-                               
+
                                                 <Field name="mobile" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="fathersname">Mobile</FormLabel>
                                                             <Input
                                                                 {...field}
@@ -854,7 +896,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="address" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.address && form.touched.address} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.address && form.touched.address} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="Address">Address</FormLabel>
                                                             <Input {...field} placeholder='Address' ref={addressRef} id="address" name='address' />
                                                             <FormErrorMessage>{form.errors.address}</FormErrorMessage>
@@ -864,7 +906,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="class" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="class">Class Name</FormLabel>
                                                             <Select {...field} ref={classRef} isRequired id="class" name='class' placeholder='class name'>
 
@@ -879,12 +921,12 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     )}
                                                 </Field>
 
-                                          
 
-                                          
+
+
                                                 <Field name="section">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="section" >Section</FormLabel>
                                                             <Select {...field} ref={sectionRef} placeholder="Select">
                                                                 {/* Empty option for placeholder */}
@@ -906,7 +948,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
 
 
-                                                <FormControl isRequired   flexBasis="200px"  flexGrow="1">
+                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
                                                     <FormLabel>Admission Year</FormLabel>
                                                     <Input placeholder='Admission Year'
                                                         id="number"
@@ -917,16 +959,16 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                     />
                                                 </FormControl>
-                                                <FormControl isRequired   flexBasis="200px"  flexGrow="1">
+                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
                                                     <FormLabel>Date of birth</FormLabel>
-                                                    <Input  ref={dobRef} isRequired type='date' max={today} />
+                                                    <Input ref={dobRef} isRequired type='date' max={today} />
                                                 </FormControl>
-                                           
 
-                                           
+
+
                                                 <Field name="category">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired   flexBasis="200px"  flexGrow="1"  >
+                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired flexBasis="200px" flexGrow="1"  >
                                                             <FormLabel htmlFor="category">Category</FormLabel>
                                                             <Select {...field} ref={catRef} id="category" placeholder="Select" onChange={(e) => form.setFieldValue('category', e.target.value)}>
 
@@ -943,7 +985,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="gender">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="gender">Gender</FormLabel>
                                                             <Select {...field} ref={sexRef} id="gender" placeholder="Select" onChange={(e) => form.setFieldValue('gender', e.target.value)}>
 
@@ -959,7 +1001,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="rollNo" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="rollNo" >Roll No.</FormLabel>
                                                             <Input {...field} ref={rollRef} id="rollNo" placeholder="Roll No." type="number" />
                                                             <FormErrorMessage>{form.errors.rollNo}</FormErrorMessage>
@@ -967,17 +1009,17 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     )}
                                                 </Field>
 
-                                                <FormControl isRequired  flexBasis="200px"  flexGrow="1">
+                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
                                                     <FormLabel>Enrollment No.</FormLabel>
                                                     <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
                                                 </FormControl>
-                                                <FormControl   flexBasis="200px"  flexGrow="1">
+                                                <FormControl flexBasis="200px" flexGrow="1">
                                                     <FormLabel>Upload Image</FormLabel>
                                                     <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
                                                 </FormControl>
                                                 <Field name="session">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired   flexBasis="200px"  flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired flexBasis="200px" flexGrow="1">
                                                             <FormLabel htmlFor="session">Session</FormLabel>
                                                             <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
 

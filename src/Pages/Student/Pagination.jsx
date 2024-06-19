@@ -919,7 +919,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </FormControl>
                                                 <FormControl isRequired   flexBasis="200px"  flexGrow="1">
                                                     <FormLabel>Date of birth</FormLabel>
-                                                    <Input placeholder='dob' ref={dobRef} isRequired type='date' max={today} />
+                                                    <Input  ref={dobRef} isRequired type='date' max={today} />
                                                 </FormControl>
                                            
 

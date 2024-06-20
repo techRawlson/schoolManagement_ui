@@ -414,14 +414,14 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     <Navbar />
                     <ToastContainer />
 
-                    <Stack width="95%" orientation="horizontal" marginX="auto">
-                        <Flex justifyContent="space-between" width="100%" mt="1%">
+                    <Stack   >
+                        <Flex justifyContent="space-between"  mt="1%" flexWrap="wrap">
                             <Flex alignItems="center" >
                                 <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
                             </Flex>
                             <Flex justifyContent="space-around">
-                                <Input maxWidth="60%" placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
-                                <Button maxW="30%" onClick={() => setOpen(true)}>
+                                <Input  placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
+                                <Button  onClick={() => setOpen(true)}>
                                     Add New
                                 </Button>
                             </Flex>
@@ -429,60 +429,58 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                         </Flex>
 
-                        <TableContainer minH="45vh">
-                            <Table size='sm' borderWidth="1px" borderColor="gray.200"  >
-                                <Thead>
-                                    <Tr maxWidth="10%" border="1px solid">
-                                        {/* {[...uniqueKeys]?.map((key, index) => (
-                <Th key={index}>{key}</Th>
-              ))} */}
-                                        <Th border="1px solid">Sr.No.</Th>
-                                        <Th border="1px solid">STAFF ID</Th>
-                                        {/* <Th border="1px solid">SYSTEM ID</Th> */}
-                                        <Th border="1px solid">Staff Name</Th>
-                                        <Th border="1px solid">Designation</Th>
+                        <TableContainer
+    maxWidth="100%"
+    overflowX="auto"
+    whiteSpace="nowrap"
+    sx={{
+        '::-webkit-scrollbar': {
+            height: '8px',
+        },
+        '::-webkit-scrollbar-thumb': {
+            background: 'gray',
+            borderRadius: '10px',
+        },
+    }}
+>
+    <Table size="sm" borderWidth="1px" borderColor="gray.200">
+        <Thead>
+            <Tr>
+                <Th>Sr.No.</Th>
+                <Th>STAFF ID</Th>
+                <Th>Staff Name</Th>
+                <Th>Designation</Th>
+                <Th>Department</Th>
+                <Th>Mobile</Th>
+                <Th>Email</Th>
+                <Th>Date of Joining</Th>
+                <Th>Gender</Th>
+            </Tr>
+        </Thead>
+        <Tbody>
+            {classData?.slice(startIndex, endIndex).map((elm, i) => (
+                <Tr key={i}>
+                    <Td>{startIndex + i + 1}</Td>
+                    <Td>{elm.staffId}</Td>
+                    <Td>
+                        <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
+                            {elm.name}
+                        </ChakraLink>
+                    </Td>
+                    <Td>{elm.designation}</Td>
+                    <Td>{elm.department}</Td>
+                    <Td>{elm.mobile}</Td>
+                    <Td>{elm.email}</Td>
+                    <Td>{elm.dateOfJoining}</Td>
+                    <Td>{elm.gender}</Td>
+                </Tr>
+            ))}
+        </Tbody>
+    </Table>
+</TableContainer>
 
-                                        <Th border="1px solid">Department</Th>
-                                        <Th border="1px solid">Mobile</Th>
-                                        <Th border="1px solid">Email</Th>
-                                        <Th border="1px solid">Date of Joining</Th>
-                                        <Th border="1px solid">Gender</Th>
 
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {
-                                        classData?.slice(startIndex, endIndex).map((elm, i) => (
-                                            <Tr key={i} border="1px solid">
-                                                <Td border="1px solid">{startIndex + i + 1}</Td>
-                                                <Td border="1px solid">{elm.staffId}</Td>
-                                                {/* <Td border="1px solid">{elm.id}</Td> */}
-                                                <Td border="1px solid">
-                                                    <ChakraLink as={ReactRouterLink} to={`http://192.168.1.121:8083/staffdetails/${elm.id}`}>
-                                                        {elm.name}
-                                                    </ChakraLink>
-                                                </Td>
-
-                                                <Td border="1px solid">{elm.designation}</Td>
-
-                                                <Td border="1px solid">{elm.department}</Td>
-                                                <Td border="1px solid">{elm.mobile}</Td>
-                                                <Td border="1px solid">{elm.email}</Td>
-                                                <Td border="1px solid">{elm.dateOfJoining}</Td>
-                                                <Td border="1px solid">{elm.gender}</Td>
-                                            </Tr>
-                                        ))
-
-                                    }
-
-
-
-                                </Tbody>
-                                <Tfoot>
-                                </Tfoot>
-
-                            </Table>
-                        </TableContainer>
+                        
                         <Stack display="flex"
                             flexDirection="row"
                             width="96%"

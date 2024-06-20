@@ -52,35 +52,46 @@ const ModalForm = () => {
         setDate(formattedDate);
     }, []);
 
-    const [message, setMessage] = useState('message hello');
-    const [receivedMessage, setReceivedMessage] = useState('');
-    const websocketService = new WebSocketService('ws://192.168.1.121:8081/websocket');
+    const [message, setMessage] = useState('');
+  const [receivedMessage, setReceivedMessage] = useState('');
+  const [websocketService, setWebsocketService] = useState(null);
 
-    useEffect(() => {
-        websocketService.connect();
+  useEffect(() => {
+    const wsService = new WebSocketService('ws://192.168.1.121:8081/websocket');
+    wsService.connect();
+    setWebsocketService(wsService);
 
-        websocketService.onMessage((data) => {
-            setReceivedMessage(data);
-        });
+    wsService.onMessage((data) => {
+      setReceivedMessage(data);
+    });
 
-        return () => {
-            websocketService.disconnect();
-        };
-    }, []);
+    // Cleanup on component unmount
+    return () => {
+      wsService.disconnect();
+    };
+  }, []);
 
-    const sendMessage = () => {
-        if (websocketService.connected && websocketService.ws.readyState === WebSocket.OPEN) {
-          websocketService.sendMessage(message);
-          console.log("Message sent:", message);
-        } else {
-          console.error('WebSocket is not open or connected');
-        }
-      };
+  const sendMessage = () => {
+    if (websocketService) {
+      websocketService.sendMessage(message);
+      setMessage('');
+    } else {
+      console.error('WebSocketService is not initialized');
+    }
+  };
+
+  
     
 
     console.log(receivedMessage)
-    const handleSave = () => {
-         sendMessage()
+    const handleSave = (e) => {
+        e.preventDefault();
+        if (message.trim()) {
+            sendMessage();
+          } else {
+            console.warn('Message is empty');
+          }
+       
         console.log("hello")
 
         if (isEditing) {

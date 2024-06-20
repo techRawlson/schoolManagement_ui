@@ -10,7 +10,7 @@ const LeaveBalances=()=>{
     const [LDetails, setLDetails] = useState([])
     const getLDetails = async () => {
         try {
-            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+            const data = await fetch('http://192.168.1.121:8090/api/LVM/All-Data')
             const fdata = await data.json()
             console.log(fdata)
             setLDetails(fdata)
@@ -21,18 +21,18 @@ const LeaveBalances=()=>{
     const getData = async () => {
         console.log(LDetails);
         try {
-            const staffResponse = await fetch('http://13.201.55.247:8083/api/staff/saved-Staff');
+            const staffResponse = await fetch('http://192.168.1.121:8083/api/staff/saved-Staff');
             const staffData = await staffResponse.json();
             console.log(staffData);
             // setClassData(staffData);
     
             if (staffData.length > 0) {
-                const lvmResponse = await fetch('http://localhost:8090/api/LVM/All-Data');
+                const lvmResponse = await fetch('http://192.168.1.121:8090/api/LVM/All-Data');
                 const lvmData = await lvmResponse.json();
                 const filteredLvmData = lvmData.filter(elm => elm.checkBox === true);
                 console.log(filteredLvmData);
     
-                const approvalResponse = await fetch('http://localhost:8090/api/Approval/All-Data');
+                const approvalResponse = await fetch('http://192.168.1.121:8090/api/Approval/All-Data');
                 const approvalData = await approvalResponse.json();
                 console.log(approvalData);
     

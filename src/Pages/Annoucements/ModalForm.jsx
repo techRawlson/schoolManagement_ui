@@ -52,46 +52,53 @@ const ModalForm = () => {
         setDate(formattedDate);
     }, []);
 
-    const [message, setMessage] = useState('');
-  const [receivedMessage, setReceivedMessage] = useState('');
-  const [websocketService, setWebsocketService] = useState(null);
+    const [message, setMessage] = useState('i am the king');
+    const [receivedMessage, setReceivedMessage] = useState('');
+    const [websocketService, setWebsocketService] = useState(null);
 
-  useEffect(() => {
-    const wsService = new WebSocketService('ws://192.168.1.121:8081/websocket');
-    wsService.connect();
-    setWebsocketService(wsService);
+    useEffect(() => {
+        // Create a new instance of WebSocketService
+        const wsService = new WebSocketService('ws://192.168.1.121:8081/websocket');
 
-    wsService.onMessage((data) => {
-      setReceivedMessage(data);
-    });
+        // Connect to the WebSocket server
+        wsService.connect();
 
-    // Cleanup on component unmount
-    return () => {
-      wsService.disconnect();
+        // Set the WebSocketService instance in state
+        setWebsocketService(wsService);
+
+        // Listen for incoming messages
+        wsService.onMessage((data) => {
+            console.log('Received:', data);
+            setReceivedMessage(data); // Update state with received message
+        });
+
+        // Cleanup on component unmount
+        return () => {
+            wsService.disconnect(); // Disconnect WebSocket when component unmounts
+        };
+    }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+    const sendMessage = () => {
+        if (websocketService) {
+            console.log('Sending message:', message);
+            websocketService.sendMessage(message); // Send message via WebSocketService
+        } else {
+            console.error('WebSocketService is not initialized');
+        }
     };
-  }, []);
 
-  const sendMessage = () => {
-    if (websocketService) {
-      websocketService.sendMessage(message);
-      setMessage('');
-    } else {
-      console.error('WebSocketService is not initialized');
-    }
-  };
-
-  
-    
 
     console.log(receivedMessage)
+
     const handleSave = (e) => {
         e.preventDefault();
+        console.log(message.trim())
         if (message.trim()) {
-            sendMessage();
-          } else {
+            sendMessage()
+        } else {
             console.warn('Message is empty');
-          }
-       
+        }
+
         console.log("hello")
 
         if (isEditing) {
@@ -129,7 +136,10 @@ const ModalForm = () => {
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
                 <GoPlusCircle size="40px" />
             </Button>
-
+            <div>
+                <h2>Received Message:</h2>
+                <p>{receivedMessage}</p> {/* Display received message in UI */}
+            </div>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

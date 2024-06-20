@@ -49,11 +49,11 @@ const LeaveApplication = () => {
     };
     const getLoggedInuserDetail = async () => {
         try {
-            const data = await fetch(`http://localhost:8090/api/Approval/staff/${localStorage.getItem('username')}`)
+            const data = await fetch(`http://192.168.1.121:8090/api/Approval/staff/${localStorage.getItem('username')}`)
             const fdata = await data.json()
             console.log(fdata)
             setUser(fdata)
-            const data1 = await fetch(`http://localhost:8090/api/staff-application/byApprover/${fdata.approver}`)
+            const data1 = await fetch(`http://192.168.1.121:8090/api/staff-application/byApprover/${fdata.approver}`)
             const fdata2 = await data1.json()
             console.log(fdata2)
             setData(fdata2)
@@ -102,7 +102,7 @@ const LeaveApplication = () => {
         }
         try {
             console.log(body)
-            const data1 = await fetch(`http://localhost:8090/api/staff-application/${data[i].id}`, {
+            const data1 = await fetch(`http://192.168.1.121:8090/api/staff-application/${data[i].id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

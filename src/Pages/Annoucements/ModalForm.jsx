@@ -28,6 +28,8 @@ import {
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { GoPlusCircle } from "react-icons/go";
+import WebSocketService from "../../components/WebSocketService";
+
 
 const ModalForm = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,24 +44,57 @@ const ModalForm = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-console.log(date)
+
     // Set default date to today's date
     useEffect(() => {
-      const today = new Date();
-      const formattedDate = today.toISOString().split('T')[0];
-      setDate(formattedDate);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        setDate(formattedDate);
     }, []);
+
+    const [message, setMessage] = useState('message hello');
+    const [receivedMessage, setReceivedMessage] = useState('');
+    const websocketService = new WebSocketService('ws://192.168.1.121:8081/websocket');
+
+    useEffect(() => {
+        websocketService.connect();
+
+        websocketService.onMessage((data) => {
+            setReceivedMessage(data);
+        });
+
+        return () => {
+            websocketService.disconnect();
+        };
+    }, []);
+
+    const sendMessage = () => {
+        if (websocketService.connected && websocketService.ws.readyState === WebSocket.OPEN) {
+          websocketService.sendMessage(message);
+          console.log("Message sent:", message);
+        } else {
+          console.error('WebSocket is not open or connected');
+        }
+      };
+    
+
+    console.log(receivedMessage)
     const handleSave = () => {
+         sendMessage()
+        console.log("hello")
+
         if (isEditing) {
             const updatedItems = items.map((item, index) =>
                 index === currentIndex ? formData : item
             );
             setItems(updatedItems);
             setIsEditing(false);
+
+
         } else {
-           
-            formData.date=date;
-            console.log(formData)
+
+            formData.date = date;
+
             setItems([...items, formData]);
         }
         setFormData({ date: "", title: "", description: "" });
@@ -77,7 +112,7 @@ console.log(date)
         const filteredItems = items.filter((_, i) => i !== index);
         setItems(filteredItems);
     };
-  
+
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
@@ -144,7 +179,7 @@ console.log(date)
                                 <AccordionButton>
                                     <Flex as='span' flex='1' justifyContent="space-between" alignItems='center' margin="0 1rem">
                                         <Box bg='#2E8BC0' w='100px' p={1} color='white' whiteSpace="nowrap">
-                    {item.date}
+                                            {item.date}
                                         </Box>
                                         {item.title}
                                         <IoArrowDownCircleOutline size="30px" />

@@ -21,7 +21,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { useData } from "../context/DataContext";
 const Classtimetable = () => {
-    const{Role,updateData}=useData()
+    const { Role, updateData } = useData()
     const [data, setData] = useState([])
     console.log(data)
 
@@ -78,6 +78,10 @@ const Classtimetable = () => {
     const [thursdaySubject, setThursdaySubject] = useState('');
     const [fridayTeacher, setFridayTeacher] = useState('');
     const [fridaySubject, setFridaySubject] = useState('');
+    const [saturdayTeacher, setsaturdayTeacher] = useState('')
+    const [saturdaySubject, setsaturdaySubject] = useState('')
+    const [sundayTeacher, setsundayTeacher] = useState('')
+    const [sundaySubject, setsundaySubject] = useState('')
 
     // setting subjects of respective teachers 
     const [mondayStore, setMondayStore] = useState([]);
@@ -85,7 +89,8 @@ const Classtimetable = () => {
     const [wednesdayStore, setWednesdayStore] = useState([]);
     const [thursdayStore, setThursdayStore] = useState([]);
     const [fridayStore, setFridayStore] = useState([]);
-
+    const [saturdayStore, setsaturdayStore] = useState([]);
+    const [sundayStore, setsundayStore] = useState([]);
 
 
     console.log(wednesdayTeacher)
@@ -462,7 +467,7 @@ const Classtimetable = () => {
         setModifiedData(modifiedData)
 
 
-console.log(filters)
+        console.log(filters)
         //filter for session
         if (filters.year !== "") {
             filterData = filterData.filter(
@@ -487,7 +492,7 @@ console.log(filters)
         console.log(filterData)
 
         if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
-console.log("here")
+            console.log("here")
             if (filterData.length > 0) {
                 setcreate(true)
                 setDis(false)
@@ -668,6 +673,12 @@ console.log("here")
                 else if (day == 'friday') {
                     setFridayTeacher(fab.name)
                     setFridayStore(fab.subjects)
+                } else if (day == 'saturday') {
+                    setsaturdayTeacher(fab.name)
+                    setsaturdayStore(fab.subjects)
+                } else if (day == 'sunday') {
+                    setsundayTeacher(fab.name)
+                    setsundayStore(fab.subjects)
                 }
 
             } catch (error) {
@@ -860,8 +871,8 @@ console.log("here")
                 ...prev,
                 // classData: false,
                 year: dataJson.session,
-                class:dataJson.className,
-                section:dataJson.section
+                class: dataJson.className,
+                section: dataJson.section
             }));
             await getData()
             await dataFilter(data)
@@ -871,14 +882,14 @@ console.log("here")
     };
 
     useEffect(() => {
-        if(Role=='student'){
+        if (Role == 'student') {
             const fetchData = async () => {
                 await showStudentTimeTable();
                 // await getData()
             };
-            fetchData(); 
+            fetchData();
         }
-        
+
     }, []);
 
 
@@ -904,11 +915,11 @@ console.log("here")
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"
-                direction="column" width={Role=='student'?'100vw':'65vw'} maxW="100vw">
+                direction="column" width={Role == 'student' ? '100vw' : '65vw'} maxW="100vw">
                 <Flex justifyContent='space-around' alignItems='center' >
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Session</FormLabel>
-                        <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)} disabled={Role=='student'?true:false}>
+                        <Select isRequired value={session} onChange={(e) => handleFilterYear(e.target.value)} disabled={Role == 'student' ? true : false}>
                             <option>Select</option>
                             {uniqueSessions?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
@@ -917,7 +928,7 @@ console.log("here")
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Class</FormLabel>
-                        <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)} disabled={Role=='student'?true:false}>
+                        <Select isRequired value={classValue} onChange={(e) => handleFilterClass(e.target.value)} disabled={Role == 'student' ? true : false}>
                             <option>Select</option>
                             {uniqueClassNames?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
@@ -926,7 +937,7 @@ console.log("here")
                     </FormControl>
                     <FormControl isRequired justifyContent="space-between" alignItems="center" m="1">
                         <FormLabel>Section</FormLabel>
-                        <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)} disabled={Role=='student'?true:false}>
+                        <Select isRequired value={section} onChange={(e) => handleFiltersection(e.target.value)} disabled={Role == 'student' ? true : false}>
                             <option>Select</option>
                             {uniqueSections?.map((elm, i) => (
                                 <option key={i} value={elm}>{elm}</option>
@@ -934,36 +945,36 @@ console.log("here")
                         </Select>
                     </FormControl>
                     {
-                        Role=='student'?"":Role=='staff'?'': <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
-                        {
-                            dis ? <div>
-                                {createNew ?
-                                    <div>
-                                        <Button onClick={() => setcreateNew(false)}>Cancel</Button>
-                                    </div>
+                        Role == 'student' ? "" : Role == 'staff' ? '' : <FormControl isRequired justifyContent="space-between" alignItems="center" m="2% 1% 0 1%" display='flex'>
+                            {
+                                dis ? <div>
+                                    {createNew ?
+                                        <div>
+                                            <Button onClick={() => setcreateNew(false)}>Cancel</Button>
+                                        </div>
 
-                                    : <div>
-                                        <Button onClick={() => createNewEntry()}>Add new</Button>
-                                        <Button colorScheme="green">Print</Button>
-                                    </div>
+                                        : <div>
+                                            <Button onClick={() => createNewEntry()}>Add new</Button>
+                                            <Button colorScheme="green">Print</Button>
+                                        </div>
 
                                     }
-                            </div> : <div>
-                                {
-                                    create ? <Button onClick={() => showUpdate()}>{updateButton}</Button> : ''
+                                </div> : <div>
+                                    {
+                                        create ? <Button onClick={() => showUpdate()}>{updateButton}</Button> : ''
 
-                                }
+                                    }
 
-                            </div>
-
-
-                        }
+                                </div>
 
 
-                    </FormControl>
-                       
+                            }
+
+
+                        </FormControl>
+
                     }
-                    
+
                 </Flex>
                 <TableContainer style={{ overflowY: "scroll", msOverflowStyle: "none" }}>
                     <Table size='sm' variant="simple" style={tableStyle}>
@@ -996,7 +1007,7 @@ console.log("here")
 
                             // Function to save changes
                             const saveChanges = async (id) => {
-                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
 
@@ -1127,6 +1138,58 @@ console.log("here")
                                             const fstaffdata = await data.json()
 
                                         }
+                                        else if (i == 5) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: saturdaySubject
+                                            }
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
+
+                                        }
+                                        else if (i == 6) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: sundaySubject
+                                            }
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
+
+                                        }
+
+
                                     }
                                     await getData()
                                 })
@@ -1513,6 +1576,50 @@ console.log("here")
                                                 </Td> : ""
                                         }
 
+                                        {
+                                            daysMap?.find((day) => day == 'S a t u r d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'saturday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={fridaySubject} onChange={(e) => setsaturdaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                saturdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ""
+                                        }
+                                        {
+                                            daysMap?.find((day) => day == 'S u n d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'sunday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={fridaySubject} onChange={(e) => setsundaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                sundayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ""
+                                        }
                                         <Td display="flex" flexDir="column" justifyContent="space-between" >
                                             <Button onClick={() => timeTable()} margin="4%">Save</Button>
                                             <Button onClick={() => setcreateNew(false)} >Cancel</Button>
@@ -1530,57 +1637,57 @@ console.log("here")
 
                     {
                         showMsg ? <Text style={{ alignSelf: 'center', margin: "2% 10%", color: 'red' }}>it seems that time table does not exist for the above class selection.
-                        {
-                            Role=='student'?"":'Please click "Add New" button to add time table for this class.'
-                        }
+                            {
+                                Role == 'student' ? "" : 'Please click "Add New" button to add time table for this class.'
+                            }
                         </Text> : ''
                     }
 
                 </TableContainer>
                 {
-                    Role=='student'?'':Role=='staff'?'': <Stack marginLeft="85%" >
-                    {
-                        AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
+                    Role == 'student' ? '' : Role == 'staff' ? '' : <Stack marginLeft="85%" >
+                        {
+                            AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
 
-                    }
+                        }
 
-                </Stack>
+                    </Stack>
                 }
 
-               
+
 
             </Flex>
 
 
-{
-    Role=='student'?"":<Flex margin='0.5% 0 0 5%' width="30vw">
-    <TableContainer>
-        <Table size='sm' variant="simple">
-            <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue.toUpperCase()} </caption>
-            <Thead>
-                <Tr>
-                    <Th>S.No</Th>
-                    <Th>Subjects</Th>
-                    <Th>Total Lectures</Th>
+            {
+                Role == 'student' ? "" : <Flex margin='0.5% 0 0 5%' width="30vw">
+                    <TableContainer>
+                        <Table size='sm' variant="simple">
+                            <caption style={{ fontSize: '2vh' }}>Class Time Table {classValue == 'Select' ? '' : classValue.toUpperCase()} </caption>
+                            <Thead>
+                                <Tr>
+                                    <Th>S.No</Th>
+                                    <Th>Subjects</Th>
+                                    <Th>Total Lectures</Th>
 
-                </Tr>
-            </Thead>
-            <Tbody>
-                {Object.entries(totalSubjects).map(([subject, count], i) => (
-                    <Tr key={subject}>
-                        <Td>{i + 1}</Td>
-                        <Td>{subject}</Td>
-                        <Td>{count}</Td>
-                    </Tr>
-                ))}
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {Object.entries(totalSubjects).map(([subject, count], i) => (
+                                    <Tr key={subject}>
+                                        <Td>{i + 1}</Td>
+                                        <Td>{subject}</Td>
+                                        <Td>{count}</Td>
+                                    </Tr>
+                                ))}
 
 
-            </Tbody>
-        </Table>
-    </TableContainer>
-</Flex>
-}
-            
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </Flex>
+            }
+
 
         </Stack>
     </div>

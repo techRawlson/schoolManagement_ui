@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Pagination from './Pagination';
 import { Stack } from '@chakra-ui/react';
+import { useData } from '../context/DataContext';
 
 
 const Student = () => {
+    const { Role, updateData } = useData();
+    console.log(Role)
     const [classData, setClassData] = useState([])
     const [uniqueKeys, setUniqueKeys] = useState(new Set());
     const [searchTimeout, setSearchTimeout] = useState(null);

@@ -12,14 +12,49 @@ import { useMediaQuery } from 'react-responsive';
 import { useData } from '../Pages/context/DataContext';
 import { Link as ReactRouterLink } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
+import WebSocketService from './WebSocketService';
 const Navbar = () => {
   //for resposiveness
-  const { data, updateData } = useData();
+  const { Role, updateData } = useData();
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
+  console.log(Role)
+  // console.log(ok)
+  const username = localStorage.getItem("username")
+  console.log(username)
 
-  
+  const [id, setId] = useState([])
+
+  const getData = async () => {
+    try {
+      const data = await fetch(
+        Role=='staff'?
+        "http://192.168.1.121:8083/api/staff/saved-Staff":
+        "http://192.168.1.121:8082/api/students/savedData"
+
+      );
+      const fdata = await data.json();
+      console.log(fdata)
+      // setClassData(fdata)
+      const staffId=fdata.filter((elm)=>elm.staffId==username)
+      const studentId=fdata.filter((elm)=>elm.studentId==username)
+      console.log(staffId)
+      console.log(studentId)
+      const ids=Role=='staff'?staffId:studentId
+      const i=ids[0].id
+      console.log(ids)
+      setId(i)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+ 
+
+
+
   const nextPage = (data) => {
     try {
       console.log("data")
@@ -29,12 +64,14 @@ const Navbar = () => {
     }
   }
 
-console.log(data)
 
+ 
 
   const navigate = useNavigate()
   const logOut = () => {
-   localStorage.removeItem('token')
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    localStorage.removeItem('staffname')
     navigate('/login')
   }
   const [person, setPerson] = useState("")
@@ -85,7 +122,7 @@ console.log(data)
             // Add the new notification only if its ID is not already in the set
             const notifi = [...prevNotifications, data];
             // const filter=notifi
-            return notifi.sort((a, b) =>   new Date(b.timestamp) -new Date(a.timestamp)).filter((fil)=>fil.read==0);
+            return notifi.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).filter((fil) => fil.read == 0);
           }
           return prevNotifications; // If the notification already exists, return the previous state
         });
@@ -157,6 +194,23 @@ console.log(data)
     borderRadius: '8px',
   };
 
+  useEffect(() => {
+    getData()
+  },[])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
@@ -198,15 +252,15 @@ console.log(data)
               <Menu>
                 <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" flexDir="column">
                   <Box display="flex" gap="1rem" alignItems="center" >
-                    <Avatar bg="red.500" onClick={()=>nextPage("hello")}/>
+                    <Avatar bg="red.500" onClick={() => nextPage("hello")} />
                     <MenuButton padding="9% 0 0 0">
                       <IoNotifications color="white" size="32" />
-                      
-                         {
-                          notifications.length>0?  <Box style={mobileStyle} id='dot' ></Box>:''
-                        }
-                      
-                     
+
+                      {
+                        notifications.length > 0 ? <Box style={mobileStyle} id='dot' ></Box> : ''
+                      }
+
+
                     </MenuButton>
 
                   </Box>
@@ -240,7 +294,7 @@ console.log(data)
       }
 
       {
-        isDesktop || isTablet ? <Text textAlign="center"  marginLeft="5rem" color='green.9000'>
+        isDesktop || isTablet ? <Text textAlign="center" marginLeft="5rem" color='green.9000'>
 
           Rawlson Technologies
         </Text> : ''
@@ -252,19 +306,23 @@ console.log(data)
           <div style={gridContainerStyle}>
             <Center padding="0 1rem">
               <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" gap="1rem">
-               
-                <ChakraLink as={ReactRouterLink} to={`http://192.168.1.121:3000/studentdetails/${data}`}>
-                <Avatar bg="red.500" cursor="pointer" />
-                                                    </ChakraLink>
+
+                <ChakraLink
+                  as={ReactRouterLink}
+                  to={Role === 'student' ? `/studentdetails/${id}` : `/staffdetails/${id}`}
+                  
+                >
+                  <Avatar bg="red.500" cursor="pointer" />
+                </ChakraLink>
                 <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
               </Flex>
               <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
                 <MenuButton paddingTop="32%" mr="1rem">
-                  <IoNotifications  size="32" color="yellow"/>
+                  <IoNotifications size="32" color="yellow" />
                   {
-                    notifications.length>0? <Box style={style} id='dot' ></Box>:''
+                    notifications.length > 0 ? <Box style={style} id='dot' ></Box> : ''
                   }
-                 
+
                 </MenuButton>
 
               </Box>

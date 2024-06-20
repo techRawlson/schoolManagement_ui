@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import  PaginatedStaff from './PaginatedStaff';
 import { Stack } from '@chakra-ui/react';
+import { useData } from '../context/DataContext';
 
 const Staff = () => {
+    const { Role, updateData } = useData();
+  console.log(Role)
     const [classData, setClassData] = useState([])
     const [uniqueKeys, setUniqueKeys] = useState(new Set());
     const [searchTimeout, setSearchTimeout] = useState(null);

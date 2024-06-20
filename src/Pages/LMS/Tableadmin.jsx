@@ -29,7 +29,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     //         status: status
     //     }
     //     try {
-    //         const data = await fetch(`http://localhost:8090/api/staff-application/create`, {
+    //         const data = await fetch(`http://192.168.1.121:8090/api/staff-application/create`, {
     //             method: 'PUT',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
         }
         try {
             console.log(body)
-            const data1 = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`, {
+            const data1 = await fetch(`http://192.168.1.121:8090/api/staff-application/${applicantId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,11 +99,11 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     const getUser = async () => {
         try {
             console.log(applicantId)
-            const data1 = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`)
+            const data1 = await fetch(`http://192.168.1.121:8090/api/staff-application/${applicantId}`)
             const fdata1 = await data1.json()
             console.log(fdata1)
             setUser(fdata1)
-            const data2 = await fetch(`http://localhost:8090/api/Approval/staff/${data.staffId}`)
+            const data2 = await fetch(`http://192.168.1.121:8090/api/Approval/staff/${data.staffId}`)
             const fdata2 = await data2.json()
             console.log(fdata2)
             setleaveBalances(fdata2)
@@ -122,7 +122,7 @@ const KeyValueTableAdmin = ({ data, fire, setFire, onClose, getDetails, applican
     }, [])
 
     const notificationClear = async () => {
-        const response = await fetch(`http://localhost:8090/api/all/read`, {
+        const response = await fetch(`http://192.168.1.121:8090/api/all/read`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

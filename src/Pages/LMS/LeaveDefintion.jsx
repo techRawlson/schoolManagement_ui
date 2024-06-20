@@ -21,7 +21,7 @@ const LeaveDefinition = () => {
     const [data, setData] = useState([])
     const getDetails = async () => {
         try {
-            const response = await fetch('http://localhost:8090/api/LVM/All-Data');
+            const response = await fetch('http://192.168.1.121:8090/api/LVM/All-Data');
     
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -69,7 +69,7 @@ const LeaveDefinition = () => {
     const Update = async () => {
         console.log(data)
         try {
-            const da = await fetch('http://localhost:8090/api/LVM/checkbox', {
+            const da = await fetch('http://192.168.1.121:8090/api/LVM/checkbox', {
                 method: 'PUT', // or 'GET', 'PUT', 'DELETE', etc. depending on the request
                 headers: {
                     'Content-Type': 'application/json', // specifies the type of content being sent

@@ -47,7 +47,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
         console.log(time)
         const approver = users.approver
         try {
-            const users = await fetch(`http://localhost:8090/api/staff-application/create`, {
+            const users = await fetch(`http://192.168.1.121:8090/api/staff-application/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
                 formData.append('approverName', approver);
                 formData.append('staffName', localStorage.getItem("staffName"));
                 
-                const tim = await fetch(`http://localhost:8090/api/notifications`, {
+                const tim = await fetch(`http://192.168.1.121:8090/api/notifications`, {
                     method: 'POST',
                     body: formData // No need to set 'Content-Type', the browser will set it to 'multipart/form-data'
                 });
@@ -106,7 +106,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
         console.log(body)
         console.log(applicantId)
         try {
-            const users = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`, {
+            const users = await fetch(`http://192.168.1.121:8090/api/staff-application/${applicantId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     const deleteEntry = async () => {
         try {
             console.log(applicantId)
-            const users = await fetch(`http://localhost:8090/api/staff-application/leave-applications/${applicantId}`, {
+            const users = await fetch(`http://192.168.1.121:8090/api/staff-application/leave-applications/${applicantId}`, {
                 method: 'delete'
             })
             const fusers = await users.json()
@@ -153,7 +153,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     const getUser = async () => {
         try {
             console.log(applicantId)
-            const users = await fetch(`http://localhost:8090/api/staff-application/${applicantId}`)
+            const users = await fetch(`http://192.168.1.121:8090/api/staff-application/${applicantId}`)
             const fusers = await users.json()
             console.log(fusers)
             setUser(fusers)
@@ -257,7 +257,7 @@ const KeyValueTable = ({ data, users, fire, setFire, onClose, getDetails, applic
     const [leaveTypesAvailavle, setleaveTypesAvailavle] = useState([])
     const getleaveTypesAvailavle = async () => {
         try {
-            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+            const data = await fetch('http://192.168.1.121:8090/api/LVM/All-Data')
             const fdata = await data.json()
             console.log(fdata)
             const onlyTrue = fdata.filter((elm) => elm.checkBox == true)

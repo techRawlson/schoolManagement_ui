@@ -13,6 +13,7 @@ import {
   Toast
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
+import { useData } from '../context/DataContext';
 // import { useDispatch } from 'react-redux';
 // import { setUser } from './Redux/userActions';
 function Login({ setToken, setUser }) {
@@ -21,8 +22,8 @@ function Login({ setToken, setUser }) {
   const [onOpen, setOnOpen] = useState(false)
   const [onClose, setOnClose] = useState(false)
 
-
-
+  const { Role, updateData } = useData();
+console.log(Role)
   const emailRef = useRef()
   const passRef = useRef()
   const navigate = useNavigate();
@@ -55,9 +56,8 @@ function Login({ setToken, setUser }) {
       console.log(dataf)
       if (data.status >= 200 && data.status < 300) {
         localStorage.setItem("token", "fdata.username");
-        localStorage.setItem("staffName", dataf.staffName);
         localStorage.setItem("username", emailRef.current.value);
-
+        updateData(dataf.role)
         // Show success toast notification
         toast.success('Login Successful', {
           autoClose: 1500 ,

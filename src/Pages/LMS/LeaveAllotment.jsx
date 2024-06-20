@@ -29,7 +29,7 @@ const LmsLeaveallotment = () => {
     const [allotment, setAllotment] = useState([])
     const getAllotment = async () => {
         try {
-            const data = await fetch('http://localhost:8090/api/Approval/All-Data')
+            const data = await fetch('http://192.168.1.121:8090/api/Approval/All-Data')
             const dataf = await data.json();
             if (dataf.length > 0) {
                 setAllotment(dataf)
@@ -41,7 +41,7 @@ const LmsLeaveallotment = () => {
 
     const getLDetails = async () => {
         try {
-            const data = await fetch('http://localhost:8090/api/LVM/All-Data')
+            const data = await fetch('http://192.168.1.121:8090/api/LVM/All-Data')
             const fdata = await data.json()
             console.log(fdata)
             setLDetails(fdata)
@@ -60,12 +60,12 @@ const LmsLeaveallotment = () => {
             setClassData(staffData);
     
             if (staffData.length > 0) {
-                const lvmResponse = await fetch('http://localhost:8090/api/LVM/All-Data');
+                const lvmResponse = await fetch('http://192.168.1.121:8090/api/LVM/All-Data');
                 const lvmData = await lvmResponse.json();
                 const filteredLvmData = lvmData.filter(elm => elm.checkBox === true);
                 console.log(filteredLvmData);
     
-                const approvalResponse = await fetch('http://localhost:8090/api/Approval/All-Data');
+                const approvalResponse = await fetch('http://192.168.1.121:8090/api/Approval/All-Data');
                 const approvalData = await approvalResponse.json();
                 console.log(approvalData);
     
@@ -136,13 +136,13 @@ const navigate=useNavigate()
         console.log(mainData[editId])
         console.log(mainData[editId].id)
        
-        const dataFromAllotedTavle = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`)
+        const dataFromAllotedTavle = await fetch(`http://192.168.1.121:8090/api/Approval/${mainData[editId].id}`)
         const dataFromAllotedTavlejson = await dataFromAllotedTavle.json()
         console.log(dataFromAllotedTavlejson)
         if (dataFromAllotedTavle.status >= 200 && dataFromAllotedTavle.status < 300) {
             try {
                 console.log(mainData[editId])
-                const dat = await fetch(`http://localhost:8090/api/Approval/${mainData[editId].id}`, {
+                const dat = await fetch(`http://192.168.1.121:8090/api/Approval/${mainData[editId].id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ const navigate=useNavigate()
         } else {
             try {
                 console.log(mainData[editId]);
-                const response = await fetch('http://localhost:8090/api/Approval/create', {
+                const response = await fetch('http://192.168.1.121:8090/api/Approval/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

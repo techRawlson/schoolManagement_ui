@@ -14,12 +14,8 @@ export const DataProvider = ({ children }) => {
   const updateData = (newData) => {
     console.log(newData)
     setStudent(newData);
-
-
-
-    
   };
-
+console.log(Role)
   return (
     <DataContext.Provider value={{ Role, updateData }}>
       {children}

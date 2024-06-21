@@ -264,7 +264,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     body: formData2,
                 });
                 if (!pictureResponse.ok) {
-                    const er=await pictureResponse.text() 
+                    const er = await pictureResponse.text()
                     console.log(er)
                     const errorMessage = await pictureResponse.text() || 'Picture could not upload';
                     setOpen(false)
@@ -291,7 +291,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     let form = new FormData()
     let file;
     const fileChange = async () => {
-         file = excelFile.current.files[0];
+        file = excelFile.current.files[0];
         if (file) {
             console.log("File selected:", file);
         } else {
@@ -415,13 +415,13 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                     <ToastContainer />
 
                     <Stack   >
-                        <Flex justifyContent="space-between"  mt="1%" flexWrap="wrap">
+                        <Flex justifyContent="space-between" mt="1%" flexWrap="wrap">
                             <Flex alignItems="center" >
                                 <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
                             </Flex>
                             <Flex justifyContent="space-around">
-                                <Input  placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
-                                <Button  onClick={() => setOpen(true)}>
+                                <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
+                                <Button onClick={() => setOpen(true)}>
                                     Add New
                                 </Button>
                             </Flex>
@@ -430,57 +430,57 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                         </Flex>
 
                         <TableContainer
-    maxWidth="100%"
-    overflowX="auto"
-    whiteSpace="nowrap"
-    sx={{
-        '::-webkit-scrollbar': {
-            height: '8px',
-        },
-        '::-webkit-scrollbar-thumb': {
-            background: 'gray',
-            borderRadius: '10px',
-        },
-    }}
->
-    <Table size="sm" borderWidth="1px" borderColor="gray.200">
-        <Thead>
-            <Tr>
-                <Th>Sr.No.</Th>
-                <Th>STAFF ID</Th>
-                <Th>Staff Name</Th>
-                <Th>Designation</Th>
-                <Th>Department</Th>
-                <Th>Mobile</Th>
-                <Th>Email</Th>
-                <Th>Date of Joining</Th>
-                <Th>Gender</Th>
-            </Tr>
-        </Thead>
-        <Tbody>
-            {classData?.slice(startIndex, endIndex).map((elm, i) => (
-                <Tr key={i}>
-                    <Td>{startIndex + i + 1}</Td>
-                    <Td>{elm.staffId}</Td>
-                    <Td>
-                        <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
-                            {elm.name}
-                        </ChakraLink>
-                    </Td>
-                    <Td>{elm.designation}</Td>
-                    <Td>{elm.department}</Td>
-                    <Td>{elm.mobile}</Td>
-                    <Td>{elm.email}</Td>
-                    <Td>{elm.dateOfJoining}</Td>
-                    <Td>{elm.gender}</Td>
-                </Tr>
-            ))}
-        </Tbody>
-    </Table>
-</TableContainer>
+                            maxWidth="100%"
+                            overflowX="auto"
+                            whiteSpace="nowrap"
+                            sx={{
+                                '::-webkit-scrollbar': {
+                                    height: '8px',
+                                },
+                                '::-webkit-scrollbar-thumb': {
+                                    background: 'gray',
+                                    borderRadius: '10px',
+                                },
+                            }}
+                        >
+                            <Table size="sm" borderWidth="1px" borderColor="gray.200">
+                                <Thead>
+                                    <Tr>
+                                        <Th>Sr.No.</Th>
+                                        <Th>STAFF ID</Th>
+                                        <Th>Staff Name</Th>
+                                        <Th>Designation</Th>
+                                        <Th>Department</Th>
+                                        <Th>Mobile</Th>
+                                        <Th>Email</Th>
+                                        <Th>Date of Joining</Th>
+                                        <Th>Gender</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {classData?.slice(startIndex, endIndex).map((elm, i) => (
+                                        <Tr key={i}>
+                                            <Td>{startIndex + i + 1}</Td>
+                                            <Td>{elm.staffId}</Td>
+                                            <Td>
+                                                <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
+                                                    {elm.name}
+                                                </ChakraLink>
+                                            </Td>
+                                            <Td>{elm.designation}</Td>
+                                            <Td>{elm.department}</Td>
+                                            <Td>{elm.mobile}</Td>
+                                            <Td>{elm.email}</Td>
+                                            <Td>{elm.dateOfJoining}</Td>
+                                            <Td>{elm.gender}</Td>
+                                        </Tr>
+                                    ))}
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
 
 
-                        
+
                         <Stack display="flex"
                             flexDirection="row"
                             width="96%"
@@ -539,17 +539,17 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                 <Modal
                     isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
-                    
+
                 >
                     <ModalOverlay />
                     <ModalContent minW="60%">
-                    <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
-                                {isMinimized ? "Maximize" : "Minimize"}
-                            </Button>
-                        
+                        <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
+                            {isMinimized ? "Maximize" : "Minimize"}
+                        </Button>
+
                         <ModalCloseButton onClick={() => setOpen(false)} />
                         <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
-                        <ModalHeader textAlign="center" fontFamily="Roboto">Add New Staff</ModalHeader>
+                            <ModalHeader textAlign="center" fontFamily="Roboto">Add New Staff</ModalHeader>
                             <Formik initialValues={{
                                 name: '',
                                 approver: '',
@@ -645,16 +645,18 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                         isInvalid={form.errors.approver && form.touched.approver}
                                                     >
                                                         <FormLabel>Approver</FormLabel>
-                                                        <Input
+                                                        
+                                                        <Select
                                                             {...field}
                                                             list="class"
-                                                            placeholder="Select a Class"
-                                                        />
-                                                        <datalist id="class">
+                                                            placeholder="Select Approver"
+                                                        >
                                                             {classData.map((option, index) => (
-                                                                <option key={index} value={option.name} />
+                                                                <option key={index}>{option.name}</option>
                                                             ))}
-                                                        </datalist>
+                                                        </Select>
+
+
                                                         <FormErrorMessage>{form.errors.approver}</FormErrorMessage>
                                                     </FormControl>
                                                 )}

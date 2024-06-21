@@ -35,6 +35,7 @@ import Role from './Pages/Role';
 import Directory from './Pages/Directory/Directroy';
 import Holiday from './Pages/Holidays/Holiday';
 import Annoucement from './Pages/Annoucements/Annoucement';
+import Fees from './Pages/Fees/Fess';
 function App() {
   const { data, updateData } = useData();
   const token = localStorage.getItem('token');
@@ -95,6 +96,7 @@ console.log(localStorage.getItem("token"))
           <Route path='/directory' element={tok ? <Directory/> : <Login setToken={setToken} />} />
           <Route path='/holidays' element={tok ? <Holiday/> : <Login setToken={setToken} />} />
           <Route path='/annoucement' element={tok ? <Annoucement/> : <Login setToken={setToken} />} />
+          <Route path='/fees' element={tok ? <Fees/> : <Login setToken={setToken} />} />
         </Routes>
       </AuthProvider>
     </Router>

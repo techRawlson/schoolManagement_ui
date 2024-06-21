@@ -90,7 +90,7 @@ const ModalForm = () => {
 
     console.log(receivedMessage)
 
-    const handleSave = (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
         console.log(message.trim())
         if (message.trim()) {
@@ -98,7 +98,30 @@ const ModalForm = () => {
         } else {
             console.warn('Message is empty');
         }
-
+        console.log(formData)
+        const url = 'http://192.168.1.121:8081/api/announcements/create';
+        // Log the URL to ensure it's correct
+        console.log('URL:', url);
+        try {
+            const data = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            console.log(data)
+            setFormData({
+                holidayName: '',
+                date: '',
+                dayOfWeek: ''
+            });
+            // setEditingIndex(null);
+            onClose();
+            fetchEmployees()
+        } catch (error) {
+            console.log(error)
+        }
         console.log("hello")
 
         if (isEditing) {
@@ -112,8 +135,22 @@ const ModalForm = () => {
         } else {
 
             formData.date = date;
-
-            setItems([...items, formData]);
+            const data = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            console.log(data)
+            setFormData({
+                holidayName: '',
+                date: '',
+                dayOfWeek: ''
+            });
+            setEditingIndex(null);
+            onClose();
+            // setItems([...items, formData]);
         }
         setFormData({ date: "", title: "", description: "" });
         onClose();
@@ -130,7 +167,33 @@ const ModalForm = () => {
         const filteredItems = items.filter((_, i) => i !== index);
         setItems(filteredItems);
     };
+    const fetchEmployees = async () => {
+        try {
+            // Ensure the URL is properly formatted
+            const response = await fetch('http://192.168.1.121:8081/api/announcements/all');
 
+            // Check if the response status is OK (200)
+            if (!response.ok) {
+                console.log()
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Parse the JSON data
+            const employeeData = await response.json();
+
+            // Log the fetched data
+            console.log(employeeData);
+
+            // Update the state with the fetched data
+            setItems(employeeData);
+        } catch (error) {
+            // Provide a more descriptive error message
+            console.error('Error fetching employee data:', error);
+        }
+    };
+    useEffect(() => {
+        fetchEmployees()
+    }, [])
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
@@ -205,14 +268,7 @@ const ModalForm = () => {
                                         {item.title}
                                         <IoArrowDownCircleOutline size="30px" />
                                     </Flex>
-                                    <IconButton
-                                        backgroundColor="green"
-                                        color="white"
-                                        aria-label="Edit"
-                                        icon={<EditIcon />}
-                                        onClick={() => handleEdit(index)}
-                                        mr={2}
-                                    />
+                                   
                                     <IconButton
                                         backgroundColor="red"
                                         color="white"

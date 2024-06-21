@@ -32,7 +32,7 @@ const Classtimetable = () => {
         try {
             const data = await fetch('http://192.168.1.121:8086/api/timetable/full-timetable')
             const fdata = await data.json()
-            //console.log(fdata)
+            // console.log(fdata)
             setData(fdata)
         } catch (error) {
             console.log(error)
@@ -582,7 +582,7 @@ const Classtimetable = () => {
             const fdata = await data.json();
             // console.log(fdata);
             // Sort the days array based on the day property
-            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', ];
 
             const sortedDays = fdata.slice().sort((a, b) => {
                 return desiredOrder.indexOf(a.day) - desiredOrder.indexOf(b.day);
@@ -673,13 +673,14 @@ const Classtimetable = () => {
                 else if (day == 'friday') {
                     setFridayTeacher(fab.name)
                     setFridayStore(fab.subjects)
-                } else if (day == 'saturday') {
-                    setsaturdayTeacher(fab.name)
-                    setsaturdayStore(fab.subjects)
-                } else if (day == 'sunday') {
-                    setsundayTeacher(fab.name)
-                    setsundayStore(fab.subjects)
-                }
+                } 
+                // else if (day == 'saturday') {
+                //     setsaturdayTeacher(fab.name)
+                //     setsaturdayStore(fab.subjects)
+                // } else if (day == 'sunday') {
+                //     setsundayTeacher(fab.name)
+                //     setsundayStore(fab.subjects)
+                // }
 
             } catch (error) {
                 console.log(error)
@@ -1007,7 +1008,7 @@ const Classtimetable = () => {
 
                             // Function to save changes
                             const saveChanges = async (id) => {
-                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
+                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
 
@@ -1138,56 +1139,7 @@ const Classtimetable = () => {
                                             const fstaffdata = await data.json()
 
                                         }
-                                        else if (i == 5) {
-                                            const body = {
-                                                teacherName: teach,
-                                                subject: saturdaySubject
-                                            }
-                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
-                                                method: 'put',
-                                                headers: {
-                                                    'Content-Type': 'application/json' // Specify the content type as JSON
-                                                },
-                                                body: JSON.stringify(body)
-                                            })
-                                            const fdata = await data.json()
-                                            console.log(fdata)
-                                            //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
-                                                method: 'put',
-                                                headers: {
-                                                    'Content-Type': 'application/json' // Specify the content type as JSON
-                                                },
-                                                body: JSON.stringify(body)
-                                            })
-                                            const fstaffdata = await data.json()
-
-                                        }
-                                        else if (i == 6) {
-                                            const body = {
-                                                teacherName: teach,
-                                                subject: sundaySubject
-                                            }
-                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
-                                                method: 'put',
-                                                headers: {
-                                                    'Content-Type': 'application/json' // Specify the content type as JSON
-                                                },
-                                                body: JSON.stringify(body)
-                                            })
-                                            const fdata = await data.json()
-                                            console.log(fdata)
-                                            //now update the same entry in this staff time table
-                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
-                                                method: 'put',
-                                                headers: {
-                                                    'Content-Type': 'application/json' // Specify the content type as JSON
-                                                },
-                                                body: JSON.stringify(body)
-                                            })
-                                            const fstaffdata = await data.json()
-
-                                        }
+                                        
 
 
                                     }
@@ -1576,50 +1528,7 @@ const Classtimetable = () => {
                                                 </Td> : ""
                                         }
 
-                                        {
-                                            daysMap?.find((day) => day == 'S a t u r d a y') ?
-                                                <Td>
-                                                    <Flex direction='column'>
-                                                        <Select onChange={(e) => get(e, 'saturday')} disabled={disabledCheck}>
-                                                            <option>Select</option>
-
-                                                            {staff?.map((elm, i) => (
-                                                                <option key={i} value={elm.id}>{elm.name}</option>
-                                                            ))}
-                                                        </Select>
-                                                        <Select value={fridaySubject} onChange={(e) => setsaturdaySubject(e.target.value)} disabled={disabledCheck}>
-                                                            <option>Select</option>
-                                                            {
-                                                                saturdayStore?.map((subject) => (
-                                                                    <option>{subject}</option>
-                                                                ))
-                                                            }
-                                                        </Select>
-                                                    </Flex>
-                                                </Td> : ""
-                                        }
-                                        {
-                                            daysMap?.find((day) => day == 'S u n d a y') ?
-                                                <Td>
-                                                    <Flex direction='column'>
-                                                        <Select onChange={(e) => get(e, 'sunday')} disabled={disabledCheck}>
-                                                            <option>Select</option>
-
-                                                            {staff?.map((elm, i) => (
-                                                                <option key={i} value={elm.id}>{elm.name}</option>
-                                                            ))}
-                                                        </Select>
-                                                        <Select value={fridaySubject} onChange={(e) => setsundaySubject(e.target.value)} disabled={disabledCheck}>
-                                                            <option>Select</option>
-                                                            {
-                                                                sundayStore?.map((subject) => (
-                                                                    <option>{subject}</option>
-                                                                ))
-                                                            }
-                                                        </Select>
-                                                    </Flex>
-                                                </Td> : ""
-                                        }
+                                        
                                         <Td display="flex" flexDir="column" justifyContent="space-between" >
                                             <Button onClick={() => timeTable()} margin="4%">Save</Button>
                                             <Button onClick={() => setcreateNew(false)} >Cancel</Button>

@@ -623,7 +623,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                             >
                                 {({ isSubmitting, isValid }) => (
                                     <Form>
-                                        <Flex justifyContent="space-around" alignItems="center" >
+                                        <Flex justifyContent="space-around"  >
                                             <Field name="name">
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.name && form.touched.name} isRequired m="1">
@@ -717,7 +717,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                                         </Flex>
 
-                                        <Flex justifyContent="space-between" alignItems="center">
+                                        <Flex justifyContent="space-between" >
 
                                             <Field name="mobile">
                                                 {({ field, form }) => (
@@ -761,7 +761,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                                         </Flex>
 
-                                        <Flex justifyContent="space-between" alignItems="center">
+                                        <Flex justifyContent="space-between" >
 
                                             <Field name="doj">
                                                 {({ field, form }) => (
@@ -806,7 +806,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             </Field>
                                         </Flex>
 
-                                        <Flex justifyContent="space-between" alignItems="center">
+                                        <Flex justifyContent="space-between" >
 
                                             <Field name="gender">
                                                 {({ field, form }) => (
@@ -877,7 +877,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                                         </Flex >
 
-                                        <Flex justifyContent="space-around" alignItems="center" >
+                                        <Flex justifyContent="space-around"  >
                                             <Field name="email">
                                                 {({ field, form }) => (
                                                     <FormControl

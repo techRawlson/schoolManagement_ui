@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Icon, IconButton, Input, Select, Stack, Text } from "@chakra-ui/react"
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Icon, IconButton, Input, Select, Stack, Text } from "@chakra-ui/react"
 import Navbar from "../../components/Navbar"
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import {
@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import { useData } from "../context/DataContext";
 const Subject = () => {
-  
+
     const [staff, setStaff] = useState([])
     const [subjects, setSubjects] = useState([])
     console.log(subjects)
@@ -81,6 +81,8 @@ const Subject = () => {
     const createClass = async () => {
 
         console.log(classRef.current.value)
+        console.log(sectionRef.current.value)
+        console.log(sessionRef.current.value)
         try {
             const data = await fetch(`http://192.168.1.121:8082/api/students/create-class?classname=${encodeURIComponent(classRef.current.value)}&section=${encodeURIComponent(sectionRef.current.value)}&session=${encodeURIComponent(sessionRef.current.value)}`, {
                 method: 'POST',
@@ -293,8 +295,9 @@ const Subject = () => {
 
     });
     const validationSchema2 = Yup.object().shape({
-        class: Yup.string().required("Class is required"),
-        section: Yup.string().required("Section is required"),
+        class: Yup.string().required("Required"),
+        section: Yup.string().required("Required"),
+        session: Yup.string().required("Required"),
     });
 
 
@@ -341,12 +344,12 @@ const Subject = () => {
             <Navbar />
             <ToastContainer />
             <Flex alignItems="center" margin="0 0 0 2%">
-                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-                            </Flex>
-            <Stack display="flex" flexDir="row" justifyContent="space-around" >
+                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+            </Flex>
+            <Stack display="flex" flexDir="row" justifyContent="space-around" maxW="100%">
 
-                <Stack width="30%">
-                    
+                <Stack width="30%" m="0 1%">
+
                     <Formik
                         initialValues={{ subject: "" }}
                         onSubmit={(values, actions) => {
@@ -357,18 +360,32 @@ const Subject = () => {
                     >
                         {({ isSubmitting }) => (
                             <Form>
-                                <Stack justifyContent="space-around" display="flex" flexDir="row">
+                                <Stack justifyContent="space-around" display="flex" flexDir="row"  padding="1">
                                     <Field name="subject">
-                                        {({ field }) => (
-                                            <Flex flexDir="column" alignItems="center" justifyContent="space-around">
-                                                <Input {...field} ref={subjectRef} placeholder="Subject" />
-                                                <ErrorMessage name="subject" component="div" style={{ color: 'red' }} />
-                                            </Flex>
-
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.subject && form.touched.subject} isRequired >
+                                                <FormLabel htmlFor="subject">Subject</FormLabel>
+                                                <Input
+                                                    {...field}
+                                                    ref={subjectRef}
+                                                    placeholder="Subject"
+                                                    id="subject"
+                                                    name="subject"
+                                                />
+                                                <FormErrorMessage>{form.errors.subject}</FormErrorMessage>
+                                            </FormControl>
                                         )}
                                     </Field>
+                                    <FormControl>
+                                        <FormLabel>Submit</FormLabel>
+                                        <Button colorScheme="blue" type="submit" isLoading={isSubmitting} >
+                                            Add
+                                        </Button>
+                                    </FormControl>
 
-                                    <Button colorScheme="blue" type="submit" isLoading={isSubmitting}>Add</Button>
+
+
+
                                 </Stack>
                             </Form>
                         )}
@@ -409,11 +426,12 @@ const Subject = () => {
                         </Table>
                     </TableContainer>
                 </Stack>
-                <Stack width="30%">
+                <Stack width="30%" m="0 1%">
 
                     <Formik
                         initialValues={{ class: "", section: "", session: "" }}
                         onSubmit={(values, actions) => {
+                            console.log(values)
                             createClass(values);
                             actions.resetForm(); // Reset form after submission
                         }}
@@ -421,36 +439,69 @@ const Subject = () => {
                     >
                         {({ isSubmitting }) => (
                             <Form>
-                                <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="row">
+                                <Stack justifyContent="space-around" display="flex" flexDir="row">
+
                                     <Field name="class">
-                                        {({ field }) => (
-                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
-                                                <Input {...field} ref={classRef} placeholder="Class" />
-                                                <ErrorMessage name="class" component="div" style={{ color: 'red' }} />
-                                            </Stack>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.class && form.touched.class} isRequired m="1">
+                                                <FormLabel htmlFor="class">Class</FormLabel>
+                                                <Input
+                                                    {...field}
+                                                    ref={classRef}
+                                                    placeholder="Class"
+                                                    id="class"
+                                                    name="class"
+                                                />
+                                                <FormErrorMessage>{form.errors.class}</FormErrorMessage>
+                                            </FormControl>
                                         )}
                                     </Field>
                                     <Field name="section">
-                                        {({ field }) => (
-                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
-                                                <Input {...field} ref={sectionRef} placeholder="Section" />
-                                                <ErrorMessage name="section" component="div" style={{ color: 'red' }} />
-                                            </Stack>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.section && form.touched.section} isRequired m="1">
+                                                <FormLabel htmlFor="section">Section</FormLabel>
+                                                <Input
+                                                    {...field}
+                                                    ref={sectionRef}
+                                                    placeholder="Section"
+                                                    id="section"
+                                                    name="section"
+                                                />
+                                                <FormErrorMessage>{form.errors.section}</FormErrorMessage>
+                                            </FormControl>
                                         )}
                                     </Field>
+
                                     <Field name="session">
-                                        {({ field }) => (
-                                            <Stack justifyContent="space-around" alignItems="center" display="flex" flexDir="column">
-                                                <Input {...field} ref={sessionRef} placeholder="Session" />
-                                                <ErrorMessage name="session" component="div" style={{ color: 'red' }} />
-                                            </Stack>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.session && form.touched.session} isRequired m="1">
+                                                <FormLabel htmlFor="session">Session</FormLabel>
+                                                <Input
+                                                    {...field}
+                                                    ref={sessionRef}
+                                                    placeholder="Session"
+                                                    id="session"
+                                                    name="session"
+                                                />
+                                                <FormErrorMessage>{form.errors.session}</FormErrorMessage>
+                                            </FormControl>
                                         )}
                                     </Field>
-                                    <Button colorScheme="blue" type="submit" isLoading={isSubmitting} >Add</Button>
+
+                                    <FormControl m="1">
+                                        <FormLabel>Submit</FormLabel>
+                                        <Button colorScheme="blue" type="submit" isLoading={isSubmitting} >Add</Button>
+                                    </FormControl>
+
+
+
+
+
                                 </Stack>
                             </Form>
                         )}
                     </Formik>
+
 
                     <TableContainer style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
                         "&::-webkit-scrollbar": {
@@ -490,9 +541,9 @@ const Subject = () => {
                     </TableContainer>
                 </Stack>
 
-                <Stack width="40%" >
+                <Stack width="40%" m="0 1%">
 
-                    <TableContainer style={{ maxHeight: '80vh', overflowY: 'scroll' }} css={{
+                    <TableContainer style={{ maxHeight: '80vh', overflow: 'scroll',maxWidth:'90%' }} css={{
                         "&::-webkit-scrollbar": {
                             width: "0 !important", // For Chrome, Safari, and Opera
                         },
@@ -616,8 +667,8 @@ const Subject = () => {
                     </TableContainer>
                 </Stack>
             </Stack>
-            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
-            </Stack>
+            <Button width="120px" colorScheme="green" position="absolute" bottom="1vw" left="1vh" >Print</Button>
+        </Stack>
 
     )
 }

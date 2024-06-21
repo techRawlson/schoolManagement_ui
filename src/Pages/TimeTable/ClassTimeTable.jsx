@@ -109,6 +109,7 @@ const Classtimetable = () => {
         wednesday: wednesdayTeacher == undefined ? '' : wednesdayTeacher + " " + wednesdaySubject,
         thursday: thursdayTeacher == undefined ? '' : thursdayTeacher + " " + thursdaySubject,
         friday: fridayTeacher == undefined ? '' : fridayTeacher + " " + fridaySubject,
+        saturday: saturdayTeacher == undefined ? '' : saturdayTeacher + " " + saturdaySubject
     };
 
     const timeTable = async () => {
@@ -144,9 +145,9 @@ const Classtimetable = () => {
                 section: section,
             };
             //this code is for table entries for class
-            const entryTeachers = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
-            const entrySubjects = [mondaySubject, tuesdaySubject, wednesdaySubject, thursdaySubject, fridaySubject]
-            const entryDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",];
+            const entryTeachers = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher, saturdayTeacher]
+            const entrySubjects = [mondaySubject, tuesdaySubject, wednesdaySubject, thursdaySubject, fridaySubject, saturdaySubject]
+            const entryDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
             const bodyEntries = []; // Array to store entries for each day
             // Iterate over each day
@@ -333,6 +334,54 @@ const Classtimetable = () => {
                             teacherName: fridayTeacher,
                             teacherSubject: fridaySubject,
                             day: 'Friday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    } else if (i == 5) {
+                        console.log("saturday teacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: saturdayTeacher,
+                            teacherSubject: saturdaySubject,
+                            day: 'Saturday',
+                            session: session
+                        };
+                        if (check[i]) {
+                            const staffTimeTableEnntry = await fetch('http://192.168.1.121:8086/api/LockedData/teachersData', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(body),
+                            });
+                            console.log(staffTimeTableEnntry)
+                        }
+
+                    }else if (i == 6) {
+                        console.log("sunday teacher")
+                        const body = {
+                            lectureNumber: lecture,
+                            startTime: currentStartTime,
+                            endTime: currentEndTime,
+                            className: classValue,
+                            section: section,
+                            teacherName: sundayTeacher,
+                            teacherSubject: sundaySubject,
+                            day: 'Sunday',
                             session: session
                         };
                         if (check[i]) {
@@ -582,7 +631,7 @@ const Classtimetable = () => {
             const fdata = await data.json();
             // console.log(fdata);
             // Sort the days array based on the day property
-            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', ];
+            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
 
             const sortedDays = fdata.slice().sort((a, b) => {
                 return desiredOrder.indexOf(a.day) - desiredOrder.indexOf(b.day);
@@ -673,14 +722,15 @@ const Classtimetable = () => {
                 else if (day == 'friday') {
                     setFridayTeacher(fab.name)
                     setFridayStore(fab.subjects)
-                } 
-                // else if (day == 'saturday') {
-                //     setsaturdayTeacher(fab.name)
-                //     setsaturdayStore(fab.subjects)
-                // } else if (day == 'sunday') {
-                //     setsundayTeacher(fab.name)
-                //     setsundayStore(fab.subjects)
-                // }
+                }
+                else if (day == 'saturday') {
+                    setsaturdayTeacher(fab.name)
+                    setsaturdayStore(fab.subjects)
+                }
+                else if (day == 'sunday') {
+                    setsundayTeacher(fab.name)
+                    setsundayStore(fab.subjects)
+                }
 
             } catch (error) {
                 console.log(error)
@@ -1008,18 +1058,19 @@ const Classtimetable = () => {
 
                             // Function to save changes
                             const saveChanges = async (id) => {
-                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
 
                                         console.log('no updataes', teach)
                                     } else {
                                         console.log('lets update this', teach, i)
-                                        const body = {
-                                            teacherName: teach,
-                                            subject: mondaySubject
-                                        };
+                                        
                                         if (i == 0) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: mondaySubject
+                                            };
                                             const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/monday`, {
                                                 method: 'put',
                                                 headers: {
@@ -1138,8 +1189,56 @@ const Classtimetable = () => {
                                             })
                                             const fstaffdata = await data.json()
 
+                                        }else if (i == 5) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: saturdaySubject
+                                            }
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/saturday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
+
+                                        }else if (i == 6) {
+                                            const body = {
+                                                teacherName: teach,
+                                                subject: sundaySubject
+                                            }
+                                            const data = await fetch(`http://192.168.1.121:8086/api/timetable/update-timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fdata = await data.json()
+                                            console.log(fdata)
+                                            //now update the same entry in this staff time table
+                                            const staffdata = await fetch(`http://192.168.1.121:8086/api/LockedData/update-Staff-Timetable/${classValue}/${section}/${session}/${lectureEdit}/sunday`, {
+                                                method: 'put',
+                                                headers: {
+                                                    'Content-Type': 'application/json' // Specify the content type as JSON
+                                                },
+                                                body: JSON.stringify(body)
+                                            })
+                                            const fstaffdata = await data.json()
+
                                         }
-                                        
+
 
 
                                     }
@@ -1165,6 +1264,12 @@ const Classtimetable = () => {
                                     setThursdayStore([])
                                     setFridayTeacher('')
                                     setFridaySubject('')
+                                    setsaturdaySubject('')
+                                    setsaturdayTeacher('')
+                                    setsaturdayStore([])
+                                    setsundaySubject('')
+                                    setsundayStore([])
+                                    setsundayTeacher('')
                                     setFridayStore([])
 
 
@@ -1353,25 +1458,70 @@ const Classtimetable = () => {
                                                     }
                                                 </Td>
                                         }
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Saturday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Saturday')]}
+                                                        <Select onChange={(e) => get(e, 'saturday')} >
+                                                            <option>Select</option>
 
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Saturday')]}
+                                                        <Select value={saturdaySubject} onChange={(e) => setsaturdaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                saturdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Saturday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Saturday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Saturday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Saturday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+                                        }
+                                        {
+                                            editMode == elm.id && elm.days.find((elm) => elm == 'Sunday') ?
+                                                <Td>
+                                                    <Flex direction='column' alignItems="center">
+                                                        {elm.teachers[elm.days.indexOf('Sunday')]}
+                                                        <Select onChange={(e) => get(e, 'sunday')} >
+                                                            <option>Select</option>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        {elm.subjects[elm.days.indexOf('Sunday')]}
+                                                        <Select value={sundaySubject} onChange={(e) => setsundaySubject(e.target.value)} >
+                                                            <option>Select</option>
+                                                            {
+                                                                sundayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td>
+                                                : <Td style={{ display: days.some(item => item.day === 'Sunday') ? 'table-cell' : 'none' }}>
+                                                    {
+                                                        elm.days.find((elm) => elm == 'Sunday') ? <Flex direction="column">
+                                                            <Td>{elm.teachers[elm.days.indexOf('Sunday')]}</Td>
+                                                            <Td>{elm.subjects[elm.days.indexOf('Sunday')]}  </Td>
+                                                        </Flex> : ""
+                                                    }
+                                                </Td>
+                                        }
                                         {
                                             update ? <Td>
                                                 {editMode == elm.id ? (
@@ -1526,9 +1676,52 @@ const Classtimetable = () => {
                                                         </Select>
                                                     </Flex>
                                                 </Td> : ""
+                                        }{
+                                            daysMap?.find((day) => day == 'S a t u r d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'saturday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={saturdaySubject} onChange={(e) => setsaturdaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                saturdayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ""
+                                        }{
+                                            daysMap?.find((day) => day == 'S u n d a y') ?
+                                                <Td>
+                                                    <Flex direction='column'>
+                                                        <Select onChange={(e) => get(e, 'sunday')} disabled={disabledCheck}>
+                                                            <option>Select</option>
+
+                                                            {staff?.map((elm, i) => (
+                                                                <option key={i} value={elm.id}>{elm.name}</option>
+                                                            ))}
+                                                        </Select>
+                                                        <Select value={sundaySubject} onChange={(e) => setsundaySubject(e.target.value)} disabled={disabledCheck}>
+                                                            <option>Select</option>
+                                                            {
+                                                                sundayStore?.map((subject) => (
+                                                                    <option>{subject}</option>
+                                                                ))
+                                                            }
+                                                        </Select>
+                                                    </Flex>
+                                                </Td> : ""
                                         }
 
-                                        
+
+
                                         <Td display="flex" flexDir="column" justifyContent="space-between" >
                                             <Button onClick={() => timeTable()} margin="4%">Save</Button>
                                             <Button onClick={() => setcreateNew(false)} >Cancel</Button>

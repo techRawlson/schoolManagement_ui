@@ -65,6 +65,11 @@ const Stafftimetable = () => {
                 obj.thursday = tt.teacherSubject + " " + tt.className + " " + tt.section;
             } else if (tt.day === 'Friday') {
                 obj.friday = tt.teacherSubject + " " + tt.className + " " + tt.section;
+            }else if (tt.day === 'Saturday') {
+                obj.saturday = tt.teacherSubject + " " + tt.className + " " + tt.section;
+            }
+            else if (tt.day === 'Sunday') {
+                obj.sunday = tt.teacherSubject + " " + tt.className + " " + tt.section;
             }
             newDb.push(obj);
             // console.log(obj);
@@ -291,7 +296,7 @@ const Stafftimetable = () => {
                 teacher: dataJson.name
             }));
             await getData()
-            await dataFilter(data)
+             dataFilter(data)
         } catch (error) {
             console.log(error);
         }
@@ -398,6 +403,8 @@ const Stafftimetable = () => {
                                     <th style={thStyle}>Wednesday</th>
                                     <th style={thStyle}>Thursday</th>
                                     <th style={thStyle}>Friday</th>
+                                    <th style={thStyle}>Saturday</th>
+                                    <th style={thStyle}>Sunday</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -411,6 +418,8 @@ const Stafftimetable = () => {
                                         <td style={tdStyle}>{entry.wednesday}</td>
                                         <td style={tdStyle}>{entry.thursday}</td>
                                         <td style={tdStyle}>{entry.friday}</td>
+                                        <td style={tdStyle}>{entry.saturday}</td>
+                                        <td style={tdStyle}>{entry.sunday}</td>
                                     </tr>
                                 ))}
                             </tbody>

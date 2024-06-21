@@ -738,7 +738,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                 </div> : ''
             }
             {
-                isMobile?   <div className="pagination-controls" style={{
+                isMobile ? <div className="pagination-controls" style={{
                     width: "40%",
                     margin: "2vh auto",
                     display: "flex",
@@ -746,8 +746,8 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     alignContent: "center",
                     fontSize: "15px",
                     justifyContent: "space-between",
-                   fontSize:'22px'
-    
+                    fontSize: '22px'
+
                 }}>
                     <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                         <FaArrowLeft />
@@ -765,7 +765,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     <button onClick={handleNextPage} disabled={currentPage === totalPages}>
                         <FaArrowRight />
                     </button>
-                </div>:''
+                </div> : ''
             }
 
 
@@ -824,8 +824,15 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                         if (!values.session) {
                                             errors.session = 'Session is Required'
                                         }
-
-
+                                        if (!values.dob) {
+                                            errors.dob = 'date of birth  is Required'
+                                        }
+                                        if (!values.admissionYear) {
+                                            errors.admissionYear = 'admission year is Required'
+                                        }
+                                        if (!values.enrollmentNumber) {
+                                            errors.enrollmentNumber = 'enrollment Number  is Required'
+                                        }
 
                                         // Add validations for other fields
                                         return errors;
@@ -842,10 +849,10 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 >
                                     {({ isSubmitting, isValid }) => (
                                         <Form>
-                                            <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                                            <Flex justifyContent="space-between" flexWrap="wrap">
                                                 <Field name="name" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired flexBasis="200px" flexGrow="1"  >
+                                                        <FormControl isInvalid={form.errors.name && form.touched.name} isRequired flexBasis="200px" flexGrow="1" m="0 1%"  >
                                                             <FormLabel htmlFor="name">Name</FormLabel>
                                                             <Input {...field} id="name" placeholder="Name" ref={nameRef} />
                                                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -854,7 +861,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
                                                 <Field name="email" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired flexBasis="200px" flexGrow="1"  >
+                                                        <FormControl isInvalid={form.errors.email && form.touched.email} isRequired flexBasis="200px" flexGrow="1" m="0 1%"  >
                                                             <FormLabel htmlFor="email">Email Address</FormLabel>
                                                             <Input {...field} id="email" placeholder="Email Address" ref={emailRef} />
                                                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
@@ -863,7 +870,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
                                                 <Field name="fathersname" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired flexBasis="200px" flexGrow="1" >
+                                                        <FormControl isInvalid={form.errors.fathersname && form.touched.fathersname} isRequired flexBasis="200px" flexGrow="1" m="0 1%" >
                                                             <FormLabel htmlFor="fathersname">Father Name</FormLabel>
                                                             <Input {...field} placeholder='Father name' ref={fatherRef} id="fathersname" name='fathersname' />
                                                             <FormErrorMessage>{form.errors.fathersname}</FormErrorMessage>
@@ -873,7 +880,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="mobile" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.mobile && form.touched.mobile} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="fathersname">Mobile</FormLabel>
                                                             <Input
                                                                 {...field}
@@ -896,7 +903,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="address" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.address && form.touched.address} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="Address">Address</FormLabel>
                                                             <Input {...field} placeholder='Address' ref={addressRef} id="address" name='address' />
                                                             <FormErrorMessage>{form.errors.address}</FormErrorMessage>
@@ -906,7 +913,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="class" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors['class'] && form.touched['class']} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="class">Class Name</FormLabel>
                                                             <Select {...field} ref={classRef} isRequired id="class" name='class' placeholder='class name'>
 
@@ -926,7 +933,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="section">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.section && form.touched.section} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="section" >Section</FormLabel>
                                                             <Select {...field} ref={sectionRef} placeholder="Select">
                                                                 {/* Empty option for placeholder */}
@@ -942,33 +949,30 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
 
 
+                                                <Field name="admissionYear">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.admissionYear && form.touched.admissionYear} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
+                                                            <FormLabel htmlFor="admissionYear">Admission Year</FormLabel>
+                                                            <Input {...field} id="admissionYear" placeholder="Admission Year" type="number" ref={admRef} />
+                                                            <FormErrorMessage>{form.errors.admissionYear}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
-
-
-
-
-
-                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
-                                                    <FormLabel>Admission Year</FormLabel>
-                                                    <Input placeholder='Admission Year'
-                                                        id="number"
-                                                        name="number"
-                                                        type="Number"
-                                                        ref={admRef}
-
-
-                                                    />
-                                                </FormControl>
-                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
-                                                    <FormLabel>Date of birth</FormLabel>
-                                                    <Input ref={dobRef} isRequired type='date' max={today} />
-                                                </FormControl>
-
+                                                <Field name="dob">
+                                                    {({ field, form }) => (
+                                                        <FormControl isInvalid={form.errors.dob && form.touched.dob} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
+                                                            <FormLabel htmlFor="dob">Date of Birth</FormLabel>
+                                                            <Input {...field} id="dob" type="date" max={today} ref={dobRef} />
+                                                            <FormErrorMessage>{form.errors.dob}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
 
 
                                                 <Field name="category">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired flexBasis="200px" flexGrow="1"  >
+                                                        <FormControl isInvalid={form.errors.category && form.touched.category} isRequired flexBasis="200px" flexGrow="1" m="0 1%"  >
                                                             <FormLabel htmlFor="category">Category</FormLabel>
                                                             <Select {...field} ref={catRef} id="category" placeholder="Select" onChange={(e) => form.setFieldValue('category', e.target.value)}>
 
@@ -985,7 +989,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="gender">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.gender && form.touched.gender} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="gender">Gender</FormLabel>
                                                             <Select {...field} ref={sexRef} id="gender" placeholder="Select" onChange={(e) => form.setFieldValue('gender', e.target.value)}>
 
@@ -1001,7 +1005,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                                                 <Field name="rollNo" >
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.rollNo && form.touched.rollNo} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="rollNo" >Roll No.</FormLabel>
                                                             <Input {...field} ref={rollRef} id="rollNo" placeholder="Roll No." type="number" />
                                                             <FormErrorMessage>{form.errors.rollNo}</FormErrorMessage>
@@ -1009,17 +1013,22 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                     )}
                                                 </Field>
 
-                                                <FormControl isRequired flexBasis="200px" flexGrow="1">
-                                                    <FormLabel>Enrollment No.</FormLabel>
-                                                    <Input placeholder='Enrollment No.' ref={enrollRef} type='number' />
-                                                </FormControl>
-                                                <FormControl flexBasis="200px" flexGrow="1">
+                                                <Field name="enrollmentNumber">
+                                                    {({ field,form }) => (
+                                                        <FormControl isInvalid={form.errors.enrollmentNumber && form.touched.enrollmentNumber} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
+                                                            <FormLabel htmlFor="enrollmentNumber">Enrollment No.</FormLabel>
+                                                            <Input {...field} id="enrollmentNumber" placeholder="Enrollment No." type="number" ref={enrollRef}/>
+                                                            <FormErrorMessage>{form.errors.enrollmentNumber}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+                                                <FormControl flexBasis="200px" flexGrow="1" m="0 1%">
                                                     <FormLabel>Upload Image</FormLabel>
                                                     <Input placeholder='Upload Image' type='file' accept='image/jpeg' onChange={handleChange} />
                                                 </FormControl>
                                                 <Field name="session">
                                                     {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired flexBasis="200px" flexGrow="1">
+                                                        <FormControl isInvalid={form.errors.session && form.touched.session} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="session">Session</FormLabel>
                                                             <Select {...field} ref={sessionRef} id="session" placeholder="Select" onChange={(e) => form.setFieldValue('session', e.target.value)}>
 

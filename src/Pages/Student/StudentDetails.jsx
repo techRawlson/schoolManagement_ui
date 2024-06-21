@@ -256,7 +256,7 @@ const StudentDetails = () => {
     const uniqueSessions = [...new Set(clas.map(elm => elm.session))].sort();
     const today = new Date().toISOString().split('T')[0];
     return (
-        <div style={{ width:'100vw'}} >
+        <div style={{ width:'100vw',height:'100vh'}} >
             <Navbar />
             <ToastContainer /> {/* Add this line */}
             <Stack  width="100vw"  backgroundColor="white">

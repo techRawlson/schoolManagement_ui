@@ -202,11 +202,12 @@ const Classtimetable = () => {
                         console.log(status);
                         check[i] = true
                         toast.success('Data created');
-                        await getData()
+                       
                     } else {
                         check[i] = false
                         console.log(status);
-                        toast.error('Teacher is not free');
+                        const er=await response.text()
+                        toast.error(er);
                         setcreateNew(true)
                         setcreate(false)
                     }
@@ -432,6 +433,7 @@ const Classtimetable = () => {
             setFridaySubject('')
             setFridayStore([])
             // setFridayStore('')
+            await getData()
         } catch (error) {
             // toast.error("something went wrong")
             console.log(error);
@@ -675,6 +677,34 @@ const Classtimetable = () => {
     }, [])
 
     const [isDisabled, setisDisabled] = useState(false)
+
+
+const setLectureNumber=async()=>{
+    try {
+    await getData()
+    // dataFilter(data)
+        const length=filteredData.length+1
+        console.log(length)
+        const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
+        const fdata = await data.json();
+        console.log(fdata);
+
+        // setLecture(e.target.value)
+        setLecture(length)
+        setCurrentStartTime(fdata.startTime)
+        setCurrentEndTime(fdata.endTime)
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+useEffect(()=>{
+    
+    setLectureNumber()
+},[filters])
+
+
+
     const get = async (e, day) => {
 
         const id = e?.target?.value
@@ -682,18 +712,20 @@ const Classtimetable = () => {
         if (day == 'periods' && id !== 'Select') {
             const id = e.target.value;
             console.log(e.target.value)
+            const length=filteredData.length+1
 
-            try {
-                const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${id}`);
-                const fdata = await data.json();
-                //console.log(fdata);
+            // try {
+            //     const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
+            //     const fdata = await data.json();
+            //     //console.log(fdata);
 
-                setLecture(e.target.value)
-                setCurrentStartTime(fdata.startTime)
-                setCurrentEndTime(fdata.endTime)
-            } catch (error) {
-                console.log(error);
-            }
+            //     // setLecture(e.target.value)
+            //     setLecture(length)
+            //     setCurrentStartTime(fdata.startTime)
+            //     setCurrentEndTime(fdata.endTime)
+            // } catch (error) {
+            //     console.log(error);
+            // }
         } else if (day == 'periods' && id == 'Select') {
             setLecture('')
             setCurrentStartTime('')
@@ -997,7 +1029,7 @@ const Classtimetable = () => {
                 method: 'delete'
             })
             await getData()
-
+await setLectureNumber()
         } catch (error) {
             console.log(error)
         }
@@ -1112,7 +1144,7 @@ const Classtimetable = () => {
                 section: dataJson.section
             }));
             await getData()
-            await dataFilter(data)
+         dataFilter(data)
         } catch (error) {
             console.log(error);
         }
@@ -1137,7 +1169,7 @@ const Classtimetable = () => {
     }, [filters, data]);
 
 
-
+console.log(filteredData.length+1)
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -1737,11 +1769,12 @@ const Classtimetable = () => {
                                     <Tr>
                                         <Td>
                                             {/* <Input  /> */}
-                                            <Select onChange={(e) => get(e, 'periods')} >
-                                                <option>Select</option>
-                                                {periods?.map((elm, i) => (
+                                            <Select onChange={(e) => get(e, 'periods')} disabled>
+                                                <option value={filteredData.length+1}>{filteredData.length+1}</option>
+                                                {/* {periods?.map((elm, i) => (
                                                     <option key={i} value={elm.lectureNumber}>{elm.lectureNumber}</option>
-                                                ))}
+                                                ))} */}
+
                                             </Select>
                                         </Td>
                                         <Td><Input type="time" value={currentStartTime} onChange={(e) => setStartTime(e.target.value)} disabled style={{ fontWeight: 'bolder' }} /></Td>
@@ -1937,7 +1970,12 @@ const Classtimetable = () => {
                 {
                     Role == 'student' ? '' : Role == 'staff' ? '' : <Stack marginLeft="85%" >
                         {
-                            AddNew ? <Button onClick={() => create1()}>Add New row</Button> : ''
+                            AddNew ? <Button onClick={async() => {
+                                await setLectureNumber()
+                                create1()
+                            }
+                                
+                            }>Add New row</Button> : ''
 
                         }
 

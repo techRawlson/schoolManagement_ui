@@ -91,70 +91,23 @@ const ModalForm = () => {
     console.log(receivedMessage)
 
     const handleSave = async (e) => {
-        e.preventDefault();
-        console.log(message.trim())
-        if (message.trim()) {
-            sendMessage()
-        } else {
-            console.warn('Message is empty');
-        }
-        console.log(formData)
-        const url = 'http://192.168.1.121:8081/api/announcements/create';
-        // Log the URL to ensure it's correct
-        console.log('URL:', url);
-        try {
-            const data = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            console.log(data)
-            setFormData({
-                holidayName: '',
-                date: '',
-                dayOfWeek: ''
-            });
-            // setEditingIndex(null);
-            onClose();
-            fetchEmployees()
-        } catch (error) {
-            console.log(error)
-        }
-        console.log("hello")
-
-        if (isEditing) {
-            const updatedItems = items.map((item, index) =>
-                index === currentIndex ? formData : item
-            );
-            setItems(updatedItems);
-            setIsEditing(false);
-
-
-        } else {
-
-            formData.date = date;
-            const data = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            console.log(data)
-            setFormData({
-                holidayName: '',
-                date: '',
-                dayOfWeek: ''
-            });
-            setEditingIndex(null);
-            onClose();
-            // setItems([...items, formData]);
-        }
+        formData.date = date;
+        const data = await fetch('http://192.168.1.121:8081/api/announcements/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        console.log(data)
+        setFormData({
+            holidayName: '',
+            date: '',
+            dayOfWeek: ''
+        });
         setFormData({ date: "", title: "", description: "" });
         onClose();
-    };
+    }
 
     const handleEdit = (index) => {
         setCurrentIndex(index);
@@ -163,10 +116,27 @@ const ModalForm = () => {
         onOpen();
     };
 
-    const handleDelete = (index) => {
-        const filteredItems = items.filter((_, i) => i !== index);
-        setItems(filteredItems);
+    const handleDelete = async (id) => {
+        console.log(id);
+
+        try {
+            const response = await fetch(`http://192.168.1.121:8081/api/announcements/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            console.log(result);
+            await fetchEmployees()
+
+        } catch (error) {
+            console.error('There was an error with the deletion:', error);
+        }
     };
+
     const fetchEmployees = async () => {
         try {
             // Ensure the URL is properly formatted
@@ -193,16 +163,13 @@ const ModalForm = () => {
     };
     useEffect(() => {
         fetchEmployees()
-    }, [])
+    }, [items])
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
                 <GoPlusCircle size="40px" />
             </Button>
-            <div>
-                <h2>Received Message:</h2>
-                <p>{receivedMessage}</p> {/* Display received message in UI */}
-            </div>
+
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -268,13 +235,13 @@ const ModalForm = () => {
                                         {item.title}
                                         <IoArrowDownCircleOutline size="30px" />
                                     </Flex>
-                                   
+
                                     <IconButton
                                         backgroundColor="red"
                                         color="white"
                                         aria-label="Delete"
                                         icon={<DeleteIcon />}
-                                        onClick={() => handleDelete(index)}
+                                        onClick={() => handleDelete(item.id)}
                                     />
                                 </AccordionButton>
 

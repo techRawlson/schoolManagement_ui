@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormLabel, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
+import { Button, Center, Flex, FormControl, FormLabel, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -109,13 +109,14 @@ const Classtimetable = () => {
         wednesday: wednesdayTeacher == undefined ? '' : wednesdayTeacher + " " + wednesdaySubject,
         thursday: thursdayTeacher == undefined ? '' : thursdayTeacher + " " + thursdaySubject,
         friday: fridayTeacher == undefined ? '' : fridayTeacher + " " + fridaySubject,
-        saturday: saturdayTeacher == undefined ? '' : saturdayTeacher + " " + saturdaySubject
+        saturday: saturdayTeacher == undefined ? '' : saturdayTeacher + " " + saturdaySubject,
+        sunday:sundayTeacher == undefined ? '' : sundayTeacher + " " + sundayTeacher,
     };
 
     const timeTable = async () => {
         let totalEntry = 0;
         let und = 0;
-        const arr = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher]
+        const arr = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
         arr.map((day) => (
 
             day == undefined || day == '' ? und++ : totalEntry++
@@ -145,9 +146,9 @@ const Classtimetable = () => {
                 section: section,
             };
             //this code is for table entries for class
-            const entryTeachers = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher, saturdayTeacher]
-            const entrySubjects = [mondaySubject, tuesdaySubject, wednesdaySubject, thursdaySubject, fridaySubject, saturdaySubject]
-            const entryDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const entryTeachers = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher, saturdayTeacher, sundayTeacher]
+            const entrySubjects = [mondaySubject, tuesdaySubject, wednesdaySubject, thursdaySubject, fridaySubject, saturdaySubject, sundaySubject]
+            const entryDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
             const bodyEntries = []; // Array to store entries for each day
             // Iterate over each day
@@ -183,7 +184,7 @@ const Classtimetable = () => {
 
             console.log(bodyEntries)
             let status = 0;
-            let check = [true, true, true, true, true]
+            let check = [true, true, true, true, true,true,true]
             // Create an array to store promises
             const promises = bodyEntries?.map(async (elm, i) => {
                 console.log(elm);
@@ -222,7 +223,7 @@ const Classtimetable = () => {
             console.log(check)
             //create timetable for teachers
             arr.map(async (teach, i) => {
-                console.log('hello')
+                console.log('teacher here is',teach)
                 if (teach == undefined || teach == '') {
                     toast('Please select teachers')
 
@@ -371,7 +372,7 @@ const Classtimetable = () => {
                             console.log(staffTimeTableEnntry)
                         }
 
-                    }else if (i == 6) {
+                    } else if (i == 6) {
                         console.log("sunday teacher")
                         const body = {
                             lectureNumber: lecture,
@@ -631,7 +632,7 @@ const Classtimetable = () => {
             const fdata = await data.json();
             // console.log(fdata);
             // Sort the days array based on the day property
-            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
+            const desiredOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
             const sortedDays = fdata.slice().sort((a, b) => {
                 return desiredOrder.indexOf(a.day) - desiredOrder.indexOf(b.day);
@@ -673,7 +674,7 @@ const Classtimetable = () => {
         getDays()
     }, [])
 
-
+    const [isDisabled, setisDisabled] = useState(false)
     const get = async (e, day) => {
 
         const id = e?.target?.value
@@ -686,6 +687,7 @@ const Classtimetable = () => {
                 const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${id}`);
                 const fdata = await data.json();
                 //console.log(fdata);
+
                 setLecture(e.target.value)
                 setCurrentStartTime(fdata.startTime)
                 setCurrentEndTime(fdata.endTime)
@@ -698,36 +700,220 @@ const Classtimetable = () => {
             setCurrentEndTime('')
         }
         else {
+            let body = {
+                session: session,
+                className: classValue,
+                section: section,
+                lectureNumber: lecture,
+                day: day,
+                teacherName: ''
+            }
+
             try {
                 const ab = await fetch(`http://192.168.1.121:8083/api/staff/${id}`)
                 const fab = await ab.json()
+
                 if (day == 'monday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(` ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
 
                     setMondayTeacher(fab.name)
                     setMondayStore(fab.subjects)
                 }
                 else if (day == 'tuesday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
 
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setTuesdayTeacher(fab.name)
                     setTuesdayStore(fab.subjects)
                 }
                 else if (day == 'wednesday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setWednesdayTeacher(fab.name)
                     setWednesdayStore(fab.subjects)
                 }
                 else if (day == 'thursday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setThursdayTeacher(fab.name)
                     setThursdayStore(fab.subjects)
                 }
                 else if (day == 'friday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setFridayTeacher(fab.name)
                     setFridayStore(fab.subjects)
                 }
                 else if (day == 'saturday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setsaturdayTeacher(fab.name)
                     setsaturdayStore(fab.subjects)
                 }
                 else if (day == 'sunday') {
+                    try {
+                        body.teacherName = fab.name;  // Use assignment operator '=' instead of ','.
+                        console.log(body);
+
+                        const data = await fetch(`http://192.168.1.121:8086/api/timetable/check-teacher-assignment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        if (!data.ok) {
+                            const er = await data.text()
+                            console.log(er)
+                            throw new Error(`Error: ${er}`);
+                        }
+
+                        // const fdata = await data.json();
+                        console.log("ok");
+                    } catch (error) {
+                        console.log(error)
+                        setisDisabled(true)
+                        toast.error(error.message);  // Use error.message to display the error message.
+                    }
                     setsundayTeacher(fab.name)
                     setsundayStore(fab.subjects)
                 }
@@ -1058,14 +1244,14 @@ const Classtimetable = () => {
 
                             // Function to save changes
                             const saveChanges = async (id) => {
-                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
+                                const teacherArray = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher, saturdayTeacher, sundayTeacher]
                                 teacherArray?.map(async (teach, i) => {
                                     if (teach == '' || teach == undefined) {
 
                                         console.log('no updataes', teach)
                                     } else {
                                         console.log('lets update this', teach, i)
-                                        
+
                                         if (i == 0) {
                                             const body = {
                                                 teacherName: teach,
@@ -1189,7 +1375,7 @@ const Classtimetable = () => {
                                             })
                                             const fstaffdata = await data.json()
 
-                                        }else if (i == 5) {
+                                        } else if (i == 5) {
                                             const body = {
                                                 teacherName: teach,
                                                 subject: saturdaySubject
@@ -1213,7 +1399,7 @@ const Classtimetable = () => {
                                             })
                                             const fstaffdata = await data.json()
 
-                                        }else if (i == 6) {
+                                        } else if (i == 6) {
                                             const body = {
                                                 teacherName: teach,
                                                 subject: sundaySubject
@@ -1722,9 +1908,11 @@ const Classtimetable = () => {
 
 
 
-                                        <Td display="flex" flexDir="column" justifyContent="space-between" >
-                                            <Button onClick={() => timeTable()} margin="4%">Save</Button>
-                                            <Button onClick={() => setcreateNew(false)} >Cancel</Button>
+                                        <Td display="flex" flexDir="column" justifyContent="space-between">
+                                            <div style={{ opacity: isDisabled ? 0.5 : 1, pointerEvents: isDisabled ? 'none' : 'auto' }}>
+                                                <Button onClick={timeTable} margin="4%">Save1</Button>
+                                            </div>
+                                            <Button onClick={() => setcreateNew(false)}>Cancel</Button>
                                         </Td>
 
 

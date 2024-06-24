@@ -25,7 +25,7 @@ const Navbar = () => {
   console.log(username)
 
   const [id, setId] = useState([])
-
+console.log(id)
   const getData = async () => {
     try {
       const data = await fetch(
@@ -200,18 +200,6 @@ const Navbar = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
     <Box
@@ -312,7 +300,7 @@ const Navbar = () => {
                   to={Role === 'student' ? `/studentdetails/${id}` : `/staffdetails/${id}`}
                   
                 >
-                  <Avatar bg="red.500" cursor="pointer" />
+                  <Avatar  cursor="pointer"  src={ `http://192.168.1.121:8083/api/staff-images/${id}`}/>
                 </ChakraLink>
                 <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
               </Flex>

@@ -735,8 +735,8 @@ const Classtimetable = () => {
         else {
             let body = {
                 session: session,
-                className: classValue,
-                section: section,
+                // className: classValue,
+                // section: section,
                 lectureNumber: lecture,
                 day: day,
                 teacherName: ''

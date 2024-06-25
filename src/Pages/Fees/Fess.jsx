@@ -9,6 +9,7 @@ import {
     Button,
     HStack,
     Flex,
+    Textarea,
 } from '@chakra-ui/react';
 import Navbar from '../../components/Navbar';
 import { useEffect, useState } from 'react';
@@ -240,10 +241,7 @@ const Fees = () => {
                         <FormLabel>Amount to Pay</FormLabel>
                         <Input type="number" placeholder="Enter amount" name='amount' onChange={(e) => setamountPay(e.target.value)} />
                     </FormControl>
-                    <FormControl flex="1" m="0 1%">
-                        <FormLabel>Comment</FormLabel>
-                        <Input type="text" placeholder="comment" name='comment' onChange={(e) => setComment(e.target.value)} />
-                    </FormControl>
+                  
 
                     {/* Submit Button */}
                     <FormControl flex="1" m="0 1%">
@@ -252,6 +250,10 @@ const Fees = () => {
                     </FormControl>
 
                 </Flex>
+                <FormControl  m="0 1%" maxW='20%'>
+                        <FormLabel>Comment</FormLabel>
+                        <Textarea type="text" placeholder="write your comment here" name='comment' onChange={(e) => setComment(e.target.value)} />
+                    </FormControl>
 
 
 

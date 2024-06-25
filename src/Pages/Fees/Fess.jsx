@@ -10,9 +10,12 @@ import {
     HStack,
     Flex,
     Textarea,
+    IconButton,
 } from '@chakra-ui/react';
 import Navbar from '../../components/Navbar';
 import { useEffect, useState } from 'react';
+import { IoArrowBack } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 const Fees = () => {
     const [studentId, setstudentId] = useState('')
     const [comment, setComment] = useState("")
@@ -173,11 +176,15 @@ const Fees = () => {
         //https://api-preprod.phonepe.com/apis/pg-sandbox
 
     };
-
+    const navigate = useNavigate()
+    const goback = () => {
+        navigate(-1)
+    }
 
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
             <Navbar />
+            <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'/>
             <ChakraProvider>
                 <Flex mx="auto" p={2} borderWidth={1} flexWrap="wrap" justifyContent="space-around" alignItems="center">
 

@@ -47,29 +47,41 @@ const Dashboard = () => {
       <SimpleGrid templateColumns='1fr 1fr 1fr' margin="0" >
 
         {
-          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("student")} >
-            <CardHeader>
-              <Heading size='md' textAlign="center"> Student </Heading>
-            </CardHeader>
-            <CardBody>
-
-              <Stack m={18} spacing={4} display="flex"
-                alignItems="center"
-                justifyContent="center">
-                <FcReading size={100} />
-              </Stack>
-
-            </CardBody>
-
-          </Card>
+          Role == 'student' ? "" : <Card
+          cursor="pointer"
+          onClick={() => nextPage("student")}
+          sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }}
+        >
+       
+          <CardBody>
+            <Stack m={18} spacing={4} display="flex" alignItems="center" justifyContent="center">
+              <FcReading size={100} />
+            </Stack>
+          </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Student </Heading>
+          </CardHeader>
+        </Card>
         }
 
 
         {
-          Role == 'student' ? "" : Role == 'staff' ? '' : <Card cursor="pointer" onClick={() => nextPage("staff")} >
-            <CardHeader>
-              <Heading size='md' textAlign="center"> Staff</Heading>
-            </CardHeader>
+          Role == 'student' ? "" : Role == 'staff' ? '' : <Card cursor="pointer" onClick={() => nextPage("staff")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+           
             <CardBody>
               <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
                 <PiChalkboardTeacher size={100}
@@ -77,69 +89,109 @@ const Dashboard = () => {
                 />
               </Stack>
             </CardBody>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Staff</Heading>
+            </CardHeader>
 
           </Card>
         }
         {
-          Role == 'student' ? "" : Role == 'staff' ? "" : <Card cursor="pointer" onClick={() => nextPage("subjects")}>
-            <CardHeader>
-              <Heading size='md' textAlign="center"> Subjects</Heading>
-            </CardHeader>
+          Role == 'student' ? "" : Role == 'staff' ? "" : <Card cursor="pointer" onClick={() => nextPage("subjects")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }}>
+            
             <CardBody>
               <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
                 <ImBooks size={100}
                   color='pink' />
               </Stack>
             </CardBody>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> Subjects</Heading>
+            </CardHeader>
 
           </Card>
         }
 
 
 
-        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'classtimetable' : "timetable")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Time Table</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'classtimetable' : "timetable")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }}>
+          
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <FcOvertime size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Time Table</Heading>
+          </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'studentrecord' : "attendance")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Attendance</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'studentrecord' : "attendance")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }}>
+         
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <FcTodoList size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Attendance</Heading>
+          </CardHeader>
 
         </Card>
         {
-          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("lms")} >
-            <CardHeader>
-              <Heading size='md' textAlign="center"> LMS</Heading>
-            </CardHeader>
+          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("lms")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+           
             <CardBody>
               <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
                 <FcLeave
                   size={95} />
               </Stack>
             </CardBody>
+            <CardHeader>
+              <Heading size='md' textAlign="center"> LMS</Heading>
+            </CardHeader>
 
           </Card>
         }
 
         {
           Role == 'student' ? "" : Role == 'staff' ? "" :
-            <Card cursor="pointer" onClick={() => nextPage("role")} >
-              <CardHeader>
-                <Heading size='md' textAlign="center"> Roles</Heading>
-              </CardHeader>
+            <Card cursor="pointer" onClick={() => nextPage("role")} sx={{
+              transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+              },
+            }}>
+            
               <CardBody>
                 <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
                   <GiPoliceOfficerHead
@@ -148,14 +200,22 @@ const Dashboard = () => {
                   />
                 </Stack>
               </CardBody>
+              <CardHeader>
+                <Heading size='md' textAlign="center"> Roles</Heading>
+              </CardHeader>
 
             </Card>
         }
 
-        <Card cursor="pointer" onClick={() => nextPage("directory")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Directory</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage("directory")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }}>
+          
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <GoFileDirectoryFill
@@ -163,12 +223,20 @@ const Dashboard = () => {
                 size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Directory</Heading>
+          </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("holidays")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center">HOLIDAYS</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage("holidays")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+          
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <MdBeachAccess
@@ -176,12 +244,20 @@ const Dashboard = () => {
                 size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center">HOLIDAYS</Heading>
+          </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("annoucement")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> Annoucement</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage("annoucement")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+         
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <FaBell
@@ -189,12 +265,20 @@ const Dashboard = () => {
                 size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> Annoucement</Heading>
+          </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("fees")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> fees</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage("fees")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+        
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <MdPayment
@@ -202,18 +286,29 @@ const Dashboard = () => {
                 size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> fees</Heading>
+          </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("sms")} >
-          <CardHeader>
-            <Heading size='md' textAlign="center"> sms</Heading>
-          </CardHeader>
+        <Card cursor="pointer" onClick={() => nextPage("sms")} sx={{
+            transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+              backgroundColor: '#f0f0f0', // Change this to the desired highlight color
+            },
+          }} >
+       
           <CardBody>
             <Stack m={18} spacing={4} display="flex" justifyContent="center" alignItems="center">
               <FcSms
                 size={95} />
             </Stack>
           </CardBody>
+          <CardHeader>
+            <Heading size='md' textAlign="center"> sms</Heading>
+          </CardHeader>
 
         </Card>
         

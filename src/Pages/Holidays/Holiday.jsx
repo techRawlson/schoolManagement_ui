@@ -232,7 +232,7 @@ const Holiday = () => {
       <Modal isOpen={isOpen} onClose={() => { onClose(); setEditingIndex(null); }}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{editingIndex !== null ? 'Edit User' : 'Add User'}</ModalHeader>
+          <ModalHeader>{editingIndex !== null ? 'Edit User' : 'Add Holiday'}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <UserForm

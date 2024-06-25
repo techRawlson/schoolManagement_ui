@@ -264,7 +264,7 @@ console.log(formData)
                     </FormControl>
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={handleSave}>
-                            {isEditing ? "Update" : "Save"}
+                            {isEditing ? "Update" : "Publish"}
                         </Button>
                         <Button variant="ghost" onClick={onClose}>
                             Cancel

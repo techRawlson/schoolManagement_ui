@@ -173,7 +173,7 @@ console.log(data)
 
 
 
-    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',
+    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',height:'100vh'
      }} >
         <Box >
             <Navbar />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Flex } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react'
 import { PiChalkboardTeacher } from "react-icons/pi";
@@ -44,10 +44,12 @@ const Dashboard = () => {
 
       <Navbar Role={Role} ok="ok" />
 
-      <SimpleGrid templateColumns='1fr 1fr 1fr' margin="0" >
+      <Flex  margin="0" flexWrap='wrap' >
 
         {
-          Role == 'student' ? "" : <Card
+          Role == 'student' ? "" :  <Card flexGrow='1' m='1vw'
+          flexBasis='450px'
+        
           cursor="pointer"
           onClick={() => nextPage("student")}
           sx={{
@@ -73,7 +75,8 @@ const Dashboard = () => {
 
 
         {
-          Role == 'student' ? "" : Role == 'staff' ? '' : <Card cursor="pointer" onClick={() => nextPage("staff")} sx={{
+          Role == 'student' ? "" : Role == 'staff' ? '' :  <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("staff")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -96,7 +99,8 @@ const Dashboard = () => {
           </Card>
         }
         {
-          Role == 'student' ? "" : Role == 'staff' ? "" : <Card cursor="pointer" onClick={() => nextPage("subjects")} sx={{
+          Role == 'student' ? "" : Role == 'staff' ? "" :  <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("subjects")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -120,7 +124,8 @@ const Dashboard = () => {
 
 
 
-        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'classtimetable' : "timetable")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'classtimetable' : "timetable")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -139,7 +144,8 @@ const Dashboard = () => {
           </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'studentrecord' : "attendance")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage(Role == 'student' ? 'studentrecord' : "attendance")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -159,7 +165,8 @@ const Dashboard = () => {
 
         </Card>
         {
-          Role == 'student' ? "" : <Card cursor="pointer" onClick={() => nextPage("lms")} sx={{
+          Role == 'student' ? "" :  <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("lms")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -183,7 +190,8 @@ const Dashboard = () => {
 
         {
           Role == 'student' ? "" : Role == 'staff' ? "" :
-            <Card cursor="pointer" onClick={() => nextPage("role")} sx={{
+             <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("role")} sx={{
               transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
               '&:hover': {
                 transform: 'scale(1.05)',
@@ -207,7 +215,8 @@ const Dashboard = () => {
             </Card>
         }
 
-        <Card cursor="pointer" onClick={() => nextPage("directory")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("directory")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -228,7 +237,8 @@ const Dashboard = () => {
           </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("holidays")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("holidays")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -249,7 +259,8 @@ const Dashboard = () => {
           </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("annoucement")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("annoucement")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -270,7 +281,8 @@ const Dashboard = () => {
           </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("fees")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("fees")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -291,7 +303,8 @@ const Dashboard = () => {
           </CardHeader>
 
         </Card>
-        <Card cursor="pointer" onClick={() => nextPage("sms")} sx={{
+         <Card flexGrow='1' m='1vw'
+          flexBasis='450px' cursor="pointer" onClick={() => nextPage("sms")} sx={{
             transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
             '&:hover': {
               transform: 'scale(1.05)',
@@ -315,7 +328,7 @@ const Dashboard = () => {
 
 
 
-      </SimpleGrid>
+      </Flex>
     </Stack>
 
   )

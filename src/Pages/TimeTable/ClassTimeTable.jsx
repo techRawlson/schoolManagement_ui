@@ -110,13 +110,13 @@ const Classtimetable = () => {
         thursday: thursdayTeacher == undefined ? '' : thursdayTeacher + " " + thursdaySubject,
         friday: fridayTeacher == undefined ? '' : fridayTeacher + " " + fridaySubject,
         saturday: saturdayTeacher == undefined ? '' : saturdayTeacher + " " + saturdaySubject,
-        sunday:sundayTeacher == undefined ? '' : sundayTeacher + " " + sundayTeacher,
+        sunday: sundayTeacher == undefined ? '' : sundayTeacher + " " + sundayTeacher,
     };
 
     const timeTable = async () => {
         let totalEntry = 0;
         let und = 0;
-        const arr = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher,saturdayTeacher,sundayTeacher]
+        const arr = [mondayTeacher, tuesdayTeacher, wednesdayTeacher, thursdayTeacher, fridayTeacher, saturdayTeacher, sundayTeacher]
         arr.map((day) => (
 
             day == undefined || day == '' ? und++ : totalEntry++
@@ -184,7 +184,7 @@ const Classtimetable = () => {
 
             console.log(bodyEntries)
             let status = 0;
-            let check = [true, true, true, true, true,true,true]
+            let check = [true, true, true, true, true, true, true]
             // Create an array to store promises
             const promises = bodyEntries?.map(async (elm, i) => {
                 console.log(elm);
@@ -202,11 +202,11 @@ const Classtimetable = () => {
                         console.log(status);
                         check[i] = true
                         toast.success('Data created');
-                       
+
                     } else {
                         check[i] = false
                         console.log(status);
-                        const er=await response.text()
+                        const er = await response.text()
                         toast.error(er);
                         setcreateNew(true)
                         setcreate(false)
@@ -224,7 +224,7 @@ const Classtimetable = () => {
             console.log(check)
             //create timetable for teachers
             arr.map(async (teach, i) => {
-                console.log('teacher here is',teach)
+                console.log('teacher here is', teach)
                 if (teach == undefined || teach == '') {
                     toast('Please select teachers')
 
@@ -679,29 +679,29 @@ const Classtimetable = () => {
     const [isDisabled, setisDisabled] = useState(false)
 
 
-const setLectureNumber=async()=>{
-    try {
-    await getData()
-    // dataFilter(data)
-        const length=filteredData.length+1
-        console.log(length)
-        const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
-        const fdata = await data.json();
-        console.log(fdata);
+    const setLectureNumber = async () => {
+        try {
+            await getData()
+            // dataFilter(data)
+            const length = filteredData.length + 1
+            console.log(length)
+            const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
+            const fdata = await data.json();
+            console.log(fdata);
 
-        // setLecture(e.target.value)
-        setLecture(length)
-        setCurrentStartTime(fdata.startTime)
-        setCurrentEndTime(fdata.endTime)
-    } catch (error) {
-        console.log(error);
+            // setLecture(e.target.value)
+            setLecture(length)
+            setCurrentStartTime(fdata.startTime)
+            setCurrentEndTime(fdata.endTime)
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
 
-useEffect(()=>{
-    
-    setLectureNumber()
-},[filters])
+    useEffect(() => {
+
+        setLectureNumber()
+    }, [filters])
 
 
 
@@ -712,7 +712,7 @@ useEffect(()=>{
         if (day == 'periods' && id !== 'Select') {
             const id = e.target.value;
             console.log(e.target.value)
-            const length=filteredData.length+1
+            const length = filteredData.length + 1
 
             // try {
             //     const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
@@ -763,7 +763,7 @@ useEffect(()=>{
                             console.log(er)
                             throw new Error(` ${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -791,9 +791,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(` ${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -820,9 +820,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(` ${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -849,9 +849,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(`${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -878,9 +878,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(`${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -907,9 +907,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(`${er}`);
                         }
-
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -936,9 +936,9 @@ useEffect(()=>{
                         if (!data.ok) {
                             const er = await data.text()
                             console.log(er)
-                            throw new Error(`Error: ${er}`);
+                            throw new Error(` ${er}`);
                         }
-
+ setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -1029,7 +1029,7 @@ useEffect(()=>{
                 method: 'delete'
             })
             await getData()
-await setLectureNumber()
+            await setLectureNumber()
         } catch (error) {
             console.log(error)
         }
@@ -1144,7 +1144,7 @@ await setLectureNumber()
                 section: dataJson.section
             }));
             await getData()
-         dataFilter(data)
+            dataFilter(data)
         } catch (error) {
             console.log(error);
         }
@@ -1169,7 +1169,7 @@ await setLectureNumber()
     }, [filters, data]);
 
 
-console.log(filteredData.length+1)
+    console.log(filteredData.length + 1)
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
         <Flex >
@@ -1770,7 +1770,7 @@ console.log(filteredData.length+1)
                                         <Td>
                                             {/* <Input  /> */}
                                             <Select onChange={(e) => get(e, 'periods')} disabled>
-                                                <option value={filteredData.length+1}>{filteredData.length+1}</option>
+                                                <option value={lecture}>{lecture}</option>
                                                 {/* {periods?.map((elm, i) => (
                                                     <option key={i} value={elm.lectureNumber}>{elm.lectureNumber}</option>
                                                 ))} */}
@@ -1943,7 +1943,7 @@ console.log(filteredData.length+1)
 
                                         <Td display="flex" flexDir="column" justifyContent="space-between">
                                             <div style={{ opacity: isDisabled ? 0.5 : 1, pointerEvents: isDisabled ? 'none' : 'auto' }}>
-                                                <Button onClick={timeTable} margin="4%">Save1</Button>
+                                                <Button onClick={timeTable} margin="4%">Save</Button>
                                             </div>
                                             <Button onClick={() => setcreateNew(false)}>Cancel</Button>
                                         </Td>
@@ -1970,11 +1970,11 @@ console.log(filteredData.length+1)
                 {
                     Role == 'student' ? '' : Role == 'staff' ? '' : <Stack marginLeft="85%" >
                         {
-                            AddNew ? <Button onClick={async() => {
+                            AddNew ? <Button onClick={async () => {
                                 await setLectureNumber()
                                 create1()
                             }
-                                
+
                             }>Add New row</Button> : ''
 
                         }

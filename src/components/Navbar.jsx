@@ -42,6 +42,7 @@ console.log(id)
       console.log(staffId)
       console.log(studentId)
       const ids=Role=='staff'?staffId:studentId
+       console.log(ids)
       const i=ids[0].id
       console.log(ids)
       setId(i)

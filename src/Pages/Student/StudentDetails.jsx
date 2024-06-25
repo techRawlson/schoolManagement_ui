@@ -41,7 +41,7 @@ const StudentDetails = () => {
     const [dis, setdis] = useState(true)
     const [image, setImage] = useState(null);
 
-
+console.log(student[0]?.studentId)
 
 
     // Function to convert data URI to Blob

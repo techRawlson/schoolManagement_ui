@@ -667,7 +667,7 @@ const Subject = () => {
                     </TableContainer>
                 </Stack>
             </Stack>
-            <Button width="120px" colorScheme="green" position="absolute" bottom="1vw" left="1vh" >Print</Button>
+        
         </Stack>
 
     )

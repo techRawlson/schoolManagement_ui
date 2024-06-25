@@ -89,7 +89,7 @@ const ModalForm = () => {
 
 
     console.log(receivedMessage)
-
+    const [files, setFiles] = useState([]);
     const handleSave = async (e) => {
         formData.date = date;
         const data = await fetch('http://192.168.1.121:8081/api/announcements/create', {
@@ -99,7 +99,31 @@ const ModalForm = () => {
             },
             body: JSON.stringify(formData)
         });
-        console.log(data)
+        const fdata=await data.json()
+        console.log(fdata)
+        const formData2 = new FormData();
+
+       console.log(files[0])
+       console.log(files.length)
+        for (let i = 0; i < files.length; i++) {
+            formData2.append('files', files[i]);
+        }
+
+        try {
+            const response = await fetch(`http://192.168.1.121:8081/api/files/upload/${fdata.id}`, {
+                method: 'POST',
+                body: formData2,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Files uploaded successfully:', result);
+            } else {
+                console.error('Error uploading files:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error uploading files:', error);
+        }
         setFormData({
             holidayName: '',
             date: '',
@@ -128,8 +152,8 @@ const ModalForm = () => {
                 throw new Error(`Error: ${response.statusText}`);
             }
 
-            const result = await response.json();
-            console.log(result);
+            // const result = await response.json();
+            // console.log(result);
             await fetchEmployees()
 
         } catch (error) {
@@ -163,7 +187,25 @@ const ModalForm = () => {
     };
     useEffect(() => {
         fetchEmployees()
-    }, [items])
+    }, [])
+
+
+
+   
+    const handleFileChange = (event) => {
+        setFiles(event.target.files);
+    };
+    const handleDownload = (id) => {
+        const downloadUrl = `http://192.168.1.121:8081/api/files/pdf/announcement/${id}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', `file_${id}.pdf`); // Use a meaningful file name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
@@ -206,7 +248,19 @@ const ModalForm = () => {
                             />
                         </FormControl>
                     </ModalBody>
+                   
+                    <FormControl mt={4} as="form" encType="multipart/form-data" onChange={handleFileChange}>
+                        <FormLabel htmlFor="fileInput">Upload a file:</FormLabel>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            name="file"
+                            accept=".pdf, .doc, .docx, .xls, .xlsx, image/*"
+                            multiple
 
+                        />
+
+                    </FormControl>
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={handleSave}>
                             {isEditing ? "Update" : "Save"}
@@ -244,7 +298,7 @@ const ModalForm = () => {
                                         onClick={() => handleDelete(item.id)}
                                     />
                                 </AccordionButton>
-
+                                <Button onClick={()=>handleDownload(item.id)}>download</Button>
                             </h2>
                             <AccordionPanel pb={2} textAlign="center">
                                 {item.description}

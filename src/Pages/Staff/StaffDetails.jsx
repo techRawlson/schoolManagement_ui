@@ -425,7 +425,7 @@ console.log(staffImageId)
 
                 </Flex>
             </Stack>
-            <Button colorScheme="green" width="160px">Print</Button>
+         
         </Stack>
     )
 }

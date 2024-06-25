@@ -137,7 +137,7 @@ const navigate=useNavigate()
                                     <Td > 
                                        
                                         <Button onClick={() => setEdit(true)} bgColor="orangered">Edit</Button>
-                                        <Button colorScheme="green" margin="0 1rem">Print</Button>
+                                  
 
                                     </Td> : ""
                             }

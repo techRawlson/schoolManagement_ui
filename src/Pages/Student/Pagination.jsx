@@ -696,7 +696,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 {
                                     Role == 'staff' ? '' : <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
                                 }
-                                <Button colorScheme='green' >Print</Button>
+                                <Button colorScheme='green' ></Button>
                             </Stack>
 
 

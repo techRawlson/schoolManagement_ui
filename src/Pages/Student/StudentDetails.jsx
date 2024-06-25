@@ -484,7 +484,7 @@ console.log(student[0]?.studentId)
                         {
                             dis ? <Button bg="lightblue" onClick={() => editStudent()} margin="0 1vh">Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
                         }
-                        <Button colorScheme='green' >Print</Button>
+                      
                     </Flex>
                 }
 

@@ -434,7 +434,7 @@ const Stafftimetable = () => {
                     showError && !show ? <Text color="red" fontWeight="bold">It seems no timetable present for this techer</Text>:''
 }
             </TableContainer>
-            <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+          
 
         </Stack>
     </div>

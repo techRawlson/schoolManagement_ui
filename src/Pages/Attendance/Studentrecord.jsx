@@ -98,7 +98,7 @@ const StudentRecord = () => {
     getRollNumber()
   }, [student])
 
-
+console.log(data)
 
   //get Student names
   const getStudentNames = () => {
@@ -640,7 +640,7 @@ const StudentRecord = () => {
       }
       
     </Stack>
-    <Button width="160px" colorScheme="green" position="absolute" bottom="2rem" left="5rem">Print</Button>
+    
     
   </Stack>
 }

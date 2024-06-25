@@ -1266,7 +1266,7 @@ const Classtimetable = () => {
 
                                         : <div>
                                             <Button onClick={() => createNewEntry()}>Add new</Button>
-                                            <Button colorScheme="green">Print</Button>
+                                       
                                         </div>
 
                                     }

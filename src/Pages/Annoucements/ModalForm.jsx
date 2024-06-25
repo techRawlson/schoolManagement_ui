@@ -56,27 +56,27 @@ const ModalForm = () => {
     const [receivedMessage, setReceivedMessage] = useState('');
     const [websocketService, setWebsocketService] = useState(null);
 
-    useEffect(() => {
-        // Create a new instance of WebSocketService
-        const wsService = new WebSocketService('ws://192.168.1.121:8081/websocket');
+    // useEffect(() => {
+    //     // Create a new instance of WebSocketService
+    //     const wsService = new WebSocketService('ws://192.168.1.121:8081/websocket');
 
-        // Connect to the WebSocket server
-        wsService.connect();
+    //     // Connect to the WebSocket server
+    //     wsService.connect();
 
-        // Set the WebSocketService instance in state
-        setWebsocketService(wsService);
+    //     // Set the WebSocketService instance in state
+    //     setWebsocketService(wsService);
 
-        // Listen for incoming messages
-        wsService.onMessage((data) => {
-            console.log('Received:', data);
-            setReceivedMessage(data); // Update state with received message
-        });
+    //     // Listen for incoming messages
+    //     wsService.onMessage((data) => {
+    //         console.log('Received:', data);
+    //         setReceivedMessage(data); // Update state with received message
+    //     });
 
-        // Cleanup on component unmount
-        return () => {
-            wsService.disconnect(); // Disconnect WebSocket when component unmounts
-        };
-    }, []); // Empty dependency array ensures this effect runs only once on component mount
+    //     // Cleanup on component unmount
+    //     return () => {
+    //         wsService.disconnect(); // Disconnect WebSocket when component unmounts
+    //     };
+    // }, []); // Empty dependency array ensures this effect runs only once on component mount
 
     const sendMessage = () => {
         if (websocketService) {
@@ -90,40 +90,33 @@ const ModalForm = () => {
 
     console.log(receivedMessage)
     const [files, setFiles] = useState([]);
+   
     const handleSave = async (e) => {
-        formData.date = date;
-        const data = await fetch('http://192.168.1.121:8081/api/announcements/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-        const fdata=await data.json()
-        console.log(fdata)
-        const formData2 = new FormData();
-
-       console.log(files[0])
-       console.log(files.length)
-        for (let i = 0; i < files.length; i++) {
-            formData2.append('files', files[i]);
-        }
-
+        
+        formData.date=date;
+console.log(formData)
         try {
-            const response = await fetch(`http://192.168.1.121:8081/api/files/upload/${fdata.id}`, {
+            const response = await fetch('http://192.168.1.121:8081/api/announcements/upload', {
                 method: 'POST',
-                body: formData2,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
             });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Files uploaded successfully:', result);
-            } else {
-                console.error('Error uploading files:', response.statusText);
+        
+            if (!response.ok) {
+                const errorResponseData = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${JSON.stringify(errorResponseData)}`);
             }
+        
+            const responseData = await response.json();
+            console.log(responseData);
         } catch (error) {
-            console.error('Error uploading files:', error);
+            console.error('Error:', error);
         }
+
+
+
         setFormData({
             holidayName: '',
             date: '',
@@ -132,6 +125,7 @@ const ModalForm = () => {
         setFormData({ date: "", title: "", description: "" });
         onClose();
     }
+    // console.log(formData1)
 
     const handleEdit = (index) => {
         setCurrentIndex(index);
@@ -191,21 +185,28 @@ const ModalForm = () => {
 
 
 
-   
+
     const handleFileChange = (event) => {
         setFiles(event.target.files);
     };
     const handleDownload = (id) => {
         const downloadUrl = `http://192.168.1.121:8081/api/files/pdf/announcement/${id}`;
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.setAttribute('download', `file_${id}.pdf`); // Use a meaningful file name
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        fetch(downloadUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `file_${id}`); // No specific extension
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+            })
+            .catch(error => console.error('Error downloading file:', error));
     };
 
-    
+
+
     return (
         <>
             <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
@@ -248,7 +249,7 @@ const ModalForm = () => {
                             />
                         </FormControl>
                     </ModalBody>
-                   
+
                     <FormControl mt={4} as="form" encType="multipart/form-data" onChange={handleFileChange}>
                         <FormLabel htmlFor="fileInput">Upload a file:</FormLabel>
                         <input
@@ -298,7 +299,7 @@ const ModalForm = () => {
                                         onClick={() => handleDelete(item.id)}
                                     />
                                 </AccordionButton>
-                                <Button onClick={()=>handleDownload(item.id)}>download</Button>
+                                <Button onClick={() => handleDownload(item.id)}>download</Button>
                             </h2>
                             <AccordionPanel pb={2} textAlign="center">
                                 {item.description}

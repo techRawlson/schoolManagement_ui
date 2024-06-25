@@ -544,8 +544,9 @@ const Classtimetable = () => {
         console.log(filterData)
 
         if (filters.class !== "" && filters.year !== "" && filters.section !== "") {
-            console.log("here")
+            console.log("here",filterData)
             if (filterData.length > 0) {
+                console.log("first")
                 setcreate(true)
                 setDis(false)
                 // Iterate over each object in the data array
@@ -572,6 +573,7 @@ const Classtimetable = () => {
             }
 
             else {
+                console.log("second")
                 const customToastStyle = {
                     fontFamily: 'Arial, sans-serif',
                     fontSize: '14px',
@@ -594,13 +596,14 @@ const Classtimetable = () => {
     };
 
     //filter change for class  query
-    const handleFilterClass = (value) => {
+    const handleFilterClass =async (value) => {
         setClassValue(value)
         setFilters((prev) => ({
             ...prev,
             // classData: false,
             class: value,
         }));
+        await getData()
     };
     //filter change for section  query
     const handleFiltersection = (value) => {
@@ -680,29 +683,7 @@ const Classtimetable = () => {
     const [isDisabled, setisDisabled] = useState(false)
 
 
-    const setLectureNumber = async () => {
-        try {
-            await getData()
-            // dataFilter(data)
-            const length = filteredData.length + 1
-            console.log(length)
-            const data = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
-            const fdata = await data.json();
-            console.log(fdata);
-
-            // setLecture(e.target.value)
-            setLecture(length)
-            setCurrentStartTime(fdata.startTime)
-            setCurrentEndTime(fdata.endTime)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-
-        setLectureNumber()
-    }, [filters])
+    
 
 
 
@@ -996,6 +977,7 @@ const Classtimetable = () => {
         try {
             setcreateNew(true)
             setShowMsg(false)
+        setFilteredData([])
         } catch (error) {
             console.log(error)
         }
@@ -1210,7 +1192,33 @@ const Classtimetable = () => {
         //console.log("trigeered")
     }, [filters, data]);
 
+    const setLectureNumber = async () => {
+        try {
+            
+            console.log(classValue)
+            console.log(filteredData)
+            // dataFilter(data)
+            console.log(filteredData)
+            const length = filteredData.length + 1
+            console.log(length)
+            
+            const data1 = await fetch(`http://192.168.1.121:8086/api/periods/lecture/${length}`);
+            const fdata = await data1.json();
+            console.log(fdata);
 
+            setLecture(prevLecture => prevLecture + 1) 
+            setLecture(length)
+            setCurrentStartTime(fdata.startTime)
+            setCurrentEndTime(fdata.endTime)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+
+        setLectureNumber()
+    }, [filters,session,classValue,section])
     console.log(filteredData.length + 1)
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
@@ -1265,7 +1273,10 @@ const Classtimetable = () => {
                                         </div>
 
                                         : <div>
-                                            <Button onClick={() => createNewEntry()}>Add new</Button>
+                                            <Button onClick={
+                                                () => {createNewEntry()}
+
+                                                }>Add new</Button>
                                        
                                         </div>
 
@@ -1549,7 +1560,7 @@ const Classtimetable = () => {
                                 <Tbody key={i}>
                                     <Tr>
                                         <Td >
-                                            <span> {elm.lectureNumber == null || elm.lectureNumber == 0 ? 1 : elm.lectureNumber}  </span>
+                                            <span> {elm.lectureNumber == null || elm.lectureNumber == 0 ? 1 : elm.lectureNumber}  1</span>
                                         </Td>
                                         <Td ><input type="time" value={elm.startTime} disabled /></Td>
                                         <Td ><input type="time" value={elm.endTime} disabled /></Td>

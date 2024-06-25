@@ -851,7 +851,7 @@ const AttendanceMarking = ({ user }) => {
                                     Attendance?.length == 0 && showMsg ? "" :
                                         <Flex >
                                             <Button onClick={() => create1()} colorScheme="green" margin="0 1rem">Submit</Button>
-                                            <Button colorScheme="green"  >Print</Button>
+                                          
                                         </Flex>
 
 

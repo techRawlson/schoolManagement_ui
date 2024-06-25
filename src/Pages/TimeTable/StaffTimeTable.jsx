@@ -431,7 +431,7 @@ const Stafftimetable = () => {
                         : ""
                 }
                 {
-                    showError && !show ? <Text color="red" fontWeight="bold">It seems no timetable present for this techer</Text>:''
+                    showError && !show ? <Text color="red" fontWeight="bold" textTransform='toUpperCase'>It seems no timetable present for this session,teacher and employeeId.</Text>:''
 }
             </TableContainer>
           

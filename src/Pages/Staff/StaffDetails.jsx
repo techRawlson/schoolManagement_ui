@@ -16,6 +16,7 @@ const StaffDetails = () => {
     const [imageUrl, setImageUrl] = useState(false)
     const [imageData, setImageData] = useState('');
     const { id } = useParams();
+    const[staffImageId,setstaffImageId]=useState('')
     const [subjects, setSubjects] = useState([])
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -29,6 +30,7 @@ const StaffDetails = () => {
             if (data.status >= 200 && data.status < 300) {
                 setStudent([fdata])
                 setSelectedItems(fdata.subjects)
+                setstaffImageId(fdata.staffId)
             }
         } catch (error) {
             console.log(error)
@@ -36,7 +38,7 @@ const StaffDetails = () => {
             navigate(-1)
         }
     }
-
+console.log(staffImageId)
     useEffect(() => {
         getStudent()
     }, [id])
@@ -110,15 +112,15 @@ const StaffDetails = () => {
 
             formData2.append('file', file);
 
-            const pictureCheck = await fetch(`http://192.168.1.121:8083/api/staff-images/${id}`)
+            const pictureCheck = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffImageId}`)
             console.log(pictureCheck.status)
             if (pictureCheck.status >= 200 && pictureCheck.status < 300) {
-                const picture = await fetch(`http://192.168.1.121:8083/api/staff-images/${id}`, {
+                const picture = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffImageId}`, {
                     method: 'put',
                     body: formData2,
                 })
             } else {
-                const picture = await fetch(`http://192.168.1.121:8083/api/staff-images/${id}`, {
+                const picture = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffImageId}`, {
                     method: 'post',
                     body: formData2,
                 })
@@ -211,7 +213,7 @@ const StaffDetails = () => {
 
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar
-                            src={image || `http://192.168.1.121:8083/api/staff-images/${id}`}
+                            src={image || `http://192.168.1.121:8083/api/staff-images/${staffImageId}`}
                             alt="Avatar"
                             style={dis ? {} : { cursor: 'pointer' }}
                             

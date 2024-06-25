@@ -259,7 +259,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
             }
             if (image.current.files[0]) {
-                const pictureResponse = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffData.id}`, {
+                const pictureResponse = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffData.staffId}`, {
                     method: 'post',
                     body: formData2,
                 });

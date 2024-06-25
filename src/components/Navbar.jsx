@@ -25,25 +25,30 @@ const Navbar = () => {
   console.log(username)
 
   const [id, setId] = useState([])
-console.log(id)
+  const [pictureId, setpictureId] = useState('')
+  console.log(id)
   const getData = async () => {
     try {
       const data = await fetch(
-        Role=='staff'?
-        "http://192.168.1.121:8083/api/staff/saved-Staff":
-        "http://192.168.1.121:8082/api/students/savedData"
+        Role == 'staff' ?
+          "http://192.168.1.121:8083/api/staff/saved-Staff" :
+          "http://192.168.1.121:8082/api/students/savedData"
 
       );
       const fdata = await data.json();
       console.log(fdata)
       // setClassData(fdata)
-      const staffId=fdata.filter((elm)=>elm.staffId==username)
-      const studentId=fdata.filter((elm)=>elm.studentId==username)
+      const staffId = fdata.filter((elm) => elm.staffId == username)
+      const studentId = fdata.filter((elm) => elm.studentId == username)
       console.log(staffId)
       console.log(studentId)
-      const ids=Role=='staff'?staffId:studentId
-       console.log(ids)
-      const i=ids[0].id
+      const ids = Role == 'staff' ? staffId : studentId
+      console.log(ids)
+      const i = ids[0].id
+      const p=Role == 'staff' ?ids[0].staffId:ids[0].studentId
+      console.log(p)
+      setpictureId(p)
+      
       console.log(ids)
       setId(i)
     } catch (error) {
@@ -52,7 +57,7 @@ console.log(id)
   }
 
 
- 
+console.log(pictureId)
 
 
 
@@ -66,7 +71,7 @@ console.log(id)
   }
 
 
- 
+
 
   const navigate = useNavigate()
   const logOut = () => {
@@ -197,7 +202,7 @@ console.log(id)
 
   useEffect(() => {
     getData()
-  },[])
+  }, [])
 
 
 
@@ -299,9 +304,9 @@ console.log(id)
                 <ChakraLink
                   as={ReactRouterLink}
                   to={Role === 'student' ? `/studentdetails/${id}` : `/staffdetails/${id}`}
-                  
+
                 >
-                  <Avatar  cursor="pointer"  src={ `http://192.168.1.121:8083/api/staff-images/${id}`}/>
+                  <Avatar cursor="pointer" src={Role=='staff'?`http://192.168.1.121:8083/api/staff-images/${pictureId}`:`http://192.168.1.121:8082/api/images/${pictureId}`} />
                 </ChakraLink>
                 <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
               </Flex>

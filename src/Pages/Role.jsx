@@ -169,7 +169,7 @@ const Role = () => {
 
     }, [])
 
-
+console.log(data)
 
 
 
@@ -229,7 +229,7 @@ const Role = () => {
                                 data?.map((elm) => (
                                     <Tr>
 
-                                        <Td>{elm.staffName}</Td>
+                                        <Td>{elm.role=='staff'?elm.staffName:elm.studentName}</Td>
                                         <Td>{elm.role}</Td>
                                         <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
                                         <Td>{elm.userId}</Td>

@@ -581,6 +581,7 @@ const Classtimetable = () => {
                 // })
                 setShowMsg(true)
                 setDis(true)
+                
                 setFilteredData([])
                 setTotalSubjects([])
                 // setUpdateButton('')
@@ -938,7 +939,7 @@ const Classtimetable = () => {
                             console.log(er)
                             throw new Error(` ${er}`);
                         }
- setisDisabled(false)
+                        setisDisabled(false)
                         // const fdata = await data.json();
                         console.log("ok");
                     } catch (error) {
@@ -1125,31 +1126,72 @@ const Classtimetable = () => {
         , [lecture])
 
 
-
+    // console.log(studentId)
 
     const showStudentTimeTable = async () => {
         try {
-            const studentId = localStorage.getItem('username');
-            const response = await fetch(`http://192.168.1.121:8082/api/students/id/${studentId}`);
+            const username = localStorage.getItem('username');
+            console.log(username);
+        
+            
+        
+            const data = await fetch(
+                Role == 'staff' ?
+                    "http://192.168.1.121:8083/api/staff/saved-Staff" :
+                    "http://192.168.1.121:8082/api/students/savedData"
+            );
+            
+            if (!data.ok) {
+                throw new Error('Network response was not ok ' + data.statusText);
+            }
+        
+            const fdata = await data.json();
+            console.log(fdata);
+        
+            const staffId = fdata.filter(elm => elm.staffId == username);
+            const studentId = fdata.filter(elm => elm.studentId == username);
+            console.log(staffId);
+            console.log(studentId);
+        
+            const ids = Role == 'staff' ? staffId : studentId;
+            console.log(ids);
+        
+            if (ids.length === 0) {
+                throw new Error('No matching ID found');
+            }
+        
+            const i = ids[0].id;
+            const p = Role == 'staff' ? ids[0].staffId : ids[0].studentId;
+            console.log(i);
+        
+            const response = await fetch(`http://192.168.1.121:8082/api/students/${i}`);
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        
             const dataJson = await response.json();
             console.log(dataJson);
+        
             setSession(dataJson.session);
+            console.log(dataJson.session)
             setClassValue(dataJson.className);
             setSection(dataJson.section);
             setFilters((prev) => ({
                 ...prev,
-                // classData: false,
                 year: dataJson.session,
                 class: dataJson.className,
                 section: dataJson.section
             }));
-            await getData()
-            dataFilter(data)
+        
+            await getData();
+            dataFilter(data);
         } catch (error) {
             console.log(error);
         }
+        
     };
-
+    console.log(Role)
     useEffect(() => {
         if (Role == 'student') {
             const fetchData = async () => {

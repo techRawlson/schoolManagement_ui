@@ -500,7 +500,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                             >
                                 <Button onClick={downloadPdf}>Download</Button>
                                 <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
-                          
+
                             </Stack>
 
 
@@ -645,7 +645,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                         isInvalid={form.errors.approver && form.touched.approver}
                                                     >
                                                         <FormLabel>Approver</FormLabel>
-                                                        
+
                                                         <Select
                                                             {...field}
                                                             list="class"
@@ -682,9 +682,26 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                             placeholder="Select"
                                                         >
 
-                                                            <option value="softwaredeveloper">Software Developer</option>
-                                                            <option value="mechanic">Mechanic</option>
-                                                            <option value="electrician">Electrician</option>
+                                                            <option value="principal">Principal</option>
+                                                            <option value="vice_principal">Vice Principal</option>
+                                                            <option value="head_teacher">Head Teacher</option>
+                                                            <option value="teacher">Teacher</option>
+                                                            <option value="assistant_teacher">Assistant Teacher</option>
+                                                            <option value="counselor">Counselor</option>
+                                                            <option value="librarian">Librarian</option>
+                                                            <option value="administrative_staff">Administrative Staff</option>
+                                                            <option value="school_nurse">School Nurse</option>
+                                                            <option value="custodian">Custodian</option>
+                                                            <option value="coach">Coach</option>
+                                                            <option value="it_support_staff">IT Support Staff</option>
+                                                            <option value="department_head">Department Head</option>
+                                                            <option value="dean_of_students">Dean of Students</option>
+                                                            <option value="academic_advisor">Academic Advisor</option>
+                                                            <option value="registrar">Registrar</option>
+                                                            <option value="office_manager">Office Manager</option>
+                                                            <option value="receptionist">Receptionist</option>
+                                                            <option value="extracurricular_coordinator">Extracurricular Coordinator</option>
+                                                            <option value="substitute_teacher">Substitute Teacher</option>
                                                         </Select>
                                                         <FormErrorMessage>{form.errors.designation}</FormErrorMessage>
                                                     </FormControl>
@@ -706,9 +723,22 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                             placeholder="Select"
                                                         >
 
-                                                            <option value="A">A</option>
-                                                            <option value="B">B</option>
-                                                            <option value="C">C</option>
+                                                            <option value="mathematics">Mathematics Department</option>
+                                                            <option value="science">Science Department</option>
+                                                            <option value="english">English Department</option>
+                                                            <option value="history">History Department</option>
+                                                            <option value="physical_education">Physical Education Department</option>
+                                                            <option value="art">Art Department</option>
+                                                            <option value="music">Music Department</option>
+                                                            <option value="foreign_languages">Foreign Languages Department</option>
+                                                            <option value="special_education">Special Education Department</option>
+                                                            <option value="technology">Technology Department</option>
+                                                            <option value="social_studies">Social Studies Department</option>
+                                                            <option value="business">Business Department</option>
+                                                            <option value="health">Health Department</option>
+                                                            <option value="counseling">Counseling Department</option>
+                                                            <option value="library_media">Library Media Department</option>
+                                                            <option value="career_technical_education">Career & Technical Education Department</option>
                                                         </Select>
                                                         <FormErrorMessage>{form.errors.department}</FormErrorMessage>
                                                     </FormControl>
@@ -938,7 +968,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                             <Box display="flex" justifyContent="space-between">
                                 <Input type="file" maxW="50%" ref={excelFile} onChange={fileChange} accept=".xlsx,.xls" />
                                 <Button colorScheme='green' onClick={uploadFileExcel}>Upload</Button>
-                       
+
                             </Box>
 
                             <a onClick={downloadFile} style={{ whiteSpace: 'noWrap', cursor: 'pointer' }}>Download Sample File </a>

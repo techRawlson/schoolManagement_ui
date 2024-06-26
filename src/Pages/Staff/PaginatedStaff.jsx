@@ -651,7 +651,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                             list="class"
                                                             placeholder="Select Approver"
                                                         >
-                                                            {classData.map((option, index) => (
+                                                            {classData?.map((option, index) => (
                                                                 <option key={index}>{option.name}</option>
                                                             ))}
                                                         </Select>

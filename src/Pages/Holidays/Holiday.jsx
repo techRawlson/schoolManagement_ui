@@ -26,7 +26,7 @@ const UserForm = ({ formData, handleChange, handleSubmit, dayName }) => (
       </FormControl>
       <FormControl id="email" isRequired>
         <FormLabel>Day of week</FormLabel>
-        <Input type="text" name="dayOfWeek" value={dayName} />
+        <Input type="text" name="dayOfWeek" value={formData.dayOfWeek} />
       </FormControl>
       <Flex justify="center">
         <Button type="submit" colorScheme="blue" minW="140px" mt={4}>Submit</Button>
@@ -55,6 +55,7 @@ const Holiday = () => {
     console.log(d)
     
     setDayName(d)
+    return d;
   }
   const fetchEmployees = async () => {
     try {
@@ -93,15 +94,14 @@ const Holiday = () => {
     console.log(name, value)
     setFormData({ ...formData, [name]: value });
     if (name == 'date') {
-      await getDayName(e.target.value)
+      const newDayName = await getDayName(e.target.value);
       setFormData((prevFormData) => ({
-        ...prevFormData,
-        dayOfWeek: dayName,
-    }));
+          ...prevFormData,
+          dayOfWeek: newDayName,
+      }));
+  }
     
-    }
-
-  };
+    };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

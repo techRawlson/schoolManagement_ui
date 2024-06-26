@@ -31,55 +31,58 @@ console.log(Role)
 
 
   const login = async () => {
-
-
     try {
       const body = {
         userId: emailRef.current.value,
         password: passRef.current.value,
-      }
-      console.log(body)
-      const data = await fetch('http://192.168.1.121:8081/api/Login/login', {
+      };
+  
+      console.log(body);
+  
+      const response = await fetch('http://192.168.1.121:8081/api/Login/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-      if (!data.ok) {
-        const er = await data.text()
-        console.log(er)
-        toast.error('wrong user id  or passoword')
-        throw new Error(er)
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log(errorText);
+        throw new Error(errorText);
       }
-      const dataf = await data.json()
-      console.log(dataf)
-      if (data.status >= 200 && data.status < 300) {
-        localStorage.setItem("token", "fdata.username");
+  
+      const responseData = await response.json();
+      console.log(responseData);
+  
+      if (response.status >= 200 && response.status < 300) {
+        localStorage.setItem("token", responseData.token); // Assuming response contains a token
         localStorage.setItem("username", emailRef.current.value);
-        updateData(dataf.role)
+        updateData(responseData.role);
+  
         // Show success toast notification
         toast.success('Login Successful', {
-          autoClose: 1500 ,
+          autoClose: 1500,
           onClose: () => {
             // Navigate to the next page after the toast is closed
             navigate("/dashboard");
-          }
+          },
         });
-
-
       } else {
-        const er = await data.text()
-        console.log(er)
-        toast.error(er)
-        console.error("Login failed:", data.statusText);
+        const errorText = await response.text();
+        console.log(errorText);
+        toast.error(errorText);
+        console.error("Login failed:", response.statusText);
         // Handle login failure here
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.log(error);
+      toast.error(error.message || 'An error occurred during login');
       // Handle error here
     }
-  }
+  };
+  
 
 
 

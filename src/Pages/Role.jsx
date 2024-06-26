@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, IconButton, Select } from "@chakra-ui/react"
+import { Box, Flex, Heading, IconButton, Select, Switch } from "@chakra-ui/react"
 import {
     Table,
     Thead,
@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react"
 import Navbar from "../components/Navbar"
 import { IoArrowBack } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 const Role = () => {
 
     const [names, setNames] = useState([])
@@ -169,12 +170,92 @@ const Role = () => {
 
     }, [])
 
-console.log(data)
+    console.log(data)
 
 
 
-    return <div style={{ width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box',height:'100vh'
-     }} >
+
+    // Toggle switch function
+    const toggleSwitch = async (userId, stat) => {
+        try {
+            // Params for the URLs
+            const params = new URLSearchParams({
+                active: stat,
+            });
+            console.log(userId)
+            // URLs for both user and staff
+            const userUrl = `http://192.168.1.121:8081/api/Login/update-active-status/${userId}?${params.toString()}`;
+            const staffUrl = `http://192.168.1.121:8083/api/staff/update-active-status/${userId}?${params.toString()}`;
+
+            // Fetch request for user
+            const userResponse = await fetch(userUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer your-token-here', // If authentication is required
+                },
+            });
+
+            if (!userResponse.ok) {
+                const errorData = await userResponse.json();
+                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
+            }
+
+
+
+            // Fetch request for staff
+            const staffResponse = await fetch(staffUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer your-token-here', // If authentication is required
+                },
+            });
+
+            if (!staffResponse.ok) {
+                console.log("hello error")
+                const errorData = await staffResponse.json();
+                throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
+            }
+
+            await getData()
+
+        } catch (error) {
+            console.error('Error:', error); // Proper error handling
+        }
+    };
+
+
+
+
+
+
+
+
+    const [visiblePasswords, setVisiblePasswords] = useState({});
+
+    const togglePasswordVisibility = (id) => {
+        setVisiblePasswords((prevVisiblePasswords) => ({
+            ...prevVisiblePasswords,
+            [id]: !prevVisiblePasswords[id],
+        }));
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return <div style={{
+        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', height: '100vh'
+    }} >
         <Box >
             <Navbar />
             <Flex alignItems="center" >
@@ -207,6 +288,9 @@ console.log(data)
                                 </Select>
                             </Th>
 
+
+                            <Th>userId</Th>
+                            <Th>password</Th>
                             <Th>
                                 <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
 
@@ -218,23 +302,38 @@ console.log(data)
 
                                 </Select>
                             </Th>
-                            <Th>userId</Th>
-                            <Th>password</Th>
+                            <Th>Action</Th>
 
                         </Tr>
                     </Thead>
                     {
-                        filters.classData  ? <Tbody >
+                        filters.classData ? <Tbody >
                             {
                                 data?.map((elm) => (
                                     <Tr>
 
-                                        <Td>{elm.role=='staff'?elm.staffName:elm.studentName}</Td>
+                                        <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
                                         <Td>{elm.role}</Td>
-                                        <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
-                                        <Td>{elm.userId}</Td>
-                                        <Td >{elm.password}</Td>
 
+                                        <Td>{elm.userId}</Td>
+                                        <Td alignItems='center' justifyContent='center'>
+                                            {visiblePasswords[elm.id] ? elm.password : '********'}
+                                            <IconButton
+                                                aria-label="Toggle Password Visibility"
+                                                icon={visiblePasswords[elm.id] ? <ViewOffIcon /> : <ViewIcon />}
+                                                onClick={() => togglePasswordVisibility(elm.id)}
+                                                variant="ghost"
+                                                size="sm"
+                                                ml={2}
+                                            />
+                                        </Td>
+                                        <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
+                                        <Td>
+                                            <Switch
+                                                isChecked={elm.active || false} // Default to false if undefined
+                                                onChange={() => toggleSwitch(elm.userId, !elm.active)}
+                                            />
+                                        </Td>
 
 
                                     </Tr>

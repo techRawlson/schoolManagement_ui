@@ -512,7 +512,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 justifyContent="space-around"
                             >
                                 <Button onClick={downloadPdf}>Download</Button>
-                                <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
+                                
 
                             </Stack>
 

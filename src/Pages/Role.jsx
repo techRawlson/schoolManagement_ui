@@ -247,14 +247,14 @@ const Role = () => {
 
 
 
-
+console.log(filteredData)
 
 
 
 
 
     return <div style={{
-        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', height: '100vh'
+        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', height: '100%'
     }} >
         <Box >
             <Navbar />
@@ -327,7 +327,7 @@ const Role = () => {
                                                 ml={2}
                                             />
                                         </Td>
-                                        <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
+                                        <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
                                         <Td>
                                             <Switch
                                                 isChecked={elm.active || false} // Default to false if undefined
@@ -348,7 +348,7 @@ const Role = () => {
                                         <Tr>
                                             <Td>{elm.staffName}</Td>
                                             <Td>{elm.role}</Td>
-                                            <Td>{elm.enabled == true ? 'Active' : 'Inactive'}</Td>
+                                            <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
                                             <Td>{elm.userId}</Td>
                                             <Td >{elm.password}</Td>
 

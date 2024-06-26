@@ -10,10 +10,14 @@ import {
   ModalCloseButton,
   Button,
   FormControl, FormLabel, Input, Stack,
-  Toast
+  Toast,
+  IconButton,
+  InputRightElement,
+  InputGroup
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 // import { useDispatch } from 'react-redux';
 // import { setUser } from './Redux/userActions';
 function Login({ setToken, setUser }) {
@@ -23,7 +27,7 @@ function Login({ setToken, setUser }) {
   const [onClose, setOnClose] = useState(false)
 
   const { Role, updateData } = useData();
-console.log(Role)
+  console.log(Role)
   const emailRef = useRef()
   const passRef = useRef()
   const navigate = useNavigate();
@@ -36,9 +40,9 @@ console.log(Role)
         userId: emailRef.current.value,
         password: passRef.current.value,
       };
-  
+
       console.log(body);
-  
+
       const response = await fetch('http://192.168.1.121:8081/api/Login/login', {
         method: 'POST',
         headers: {
@@ -46,21 +50,21 @@ console.log(Role)
         },
         body: JSON.stringify(body),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         console.log(errorText);
         throw new Error(errorText);
       }
-  
+
       const responseData = await response.json();
       console.log(responseData);
-  
+
       if (response.status >= 200 && response.status < 300) {
         localStorage.setItem("token", responseData.token); // Assuming response contains a token
         localStorage.setItem("username", emailRef.current.value);
         updateData(responseData.role);
-  
+
         // Show success toast notification
         toast.success('Login Successful', {
           autoClose: 1500,
@@ -82,12 +86,13 @@ console.log(Role)
       // Handle error here
     }
   };
-  
 
 
-
-
-
+//for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <Stack minH="100vh" minW="100vw">
@@ -113,7 +118,25 @@ console.log(Role)
 
             <FormControl mt={4}>
               <FormLabel>Password</FormLabel>
-              <Input ref={passRef} placeholder='password' autoComplete='off' />
+              <InputGroup>
+                <Input
+                  ref={passRef}
+                  pr='4.5rem' // Padding right to accommodate the button
+                  type={showPassword ? 'text' : 'password'} // Toggle input type based on state
+                  placeholder='Password'
+                  autoComplete='off'
+                />
+                <InputRightElement width='4.5rem'>
+                  <IconButton
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    variant='ghost'
+                    colorScheme='blue'
+                    size='sm'
+                    onClick={togglePasswordVisibility}
+                    icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+                  />
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
           </ModalBody>
 

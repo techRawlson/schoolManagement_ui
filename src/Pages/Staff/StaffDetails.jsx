@@ -256,24 +256,17 @@ const StaffDetails = () => {
         e.preventDefault();
         try {
             const userId = student[0].staffId;
+
             // Params for the URLs
-            console.log(passwords)
             const params = new URLSearchParams({
                 newPassword: passwords.newPassword,
                 confirmNewPassword: passwords.confirmPassword,
                 oldPassword: passwords.oldPassword,
             });
-            const params1 = new URLSearchParams({
-                newPassword: passwords.newPassword,
-                // confirmPassword: passwords.confirmPassword,
-                // oldPassword: passwords.oldPassword,
-            });
-            console.log(params)
-            console.log(userId)
+
             // URLs for both user and staff
             const staffUrl = `http://192.168.1.121:8083/api/staff/${userId}/reset-password?${params.toString()}`;
-            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password?${params1.toString()}`;
-
+            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password`;
 
             // Fetch request for staff
             const staffResponse = await fetch(staffUrl, {
@@ -285,31 +278,38 @@ const StaffDetails = () => {
             });
 
             if (!staffResponse.ok) {
-                console.log("hello error")
                 const errorData = await staffResponse.text();
-                throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
+                throw new Error(`${errorData}`);
             }
+
             // Fetch request for user
             const userResponse = await fetch(userUrl, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-
+                    // Add any other headers as required
                 },
+                body: JSON.stringify({ newPassword: passwords.newPassword }), // Assuming only newPassword is required
             });
 
             if (!userResponse.ok) {
                 const errorData = await userResponse.text();
-                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
+                throw new Error(` ${errorData}`);
             }
-            await getData()
 
+            // Fetch additional data after successful password updates
+            await getData();
+
+            // Show success toast notification
+            toast.success('Password changed successfully');
         } catch (error) {
-            toast.success('password changed')
-            onClose()
-            console.error('Error:', error); // Proper error handling
+            console.error('Error:', error); // Log the error for debugging
+            toast.error(error.message || 'Failed to change password'); // Display error message in toast
+        } finally {
+            onClose(); // Close any modal or UI component after completion
         }
-    }
+    };
+
 
 
 

@@ -486,6 +486,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             <Td>{elm.email}</Td>
                                             <Td>{elm.dateOfJoining}</Td>
                                             <Td>{elm.gender}</Td>
+                                            <Td>{elm.empId}</Td>
                                         </Tr>
                                     ))}
                                 </Tbody>

@@ -225,15 +225,86 @@ const StaffDetails = () => {
         getSubjects()
         getData()
     }, [])
+    //change password code
+    const [passwords, setPasswords] = useState({
+        newPassword: '',
+        confirmPassword: '',
+        oldPassword: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setPasswords((prevPasswords) => ({
+            ...prevPasswords,
+            [name]: value,
+        }));
+    };
+
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword1, setShowPassword1] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const togglePasswordVisibility1 = () => {
-    setShowPassword1(!showPassword1);
-  };
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+    const togglePasswordVisibility1 = () => {
+        setShowPassword1(!showPassword1);
+    };
     // console.log(imageRef.current.value=='')
+
+    const changePassword = async () => {
+        try {
+            // Params for the URLs
+            const params = new URLSearchParams({
+                active: stat,
+            });
+            console.log(userId)
+            // URLs for both user and staff
+            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password`;
+            const staffUrl = `http://192.168.1.121:8083/api/staff/${userId}/reset-password`;
+
+            // Fetch request for user
+            const userResponse = await fetch(userUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer your-token-here', // If authentication is required
+                },
+            });
+
+            if (!userResponse.ok) {
+                const errorData = await userResponse.json();
+                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
+            }
+
+
+
+            // Fetch request for staff
+            const staffResponse = await fetch(staffUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer your-token-here', // If authentication is required
+                },
+            });
+
+            if (!staffResponse.ok) {
+                console.log("hello error")
+                const errorData = await staffResponse.json();
+                throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
+            }
+
+            await getData()
+
+        } catch (error) {
+            console.error('Error:', error); // Proper error handling
+        }
+    }
+
+
+
+
+
+
+
     return (
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
@@ -599,7 +670,7 @@ const StaffDetails = () => {
                         <ModalBody pb={6} >
                             <FormControl>
                                 <FormLabel>Old Password</FormLabel>
-                                <Input ref={initialRef} placeholder='Old Password' />
+                                <Input ref={initialRef} placeholder='Old Password' onChange={handleChange}/>
                             </FormControl>
 
                             <FormControl mt={4}>
@@ -608,6 +679,7 @@ const StaffDetails = () => {
                                     <Input
                                         placeholder='New Password'
                                         type={showPassword ? 'text' : 'password'}
+                                        onChange={handleChange}
                                     />
                                     <InputRightElement width='4.5rem'>
                                         <IconButton
@@ -626,6 +698,7 @@ const StaffDetails = () => {
                                     <Input
                                         placeholder='Confrim New Password'
                                         type={showPassword1 ? 'text' : 'password'}
+                                        onChange={handleChange}
                                     />
                                     <InputRightElement width='4.5rem'>
                                         <IconButton
@@ -642,8 +715,8 @@ const StaffDetails = () => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3}>
-                                Save
+                            <Button colorScheme='blue' mr={3} onClick={() => changePassword()}>
+                                Submit
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>
                         </ModalFooter>

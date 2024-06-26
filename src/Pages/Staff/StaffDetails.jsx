@@ -263,10 +263,15 @@ const StaffDetails = () => {
                 confirmNewPassword: passwords.confirmPassword,
                 oldPassword: passwords.oldPassword,
             });
+            const params1 = new URLSearchParams({
+                newPassword: passwords.newPassword,
+                // confirmNewPassword: passwords.confirmPassword,
+                // oldPassword: passwords.oldPassword,
+            });
 
             // URLs for both user and staff
             const staffUrl = `http://192.168.1.121:8083/api/staff/${userId}/reset-password?${params.toString()}`;
-            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password`;
+            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password?${params1.toString()}`;
 
             // Fetch request for staff
             const staffResponse = await fetch(staffUrl, {
@@ -277,8 +282,11 @@ const StaffDetails = () => {
                 },
             });
 
-            
-
+            if (!staffResponse.ok) {
+                const errorData = await staffResponse.text();
+                throw new Error(`${errorData}`);
+            }
+            console.log(passwords.newPassword)
             // Fetch request for user
             const userResponse = await fetch(userUrl, {
                 method: 'PUT',
@@ -286,14 +294,12 @@ const StaffDetails = () => {
                     'Content-Type': 'application/json',
                     // Add any other headers as required
                 },
-                body: JSON.stringify({ newPassword: passwords.newPassword }), // Assuming only newPassword is required
+
             });
-            // if () {
-            //     const errorData = await staffResponse.text();
-            //     throw new Error(`${errorData}`);
-            // }
-            if (!userResponse.ok || !staffResponse.ok) {
+
+            if (!userResponse.ok) {
                 const errorData = await userResponse.text();
+                console.log(errorData)
                 throw new Error(` ${errorData}`);
             }
 

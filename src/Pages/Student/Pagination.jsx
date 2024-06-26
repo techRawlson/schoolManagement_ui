@@ -693,9 +693,9 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 justifyContent="space-around"
                             >
                                 <Button onClick={downloadPdf}>Download</Button>
-                                {
+                                {/* {
                                     Role == 'staff' ? '' : <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
-                                }
+                                } */}
                                 
                             </Stack>
 

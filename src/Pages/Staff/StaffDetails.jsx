@@ -5,7 +5,7 @@ import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {ArrowLeftIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon } from '@chakra-ui/icons'
 import { MdClose } from 'react-icons/md';
 import { IoArrowBack } from "react-icons/io5";
 const StaffDetails = () => {
@@ -16,7 +16,7 @@ const StaffDetails = () => {
     const [imageUrl, setImageUrl] = useState(false)
     const [imageData, setImageData] = useState('');
     const { id } = useParams();
-    const[staffImageId,setstaffImageId]=useState('')
+    const [staffImageId, setstaffImageId] = useState('')
     const [subjects, setSubjects] = useState([])
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -38,7 +38,7 @@ const StaffDetails = () => {
             navigate(-1)
         }
     }
-console.log(staffImageId)
+    console.log(staffImageId)
     useEffect(() => {
         getStudent()
     }, [id])
@@ -129,12 +129,16 @@ console.log(staffImageId)
                 toast.success("Student details submitted successfully!")
                 setdis(!dis)
             } else {
-                toast.error("Something went wrong!")
+               
+                    const er = data.text();
+                    throw new Error(er|| 'An error occurred');
+                
+               
             }
 
         } catch (error) {
             toast.error(error)
-            // console.log(error)
+            
         }
     }
 
@@ -203,12 +207,12 @@ console.log(staffImageId)
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
             <ToastContainer /> {/* Add this line */}
-          
-                            
-            <Stack  width="95vw" m="0 auto">
-           
+
+
+            <Stack width="95vw" m="0 auto">
+
                 <Flex justifyContent="space-between" >
-                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
+                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
 
 
                     <label htmlFor={`avatar-upload-${id}`}>
@@ -216,9 +220,9 @@ console.log(staffImageId)
                             src={image || `http://192.168.1.121:8083/api/staff-images/${staffImageId}`}
                             alt="Avatar"
                             style={dis ? {} : { cursor: 'pointer' }}
-                            
-                            
-                           
+
+
+
 
                         />
                         <input
@@ -252,18 +256,86 @@ console.log(staffImageId)
                                         fontWeight="bold"
                                     />
                                 </FormControl>
-                                <FormControl id="name" name="name">
-                                    <FormLabel>Designation</FormLabel>
+                                <FormControl id="empId" >
+                                    <FormLabel>Emp ID</FormLabel>
                                     <Input
+                                        w='100%'
+                                        h='10'
+                                        bg='white.500'
+                                        value={std.empId}
+                                        name="empId"
+                                        onChange={(e) => handleFieldChange(e, i, 'empId')}
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        placeholder='your employee id'
+                                    />
+                                </FormControl>
+                                <FormControl id="fatherName" >
+                                    <FormLabel>Father Name</FormLabel>
+                                    <Input
+                                        w='100%'
+                                        h='10'
+                                        bg='white.500'
+                                        value={std.fatherName}
+                                        name="fatherName"
+                                        onChange={(e) => handleFieldChange(e, i, 'fatherName')}
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                    />
+                                </FormControl>
+                                <FormControl id="role">
+                                    <FormLabel>Role</FormLabel>
+                                    <Select
+                                        w='100%' h='10' bg='white.500' value={std.role}
+                                        name="role"
+                                        onChange={(e) => handleFieldChange(e, i, 'role')}
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        placeholder='select'
+                                    >
+                                        <option value="staff">Staff</option>
+                                        <option value="student">Student</option>
+                                        <option value="admin">Admin</option>
+                                    </Select>
+                                </FormControl>
+
+
+
+                                <FormControl id="designation" name="designation">
+                                    <FormLabel>Designation</FormLabel>
+                                    <Select
                                         w='100%' h='10' bg='white.500' value={std.designation}
                                         onChange={(e) => handleFieldChange(e, i, 'designation')}
                                         disabled={dis}
                                         fontWeight="bold"
                                         name='designation'
-                                    />
+                                        placeholder='select'
+                                    >
+                                        <option value="principal">Principal</option>
+                                        <option value="vice_principal">Vice Principal</option>
+                                        <option value="head_teacher">Head Teacher</option>
+                                        <option value="teacher">Teacher</option>
+                                        <option value="assistant_teacher">Assistant Teacher</option>
+                                        <option value="counselor">Counselor</option>
+                                        <option value="librarian">Librarian</option>
+                                        <option value="administrative_staff">Administrative Staff</option>
+                                        <option value="school_nurse">School Nurse</option>
+                                        <option value="custodian">Custodian</option>
+                                        <option value="coach">Coach</option>
+                                        <option value="it_support_staff">IT Support Staff</option>
+                                        <option value="department_head">Department Head</option>
+                                        <option value="dean_of_students">Dean of Students</option>
+                                        <option value="academic_advisor">Academic Advisor</option>
+                                        <option value="registrar">Registrar</option>
+                                        <option value="office_manager">Office Manager</option>
+                                        <option value="receptionist">Receptionist</option>
+                                        <option value="extracurricular_coordinator">Extracurricular Coordinator</option>
+                                        <option value="substitute_teacher">Substitute Teacher</option>
+                                    </Select>
                                 </FormControl>
+
                                 <FormControl id="name">
-                                    <FormLabel>Staff Id</FormLabel>
+                                    <FormLabel>System Id</FormLabel>
                                     <Input
                                         w='100%' h='10' bg='white.500' value={std.staffId} onChange={(e) => handleFieldChange(e, i, 'staffId')}
                                         disabled="true"
@@ -282,14 +354,50 @@ console.log(staffImageId)
                                         name='dateOfJoining'
 
                                     />
+
                                 </FormControl>
-                                <FormControl id="name">
-                                    <FormLabel>Department</FormLabel>
-                                    <Input fontWeight="bold"
-                                        name='department'
-                                        w='100%' h='10' bg='white.500' value={std.department} onChange={(e) => handleFieldChange(e, i, 'department')} disabled={dis}
+                                <FormControl id="qualification" >
+                                    <FormLabel>Qualification</FormLabel>
+                                    <Input
+                                        w='100%'
+                                        h='10'
+                                        bg='white.500'
+                                        value={std.qualification}
+                                        name="qualification"
+                                        onChange={(e) => handleFieldChange(e, i, 'qualification')}
+                                        disabled={dis}
+                                        fontWeight="bold"
                                     />
                                 </FormControl>
+                                <FormControl id="department" name="department">
+                                    <FormLabel>Department</FormLabel>
+                                    <Select
+                                        w='100%' h='10' bg='white.500' value={std.department}
+                                        onChange={(e) => handleFieldChange(e, i, 'department')}
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                        name='department'
+                                        placeholder='Select'
+                                    >
+                                        <option value="mathematics">Mathematics Department</option>
+                                        <option value="science">Science Department</option>
+                                        <option value="english">English Department</option>
+                                        <option value="history">History Department</option>
+                                        <option value="physical_education">Physical Education Department</option>
+                                        <option value="art">Art Department</option>
+                                        <option value="music">Music Department</option>
+                                        <option value="foreign_languages">Foreign Languages Department</option>
+                                        <option value="special_education">Special Education Department</option>
+                                        <option value="technology">Technology Department</option>
+                                        <option value="social_studies">Social Studies Department</option>
+                                        <option value="business">Business Department</option>
+                                        <option value="health">Health Department</option>
+                                        <option value="counseling">Counseling Department</option>
+                                        <option value="library_media">Library Media Department</option>
+                                        <option value="career_technical_education">Career & Technical Education Department</option>
+                                    </Select>
+                                </FormControl>
+
 
 
                                 <FormControl id="name">
@@ -318,8 +426,21 @@ console.log(staffImageId)
                                         w='100%' h='10' bg='white.500' value={std.mobile} onChange={(e) => handleFieldChange(e, i, 'mobile')} disabled={dis}
                                     />
                                 </FormControl>
+                                <FormControl id="alternateMobile" >
+                                    <FormLabel>Alternate Mobile</FormLabel>
+                                    <Input
+                                        w='100%'
+                                        h='10'
+                                        bg='white.500'
+                                        value={std.alternateMobile}
+                                        name="alternateMobile"
+                                        onChange={(e) => handleFieldChange(e, i, 'alternateMobile')}
+                                        disabled={dis}
+                                        fontWeight="bold"
+                                    />
+                                </FormControl>
 
-                                <FormControl id="name">
+                                <FormControl id="adreess">
                                     <FormLabel>Address</FormLabel>
                                     <Input fontWeight="bold"
                                         name='address'
@@ -349,9 +470,11 @@ console.log(staffImageId)
                                         w='100%' h='10'
                                         bg='white.500'
                                         name='approver'
+                                        placeholder='select'
                                         value={std.approver}
                                         onChange={(e) => handleFieldChange(e, i, 'approver')}
                                         disabled={dis}>
+                                              <option value="admin">Admin</option>
                                         {
                                             classData?.map((elm) => (
                                                 <option value={elm.name}>{elm.name}</option>
@@ -425,7 +548,7 @@ console.log(staffImageId)
 
                 </Flex>
             </Stack>
-         
+
         </Stack>
     )
 }

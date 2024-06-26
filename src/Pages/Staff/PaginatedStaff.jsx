@@ -177,6 +177,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const pageNumbers = getPageNumbers();
 
     const nameRef = useRef()
+    const fathersRef = useRef()
     const subjectRef = useRef()
     const sexRef = useRef()
     const mobileRef = useRef()
@@ -188,11 +189,15 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const emailRef = useRef()
     const staffIdRef = useRef()
     const image = useRef()
-
+    const empIdRef = useRef()
+    const roleRef = useRef()
+    const alternateMobRef = useRef()
+    const qualificationRef = useRef()
+    const approverRef = useRef()
     let body;
     const saveButton = async () => {
         // Convert selectedItems array to a comma-separated string
-        console.log(typeof (admRef.current.value))
+        // console.log(typeof (admRef.current.value))
         body = {
             name: nameRef?.current?.value,
             gender: sexRef?.current?.value,
@@ -203,10 +208,17 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             department: depRef?.current?.value,
             dateOfJoining: admRef?.current?.value,
             email: emailRef?.current?.value,
-            staffId: staffIdRef?.current?.value,
-            approver: classValue,
-            subjects: selectedItems
+            // staffId: staffIdRef?.current?.value,
+            approver: approverRef.current.value,
+            subjects: selectedItems,
+            empId: empIdRef?.current?.value,
+            fatherName: fathersRef?.current?.value,
+            role: roleRef?.current?.value,
+            alternateNumber: alternateMobRef?.current?.value,
+            qualification: qualificationRef?.current?.value,
+
         }
+        console.log(body)
 
         try {
             // Create a new FormData object
@@ -447,7 +459,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 <Thead>
                                     <Tr>
                                         <Th>Sr.No.</Th>
-                                        <Th>STAFF ID</Th>
+                                        <Th>SYSTEM ID</Th>
                                         <Th>Staff Name</Th>
                                         <Th>Designation</Th>
                                         <Th>Department</Th>
@@ -455,6 +467,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         <Th>Email</Th>
                                         <Th>Date of Joining</Th>
                                         <Th>Gender</Th>
+                                        <Th>EMP. ID</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -538,18 +551,15 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
             <>
 
                 <Modal
-                    isOpen={isOpen} size={isMinimized ? "sm" : "lg"}
+                    isOpen={isOpen}
 
                 >
                     <ModalOverlay />
                     <ModalContent minW="60%">
-                        <Button colorScheme="blue" margin="0.5rem 0.2rem" onClick={() => setIsMinimized(!isMinimized)} size="sm" width="120px" >
-                            {isMinimized ? "Maximize" : "Minimize"}
-                        </Button>
 
                         <ModalCloseButton onClick={() => setOpen(false)} />
-                        <ModalBody pb={3} style={{ display: isMinimized ? "none" : "block" }}>
-                            <ModalHeader textAlign="center" fontFamily="Roboto">Add New Staff</ModalHeader>
+                        <ModalBody pb={3} >
+                            <ModalHeader textAlign="center" >Add New Staff</ModalHeader>
                             <Formik initialValues={{
                                 name: '',
                                 approver: '',
@@ -561,55 +571,64 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 dob: '',
                                 gender: '',
                                 email: '',
+                                empId: '',
 
 
                             }}
                                 validate={(values) => {
                                     const errors = {};
-
+                                    console.log(values)
                                     if (!values.name) {
                                         errors.name = 'Required';
+                                    }
+                                    if (!values.fathersName) {
+                                        errors.fathersName = 'Required';
                                     }
 
                                     if (!values.approver) {
                                         errors.approver = 'Required';
                                     }
-
-                                    if (!values.designation) {
-                                        errors.designation = 'Required';
-                                    }
-
-                                    if (!values.department) {
-                                        errors.department = 'Required';
-                                    }
-
                                     if (!values.mobile) {
                                         errors.mobile = 'Required';
                                     } else if (!/^\d{10}$/i.test(values.mobile)) {
                                         errors.mobile = 'Invalid mobile number';
                                     }
-
-                                    if (!values.address) {
-                                        errors.address = 'Required';
-                                    }
-
                                     if (!values.doj) {
                                         errors.doj = 'Required';
                                     }
 
-                                    if (!values.dob) {
-                                        errors.dob = 'Required';
-                                    }
 
-                                    if (!values.gender) {
-                                        errors.gender = 'Required';
-                                    }
+                                    // if (!values.designation) {
+                                    //     errors.designation = 'Required';
+                                    // }
 
-                                    if (!values.email) {
-                                        errors.email = 'Required';
-                                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                                        errors.email = 'Invalid email address';
-                                    }
+                                    // if (!values.department) {
+                                    //     errors.department = 'Required';
+                                    // }
+
+
+
+                                    // if (!values.address) {
+                                    //     errors.address = 'Required';
+                                    // }
+
+
+
+                                    // if (!values.dob) {
+                                    //     errors.dob = 'Required';
+                                    // }
+
+                                    // if (!values.gender) {
+                                    //     errors.gender = 'Required';
+                                    // }
+                                    // if (!values.empId) {
+                                    //     errors.empId = 'Required';
+                                    // }
+                                    // if (!values.email) {
+                                    //     errors.email = 'Required';
+                                    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                                    //     errors.email = 'Invalid email address';
+                                    // }
 
                                     return errors;
                                 }}
@@ -633,6 +652,29 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                     </FormControl>
                                                 )}
                                             </Field>
+                                            <Field name="empId">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        // isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                    // isInvalid={form.errors.empId && form.touched.empId}
+                                                    >
+                                                        <FormLabel htmlFor="empId">Employee Id</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            ref={empIdRef}
+                                                            placeholder="Employee Id"
+                                                            type="text"
+                                                            id="empId"
+                                                            name="empId"
+                                                        />
+                                                        <FormErrorMessage>{form.errors.empId}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            
 
                                             <Field name="approver">
                                                 {({ field, form }) => (
@@ -650,7 +692,8 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                             {...field}
                                                             list="class"
                                                             placeholder="Select Approver"
-                                                        >
+                                                            ref={approverRef}
+                                                        ><option value="admin">admin</option>
                                                             {classData?.map((option, index) => (
                                                                 <option key={index}>{option.name}</option>
                                                             ))}
@@ -669,7 +712,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             <Field name="designation">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        // isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
@@ -707,10 +750,46 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                     </FormControl>
                                                 )}
                                             </Field>
+                                            <Field name="qualification">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        // isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                        isInvalid={form.errors.qualification && form.touched.qualification}
+                                                    >
+                                                        <FormLabel>Qualification</FormLabel>
+                                                        <Select
+                                                            {...field}
+                                                            ref={qualificationRef}
+                                                            placeholder="Select"
+                                                        >
+                                                            <option value="high_school_diploma">High School Diploma</option>
+                                                            <option value="associate_degree">Associate Degree</option>
+                                                            <option value="bachelors_degree">Bachelor's Degree</option>
+                                                            <option value="masters_degree">Master's Degree</option>
+                                                            <option value="doctorate_degree">Doctorate Degree</option>
+                                                            <option value="teaching_certificate">Teaching Certificate</option>
+                                                            <option value="special_education_certification">Special Education Certification</option>
+                                                            <option value="esl_certification">ESL Certification</option>
+                                                            <option value="administration_certificate">Administration Certificate</option>
+                                                            <option value="counseling_certificate">Counseling Certificate</option>
+                                                            <option value="library_science_degree">Library Science Degree</option>
+                                                            <option value="educational_technology_certificate">Educational Technology Certificate</option>
+                                                            <option value="physical_education_certificate">Physical Education Certificate</option>
+                                                            <option value="music_education_degree">Music Education Degree</option>
+                                                            <option value="art_education_degree">Art Education Degree</option>
+                                                            <option value="foreign_language_education_degree">Foreign Language Education Degree</option>
+                                                        </Select>
+                                                        <FormErrorMessage>{form.errors.qualification}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                             <Field name="department">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        // isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
@@ -769,14 +848,34 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                     </FormControl>
                                                 )}
                                             </Field>
-                                            <Field name="address">
+                                            <Field name="alternateMobile">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        // isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
-                                                        isInvalid={form.errors.address && form.touched.address}
+                                                    //isInvalid={form.errors.mobile && form.touched.mobile}
+                                                    >
+                                                        <FormLabel>Alternate Mobile</FormLabel>
+                                                        <Input
+                                                            {...field}
+                                                            placeholder="Mobile"
+                                                            type="number"
+                                                            ref={alternateMobRef}
+                                                        />
+                                                        <FormErrorMessage>{form.errors.alternateMobile}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                            <Field name="address">
+                                                {({ field, form }) => (
+                                                    <FormControl
+                                                        // isRequired
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        m="1"
+                                                    //isInvalid={form.errors.address && form.touched.address}
                                                     >
                                                         <FormLabel>Address</FormLabel>
                                                         <Input
@@ -792,7 +891,15 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         </Flex>
 
                                         <Flex justifyContent="space-between" >
-
+                                        <Field name="fathersName">
+                                                {({ field, form }) => (
+                                                    <FormControl isInvalid={form.errors.fathersName && form.touched.fathersName} isRequired m="1">
+                                                        <FormLabel htmlFor="fathersName">Father Name</FormLabel>
+                                                        <Input {...field} id="fathersName" placeholder="Your father's name" ref={fathersRef} />
+                                                        <FormErrorMessage>{form.errors.fathersName}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                             <Field name="doj">
                                                 {({ field, form }) => (
                                                     <FormControl
@@ -816,11 +923,11 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             <Field name="dob">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        //isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
-                                                        isInvalid={form.errors.dob && form.touched.dob}
+                                                    //isInvalid={form.errors.dob && form.touched.dob}
                                                     >
                                                         <FormLabel>Date of birth</FormLabel>
                                                         <Input
@@ -837,15 +944,23 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                         </Flex>
 
                                         <Flex justifyContent="space-between" >
-
+                                        <Field name="role">
+                                                {({ field, form }) => (
+                                                    <FormControl isInvalid={form.errors.role && form.touched.role}  m="1">
+                                                        <FormLabel htmlFor="role">Role</FormLabel>
+                                                        <Input {...field} id="role" placeholder="Your role" ref={roleRef} />
+                                                        <FormErrorMessage>{form.errors.role}</FormErrorMessage>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                             <Field name="gender">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        // isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
-                                                        isInvalid={form.errors.gender && form.touched.gender}
+                                                    // isInvalid={form.errors.gender && form.touched.gender}
                                                     >
                                                         <FormLabel>Gender</FormLabel>
                                                         <Select
@@ -911,11 +1026,11 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                             <Field name="email">
                                                 {({ field, form }) => (
                                                     <FormControl
-                                                        isRequired
+                                                        // isRequired
                                                         justifyContent="space-between"
                                                         alignItems="center"
                                                         m="1"
-                                                        isInvalid={form.errors.email && form.touched.email}
+                                                    //isInvalid={form.errors.email && form.touched.email}
                                                     >
                                                         <FormLabel htmlFor="email">Email</FormLabel>
                                                         <Input
@@ -930,6 +1045,13 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                                     </FormControl>
                                                 )}
                                             </Field>
+                                            <FormControl justifyContent="space-between" alignItems="center" m="1">
+                                                <FormLabel>Upload Image</FormLabel>
+                                                <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
+                                            </FormControl>
+                                        </Flex>
+                                        <Flex justifyContent="space-around"  >
+                                           
                                             <FormControl justifyContent="space-between" alignItems="center" m="1">
                                                 <FormLabel>Upload Image</FormLabel>
                                                 <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />

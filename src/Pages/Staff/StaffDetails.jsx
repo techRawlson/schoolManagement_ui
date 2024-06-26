@@ -234,10 +234,12 @@ const StaffDetails = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value)
         setPasswords((prevPasswords) => ({
             ...prevPasswords,
             [name]: value,
         }));
+        console.log(passwords)
     };
 
     const [showPassword, setShowPassword] = useState(false);
@@ -250,31 +252,27 @@ const StaffDetails = () => {
     };
     // console.log(imageRef.current.value=='')
 
-    const changePassword = async () => {
+    const changePassword = async (e) => {
+        e.preventDefault();
         try {
+            const userId = student[0].staffId;
             // Params for the URLs
+            console.log(passwords)
             const params = new URLSearchParams({
-                active: stat,
+                newPassword: passwords.newPassword,
+                confirmNewPassword: passwords.confirmPassword,
+                oldPassword: passwords.oldPassword,
             });
+            const params1 = new URLSearchParams({
+                newPassword: passwords.newPassword,
+                // confirmPassword: passwords.confirmPassword,
+                // oldPassword: passwords.oldPassword,
+            });
+            console.log(params)
             console.log(userId)
             // URLs for both user and staff
-            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password`;
-            const staffUrl = `http://192.168.1.121:8083/api/staff/${userId}/reset-password`;
-
-            // Fetch request for user
-            const userResponse = await fetch(userUrl, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer your-token-here', // If authentication is required
-                },
-            });
-
-            if (!userResponse.ok) {
-                const errorData = await userResponse.json();
-                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
-            }
-
+            const staffUrl = `http://192.168.1.121:8083/api/staff/${userId}/reset-password?${params.toString()}`;
+            const userUrl = `http://192.168.1.121:8081/api/Login/${userId}/update-password?${params1.toString()}`;
 
 
             // Fetch request for staff
@@ -288,13 +286,27 @@ const StaffDetails = () => {
 
             if (!staffResponse.ok) {
                 console.log("hello error")
-                const errorData = await staffResponse.json();
+                const errorData = await staffResponse.text();
                 throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
             }
+            // Fetch request for user
+            const userResponse = await fetch(userUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
 
+                },
+            });
+
+            if (!userResponse.ok) {
+                const errorData = await userResponse.text();
+                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
+            }
             await getData()
 
         } catch (error) {
+            toast.success('password changed')
+            onClose()
             console.error('Error:', error); // Proper error handling
         }
     }
@@ -670,13 +682,14 @@ const StaffDetails = () => {
                         <ModalBody pb={6} >
                             <FormControl>
                                 <FormLabel>Old Password</FormLabel>
-                                <Input ref={initialRef} placeholder='Old Password' onChange={handleChange}/>
+                                <Input ref={initialRef} placeholder='Old Password' onChange={handleChange} name='oldPassword' />
                             </FormControl>
 
                             <FormControl mt={4}>
                                 <FormLabel>New Password</FormLabel>
                                 <InputGroup>
                                     <Input
+                                        name='newPassword'
                                         placeholder='New Password'
                                         type={showPassword ? 'text' : 'password'}
                                         onChange={handleChange}
@@ -696,6 +709,7 @@ const StaffDetails = () => {
                                 <FormLabel>Confirm New Password</FormLabel>
                                 <InputGroup>
                                     <Input
+                                        name='confirmPassword'
                                         placeholder='Confrim New Password'
                                         type={showPassword1 ? 'text' : 'password'}
                                         onChange={handleChange}
@@ -715,7 +729,7 @@ const StaffDetails = () => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3} onClick={() => changePassword()}>
+                            <Button colorScheme='blue' mr={3} onClick={(e) => changePassword(e)}>
                                 Submit
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>

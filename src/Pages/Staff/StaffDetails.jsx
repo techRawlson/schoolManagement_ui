@@ -277,10 +277,7 @@ const StaffDetails = () => {
                 },
             });
 
-            if (!staffResponse.ok) {
-                const errorData = await staffResponse.text();
-                throw new Error(`${errorData}`);
-            }
+            
 
             // Fetch request for user
             const userResponse = await fetch(userUrl, {
@@ -291,8 +288,11 @@ const StaffDetails = () => {
                 },
                 body: JSON.stringify({ newPassword: passwords.newPassword }), // Assuming only newPassword is required
             });
-
-            if (!userResponse.ok) {
+            // if () {
+            //     const errorData = await staffResponse.text();
+            //     throw new Error(`${errorData}`);
+            // }
+            if (!userResponse.ok || !staffResponse.ok) {
                 const errorData = await userResponse.text();
                 throw new Error(` ${errorData}`);
             }

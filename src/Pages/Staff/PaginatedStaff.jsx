@@ -778,6 +778,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                         <Th>Date of Joining</Th>
                                         <Th>Gender</Th>
                                         <Th>EMP. ID</Th>
+                                        <Th>Status</Th>
                                     </Tr>
                                 </Thead>
 
@@ -800,6 +801,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                             <Td>{elm.dateOfJoining}</Td>
                                             <Td>{elm.gender}</Td>
                                             <Td>{elm.empId}</Td>
+                                            <Td>{elm.active==true?'Active':'Deactivated'}</Td>
                                         </Tr>
                                     ))}
                                 </Tbody>:<Tbody>

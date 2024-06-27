@@ -692,16 +692,18 @@ const StaffDetails = () => {
                     }
 
                 </Stack>
+{
+    student[0]?.active==true? <Flex direction='row' justifyContent="flex-end" >
+    {
+        dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
+    }
+    <Button bg='teal' color='white' ml='3vw' onClick={onOpen}>Reset Password</Button>
+    <Button bg='teal' color='white' ml='3vw' onClick={()=>goTimeTable(student[0].name,student[0].empId)}>Time Table</Button>
+    
+</Flex>:''
+}
 
-
-                <Flex direction='row' justifyContent="flex-end" >
-                    {
-                        dis ? <Button bg="lightblue" onClick={() => editStudent()}>Edit</Button> : <Button bg="lightblue" onClick={submitStudent}>Submit</Button>
-                    }
-                    <Button bg='teal' color='white' ml='3vw' onClick={onOpen}>Reset Password</Button>
-                    <Button bg='teal' color='white' ml='3vw' onClick={()=>goTimeTable(student[0].name,student[0].empId)}>Time Table</Button>
-                    
-                </Flex>
+               
             </Stack>
             <>
 

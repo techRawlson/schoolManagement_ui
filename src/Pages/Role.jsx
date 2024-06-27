@@ -77,7 +77,7 @@ const Role = () => {
         classData: true,
         name: "",
         role: "",
-        status: "",
+        active: "",
 
     });
 
@@ -86,7 +86,7 @@ const Role = () => {
     //data filter
     const dataFilter = () => {
         let filterData = data;
-
+console.log(filters)
         //filter for class
         if (filters.name !== "") {
             filterData = filterData.filter(
@@ -102,13 +102,14 @@ const Role = () => {
         }
         console.log(filterData)
         //filter for year
-        if (filters.status !== "") {
-            console.log(filters.year)
-            filterData = filterData.filter(
-                (ele) => ele.enabled == filters.status
-            );
+        if (filters.active !== "") {
+            console.log(filters.active);
+            console.log(filters);
+            filterData = filterData.filter((ele) => {
+                console.log(ele.active);
+                return ele.active === (filters.active === 'true');
+            });
         }
-        console.log(filterData)
 
         setFilteredData(filterData);
 
@@ -153,7 +154,7 @@ const Role = () => {
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            status: statusRef.current.value,
+            active: statusRef.current.value,
         }));
     };
 
@@ -296,10 +297,11 @@ const Role = () => {
                             <Th>
                                 <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
                                     {
-                                        names?.map((session, i) =>{
-                                            if(session!=''){
-                                                return   <option value={session}>{session}</option>
+                                        names?.map((session, i) => {
+                                            if (session == '' || session == null) {
+                                                return;
                                             }
+                                            return <option value={session}>{session}</option>
                                         })
                                     }
 
@@ -310,11 +312,11 @@ const Role = () => {
                                 <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
                                     {
                                         roles?.map((session, i) => {
-                                            if(session!='admin'){
-                                                return   <option value={session}>{session}</option>
+                                            if (session != 'admin') {
+                                                return <option value={session}>{session}</option>
                                             }
                                         }
-                                    )
+                                        )
                                     }
 
 
@@ -327,8 +329,8 @@ const Role = () => {
                             <Th>
                                 <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
 
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
 
 
 
@@ -390,10 +392,10 @@ const Role = () => {
                                     filteredData?.map((elm) => {
                                         if (elm.role != 'admin') {
                                             return <Tr>
-    
+
                                                 <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
                                                 <Td>{elm.role}</Td>
-    
+
                                                 <Td>{elm.userId}</Td>
                                                 <Td alignItems='center' justifyContent='center'>
                                                     {visiblePasswords[elm.id] ? elm.password : '********'}
@@ -417,11 +419,11 @@ const Role = () => {
                                                         {loadingStates[elm.userId] && <Spinner size="sm" ml={2} />}
                                                     </Box>
                                                 </Td>
-    
-    
+
+
                                             </Tr>
                                         }
-    
+
                                     })
                                 }
 

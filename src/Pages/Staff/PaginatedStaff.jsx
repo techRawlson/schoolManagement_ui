@@ -721,7 +721,12 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                     }
                                 </Select>
                                 <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0' />
-                                <Button onClick={() => setOpen(true)} width='350px'>
+                                <Button onClick={() => 
+                                    {
+                                        setOpen(true)
+                                        setSelectedItems([])
+                                    }
+                                } width='350px'>
                                     Add New
                                 </Button>
                             </Flex>
@@ -818,6 +823,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                             <Td>{elm.dateOfJoining}</Td>
                                             <Td>{elm.gender}</Td>
                                             <Td>{elm.empId}</Td>
+                                            <Td>{elm.active==true?'Active':'Deactivated'}</Td>
                                         </Tr>
                                     ))}
                                 </Tbody>
@@ -927,7 +933,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                     validate={(values) => {
                                         const errors = {};
                                         console.log(values)
-                                        dispatch(saveFormData(values));
+                                        // dispatch(saveFormData(values));
                                         if (!values.name) {
                                             errors.name = 'Required';
                                         }

@@ -912,7 +912,8 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                         onClick={handleMinimize}
                                     />
                                 </ModalHeader>
-                                <Formik initialValues={{
+                                <Formik 
+                                initialValues={{
                                     name: '',
                                     approver: '',
                                     designation: '',
@@ -924,10 +925,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                     gender: '',
                                     email: '',
                                     empId: '',
-
-
                                 }}
-
                                     validate={(values) => {
                                         const errors = {};
                                         console.log(values)
@@ -950,34 +948,6 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                         if (!values.doj) {
                                             errors.doj = 'Required';
                                         }
-
-
-                                        // if (!values.designation) {
-                                        //     errors.designation = 'Required';
-                                        // }
-
-                                        // if (!values.department) {
-                                        //     errors.department = 'Required';
-                                        // }
-
-
-
-                                        // if (!values.address) {
-                                        //     errors.address = 'Required';
-                                        // }
-
-
-
-                                        // if (!values.dob) {
-                                        //     errors.dob = 'Required';
-                                        // }
-
-                                        // if (!values.gender) {
-                                        //     errors.gender = 'Required';
-                                        // }
-                                        // if (!values.empId) {
-                                        //     errors.empId = 'Required';
-                                        // }
                                         // if (!values.email) {
                                         //     errors.email = 'Required';
                                         // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {

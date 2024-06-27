@@ -88,21 +88,33 @@ const StaffDetails = () => {
     console.log(student)
     const submitStudent = async () => {
         try {
-          const formData = new FormData();
-      
-          // Loop through student data and append each field (except 'profilePicture') to formData
-          student.forEach(std => {
-            Object.entries(std).forEach(([key, value]) => {
-              if (key !== 'profilePicture') {
-                formData.append(key, value);
-              }
+            console.log("kamal h")
+            console.log(selectedItems)
+            const formData = new FormData();
+    
+            // Loop through student data and append each field (except 'profilePicture') to formData
+            student.forEach(std => {
+              Object.entries(std).forEach(([key, value]) => {
+                if (key !== 'profilePicture') {
+                  formData.append(key, value);
+                }
+              });
             });
-          });
-      
-          // Append selected subjects (assuming 'selectedItems' is an array of subject IDs)
-          selectedItems.forEach(item => {
-            formData.append('subjects', item);
-          });
+        
+            // Clear existing 'subjects' property in formData
+            formData.delete('subjects');
+            
+            // Append selected subjects (assuming 'selectedItems' is an array of subject IDs)
+            if(selectedItems.length>0){
+                selectedItems.forEach((item, index) => {
+                    formData.append(`subjects`, item);
+                  });
+            }else{
+                formData.append('subjects',''); 
+            }
+            
+        
+            console.log(...formData.entries()); 
       
           // Perform PUT request to update student data
           const response = await fetch(`http://192.168.1.121:8083/api/staff/update/${id}`, {
@@ -317,7 +329,7 @@ const StaffDetails = () => {
 
 
 
-
+  console.log(selectedItems)
     return (
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />

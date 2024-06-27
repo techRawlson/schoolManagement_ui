@@ -175,14 +175,18 @@ const Role = () => {
 
 
 
-    // Toggle switch function
+    const [loading, setLoading] = useState(false);
+
     const toggleSwitch = async (userId, stat) => {
         try {
+            // Set loading state to true
+            setLoading(true);
+
             // Params for the URLs
             const params = new URLSearchParams({
                 active: stat,
             });
-            console.log(userId)
+
             // URLs for both user and staff
             const userUrl = `http://192.168.1.121:8081/api/Login/update-active-status/${userId}?${params.toString()}`;
             const staffUrl = `http://192.168.1.121:8083/api/staff/update-active-status/${userId}?${params.toString()}`;
@@ -197,13 +201,11 @@ const Role = () => {
             });
 
             if (!userResponse.ok) {
-                const errorData = await userResponse.json();
-                throw new Error(`User Error ${userResponse.status}: ${errorData.message}`);
+                const errorText = await userResponse.text(); // Read error as text
+                throw new Error(`User Error ${userResponse.status}: ${errorText}`);
             }
 
-
-
-            // Fetch request for staff
+            // Fetch request for staff after user request completes
             const staffResponse = await fetch(staffUrl, {
                 method: 'PUT',
                 headers: {
@@ -213,17 +215,27 @@ const Role = () => {
             });
 
             if (!staffResponse.ok) {
-                console.log("hello error")
-                const errorData = await staffResponse.json();
-                throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
+                const errorText = await staffResponse.text(); // Read error as text
+                throw new Error(`Staff Error ${staffResponse.status}: ${errorText}`);
             }
 
-            // await getData()
+            // Both requests succeeded, update UI here
+
+            // Example: Update UI after both requests complete
+            console.log('Toggle switch operation completed successfully.');
+            // Update UI or trigger callback to handle UI update
 
         } catch (error) {
             console.error('Error:', error); // Proper error handling
+            // Handle error state in UI if needed
+
+        } finally {
+            // Clear loading state
+            setLoading(false);
         }
     };
+
+
 
 
 
@@ -247,18 +259,23 @@ const Role = () => {
 
 
 
-console.log(filteredData)
+    console.log(filteredData)
 
 
-
+console.log(loading)
 
 
     return <div style={{
-        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', height: '100%'
+        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', 
     }} >
-        <Box >
+          {loading ? 
+            <p>Loading...</p>:
+            <Box >
             <Navbar />
-            
+            {
+
+            }
+          
             <TableContainer >
                 <Table variant='simple' >
                     <Thead>
@@ -364,6 +381,9 @@ console.log(filteredData)
                 </Table>
             </TableContainer>
         </Box>
+
+        }
+       
     </div>
 }
 export default Role

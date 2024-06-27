@@ -50,7 +50,7 @@ const Role = () => {
         } catch (error) {
             console.log(error)
         }
-        finally{
+        finally {
             setLoading(false);
         }
     }
@@ -179,7 +179,7 @@ const Role = () => {
 
 
 
-  
+
 
     const toggleSwitch = async (userId, stat) => {
         try {
@@ -233,7 +233,7 @@ const Role = () => {
             console.error('Error:', error); // Proper error handling
             // Handle error state in UI if needed
 
-        } 
+        }
     };
 
 
@@ -264,7 +264,13 @@ const Role = () => {
 
 
     console.log(loading)
+    const [loadingStates, setLoadingStates] = useState({});
 
+    const handleToggle = async (userId) => {
+        setLoadingStates(prevState => ({ ...prevState, [userId]: true }));
+        await toggleSwitch(userId, !data.find(elm => elm.userId === userId).active);
+        setLoadingStates(prevState => ({ ...prevState, [userId]: false }));
+    };
 
     return <div style={{
         width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', minHeight: '100vh'
@@ -275,64 +281,65 @@ const Role = () => {
             {
 
             }
-            {loading ?
+            {/* {loading ?
                 <Center>
                     <Spinner size="xl" 
                         thickness="4px"
                         speed="0.65s"
                         emptyColor="gray.200"
                         color="blue.500" />
-                </Center> :
-                <TableContainer >
-                    <Table variant='simple' >
-                        <Thead>
-                            <Tr>
-                                <Th>
-                                    <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
-                                        {
-                                            names?.map((session, i) => (
-                                                <option value={session}>{session}</option>
-                                            ))
-                                        }
+                </Center> : */}
+            <TableContainer >
+                <Table variant='simple' >
+                    <Thead>
+                        <Tr>
+                            <Th>
+                                <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
+                                    {
+                                        names?.map((session, i) => (
+                                            <option value={session}>{session}</option>
+                                        ))
+                                    }
 
 
-                                    </Select>
-                                </Th>
-                                <Th>
-                                    <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
-                                        {
-                                            roles?.map((session, i) => (
-                                                <option value={session}>{session}</option>
-                                            ))
-                                        }
+                                </Select>
+                            </Th>
+                            <Th>
+                                <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
+                                    {
+                                        roles?.map((session, i) => (
+                                            <option value={session}>{session}</option>
+                                        ))
+                                    }
 
 
-                                    </Select>
-                                </Th>
+                                </Select>
+                            </Th>
 
 
-                                <Th>userId</Th>
-                                <Th>password</Th>
-                                <Th>
-                                    <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
+                            <Th>userId</Th>
+                            <Th>password</Th>
+                            <Th>
+                                <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
 
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-
-
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
 
 
-                                    </Select>
-                                </Th>
-                                <Th>Action</Th>
 
-                            </Tr>
-                        </Thead>
-                        {
-                            filters.classData ? <Tbody >
-                                {
-                                    data?.map((elm) => (
-                                        <Tr>
+
+                                </Select>
+                            </Th>
+                            <Th>Action</Th>
+
+                        </Tr>
+                    </Thead>
+                    {
+                        filters.classData ? <Tbody >
+                            {
+                                data?.map((elm) => {
+                                    if (elm.role != 'admin') {
+                                        return <Tr>
 
                                             <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
                                             <Td>{elm.role}</Td>
@@ -351,11 +358,38 @@ const Role = () => {
                                             </Td>
                                             <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
                                             <Td>
-                                                <Switch
-                                                    isChecked={elm.active || false} // Default to false if undefined
-                                                    onChange={() => toggleSwitch(elm.userId, !elm.active)}
-                                                />
+                                                <Box display="flex" alignItems="center" >
+                                                    <Switch
+                                                        isChecked={elm.active || false}
+                                                        onChange={() => handleToggle(elm.userId)}
+                                                        isDisabled={loadingStates[elm.userId] || false}
+                                                    />
+                                                    {loadingStates[elm.userId] && <Spinner size="sm" ml={2} />}
+                                                </Box>
                                             </Td>
+
+
+                                        </Tr>
+                                    }
+
+                                }
+
+
+                                )
+                            }
+
+
+                        </Tbody> :
+                            <Tbody >
+                                {
+                                    filteredData?.map((elm) => (
+                                        <Tr>
+                                            <Td>{elm.staffName}</Td>
+                                            <Td>{elm.role}</Td>
+                                            <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
+                                            <Td>{elm.userId}</Td>
+                                            <Td >{elm.password}</Td>
+
 
 
                                         </Tr>
@@ -363,31 +397,13 @@ const Role = () => {
                                 }
 
 
-                            </Tbody> :
-                                <Tbody >
-                                    {
-                                        filteredData?.map((elm) => (
-                                            <Tr>
-                                                <Td>{elm.staffName}</Td>
-                                                <Td>{elm.role}</Td>
-                                                <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
-                                                <Td>{elm.userId}</Td>
-                                                <Td >{elm.password}</Td>
+                            </Tbody>
+                    }
 
 
-
-                                            </Tr>
-                                        ))
-                                    }
-
-
-                                </Tbody>
-                        }
-
-
-                    </Table>
-                </TableContainer>
-            }
+                </Table>
+            </TableContainer>
+            {/* } */}
         </Box>
 
 

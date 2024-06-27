@@ -231,8 +231,8 @@ console.log(pictureId)
 
       {
         isDesktop || isTablet ? <span  style={{ display:'flex',alignItems:'center'}}>
-                <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'/>
-          <FiLogOut onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem'}} />
+                <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'  background='#2196F3' justifyContent='center' textAlign='center'/>
+          <FiLogOut as={Button} onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem'}} />
     
 
         </span> : ''

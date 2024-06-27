@@ -449,21 +449,18 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
         setIsMinimized(!isMinimized);
     };
     return (
-        <div>
-            <>
-
-            </>
+        <div style={{width:'100vw'}}>
+          
             <div className="pagination-items">
                 <div>
                     <Navbar />
                     <ToastContainer />
 
                     <Stack   >
-                        <Flex justifyContent="space-between" mt="1%" flexWrap="wrap">
-                            <Flex alignItems="center" >
-                            </Flex>
+                        <Flex justifyContent="space-between" mt="1%" flexWrap="wrap" alignItems='flex-end' >
+                           
                             <Flex justifyContent="space-around">
-                                <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} />
+                                <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0'/>
                                 <Button onClick={() => setOpen(true)}>
                                     Add New
                                 </Button>
@@ -490,7 +487,12 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 <Thead>
                                     <Tr>
                                         <Th>Sr.No.</Th>
-                                        <Th>SYSTEM ID</Th>
+                                        <Th>
+                                          <Select placeholder='SYSTEM ID'>
+<option>hello</option>
+                                          </Select>
+
+                                        </Th>
                                         <Th>Staff Name</Th>
                                         <Th>Designation</Th>
                                         <Th>Department</Th>

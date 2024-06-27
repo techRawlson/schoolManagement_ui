@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, IconButton, Select, Switch } from "@chakra-ui/react"
+import { Box, Center, Flex, Heading, IconButton, Select, Spinner, Switch } from "@chakra-ui/react"
 import {
     Table,
     Thead,
@@ -21,10 +21,11 @@ const Role = () => {
     const [names, setNames] = useState([])
     const [roles, setRoles] = useState([])
     const [status, setStatus] = useState([])
-
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([])
     const getData = async () => {
         try {
+            setLoading(true);
             const data1 = await fetch('http://192.168.1.121:8081/api/Login/allUsersLog')
             if (!data1.ok) {
                 throw new Error('something went wrong')
@@ -48,6 +49,9 @@ const Role = () => {
 
         } catch (error) {
             console.log(error)
+        }
+        finally{
+            setLoading(false);
         }
     }
     useEffect(() => {
@@ -175,7 +179,7 @@ const Role = () => {
 
 
 
-    const [loading, setLoading] = useState(false);
+  
 
     const toggleSwitch = async (userId, stat) => {
         try {
@@ -218,7 +222,7 @@ const Role = () => {
                 const errorText = await staffResponse.text(); // Read error as text
                 throw new Error(`Staff Error ${staffResponse.status}: ${errorText}`);
             }
-
+            await getData()
             // Both requests succeeded, update UI here
 
             // Example: Update UI after both requests complete
@@ -229,10 +233,7 @@ const Role = () => {
             console.error('Error:', error); // Proper error handling
             // Handle error state in UI if needed
 
-        } finally {
-            // Clear loading state
-            setLoading(false);
-        }
+        } 
     };
 
 
@@ -262,111 +263,99 @@ const Role = () => {
     console.log(filteredData)
 
 
-console.log(loading)
+    console.log(loading)
 
 
     return <div style={{
-        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', 
+        width: "100vw", margin: '0', padding: '0', boxSizing: 'border-box', minHeight: '100vh'
     }} >
-          {loading ? 
-            <p>Loading...</p>:
-            <Box >
+
+        <Box >
             <Navbar />
             {
 
             }
-          
-            <TableContainer >
-                <Table variant='simple' >
-                    <Thead>
-                        <Tr>
-                            <Th>
-                                <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
-                                    {
-                                        names?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
-                                    }
+            {loading ?
+                <Center>
+                    <Spinner size="xl" 
+                        thickness="4px"
+                        speed="0.65s"
+                        emptyColor="gray.200"
+                        color="blue.500" />
+                </Center> :
+                <TableContainer >
+                    <Table variant='simple' >
+                        <Thead>
+                            <Tr>
+                                <Th>
+                                    <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
+                                        {
+                                            names?.map((session, i) => (
+                                                <option value={session}>{session}</option>
+                                            ))
+                                        }
 
 
-                                </Select>
-                            </Th>
-                            <Th>
-                                <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
-                                    {
-                                        roles?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
-                                    }
+                                    </Select>
+                                </Th>
+                                <Th>
+                                    <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
+                                        {
+                                            roles?.map((session, i) => (
+                                                <option value={session}>{session}</option>
+                                            ))
+                                        }
 
 
-                                </Select>
-                            </Th>
+                                    </Select>
+                                </Th>
 
 
-                            <Th>userId</Th>
-                            <Th>password</Th>
-                            <Th>
-                                <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
+                                <Th>userId</Th>
+                                <Th>password</Th>
+                                <Th>
+                                    <Select placeholder='Status' onChange={handleFilterStatus} ref={statusRef} >
 
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-
-
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
 
 
-                                </Select>
-                            </Th>
-                            <Th>Action</Th>
-
-                        </Tr>
-                    </Thead>
-                    {
-                        filters.classData ? <Tbody >
-                            {
-                                data?.map((elm) => (
-                                    <Tr>
-
-                                        <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
-                                        <Td>{elm.role}</Td>
-
-                                        <Td>{elm.userId}</Td>
-                                        <Td alignItems='center' justifyContent='center'>
-                                            {visiblePasswords[elm.id] ? elm.password : '********'}
-                                            <IconButton
-                                                aria-label="Toggle Password Visibility"
-                                                icon={visiblePasswords[elm.id] ? <ViewOffIcon /> : <ViewIcon />}
-                                                onClick={() => togglePasswordVisibility(elm.id)}
-                                                variant="ghost"
-                                                size="sm"
-                                                ml={2}
-                                            />
-                                        </Td>
-                                        <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
-                                        <Td>
-                                            <Switch
-                                                isChecked={elm.active || false} // Default to false if undefined
-                                                onChange={() => toggleSwitch(elm.userId, !elm.active)}
-                                            />
-                                        </Td>
 
 
-                                    </Tr>
-                                ))
-                            }
+                                    </Select>
+                                </Th>
+                                <Th>Action</Th>
 
-
-                        </Tbody> :
-                            <Tbody >
+                            </Tr>
+                        </Thead>
+                        {
+                            filters.classData ? <Tbody >
                                 {
-                                    filteredData?.map((elm) => (
+                                    data?.map((elm) => (
                                         <Tr>
-                                            <Td>{elm.staffName}</Td>
-                                            <Td>{elm.role}</Td>
-                                            <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
-                                            <Td>{elm.userId}</Td>
-                                            <Td >{elm.password}</Td>
 
+                                            <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
+                                            <Td>{elm.role}</Td>
+
+                                            <Td>{elm.userId}</Td>
+                                            <Td alignItems='center' justifyContent='center'>
+                                                {visiblePasswords[elm.id] ? elm.password : '********'}
+                                                <IconButton
+                                                    aria-label="Toggle Password Visibility"
+                                                    icon={visiblePasswords[elm.id] ? <ViewOffIcon /> : <ViewIcon />}
+                                                    onClick={() => togglePasswordVisibility(elm.id)}
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    ml={2}
+                                                />
+                                            </Td>
+                                            <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
+                                            <Td>
+                                                <Switch
+                                                    isChecked={elm.active || false} // Default to false if undefined
+                                                    onChange={() => toggleSwitch(elm.userId, !elm.active)}
+                                                />
+                                            </Td>
 
 
                                         </Tr>
@@ -374,16 +363,35 @@ console.log(loading)
                                 }
 
 
-                            </Tbody>
-                    }
+                            </Tbody> :
+                                <Tbody >
+                                    {
+                                        filteredData?.map((elm) => (
+                                            <Tr>
+                                                <Td>{elm.staffName}</Td>
+                                                <Td>{elm.role}</Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
+                                                <Td>{elm.userId}</Td>
+                                                <Td >{elm.password}</Td>
 
 
-                </Table>
-            </TableContainer>
+
+                                            </Tr>
+                                        ))
+                                    }
+
+
+                                </Tbody>
+                        }
+
+
+                    </Table>
+                </TableContainer>
+            }
         </Box>
 
-        }
-       
+
+
     </div>
 }
 export default Role

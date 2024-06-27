@@ -446,7 +446,7 @@ const Classtimetable = () => {
     const [staff, setStaff] = useState([])
     const getStaff = async () => {
         try {
-            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
+            const data = await fetch("http://192.168.1.121:8083/api/staff/active");
             const fdata = await data.json();
 
             setStaff(fdata)
@@ -1119,7 +1119,7 @@ const Classtimetable = () => {
         
             const data = await fetch(
                 Role == 'staff' ?
-                    "http://192.168.1.121:8083/api/staff/saved-Staff" :
+                    "http://192.168.1.121:8083/api/staff/active" :
                     "http://192.168.1.121:8082/api/students/savedData"
             );
             

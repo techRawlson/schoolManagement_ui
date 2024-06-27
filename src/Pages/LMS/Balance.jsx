@@ -21,7 +21,7 @@ const LeaveBalances=()=>{
     const getData = async () => {
         console.log(LDetails);
         try {
-            const staffResponse = await fetch('http://192.168.1.121:8083/api/staff/saved-Staff');
+            const staffResponse = await fetch('http://192.168.1.121:8083/api/staff/active');
             const staffData = await staffResponse.json();
             console.log(staffData);
             // setClassData(staffData);

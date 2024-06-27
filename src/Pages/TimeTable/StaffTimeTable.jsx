@@ -113,7 +113,7 @@ const Stafftimetable = () => {
 
     const getTeachers = async () => {
         try {
-            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
+            const data = await fetch("http://192.168.1.121:8083/api/staff/active");
             const fdata = await data.json();
 
             setClassData(fdata)
@@ -330,7 +330,7 @@ const Stafftimetable = () => {
     const [empId, setempId] = useState([])
     const getEmpId = async () => {
         try {
-            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
+            const data = await fetch("http://192.168.1.121:8083/api/staff/active");
             const fdata = await data.json();
             const emId = fdata
             .filter(el => el.empId !== null && el.empId !== undefined && el.empId !== '')

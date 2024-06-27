@@ -296,9 +296,11 @@ const Role = () => {
                             <Th>
                                 <Select placeholder='Name' onChange={handleFilterName} ref={nameRef}>
                                     {
-                                        names?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
+                                        names?.map((session, i) =>{
+                                            if(session!=''){
+                                                return   <option value={session}>{session}</option>
+                                            }
+                                        })
                                     }
 
 
@@ -307,9 +309,12 @@ const Role = () => {
                             <Th>
                                 <Select placeholder='Role' onChange={handleFilterRole} ref={roleRef}>
                                     {
-                                        roles?.map((session, i) => (
-                                            <option value={session}>{session}</option>
-                                        ))
+                                        roles?.map((session, i) => {
+                                            if(session!='admin'){
+                                                return   <option value={session}>{session}</option>
+                                            }
+                                        }
+                                    )
                                     }
 
 
@@ -382,18 +387,42 @@ const Role = () => {
                         </Tbody> :
                             <Tbody >
                                 {
-                                    filteredData?.map((elm) => (
-                                        <Tr>
-                                            <Td>{elm.staffName}</Td>
-                                            <Td>{elm.role}</Td>
-                                            <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
-                                            <Td>{elm.userId}</Td>
-                                            <Td >{elm.password}</Td>
-
-
-
-                                        </Tr>
-                                    ))
+                                    filteredData?.map((elm) => {
+                                        if (elm.role != 'admin') {
+                                            return <Tr>
+    
+                                                <Td>{elm.role == 'staff' ? elm.staffName : elm.studentName}</Td>
+                                                <Td>{elm.role}</Td>
+    
+                                                <Td>{elm.userId}</Td>
+                                                <Td alignItems='center' justifyContent='center'>
+                                                    {visiblePasswords[elm.id] ? elm.password : '********'}
+                                                    <IconButton
+                                                        aria-label="Toggle Password Visibility"
+                                                        icon={visiblePasswords[elm.id] ? <ViewOffIcon /> : <ViewIcon />}
+                                                        onClick={() => togglePasswordVisibility(elm.id)}
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        ml={2}
+                                                    />
+                                                </Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Inactive'}</Td>
+                                                <Td>
+                                                    <Box display="flex" alignItems="center" >
+                                                        <Switch
+                                                            isChecked={elm.active || false}
+                                                            onChange={() => handleToggle(elm.userId)}
+                                                            isDisabled={loadingStates[elm.userId] || false}
+                                                        />
+                                                        {loadingStates[elm.userId] && <Spinner size="sm" ml={2} />}
+                                                    </Box>
+                                                </Td>
+    
+    
+                                            </Tr>
+                                        }
+    
+                                    })
                                 }
 
 

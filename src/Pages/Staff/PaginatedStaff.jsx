@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaArrowLeft, FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { FaArrowLeft, FaChevronDown, FaChevronUp, FaSort, FaSortDown, FaSortUp } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 import {
     Table,
@@ -56,7 +56,7 @@ import { useData } from '../context/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveFormData, clearFormData } from '../Redux/formDataSlice';
 // import Student from '../Pages/Student';
-function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const today = new Date().toISOString().split('T')[0];
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
@@ -242,7 +242,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
         }
         console.log(body)
-   
+
         try {
             // Create a new FormData object
             const formData = new FormData();
@@ -441,16 +441,84 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
     const [isMinimized, setIsMinimized] = useState(false);
     const handleMinimize = () => {
         if (isMinimized) {
-           console.log('here')
+            console.log('here')
             setIsMinimized(!isMinimized);
             handle()
             return;
         }
         setIsMinimized(!isMinimized);
     };
+
+
+
+    //Sorting and filteration
+    const [data, setData] = useState(classData)
+    const [sortConfig, setSortConfig] = useState({ key: 'systemId', direction: 'ascending' });
+    console.log(classData)
+
+    console.log(sortConfig)
+    const sortedData = React.useMemo(() => {
+
+        let sortableData = [...classData];
+        console.log(sortableData)
+        if (sortConfig !== null) {
+            sortableData.sort((a, b) => {
+              const aValue = a[sortConfig.key];
+              const bValue = b[sortConfig.key];
+      
+              // Handle null or empty values to be less prioritized
+              if (aValue === null || aValue === '') return 1;
+              if (bValue === null || bValue === '') return -1;
+      
+              // Normal sorting logic for non-null and non-empty values
+              if (aValue < bValue) {
+                return sortConfig.direction === 'ascending' ? -1 : 1;
+              }
+              if (aValue > bValue) {
+                return sortConfig.direction === 'ascending' ? 1 : -1;
+              }
+              return 0;
+            });
+          }
+        setClassData(sortableData)
+        return sortableData;
+        console.log(sortableData)
+    }, [data, sortConfig]);
+
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const getSortIcon = (key) => {
+        if (sortConfig.key === key) {
+            return sortConfig.direction === 'ascending' ? <FaSortUp /> : <FaSortDown />;
+        }
+        return <FaSort />;
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
-        <div style={{width:'100vw'}}>
-          
+        <div style={{ width: '100vw' }}>
+
             <div className="pagination-items">
                 <div>
                     <Navbar />
@@ -458,9 +526,9 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
                     <Stack   >
                         <Flex justifyContent="space-between" mt="1%" flexWrap="wrap" alignItems='flex-end' >
-                           
+
                             <Flex justifyContent="space-around">
-                                <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0'/>
+                                <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0' />
                                 <Button onClick={() => setOpen(true)}>
                                     Add New
                                 </Button>
@@ -487,13 +555,32 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                 <Thead>
                                     <Tr>
                                         <Th>Sr.No.</Th>
-                                        <Th>
-                                            SYSTEM ID
+                                        <Th
+                                        // onClick={() => requestSort('systemId')}
 
+                                        >
+                                            <Flex align="center">
+                                                SYSTEM ID
+                                                {/* <Icon 
+                                                as={() => getSortIcon('systemId')} ml={2} 
+                                                /> */}
+                                            </Flex>
                                         </Th>
-                                        <Th>Staff Name</Th>
-                                        <Th>Designation</Th>
-                                        <Th>Department</Th>
+                                        <Th onClick={() => requestSort('name')}>
+                                            <Flex align="center">
+                                                Staff Name <Icon as={() => getSortIcon('name')} ml={2} />
+                                            </Flex>
+                                        </Th>
+                                        <Th onClick={() => requestSort('designation')}>
+                                            <Flex align="center">
+                                                Designation <Icon as={() => getSortIcon('designation')} ml={2} />
+                                            </Flex>
+                                        </Th>
+                                        <Th onClick={() => requestSort('department')}>
+                                            <Flex align="center">
+                                                Department <Icon as={() => getSortIcon('department')} ml={2} />
+                                            </Flex>
+                                        </Th>
                                         <Th>Mobile</Th>
                                         <Th>Email</Th>
                                         <Th>Date of Joining</Th>
@@ -620,7 +707,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
 
 
                                 }}
-                                
+
                                     validate={(values) => {
                                         const errors = {};
                                         console.log(values)

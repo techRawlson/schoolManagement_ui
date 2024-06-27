@@ -169,6 +169,7 @@ console.log(fdata)
                 itemsPerPage={itemsPerPage}
                 totalItems={filters.classData ? classData.length : filteredData.length}
                 classData={filters.classData ? classData : filteredData}
+                setClassData={filters.classData ? setClassData : setFilteredData}
                 handleFilter={handleFilter}
                 clasRef={filterRef}
                 handleSectionFilter={handleFiltersection}
@@ -179,6 +180,7 @@ console.log(fdata)
                 handleSearch={handleSearch}
                 searchRef={searchRef}
                 getData={getData}
+                
             />
 
         </Stack>

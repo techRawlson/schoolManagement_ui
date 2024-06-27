@@ -218,7 +218,7 @@ const Role = () => {
                 throw new Error(`Staff Error ${staffResponse.status}: ${errorData.message}`);
             }
 
-            await getData()
+            // await getData()
 
         } catch (error) {
             console.error('Error:', error); // Proper error handling
@@ -258,9 +258,7 @@ console.log(filteredData)
     }} >
         <Box >
             <Navbar />
-            <Flex alignItems="center" >
-                <IconButton background="none" as={IoArrowBack} cursor="pointer" onClick={goback} left="2rem" />
-            </Flex>
+            
             <TableContainer >
                 <Table variant='simple' >
                     <Thead>

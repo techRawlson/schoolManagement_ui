@@ -198,13 +198,7 @@ const navigate=useNavigate()
 
 <Stack minH="100vh" minW="100%" overflow="scroll" bgColor="white">
             <Navbar />
-            <IconButton as={IoArrowBack}
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: '2%' }}
-
-        />
+            
             <ToastContainer />
             <Stack   >
                 <TableContainer>

@@ -169,14 +169,7 @@ const reviewApplication=(id)=>{
     console.log(data)
     return <Stack height="100vh" width="100vw" >
         <Navbar />
-        <IconButton as={IoArrowBack}
-
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft:  '7%' }}
-
-        />
+       
         <ToastContainer />
         {
                 <TableContainer width="96vw" margin="0 auto" >

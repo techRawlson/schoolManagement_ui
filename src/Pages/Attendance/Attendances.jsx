@@ -22,12 +22,7 @@ const Attendance = () => {
 
     return <Stack h="100vh">
       <Navbar/>
-      <IoArrowBack
-            size={35}
-            cursor="pointer"
-            onClick={goback}
-            style={{  marginLeft: '3%' }}
-        />
+     
        <SimpleGrid spacing={4} templateColumns='1fr 1fr' margin="auto" width="90vw" padding="0 8%">
         <Card cursor="pointer" onClick={() => nextPage("attedancemarking")}>
           <CardHeader>

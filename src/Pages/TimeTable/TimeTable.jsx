@@ -24,15 +24,7 @@ const TimeTable = () => {
     }
     return <>
         <Navbar />
-        <Flex >
-            <IconButton
-                as={IoArrowBack}
-                size="sm"
-                cursor="pointer"
-                onClick={goback}
-                style={{  marginLeft:'5%' }}
-            />
-        </Flex>
+       
         <Stack display='flex' flexDir='row' minH='80vh' minW='98vw'>
 
 

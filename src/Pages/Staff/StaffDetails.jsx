@@ -332,8 +332,7 @@ const StaffDetails = () => {
             <Stack width="95vw" m="0 auto">
 
                 <Flex justifyContent="space-between" >
-                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-
+                   
 
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar

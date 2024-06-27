@@ -93,14 +93,7 @@ const navigate=useNavigate()
 
     return <Stack minH="100vh" minW="100vw" fontSize="16px">
         <Navbar/>
-        <IconButton
-        as={IoArrowBack}
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft :'7%' }}
-
-        />
+        
         <ToastContainer/>
         <Box >
             <Stack maxW="60vw" margin="0 auto" >

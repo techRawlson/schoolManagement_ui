@@ -126,14 +126,7 @@ const LeaveApproval = () => {
 
     return <Box minH="100vh">
         <Navbar />
-        <IconButton as={IoArrowBack}
-
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: '7%' }}
-
-        />
+        
         <Box >
             <TableContainer width="96vw" margin="0 auto">
                 <Table size='lg'>

@@ -87,13 +87,7 @@ const LeaveBalances=()=>{
     }
     return <Stack   minH="100vh" minW="100vw" bgColor="white">
         <Navbar/>
-        <IconButton as={IoArrowBack}
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: '7%' }}
-
-        />
+        
         <Stack  minH="95vh" maxW="95vw" margin="0 auto">
                 <TableContainer >
                     <Table size='sm' variant='striped' colorScheme="white" >

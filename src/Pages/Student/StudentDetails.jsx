@@ -262,7 +262,7 @@ console.log(student[0]?.studentId)
             <Stack  width="100vw"  backgroundColor="white">
                 <Flex  justifyContent="space-between" alignItems="center"   width="100%" margin="0 auto" padding="2vh 2vw">
 
-                    <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" />
+                    //<IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" />
 
                     <Flex >
                         <label htmlFor={`avatar-upload-${id}`}>

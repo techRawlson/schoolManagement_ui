@@ -669,15 +669,7 @@ const AttendanceMarking = ({ user }) => {
 
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
-        <Flex >
-            <IconButton as={IoArrowBack}
-                background="none"
-                cursor="pointer"
-                onClick={goback}
-                style={{ marginLeft: '3%' }}
-
-            />
-        </Flex>
+        
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"

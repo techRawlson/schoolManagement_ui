@@ -184,7 +184,7 @@ const Fees = () => {
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
             <Navbar />
-            <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'/>
+         
             <ChakraProvider>
                 <Flex mx="auto" p={2} borderWidth={1} flexWrap="wrap" justifyContent="space-around" alignItems="center">
 

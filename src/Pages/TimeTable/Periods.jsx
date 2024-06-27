@@ -272,15 +272,7 @@ const Periods = () => {
     return <Stack minH="100vh"  >
         <Navbar />
         <ToastContainer />
-        <Flex >
-            <IconButton as={IoArrowBack}
-                background="none"
-                cursor="pointer"
-                onClick={goback}
-                style={{  marginLeft: '3%' }}
-
-            />
-        </Flex>
+        
         
         <Flex justifyContent="space-around" minWidth="80vw">
             <TableContainer>

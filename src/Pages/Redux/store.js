@@ -1,14 +1,9 @@
-// // store.js
+// src/app/store.js
+import { configureStore } from '@reduxjs/toolkit';
+import formDataReducer from './formDataSlice';
 
-// import { createStore, combineReducers, applyMiddleware } from 'redux';
-// import thunk from 'redux-thunk';
-// import userReducer from './userReducer';
-
-// const rootReducer = combineReducers({
-//   user: userReducer,
-//   // Add more reducers here if needed
-// });
-
-// const store = createStore(rootReducer, applyMiddleware(thunk));
-
-// export default store;
+export const store = configureStore({
+    reducer: {
+        formData: formDataReducer
+    }
+});

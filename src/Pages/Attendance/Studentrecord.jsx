@@ -491,15 +491,7 @@ console.log(data)
   return <Stack width="100vw">
     <Navbar />
 
-    <Flex >
-      <IconButton as={IoArrowBack}
-        background="none"
-        cursor="pointer"
-        onClick={goback}
-        style={{ marginLeft: '3%' }}
-
-      />
-    </Flex>
+    
     <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>
 

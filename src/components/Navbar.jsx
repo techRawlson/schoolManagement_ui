@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider, Center } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider, Center, IconButton } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { FiLogOut } from "react-icons/fi";
 import { Divider } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
-import { IoNotifications } from "react-icons/io5";
+import { IoArrowBack, IoNotifications } from "react-icons/io5";
 import './Navbar.css'
 import { useMediaQuery } from 'react-responsive';
 import { useData } from '../Pages/context/DataContext';
@@ -44,8 +44,8 @@ const Navbar = () => {
       console.log(studentId)
       const ids = Role == 'staff' ? staffId : studentId
       console.log(ids)
-      const i = ids[0].id
-      const p=Role == 'staff' ?ids[0].staffId:ids[0].studentId
+      const i = ids[0]?.id
+      const p=Role == 'staff' ?ids[0]?.staffId:ids[0]?.studentId
       console.log(p)
       setpictureId(p)
       
@@ -206,6 +206,9 @@ console.log(pictureId)
 
 
 
+  const goback = () => {
+      navigate(-1)
+  }
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
     <Box
@@ -227,8 +230,11 @@ console.log(pictureId)
 
 
       {
-        isDesktop || isTablet ? <span  >
-          <FiLogOut onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem' }} />
+        isDesktop || isTablet ? <span  style={{ display:'flex',alignItems:'center'}}>
+                <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'/>
+          <FiLogOut onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem'}} />
+    
+
         </span> : ''
       }
 

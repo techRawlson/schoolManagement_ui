@@ -344,8 +344,7 @@ const Subject = () => {
             <Navbar />
             <ToastContainer />
             <Flex alignItems="center" margin="0 0 0 2%">
-                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-            </Flex>
+                           </Flex>
             <Stack display="flex" flexDir="row" justifyContent="space-around" maxW="100%">
 
                 <Stack width="30%" m="0 1%">

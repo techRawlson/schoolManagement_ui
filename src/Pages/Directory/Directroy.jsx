@@ -179,8 +179,7 @@ const App = () => {
       <ToastContainer />
       <Navbar />
       <Flex width="7.5%" >
-        <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-
+       
       </Flex>
       <Table variant="simple">
         <Thead>

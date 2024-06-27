@@ -330,15 +330,7 @@ const Stafftimetable = () => {
 
     return <div style={{ minHeight: '100vh', Width: '100vw' }}>
         <Navbar />
-        <Flex >
-            <IconButton as={IoArrowBack}
-                background="none"
-                cursor="pointer"
-                onClick={goback}
-                style={{ marginLeft: '3%' }}
-
-            />
-        </Flex>
+        
 
         <Stack style={{ maxWidth: '70vw', margin: '0 auto' }}>
             <Flex alignItems='center' >

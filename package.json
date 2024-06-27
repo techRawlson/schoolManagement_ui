@@ -45,6 +45,9 @@
   "@emotion/styled": "^11.11.5",
   
     
+  "@reduxjs/toolkit": "^2.2.5",
+  
+    
   "@stomp/stompjs": "^7.0.0",
   
     

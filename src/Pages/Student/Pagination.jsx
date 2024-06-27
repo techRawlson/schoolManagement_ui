@@ -465,10 +465,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                     <Stack orientation="horizontal" marginX="auto" >
                         {
                             isDesktop || isTablet ? <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
-                                <Flex p="0 3vw">
-                                    <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-
-                                </Flex>
+                                
                                 <Flex justifyContent="space-between" padding="1rem"  >
 
                                     <Select placeholder='Session' onChange={handleFilterYear} ref={admYearRef} margin="0 1vh">
@@ -510,8 +507,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                         {
                             isMobile ? <Flex marginTop="1vh" marginBottom="-2vh" padding="0 6vw">
-                                <IconButton background="none" size="sm" as={IoArrowBack} cursor="pointer" onClick={goback} />
-                            </Flex >
+                                                           </Flex >
                                 : ''
                         }
 

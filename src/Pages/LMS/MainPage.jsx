@@ -21,13 +21,7 @@ const Main = () => {
     }
     return <Stack minW="98.7vw" minH="98vh" >
         <Navbar />
-        <IconButton as={IoArrowBack}
-            size="md"
-            cursor="pointer"
-            onClick={goback}
-            style={{ marginLeft: '7%' }}
-
-        />
+        
         <Flex
             justifyContent="space-around"
             alignItems="center"

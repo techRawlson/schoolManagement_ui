@@ -56,7 +56,7 @@ import { useData } from '../context/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveFormData, clearFormData } from '../Redux/formDataSlice';
 // import Student from '../Pages/Student';
-function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const today = new Date().toISOString().split('T')[0];
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
@@ -69,6 +69,56 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
     const dispatch = useDispatch()
     const formData = useSelector((state) => state.formData.formData);
     console.log(formData)
+
+    const designationOptions = [
+        "principal",
+        "vice_principal",
+        "head_teacher",
+        "teacher",
+        "assistant_teacher",
+        "counselor",
+        "librarian",
+        "administrative_staff",
+        "school_nurse",
+        "custodian",
+        "coach",
+        "it_support_staff",
+        "department_head",
+        "dean_of_students",
+        "academic_advisor",
+        "registrar",
+        "office_manager",
+        "receptionist",
+        "extracurricular_coordinator",
+        "substitute_teacher"
+    ];
+    //  <option value="high_school_diploma">High School Diploma</option>
+
+    const departmentOptions = [
+        "mathematics",
+        "science",
+        "english",
+        "history",
+        "physical_education",
+        "music",
+        "art",
+        "foreign_languages",
+        "technology",
+        "counseling",
+        "administration",
+        "library",
+        "nurse",
+        "special_education",
+        "extracurricular_activities",
+        "student_affairs",
+        "admissions",
+        "finance",
+        "human_resources",
+        "it"
+    ];
+
+
+
     //////staff subject--------------------------
     const options = [
         { value: 'HINDI', label: 'HINDI' },
@@ -451,7 +501,7 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
 
 
 
-    //Sorting and filteration
+    //Sorting 
     const [data, setData] = useState(classData)
     const [sortConfig, setSortConfig] = useState({ key: 'systemId', direction: 'ascending' });
     console.log(classData)
@@ -501,6 +551,120 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
     };
 
 
+    //filteration
+
+
+    const [staffDat, setstaffDat] = useState([])
+    const getStaffData = async () => {
+        try {
+            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
+            const fdata = await data.json();
+            console.log(fdata)
+            setstaffDat(fdata)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+    // Extract unique sessions
+    const uniqueNames = [...new Set(staffDat.map(elm => elm.name))].sort();
+    // Extract unique class names
+
+    const uniqueDesignatin = [...new Set(designationOptions.map(elm => elm))].sort();
+    // Extract unique sections
+    const uniquedepartmentOptions = [...new Set(departmentOptions.map(elm => elm))].sort();
+    useEffect(() => {
+        getStaffData()
+    }, [])
+
+
+
+
+
+    const [filters, setFilters] = useState({
+        classData: true,
+        staffName: "",
+        designation: "",
+        department: "",
+        search: false,
+    });
+
+
+    // const [filteredData, setFilteredData] = useState([]);
+    const dataFilter = () => {
+        let filterData = classData;
+        console.log(filterData)
+        console.log(filters)
+        //filter for class
+        if (filters.staffName !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.name === filters.staffName
+            );
+        }
+        console.log(filterData)
+        //filter for section
+        if (filters.designation !== "") {
+            filterData = filterData.filter(
+                (ele) => ele.designation === filters.designation
+            );
+        }
+        console.log(filterData)
+        //filter for year
+        if (filters.department !== "") {
+            console.log(filters.year)
+            console.log(filterData)
+            filterData = filterData.filter(
+                (ele) => ele.department == filters.department
+            );
+        }
+        console.log(filterData)
+        if (!filters.search) {
+            setFilteredData(filterData);
+        }
+        if (filters.search) {
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            setSearchTimeout(
+                setTimeout(() => {
+                    SearchData();
+                }, 500)
+            );
+        }
+    };
+
+    //filter change for StaffName  query
+    const handleFilterName = (e) => {
+        const value = e.target.value;
+        setFilters((prev) => ({
+            ...prev,
+            classData: false,
+            staffName: value,
+        }));
+    };
+    // //filter change for Designation  query
+    const handleFilterDesignation = (e) => {
+        const value = e.target.value;
+        setFilters((prev) => ({
+            ...prev,
+            classData: false,
+            designation: value,
+        }));
+    };
+    // //filter change for Department  query
+    const handleFilterDepartment = (e) => {
+        const value = e.target.value;
+        setFilters((prev) => ({
+            ...prev,
+            classData: false,
+            department: value,
+        }));
+    };
+    useEffect(() => {
+        dataFilter();
+    }, [filters]);
 
 
 
@@ -515,6 +679,9 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
 
 
 
+    const toCamelCase = (str) => {
+        return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+    };
 
     return (
         <div style={{ width: '100vw' }}>
@@ -525,11 +692,36 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                     <ToastContainer />
 
                     <Stack   >
-                        <Flex justifyContent="space-between" mt="1%" flexWrap="wrap" alignItems='flex-end' >
+                        <Flex justifyContent="space-between" mt="1%" flexWrap="wrap"  >
 
-                            <Flex justifyContent="space-around">
+                            <Flex justifyContent="space-around" >
+                                <Select id="staffname" placeholder="Staff name" m="0 1rem" onChange={handleFilterName} name='staffname'>
+                                    {
+                                        uniqueNames?.map((elm) =>
+                                            <option>{elm}</option>
+                                        )
+                                    }
+                                </Select>
+
+
+
+                                <Select placeholder='Designation' m='0 1rem' onChange={handleFilterDesignation} id='designation' name='designation'>
+                                    {
+                                        uniqueDesignatin?.map((elm) =>
+                                            <option>{elm}</option>
+                                        )
+                                    }
+
+                                </Select>
+                                <Select placeholder='Department' m='0 1rem' onChange={handleFilterDepartment} id='department' name='department'>
+                                    {
+                                        uniquedepartmentOptions?.map((elm) =>
+                                            <option>{elm}</option>
+                                        )
+                                    }
+                                </Select>
                                 <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0' />
-                                <Button onClick={() => setOpen(true)}>
+                                <Button onClick={() => setOpen(true)} width='350px'>
                                     Add New
                                 </Button>
                             </Flex>
@@ -576,7 +768,7 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                                 Department <Icon as={() => getSortIcon('department')} ml={2} />
                                             </Flex>
                                         </Th>
-                                     
+
                                         <Th onClick={() => requestSort('department')}>
                                             <Flex align="center">
                                                 Email <Icon as={() => getSortIcon('department')} ml={2} />
@@ -588,7 +780,9 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                         <Th>EMP. ID</Th>
                                     </Tr>
                                 </Thead>
-                                <Tbody>
+
+                                {
+                                    filters.classData?<Tbody>
                                     {classData?.slice(startIndex, endIndex).map((elm, i) => (
                                         <Tr key={i}>
                                             <Td>{startIndex + i + 1}</Td>
@@ -602,13 +796,38 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                             <Td>{elm.department}</Td>
                                             <Td>{elm.email}</Td>
                                             <Td>{elm.mobile}</Td>
-                                         
+
+                                            <Td>{elm.dateOfJoining}</Td>
+                                            <Td>{elm.gender}</Td>
+                                            <Td>{elm.empId}</Td>
+                                        </Tr>
+                                    ))}
+                                </Tbody>:<Tbody>
+                                    {filteredData?.slice(startIndex, endIndex).map((elm, i) => (
+                                        <Tr key={i}>
+                                            <Td>{startIndex + i + 1}</Td>
+                                            <Td>{elm.staffId}</Td>
+                                            <Td>
+                                                <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
+                                                    {elm.name}
+                                                </ChakraLink>
+                                            </Td>
+                                            <Td>{elm.designation}</Td>
+                                            <Td>{elm.department}</Td>
+                                            <Td>{elm.email}</Td>
+                                            <Td>{elm.mobile}</Td>
+
                                             <Td>{elm.dateOfJoining}</Td>
                                             <Td>{elm.gender}</Td>
                                             <Td>{elm.empId}</Td>
                                         </Tr>
                                     ))}
                                 </Tbody>
+                                }
+                                
+
+
+
                             </Table>
                         </TableContainer>
 
@@ -854,32 +1073,12 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                                             isInvalid={form.errors.designation && form.touched.designation}
                                                         >
                                                             <FormLabel>Designation</FormLabel>
-                                                            <Select
-                                                                {...field}
-                                                                ref={classRef}
-                                                                placeholder="Select"
-                                                            >
-
-                                                                <option value="principal">Principal</option>
-                                                                <option value="vice_principal">Vice Principal</option>
-                                                                <option value="head_teacher">Head Teacher</option>
-                                                                <option value="teacher">Teacher</option>
-                                                                <option value="assistant_teacher">Assistant Teacher</option>
-                                                                <option value="counselor">Counselor</option>
-                                                                <option value="librarian">Librarian</option>
-                                                                <option value="administrative_staff">Administrative Staff</option>
-                                                                <option value="school_nurse">School Nurse</option>
-                                                                <option value="custodian">Custodian</option>
-                                                                <option value="coach">Coach</option>
-                                                                <option value="it_support_staff">IT Support Staff</option>
-                                                                <option value="department_head">Department Head</option>
-                                                                <option value="dean_of_students">Dean of Students</option>
-                                                                <option value="academic_advisor">Academic Advisor</option>
-                                                                <option value="registrar">Registrar</option>
-                                                                <option value="office_manager">Office Manager</option>
-                                                                <option value="receptionist">Receptionist</option>
-                                                                <option value="extracurricular_coordinator">Extracurricular Coordinator</option>
-                                                                <option value="substitute_teacher">Substitute Teacher</option>
+                                                            <Select {...field} ref={classRef} placeholder="Select">
+                                                                {designationOptions.map((option, index) => (
+                                                                    <option key={index} value={option}>
+                                                                        {option.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                                                    </option>
+                                                                ))}
                                                             </Select>
                                                             <FormErrorMessage>{form.errors.designation}</FormErrorMessage>
                                                         </FormControl>

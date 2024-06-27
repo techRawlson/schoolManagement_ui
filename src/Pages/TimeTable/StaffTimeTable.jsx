@@ -15,7 +15,7 @@ import {
 import { IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react"
 import { IoReturnUpBackOutline } from "react-icons/io5"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useData } from "../context/DataContext";
 const Stafftimetable = () => {
     const { Role, updateData } = useData()
@@ -65,7 +65,7 @@ const Stafftimetable = () => {
                 obj.thursday = tt.teacherSubject + " " + tt.className + " " + tt.section;
             } else if (tt.day === 'Friday') {
                 obj.friday = tt.teacherSubject + " " + tt.className + " " + tt.section;
-            }else if (tt.day === 'Saturday') {
+            } else if (tt.day === 'Saturday') {
                 obj.saturday = tt.teacherSubject + " " + tt.className + " " + tt.section;
             }
             else if (tt.day === 'Sunday') {
@@ -296,11 +296,51 @@ const Stafftimetable = () => {
                 teacher: dataJson.name
             }));
             await getData()
-             dataFilter(data)
+            dataFilter(data)
         } catch (error) {
             console.log(error);
         }
     };
+
+    
+
+
+
+
+    //for filling out the specific staff time table data 
+    const location = useLocation();
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const userInfoParam = params.get('user');
+        console.log(userInfoParam)
+        if (userInfoParam) {
+            const decodedUserInfo = JSON.parse(decodeURIComponent(userInfoParam));
+            console.log(decodedUserInfo)
+            handleFilterTeacher(decodedUserInfo.name)
+
+            handleFilterEmpId(decodedUserInfo.empId)
+
+            setUserInfo(decodedUserInfo);
+        }
+    }, [location.search]);
+
+
+    const [empId, setempId] = useState([])
+    const getEmpId = async () => {
+        try {
+            const data = await fetch("http://192.168.1.121:8083/api/staff/saved-Staff");
+            const fdata = await data.json();
+            const emId = fdata
+            .filter(el => el.empId !== null && el.empId !== undefined && el.empId !== '')
+            .map(el => el.empId);
+            console.log(emId)
+            setempId(emId)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
         if (Role == 'staff') {
@@ -311,26 +351,14 @@ const Stafftimetable = () => {
             fetchData();
         }
 
+        getEmpId()
     }, []);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
     return <div style={{ minHeight: '100vh', Width: '100vw' }}>
         <Navbar />
-        
+
 
         <Stack style={{ maxWidth: '70vw', margin: '0 auto' }}>
             <Flex alignItems='center' >
@@ -367,10 +395,10 @@ const Stafftimetable = () => {
 
 
 
-                        </Select> : <Select isRequired value={eId} onChange={(e) => handleFilterEmpId(e.target.value)}>
-                            <option>Select</option>
-                            <option>1</option>
-                            <option>2</option>
+                        </Select> : <Select isRequired value={eId} onChange={(e) => handleFilterEmpId(e.target.value)} placeholder="Select">
+                           {
+                            empId.map((el)=><option>{el}</option>)
+                           }
 
 
                         </Select>
@@ -423,10 +451,10 @@ const Stafftimetable = () => {
                         : ""
                 }
                 {
-                    showError && !show ? <Text color="red" fontWeight="bold" textTransform='toUpperCase'>It seems no timetable present for this session,teacher and employeeId.</Text>:''
-}
+                    showError && !show ? <Text color="red" fontWeight="bold" textTransform='toUpperCase'>It seems no timetable present for this session,teacher and employeeId.</Text> : ''
+                }
             </TableContainer>
-          
+
 
         </Stack>
     </div>

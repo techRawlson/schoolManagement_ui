@@ -488,9 +488,7 @@ function PaginatedStaff({ getData, searchRef, handleFilterSearch, itemsPerPage, 
                                     <Tr>
                                         <Th>Sr.No.</Th>
                                         <Th>
-                                          <Select placeholder='SYSTEM ID'>
-<option>hello</option>
-                                          </Select>
+                                            SYSTEM ID
 
                                         </Th>
                                         <Th>Staff Name</Th>

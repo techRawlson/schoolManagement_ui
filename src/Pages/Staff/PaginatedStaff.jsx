@@ -769,11 +769,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                             </Flex>
                                         </Th>
 
-                                        <Th onClick={() => requestSort('department')}>
-                                            <Flex align="center">
-                                                Email <Icon as={() => getSortIcon('department')} ml={2} />
-                                            </Flex>
-                                        </Th>
+                                        <Th>Email</Th>
                                         <Th>Mobile</Th>
                                         <Th>Date of Joining</Th>
                                         <Th>Gender</Th>

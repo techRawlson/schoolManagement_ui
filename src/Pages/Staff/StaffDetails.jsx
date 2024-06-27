@@ -332,7 +332,7 @@ const StaffDetails = () => {
             <Stack width="95vw" m="0 auto">
 
                 <Flex justifyContent="space-between" >
-                   
+
 
                     <label htmlFor={`avatar-upload-${id}`}>
                         <Avatar
@@ -362,7 +362,7 @@ const StaffDetails = () => {
                         student?.map((std, i) => (
                             <Grid templateColumns='repeat(4, 1fr)' gap={2} key={i} minH="55vh" >
 
-                                <FormControl id="name" >
+                                <FormControl id="name" isRequired>
                                     <FormLabel>Name</FormLabel>
                                     <Input
                                         w='100%'
@@ -389,7 +389,7 @@ const StaffDetails = () => {
                                         placeholder='your employee id'
                                     />
                                 </FormControl>
-                                <FormControl id="fatherName" >
+                                <FormControl id="fatherName" isRequired>
                                     <FormLabel>Father Name</FormLabel>
                                     <Input
                                         w='100%'
@@ -462,7 +462,7 @@ const StaffDetails = () => {
                                         name='staffId'
                                     />
                                 </FormControl>
-                                <FormControl id="name">
+                                <FormControl id="name" isRequired>
                                     <FormLabel>Date Of Joining</FormLabel>
                                     <Input type='date'
                                         w='100%' h='10'
@@ -477,7 +477,7 @@ const StaffDetails = () => {
                                 </FormControl>
                                 <FormControl id="qualification" >
                                     <FormLabel>Qualification</FormLabel>
-                                    <Input
+                                    <Select
                                         w='100%'
                                         h='10'
                                         bg='white.500'
@@ -486,7 +486,28 @@ const StaffDetails = () => {
                                         onChange={(e) => handleFieldChange(e, i, 'qualification')}
                                         disabled={dis}
                                         fontWeight="bold"
-                                    />
+                                        // {...field}
+                                        placeholder="Select"
+                                    >
+                                        <option value="high_school_diploma">High School Diploma</option>
+                                        <option value="associate_degree">Associate Degree</option>
+                                        <option value="bachelors_degree">Bachelor's Degree</option>
+                                        <option value="masters_degree">Master's Degree</option>
+                                        <option value="doctorate_degree">Doctorate Degree</option>
+                                        <option value="teaching_certificate">Teaching Certificate</option>
+                                        <option value="special_education_certification">Special Education Certification</option>
+                                        <option value="esl_certification">ESL Certification</option>
+                                        <option value="administration_certificate">Administration Certificate</option>
+                                        <option value="counseling_certificate">Counseling Certificate</option>
+                                        <option value="library_science_degree">Library Science Degree</option>
+                                        <option value="educational_technology_certificate">Educational Technology Certificate</option>
+                                        <option value="physical_education_certificate">Physical Education Certificate</option>
+                                        <option value="music_education_degree">Music Education Degree</option>
+                                        <option value="art_education_degree">Art Education Degree</option>
+                                        <option value="foreign_language_education_degree">Foreign Language Education Degree</option>
+                                    </Select>
+
+
                                 </FormControl>
                                 <FormControl id="department" name="department">
                                     <FormLabel>Department</FormLabel>
@@ -538,7 +559,7 @@ const StaffDetails = () => {
                                         w='100%' h='10' bg='white.500' value={std.email} onChange={(e) => handleFieldChange(e, i, 'email')} disabled={dis}
                                     />
                                 </FormControl>
-                                <FormControl id="name">
+                                <FormControl id="name" isRequired>
                                     <FormLabel>Mobile</FormLabel>
                                     <Input fontWeight="bold"
                                         name='mobile'
@@ -575,7 +596,9 @@ const StaffDetails = () => {
                                         name='gender'
                                         value={std.gender}
                                         onChange={(e) => handleFieldChange(e, i, 'gender')}
-                                        disabled={dis}>
+                                        disabled={dis}
+                                        placeholder='select'
+                                    >
                                         <option value='Male'>Male</option>
                                         <option value='Female'>Female</option>
                                         <option value='Other'>Other</option>
@@ -583,7 +606,7 @@ const StaffDetails = () => {
 
 
                                 </FormControl>
-                                <FormControl id="name">
+                                <FormControl id="name" isRequired>
                                     <FormLabel>Approver</FormLabel>
                                     <Select fontWeight="bold"
                                         w='100%' h='10'
@@ -607,7 +630,7 @@ const StaffDetails = () => {
                                     {
                                         dis ? "" :
                                             <>
-                                                <FormControl isRequired m="1">
+                                                <FormControl  m="1">
                                                     <FormLabel >Subject</FormLabel>
                                                     <Menu isOpen={isMenuOpen} onClose={handleMenuClose}>
                                                         <MenuButton as={Button} rightIcon={<></>} onClick={handleMenuToggle}>

@@ -463,23 +463,23 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
         console.log(sortableData)
         if (sortConfig !== null) {
             sortableData.sort((a, b) => {
-              const aValue = a[sortConfig.key];
-              const bValue = b[sortConfig.key];
-      
-              // Handle null or empty values to be less prioritized
-              if (aValue === null || aValue === '') return 1;
-              if (bValue === null || bValue === '') return -1;
-      
-              // Normal sorting logic for non-null and non-empty values
-              if (aValue < bValue) {
-                return sortConfig.direction === 'ascending' ? -1 : 1;
-              }
-              if (aValue > bValue) {
-                return sortConfig.direction === 'ascending' ? 1 : -1;
-              }
-              return 0;
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+
+                // Handle null or empty values to be less prioritized
+                if (aValue === null || aValue === '') return 1;
+                if (bValue === null || bValue === '') return -1;
+
+                // Normal sorting logic for non-null and non-empty values
+                if (aValue < bValue) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
             });
-          }
+        }
         setClassData(sortableData)
         return sortableData;
         console.log(sortableData)
@@ -556,14 +556,9 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                     <Tr>
                                         <Th>Sr.No.</Th>
                                         <Th
-                                        // onClick={() => requestSort('systemId')}
-
                                         >
                                             <Flex align="center">
                                                 SYSTEM ID
-                                                {/* <Icon 
-                                                as={() => getSortIcon('systemId')} ml={2} 
-                                                /> */}
                                             </Flex>
                                         </Th>
                                         <Th onClick={() => requestSort('name')}>
@@ -581,8 +576,13 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                                 Department <Icon as={() => getSortIcon('department')} ml={2} />
                                             </Flex>
                                         </Th>
+                                     
+                                        <Th onClick={() => requestSort('department')}>
+                                            <Flex align="center">
+                                                Email <Icon as={() => getSortIcon('department')} ml={2} />
+                                            </Flex>
+                                        </Th>
                                         <Th>Mobile</Th>
-                                        <Th>Email</Th>
                                         <Th>Date of Joining</Th>
                                         <Th>Gender</Th>
                                         <Th>EMP. ID</Th>
@@ -600,8 +600,9 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                             </Td>
                                             <Td>{elm.designation}</Td>
                                             <Td>{elm.department}</Td>
-                                            <Td>{elm.mobile}</Td>
                                             <Td>{elm.email}</Td>
+                                            <Td>{elm.mobile}</Td>
+                                         
                                             <Td>{elm.dateOfJoining}</Td>
                                             <Td>{elm.gender}</Td>
                                             <Td>{elm.empId}</Td>
@@ -1082,7 +1083,11 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.role && form.touched.role} m="1">
                                                             <FormLabel htmlFor="role">Role</FormLabel>
-                                                            <Input {...field} id="role" placeholder="Your role" ref={roleRef} />
+                                                            <Select {...field} ref={roleRef} id="role" placeholder="Select" >
+                                                                <option value="staff">Staff</option>
+                                                                <option value="student">Student</option>
+                                                                <option value="admin">Admin</option>
+                                                            </Select>
                                                             <FormErrorMessage>{form.errors.role}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1184,13 +1189,7 @@ function PaginatedStaff({ setClassData, getData, searchRef, handleFilterSearch, 
                                                     <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
                                                 </FormControl>
                                             </Flex>
-                                            <Flex justifyContent="space-around"  >
 
-                                                <FormControl justifyContent="space-between" alignItems="center" m="1">
-                                                    <FormLabel>Upload Image</FormLabel>
-                                                    <Input placeholder='Upload Image' type='file' ref={image} accept='image/jpeg' />
-                                                </FormControl>
-                                            </Flex>
 
 
                                             <ModalFooter>

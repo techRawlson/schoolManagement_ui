@@ -16,6 +16,7 @@ import WebSocketService from './WebSocketService';
 const Navbar = () => {
   //for resposiveness
   const { Role, updateData } = useData();
+  const [person, setPerson] = useState("")
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
@@ -80,11 +81,11 @@ console.log(pictureId)
     localStorage.removeItem('staffname')
     navigate('/login')
   }
-  const [person, setPerson] = useState("")
 
-  useEffect(() => {
-    setPerson(localStorage.getItem('username'))
-  }, [])
+
+  // useEffect(() => {
+  //   setPerson(localStorage.getItem('username'))
+  // }, [])
   const style = {
     position: 'relative',
     bottom: '1.7rem',
@@ -204,6 +205,8 @@ console.log(pictureId)
     getData()
   }, [])
 
+
+ 
 
 
   const goback = () => {

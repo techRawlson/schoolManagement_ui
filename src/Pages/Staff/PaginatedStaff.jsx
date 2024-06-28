@@ -26,17 +26,24 @@ import {
     MenuItem,
     Icon,
     IconButton,
-    FormErrorMessage
+    FormErrorMessage,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverCloseButton,
+    PopoverArrow,
+    PopoverBody
 
 } from '@chakra-ui/react'
 import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Select } from '@chakra-ui/react'
 import Navbar from '../../components/Navbar'
+
 import {
     Modal,
     ModalOverlay,
@@ -56,7 +63,7 @@ import { useData } from '../context/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveFormData, clearFormData } from '../Redux/formDataSlice';
 // import Student from '../Pages/Student';
-function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
+function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const today = new Date().toISOString().split('T')[0];
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
@@ -66,7 +73,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
     const [classValue, setClassValue] = useState('');
     const initialRef = useRef()
     const finalRef = useRef()
-    const dispatch = useDispatch()
+
     const formData = useSelector((state) => state.formData.formData);
     console.log(formData)
 
@@ -154,27 +161,33 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
+    const dispatch = useDispatch();
 
 
     const handle = () => {
+        const formik = useFormikContext();
+        console.log(formik)
+        console.log(formData)
         if (formData) {
-            if (nameRef.current) nameRef.current.value = formData.name || '';
-            if (sexRef.current) sexRef.current.value = formData.gender || '';
-            if (mobileRef.current) mobileRef.current.value = formData.mobile || '';
-            if (addressRef.current) addressRef.current.value = formData.address || '';
-            if (classRef.current) classRef.current.value = formData.designation || '';
-            if (dobRef.current) dobRef.current.value = formData.dob || '';
-            if (depRef.current) depRef.current.value = formData.department || '';
-            if (admRef.current) admRef.current.value = formData.dateOfJoining || '';
-            if (emailRef.current) emailRef.current.value = formData.email || '';
-            if (approverRef.current) approverRef.current.value = formData.approver || '';
-            // Populate selectedItems if necessary
-            if (empIdRef.current) empIdRef.current.value = formData.empId || '';
-            if (fathersRef.current) fathersRef.current.value = formData.fatherName || '';
-            if (roleRef.current) roleRef.current.value = formData.role || '';
-            if (alternateMobRef.current) alternateMobRef.current.value = formData.alternateNumber || '';
-            if (qualificationRef.current) qualificationRef.current.value = formData.qualification || '';
+            setValues({
+                name: formData.name || '',
+                approver: formData.approver || '',
+                designation: formData.designation || '',
+                department: formData.department || '',
+                mobile: formData.mobile || '',
+                address: formData.address || '',
+                doj: formData.dateOfJoining || '',
+                dob: formData.dob || '',
+                gender: formData.gender || '',
+                email: formData.email || '',
+                empId: formData.empId || '',
+                fathersName: formData.fatherName || '',
+                role: formData.role || '',
+                alternateNumber: formData.alternateNumber || '',
+                qualification: formData.qualification || ''
+            });
         }
+
     }
 
 
@@ -249,48 +262,50 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
 
     const pageNumbers = getPageNumbers();
 
-    const nameRef = useRef()
-    const fathersRef = useRef()
-    const subjectRef = useRef()
-    const sexRef = useRef()
-    const mobileRef = useRef()
-    const addressRef = useRef()
-    const classRef = useRef()
-    const admRef = useRef()
-    const dobRef = useRef()
-    const depRef = useRef()
-    const emailRef = useRef()
-    const staffIdRef = useRef()
-    const image = useRef()
-    const empIdRef = useRef()
-    const roleRef = useRef()
-    const alternateMobRef = useRef()
-    const qualificationRef = useRef()
-    const approverRef = useRef()
+    const [name, setName] = useState('');
+    const [fathersName, setFathersName] = useState('');
+    const [subject, setSubject] = useState('');
+    const [sex, setSex] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [address, setAddress] = useState('');
+    const [adm, setAdm] = useState('');
+    const [dob, setDob] = useState('');
+    const [dep, setDep] = useState('');
+    const [email, setEmail] = useState('');
+    const [staffId, setStaffId] = useState('');
+    const [image, setImage] = useState(null);
+    const [empId, setEmpId] = useState('');
+    const [role, setRole] = useState('');
+    const [alternateMob, setAlternateMob] = useState('');
+    const [qualification, setQualification] = useState('');
+    const [approver, setApprover] = useState('');
+    const [dateOfJoining, setDateOfJoining] = useState('');
+
     let body;
     const saveButton = async () => {
         // Convert selectedItems array to a comma-separated string
         // console.log(typeof (admRef.current.value))
-        body = {
-            name: nameRef?.current?.value,
-            gender: sexRef?.current?.value,
-            mobile: parseInt(mobileRef?.current?.value),
-            address: addressRef?.current?.value,
-            designation: classRef?.current?.value,
-            dob: dobRef?.current?.value,
-            department: depRef?.current?.value,
-            dateOfJoining: admRef?.current?.value,
-            email: emailRef?.current?.value,
-            // staffId: staffIdRef?.current?.value,
-            approver: approverRef.current.value,
-            subjects: selectedItems,
-            empId: empIdRef?.current?.value,
-            fatherName: fathersRef?.current?.value,
-            role: roleRef?.current?.value,
-            alternateNumber: alternateMobRef?.current?.value,
-            qualification: qualificationRef?.current?.value,
+        const body = {
+            name: formData.name,
+            gender: formData.gender,
+            mobile: parseInt(formData.mobile), // Assuming mobile is a string that needs to be parsed to an integer
+            address: formData.address,
+            designation: formData.designation,
+            dob: formData.dob,
+            department: formData.department,
+            dateOfJoining: formData.dateOfJoining,
+            email: formData.email,
+            approver: formData.approver,
+            subjects: formData.selectedItems, // Assuming selectedItems is a property in formData
+            empId: formData.empId,
+            fatherName: formData.fathersName,
+            role: formData.role,
+            alternateNumber: formData.alternateMob,
 
-        }
+            qualification: formData.qualification,
+        };
+
+
         console.log(body)
 
         try {
@@ -513,12 +528,18 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
         console.log(sortableData)
         if (sortConfig !== null) {
             sortableData.sort((a, b) => {
-                const aValue = a[sortConfig.key];
-                const bValue = b[sortConfig.key];
+                let aValue = a[sortConfig.key];
+                let bValue = b[sortConfig.key];
 
                 // Handle null or empty values to be less prioritized
                 if (aValue === null || aValue === '') return 1;
                 if (bValue === null || bValue === '') return -1;
+
+                // Convert date strings to Date objects if sorting by dateOfJoining
+                if (sortConfig.key === 'dateOfJoining') {
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                }
 
                 // Normal sorting logic for non-null and non-empty values
                 if (aValue < bValue) {
@@ -530,6 +551,8 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                 return 0;
             });
         }
+
+
         setClassData(sortableData)
         return sortableData;
         console.log(sortableData)
@@ -695,16 +718,47 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                         <Flex justifyContent="space-between" mt="1%" flexWrap="wrap"  >
 
                             <Flex justifyContent="space-around" >
-                                <Select id="staffname" placeholder="Staff name" m="0 1rem" onChange={handleFilterName} name='staffname'>
+                                {/* <Select id="staffname" placeholder="Staff name" m="0 1rem" onChange={handleFilterName} name='staffname'>
                                     {
                                         uniqueNames?.map((elm) =>
                                             <option>{elm}</option>
                                         )
                                     }
-                                </Select>
+                                </Select> */}
 
 
-
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Button
+                                        m='0 1rem'
+                                   
+                                        size='2xl'
+                                         rightIcon={<ChevronDownIcon
+                                        />}>
+                                             Designations
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <PopoverArrow />
+                                        <PopoverCloseButton />
+                                        <PopoverBody>
+                                            <Flex flexWrap="wrap"  alignItems='center'>
+                                                {designationOptions.map((designation,index) => (
+                                                    <Checkbox
+                                                        key={designation}
+                                                        m='0 1rem'
+                                                        flexBasis='50%'
+                                                        //   isChecked={selectedDesignations.includes(designation)}
+                                                        //   onChange={() => handleSelectChange(designation)}
+                                                        
+                                                    >
+                                                        {designation}
+                                                    </Checkbox>
+                                                ))}
+                                            </Flex>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                </Popover>
                                 <Select placeholder='Designation' m='0 1rem' onChange={handleFilterDesignation} id='designation' name='designation'>
                                     {
                                         uniqueDesignatin?.map((elm) =>
@@ -721,11 +775,10 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                     }
                                 </Select>
                                 <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0' />
-                                <Button onClick={() => 
-                                    {
-                                        setOpen(true)
-                                        setSelectedItems([])
-                                    }
+                                <Button onClick={() => {
+                                    setOpen(true)
+                                    setSelectedItems([])
+                                }
                                 } width='350px'>
                                     Add New
                                 </Button>
@@ -776,7 +829,11 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
 
                                         <Th>Email</Th>
                                         <Th>Mobile</Th>
-                                        <Th>Date of Joining</Th>
+                                        <Th onClick={() => requestSort('dateOfJoining')}>
+                                            <Flex align="center">
+                                                Date of Joining <Icon as={() => getSortIcon('dateOfJoining')} ml={2} />
+                                            </Flex>
+                                        </Th>
                                         <Th>Gender</Th>
                                         <Th>EMP. ID</Th>
                                         <Th>Status</Th>
@@ -784,51 +841,51 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                 </Thead>
 
                                 {
-                                    filters.classData?<Tbody>
-                                    {classData?.slice(startIndex, endIndex).map((elm, i) => (
-                                        <Tr key={i}>
-                                            <Td>{startIndex + i + 1}</Td>
-                                            <Td>{elm.staffId}</Td>
-                                            <Td>
-                                                <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
-                                                    {elm.name}
-                                                </ChakraLink>
-                                            </Td>
-                                            <Td>{elm.designation}</Td>
-                                            <Td>{elm.department}</Td>
-                                            <Td>{elm.email}</Td>
-                                            <Td>{elm.mobile}</Td>
+                                    filters.classData ? <Tbody>
+                                        {classData?.slice(startIndex, endIndex).map((elm, i) => (
+                                            <Tr key={i}>
+                                                <Td>{startIndex + i + 1}</Td>
+                                                <Td>{elm.staffId}</Td>
+                                                <Td>
+                                                    <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
+                                                        {elm.name}
+                                                    </ChakraLink>
+                                                </Td>
+                                                <Td>{elm.designation}</Td>
+                                                <Td>{elm.department}</Td>
+                                                <Td>{elm.email}</Td>
+                                                <Td>{elm.mobile}</Td>
 
-                                            <Td>{elm.dateOfJoining}</Td>
-                                            <Td>{elm.gender}</Td>
-                                            <Td>{elm.empId}</Td>
-                                            <Td>{elm.active==true?'Active':'Deactivated'}</Td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>:<Tbody>
-                                    {filteredData?.slice(startIndex, endIndex).map((elm, i) => (
-                                        <Tr key={i}>
-                                            <Td>{startIndex + i + 1}</Td>
-                                            <Td>{elm.staffId}</Td>
-                                            <Td>
-                                                <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
-                                                    {elm.name}
-                                                </ChakraLink>
-                                            </Td>
-                                            <Td>{elm.designation}</Td>
-                                            <Td>{elm.department}</Td>
-                                            <Td>{elm.email}</Td>
-                                            <Td>{elm.mobile}</Td>
+                                                <Td>{elm.dateOfJoining}</Td>
+                                                <Td>{elm.gender}</Td>
+                                                <Td>{elm.empId}</Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Deactivated'}</Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody> : <Tbody>
+                                        {filteredData?.slice(startIndex, endIndex).map((elm, i) => (
+                                            <Tr key={i}>
+                                                <Td>{startIndex + i + 1}</Td>
+                                                <Td>{elm.staffId}</Td>
+                                                <Td>
+                                                    <ChakraLink as={ReactRouterLink} to={`/staffdetails/${elm.id}`}>
+                                                        {elm.name}
+                                                    </ChakraLink>
+                                                </Td>
+                                                <Td>{elm.designation}</Td>
+                                                <Td>{elm.department}</Td>
+                                                <Td>{elm.email}</Td>
+                                                <Td>{elm.mobile}</Td>
 
-                                            <Td>{elm.dateOfJoining}</Td>
-                                            <Td>{elm.gender}</Td>
-                                            <Td>{elm.empId}</Td>
-                                            <Td>{elm.active==true?'Active':'Deactivated'}</Td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>
+                                                <Td>{elm.dateOfJoining}</Td>
+                                                <Td>{elm.gender}</Td>
+                                                <Td>{elm.empId}</Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Deactivated'}</Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
                                 }
-                                
+
 
 
 
@@ -910,37 +967,38 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                             <ModalBody pb={3} >
                                 <ModalHeader display="flex" justifyContent="space-between" alignItems="center">
                                     Add New Staff
-                                    <IconButton
+                                    {/* <IconButton
                                         aria-label="Minimize"
                                         icon={<FaChevronDown />}
                                         onClick={handleMinimize}
-                                    />
+                                    /> */}
                                 </ModalHeader>
-                                <Formik 
-                                initialValues={{
-                                    name: '',
-                                    approver: '',
-                                    designation: '',
-                                    department: '',
-                                    mobile: '',
-                                    address: '',
-                                    doj: '',
-                                    dob: '',
-                                    gender: '',
-                                    email: '',
-                                    empId: '',
-                                }}
+                                <Formik
+                                    initialValues={{
+                                        name: '',
+                                        approver: '',
+                                        designation: '',
+                                        department: '',
+                                        mobile: '',
+                                        address: '',
+                                        dateOfJoining: '',
+                                        dob: '',
+                                        gender: '',
+                                        email: '',
+                                        empId: '',
+                                        fathersName: '',
+                                        alternateMob: ''
+                                    }}
                                     validate={(values) => {
                                         const errors = {};
                                         console.log(values)
-                                        // dispatch(saveFormData(values));
+                                        dispatch(saveFormData(values));
                                         if (!values.name) {
                                             errors.name = 'Required';
                                         }
                                         if (!values.fathersName) {
                                             errors.fathersName = 'Required';
                                         }
-
                                         if (!values.approver) {
                                             errors.approver = 'Required';
                                         }
@@ -949,33 +1007,39 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                         } else if (!/^\d{10}$/i.test(values.mobile)) {
                                             errors.mobile = 'Invalid mobile number';
                                         }
-                                        if (!values.doj) {
-                                            errors.doj = 'Required';
+                                        if (!values.dateOfJoining) {
+                                            errors.dateOfJoining = 'Required';
                                         }
-                                        // if (!values.email) {
-                                        //     errors.email = 'Required';
-                                        // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                                        //     errors.email = 'Invalid email address';
-                                        // }
-
+                                        if (!values.email) {
+                                            errors.email = 'Required';
+                                        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                                            errors.email = 'Invalid email address';
+                                        }
                                         return errors;
                                     }}
 
                                     onSubmit={(values, { setSubmitting }) => {
                                         setTimeout(() => {
-                                            saveButton()
+                                            saveButton();
                                             setSubmitting(false);
                                         }, 400);
                                     }}
                                 >
-                                    {({ isSubmitting, isValid }) => (
+                                    {({ isSubmitting, isValid, setValues }) => (
                                         <Form>
                                             <Flex justifyContent="space-around"  >
                                                 <Field name="name">
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.name && form.touched.name} isRequired m="1">
                                                             <FormLabel htmlFor="name">Full Name</FormLabel>
-                                                            <Input {...field} id="name" placeholder="Your name" ref={nameRef} />
+                                                            <Input
+                                                                {...field}
+                                                                name="name"
+                                                                id="name"
+                                                                placeholder="Your name"
+
+
+                                                            />
                                                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -992,12 +1056,13 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel htmlFor="empId">Employee Id</FormLabel>
                                                             <Input
                                                                 {...field}
-                                                                ref={empIdRef}
+
                                                                 placeholder="Employee Id"
                                                                 type="text"
                                                                 id="empId"
                                                                 name="empId"
                                                             />
+
                                                             <FormErrorMessage>{form.errors.empId}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1018,14 +1083,18 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
 
                                                             <Select
                                                                 {...field}
+
                                                                 list="class"
                                                                 placeholder="Select Approver"
-                                                                ref={approverRef}
-                                                            ><option value="admin">admin</option>
+                                                                id="approver"
+                                                                name="approver"
+                                                            >
+                                                                <option value="admin">admin</option>
                                                                 {classData?.map((option, index) => (
-                                                                    <option key={index}>{option.name}</option>
+                                                                    <option key={index} value={option.name}>{option.name}</option>
                                                                 ))}
                                                             </Select>
+
 
 
                                                             <FormErrorMessage>{form.errors.approver}</FormErrorMessage>
@@ -1047,13 +1116,19 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             isInvalid={form.errors.designation && form.touched.designation}
                                                         >
                                                             <FormLabel>Designation</FormLabel>
-                                                            <Select {...field} ref={classRef} placeholder="Select">
+                                                            <Select
+                                                                {...field}
+                                                                placeholder="Select"
+                                                                id="designation"
+                                                                name="designation"
+                                                            >
                                                                 {designationOptions.map((option, index) => (
                                                                     <option key={index} value={option}>
                                                                         {option.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                                                     </option>
                                                                 ))}
                                                             </Select>
+
                                                             <FormErrorMessage>{form.errors.designation}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1070,8 +1145,11 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Qualification</FormLabel>
                                                             <Select
                                                                 {...field}
-                                                                ref={qualificationRef}
+
                                                                 placeholder="Select"
+                                                                id="qualification"
+                                                                name="qualification"
+                                                                mulitiple
                                                             >
                                                                 <option value="high_school_diploma">High School Diploma</option>
                                                                 <option value="associate_degree">Associate Degree</option>
@@ -1090,6 +1168,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                                 <option value="art_education_degree">Art Education Degree</option>
                                                                 <option value="foreign_language_education_degree">Foreign Language Education Degree</option>
                                                             </Select>
+
                                                             <FormErrorMessage>{form.errors.qualification}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1106,10 +1185,11 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Department</FormLabel>
                                                             <Select
                                                                 {...field}
-                                                                ref={depRef}
-                                                                placeholder="Select"
-                                                            >
 
+                                                                placeholder="Select"
+                                                                id="department"
+                                                                name="department"
+                                                            >
                                                                 <option value="mathematics">Mathematics Department</option>
                                                                 <option value="science">Science Department</option>
                                                                 <option value="english">English Department</option>
@@ -1127,6 +1207,7 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                                 <option value="library_media">Library Media Department</option>
                                                                 <option value="career_technical_education">Career & Technical Education Department</option>
                                                             </Select>
+
                                                             <FormErrorMessage>{form.errors.department}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1148,15 +1229,18 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Mobile</FormLabel>
                                                             <Input
                                                                 {...field}
+
                                                                 placeholder="Mobile"
                                                                 type="number"
-                                                                ref={mobileRef}
+                                                                id="mobile"
+                                                                name="mobile"
                                                             />
+
                                                             <FormErrorMessage>{form.errors.mobile}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
                                                 </Field>
-                                                <Field name="alternateMobile">
+                                                <Field name="alternateMob">
                                                     {({ field, form }) => (
                                                         <FormControl
                                                             // isRequired
@@ -1168,11 +1252,14 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Alternate Mobile</FormLabel>
                                                             <Input
                                                                 {...field}
+
                                                                 placeholder="Mobile"
                                                                 type="number"
-                                                                ref={alternateMobRef}
+                                                                id="alternateMob"
+                                                                name="alternateMob"
                                                             />
-                                                            <FormErrorMessage>{form.errors.alternateMobile}</FormErrorMessage>
+
+                                                            <FormErrorMessage>{form.errors.alternateMob}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
                                                 </Field>
@@ -1188,9 +1275,12 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Address</FormLabel>
                                                             <Input
                                                                 {...field}
+
                                                                 placeholder="Address"
-                                                                ref={addressRef}
+                                                                id="address"
+                                                                name="address"
                                                             />
+
                                                             <FormErrorMessage>{form.errors.address}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1203,28 +1293,36 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.fathersName && form.touched.fathersName} isRequired m="1">
                                                             <FormLabel htmlFor="fathersName">Father Name</FormLabel>
-                                                            <Input {...field} id="fathersName" placeholder="Your father's name" ref={fathersRef} />
+                                                            <Input
+                                                                {...field}
+                                                                id="fathersName"
+                                                                placeholder="Your father's name"
+                                                                name="fathersName"
+                                                            />
+
                                                             <FormErrorMessage>{form.errors.fathersName}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
                                                 </Field>
-                                                <Field name="doj">
+                                                <Field name="dateOfJoining">
                                                     {({ field, form }) => (
                                                         <FormControl
                                                             isRequired
                                                             justifyContent="space-between"
                                                             alignItems="center"
                                                             m="1"
-                                                            isInvalid={form.errors.doj && form.touched.doj}
+                                                            isInvalid={form.errors.dateOfJoining && form.touched.dateOfJoining}
                                                         >
                                                             <FormLabel>Date Of Joining</FormLabel>
                                                             <Input
                                                                 {...field}
                                                                 placeholder="Date of joining"
                                                                 type="date"
-                                                                ref={admRef}
+                                                                id="dateOfJoining"
+                                                                name="dateOfJoining"
                                                             />
-                                                            <FormErrorMessage>{form.errors.doj}</FormErrorMessage>
+
+                                                            <FormErrorMessage>{form.errors.dateOfJoining}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
                                                 </Field>
@@ -1240,11 +1338,14 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Date of birth</FormLabel>
                                                             <Input
                                                                 {...field}
-                                                                placeholder="dob"
+
+                                                                placeholder="Date of Birth"
                                                                 type="date"
-                                                                ref={dobRef}
-                                                                max={today}
+                                                                id="dob"
+                                                                name="dob"
+                                                                max={today} // Assuming `today` is defined in your component for the maximum date
                                                             />
+
                                                             <FormErrorMessage>{form.errors.dob}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1256,11 +1357,18 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.role && form.touched.role} m="1">
                                                             <FormLabel htmlFor="role">Role</FormLabel>
-                                                            <Select {...field} ref={roleRef} id="role" placeholder="Select" >
+                                                            <Select
+                                                                {...field}
+
+                                                                id="role"
+                                                                name="role"
+                                                                placeholder="Select"
+                                                            >
                                                                 <option value="staff">Staff</option>
                                                                 <option value="student">Student</option>
                                                                 <option value="admin">Admin</option>
                                                             </Select>
+
                                                             <FormErrorMessage>{form.errors.role}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1277,13 +1385,16 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel>Gender</FormLabel>
                                                             <Select
                                                                 {...field}
-                                                                ref={sexRef}
+
                                                                 placeholder="Select"
+                                                                id="gender"
+                                                                name="gender"
                                                             >
                                                                 <option value="Male">Male</option>
                                                                 <option value="Female">Female</option>
                                                                 <option value="Other">Other</option>
                                                             </Select>
+
                                                             <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1347,12 +1458,13 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                             <FormLabel htmlFor="email">Email</FormLabel>
                                                             <Input
                                                                 {...field}
-                                                                ref={emailRef}
+
                                                                 placeholder="Email"
                                                                 type="email"
                                                                 id="email"
                                                                 name="email"
                                                             />
+
                                                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                                                         </FormControl>
                                                     )}
@@ -1369,10 +1481,16 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                                                 <Button colorScheme='blue' mr={3} type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                                     Save
                                                 </Button>
+                                                <Button mr={3} onClick={() => {
+                                                    setValues({
+                                                        ...formData,
+                                                    })
+                                                }}>Restore</Button>
+
                                                 <Button type="button" onClick={() => setOpen(false)} disabled={isSubmitting}>
                                                     Cancel
                                                 </Button>
-                                                <Button onClick={handle}>Restore</Button>
+
                                             </ModalFooter>
                                         </Form>)}
 
@@ -1385,13 +1503,13 @@ function PaginatedStaff({ filteredData,setFilteredData,setClassData, getData, se
                     </Modal>
                 }
 
-                {isMinimized && (
+                {/* {isMinimized && (
                     <IconButton
                         aria-label="Maximize"
                         icon={<FaChevronUp />}
                         onClick={handleMinimize}
                     />
-                )}
+                )} */}
 
             </>
             <>

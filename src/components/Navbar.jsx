@@ -45,6 +45,7 @@ const Navbar = () => {
       console.log(studentId)
       const ids = Role == 'staff' ? staffId : studentId
       console.log(ids)
+      setPerson(ids[0].name)
       const i = ids[0]?.id
       const p=Role == 'staff' ?ids[0]?.staffId:ids[0]?.studentId
       console.log(p)
@@ -203,7 +204,7 @@ console.log(pictureId)
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [Role])
 
 
  

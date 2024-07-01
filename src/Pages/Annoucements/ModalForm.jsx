@@ -29,9 +29,11 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { GoPlusCircle } from "react-icons/go";
 import WebSocketService from "../../components/WebSocketService";
+import { useData } from "../context/DataContext";
 
 
 const ModalForm = () => {
+    const { Role, updateData } = useData();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [date, setDate] = useState('');
     const [items, setItems] = useState([]);
@@ -174,7 +176,7 @@ const ModalForm = () => {
                 console.log(response)
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-console.log(response)
+            console.log(response)
             // Parse the JSON data
             const employeeData = await response.json();
 
@@ -197,10 +199,10 @@ console.log(response)
 
     const handleFileChange = (event) => {
         const fileList = event.target.files; // Access the FileList object
-    
+
         // Log the FileList object to see its contents
         console.log(fileList);
-    
+
         // You can loop through fileList if multiple files are selected
         for (let i = 0; i < fileList.length; i++) {
             const file = fileList[i];
@@ -228,10 +230,12 @@ console.log(response)
 
 
     return (
-        <>
-            <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
+        <>{
+            Role == 'admin' ? <Button onClick={onOpen} colorScheme="teal" position="absolute" bottom="1rem" right="1rem">
                 <GoPlusCircle size="40px" />
-            </Button>
+            </Button> : ''
+        }
+
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -308,30 +312,34 @@ console.log(response)
                                             {item.date}
                                         </Box>
                                         <p>{item.title}</p>
-                                        
-                                       
-                                    </Flex>
-                                    <Flex flex='1' justifyContent='flex-end'>
-                                    <IconButton
-                                    mr='3rem'
-                                        backgroundColor="green"
-                                        color="white"
-                                        fontSize='24px'
-                                        fontWeight='bolder'
-                                        aria-label="Delete"
-                                        icon={<IoArrowDownCircleOutline />}
-                                        onClick={() => handleDownload(item.id)}
-                                    />
-                                    <IconButton
-                                        backgroundColor="red"
-                                        color="white"
-                                        aria-label="Delete"
-                                        icon={<DeleteIcon />}
-                                        onClick={() => handleDelete(item.id)}
-                                    />
+
+
                                     </Flex>
 
-                                    
+                                    <Flex flex='1' justifyContent='flex-end'>
+                                        <IconButton
+                                            mr='3rem'
+                                            backgroundColor="green"
+                                            color="white"
+                                            fontSize='24px'
+                                            fontWeight='bolder'
+                                            aria-label="Delete"
+                                            icon={<IoArrowDownCircleOutline />}
+                                            onClick={() => handleDownload(item.id)}
+                                        />
+                                        {
+                                            Role == 'admin' ? <IconButton
+                                                backgroundColor="red"
+                                                color="white"
+                                                aria-label="Delete"
+                                                icon={<DeleteIcon />}
+                                                onClick={() => handleDelete(item.id)}
+                                            /> : ''
+                                        }
+
+                                    </Flex>
+
+
                                 </AccordionButton>
                                 {/* <Button onClick={() => handleDownload(item.id)}>download</Button> */}
                             </h2>

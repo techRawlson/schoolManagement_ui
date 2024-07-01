@@ -325,7 +325,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
             });
 
             // Append the image file to the FormData object
-            const file = image.current.files[0];
+            const file = image?.current?.files[0];
             let formData2 = new FormData();
             formData2.append('file', file);
 
@@ -358,7 +358,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                 throw new Error(errorMessage);
 
             }
-            if (image.current.files[0]) {
+            if (image?.current?.files[0]) {
                 const pictureResponse = await fetch(`http://192.168.1.121:8083/api/staff-images/${staffData.staffId}`, {
                     method: 'post',
                     body: formData2,
@@ -1065,6 +1065,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                     }}
 
                                     onSubmit={(values, { setSubmitting }) => {
+                                        console.log(values)
                                         setTimeout(() => {
                                             saveButton();
                                             setSubmitting(false);

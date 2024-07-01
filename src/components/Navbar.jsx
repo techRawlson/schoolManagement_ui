@@ -213,6 +213,8 @@ console.log(pictureId)
   const goback = () => {
       navigate(-1)
   }
+
+  
   return (
     // //<div style={{ backgroundColor: "#FFBF00" }}>
     <Box

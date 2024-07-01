@@ -517,6 +517,12 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
 
 
     //Sorting 
+    const [filters, setFilters] = useState({
+        classData: true,
+        designation: "",
+        department: "",
+        search: false,
+    });
     const [data, setData] = useState(classData)
     const [sortConfig, setSortConfig] = useState({ key: 'systemId', direction: 'ascending' });
     console.log(classData)
@@ -524,7 +530,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
     console.log(sortConfig)
     const sortedData = React.useMemo(() => {
 
-        let sortableData = [...classData];
+        let sortableData = filters.classData?[...classData]:[...filteredData];
         console.log(sortableData)
         if (sortConfig !== null) {
             sortableData.sort((a, b) => {
@@ -540,6 +546,11 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                     aValue = new Date(aValue);
                     bValue = new Date(bValue);
                 }
+                if (sortConfig.key === 'active') {
+                    aValue = a[sortConfig.key] ? 1 : 0;
+                    bValue = b[sortConfig.key] ? 1 : 0;
+                  }
+
 
                 // Normal sorting logic for non-null and non-empty values
                 if (aValue < bValue) {
@@ -552,8 +563,8 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
             });
         }
 
-
-        setClassData(sortableData)
+        console.log(sortableData)
+        filters.classData?setClassData(sortableData):setFilteredData(sortableData)
         return sortableData;
         console.log(sortableData)
     }, [data, sortConfig]);
@@ -606,13 +617,11 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
 
 
 
-    const [filters, setFilters] = useState({
-        classData: true,
-        staffName: "",
-        designation: "",
-        department: "",
-        search: false,
-    });
+
+
+    const [selectedDesignations, setSelectedDesignations] = useState([]);
+    const [selectedDepartments, setSelectedDepartments] = useState([]);
+   
 
 
     // const [filteredData, setFilteredData] = useState([]);
@@ -620,26 +629,22 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
         let filterData = classData;
         console.log(filterData)
         console.log(filters)
-        //filter for class
-        if (filters.staffName !== "") {
-            filterData = filterData.filter(
-                (ele) => ele.name === filters.staffName
-            );
-        }
         console.log(filterData)
-        //filter for section
+        //filter for Designation
         if (filters.designation !== "") {
-            filterData = filterData.filter(
-                (ele) => ele.designation === filters.designation
-            );
+
+            filterData = selectedDesignations.length > 0 ? filterData.filter(
+                (ele) => selectedDesignations.includes(ele.designation)
+            )
+                : filterData;
         }
         console.log(filterData)
-        //filter for year
+        //filter for Department
         if (filters.department !== "") {
             console.log(filters.year)
             console.log(filterData)
             filterData = filterData.filter(
-                (ele) => ele.department == filters.department
+                (ele) =>  selectedDepartments.length > 0 ?selectedDepartments.includes(ele.department):filterData
             );
         }
         console.log(filterData)
@@ -668,21 +673,20 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
         }));
     };
     // //filter change for Designation  query
-    const handleFilterDesignation = (e) => {
-        const value = e.target.value;
+    const handleFilterDesignation = (valueArray) => {
+
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            designation: value,
+            designation: valueArray,
         }));
     };
     // //filter change for Department  query
-    const handleFilterDepartment = (e) => {
-        const value = e.target.value;
+    const handleFilterDepartment = (valueArray) => {
         setFilters((prev) => ({
             ...prev,
             classData: false,
-            department: value,
+            department: valueArray,
         }));
     };
     useEffect(() => {
@@ -692,10 +696,30 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
 
 
 
+    //multi select designation and department code from here
+    const handleSelectdesignation = (designation) => {
+        setSelectedDesignations(prevSelected => {
+            const newSelected = prevSelected.includes(designation)
+                ? prevSelected.filter(item => item !== designation)
+                : [...prevSelected, designation];
+            handleFilterDesignation(newSelected);
+            return newSelected;
+        });
+    };
+    console.log(selectedDesignations)
 
 
+  
 
-
+    const handleSelectdepartment = (department) => {
+        setSelectedDepartments(prevSelected => {
+            const newSelected = prevSelected.includes(department)
+                ? prevSelected.filter(item => item !== department)
+                : [...prevSelected, department];
+            handleFilterDepartment(newSelected);
+            return newSelected;
+        });
+    };
 
 
 
@@ -727,30 +751,30 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                 </Select> */}
 
 
-                                <Popover>
+                                <Popover id='designation' name='designation'>
                                     <PopoverTrigger>
                                         <Button
-                                        m='0 1rem'
-                                   
-                                        size='2xl'
-                                         rightIcon={<ChevronDownIcon
-                                        />}>
-                                             Designations
+                                            m='0 1rem'
+
+                                            size='2xl'
+                                            rightIcon={<ChevronDownIcon
+                                            />}>
+                                            Designations
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent>
                                         <PopoverArrow />
                                         <PopoverCloseButton />
-                                        <PopoverBody>
-                                            <Flex flexWrap="wrap"  alignItems='center'>
-                                                {designationOptions.map((designation,index) => (
+                                        <PopoverBody >
+                                            <Flex flexWrap="wrap" alignItems='center'>
+                                                {designationOptions.map((designation, index) => (
                                                     <Checkbox
                                                         key={designation}
                                                         m='0 1rem'
                                                         flexBasis='50%'
                                                         //   isChecked={selectedDesignations.includes(designation)}
-                                                        //   onChange={() => handleSelectChange(designation)}
-                                                        
+                                                        onChange={() => handleSelectdesignation(designation)}
+
                                                     >
                                                         {designation}
                                                     </Checkbox>
@@ -759,21 +783,39 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                         </PopoverBody>
                                     </PopoverContent>
                                 </Popover>
-                                <Select placeholder='Designation' m='0 1rem' onChange={handleFilterDesignation} id='designation' name='designation'>
-                                    {
-                                        uniqueDesignatin?.map((elm) =>
-                                            <option>{elm}</option>
-                                        )
-                                    }
+                                <Popover id='department' name='department'>
+                                    <PopoverTrigger>
+                                        <Button
+                                            m='0 1rem'
 
-                                </Select>
-                                <Select placeholder='Department' m='0 1rem' onChange={handleFilterDepartment} id='department' name='department'>
-                                    {
-                                        uniquedepartmentOptions?.map((elm) =>
-                                            <option>{elm}</option>
-                                        )
-                                    }
-                                </Select>
+                                            size='2xl'
+                                            rightIcon={<ChevronDownIcon
+                                            />}>
+                                            Department
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <PopoverArrow />
+                                        <PopoverCloseButton />
+                                        <PopoverBody >
+                                            <Flex flexWrap="wrap" alignItems='center'>
+                                                {uniquedepartmentOptions.map((department, index) => (
+                                                    <Checkbox
+                                                        key={department}
+                                                        m='0 1rem'
+                                                        flexBasis='50%'
+                                                        //   isChecked={selectedDesignations.includes(designation)}
+                                                        onChange={() => handleSelectdepartment(department)}
+
+                                                    >
+                                                        {department}
+                                                    </Checkbox>
+                                                ))}
+                                            </Flex>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                </Popover>
+
                                 <Input placeholder='Search Name' ref={searchRef} onChange={handleFilterSearch} margin='0 2vw 0 0' />
                                 <Button onClick={() => {
                                     setOpen(true)
@@ -836,7 +878,11 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                         </Th>
                                         <Th>Gender</Th>
                                         <Th>EMP. ID</Th>
-                                        <Th>Status</Th>
+                                        <Th onClick={() => requestSort('active')}>
+                                            <Flex align="center">
+                                                Status <Icon as={() => getSortIcon('active')} ml={2} />
+                                            </Flex>
+                                        </Th>
                                     </Tr>
                                 </Thead>
 
@@ -859,7 +905,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                                 <Td>{elm.dateOfJoining}</Td>
                                                 <Td>{elm.gender}</Td>
                                                 <Td>{elm.empId}</Td>
-                                                <Td>{elm.active == true ? 'Active' : 'Deactivated'}</Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Inactivate'}</Td>
                                             </Tr>
                                         ))}
                                     </Tbody> : <Tbody>
@@ -880,7 +926,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
                                                 <Td>{elm.dateOfJoining}</Td>
                                                 <Td>{elm.gender}</Td>
                                                 <Td>{elm.empId}</Td>
-                                                <Td>{elm.active == true ? 'Active' : 'Deactivated'}</Td>
+                                                <Td>{elm.active == true ? 'Active' : 'Inactivate'}</Td>
                                             </Tr>
                                         ))}
                                     </Tbody>

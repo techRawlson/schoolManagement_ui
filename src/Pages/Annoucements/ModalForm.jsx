@@ -303,14 +303,25 @@ console.log(response)
                         <AccordionItem padding="0 1rem">
                             <h2>
                                 <AccordionButton>
-                                    <Flex as='span' flex='1' justifyContent="space-between" alignItems='center' margin="0 1rem">
+                                    <Flex as='span' flex='1' justifyContent="space-between" alignItems='center' margin="0 1rem" textAlign='center'>
                                         <Box bg='#2E8BC0' w='100px' p={1} color='white' whiteSpace="nowrap">
                                             {item.date}
                                         </Box>
-                                        {item.title}
-                                        <IoArrowDownCircleOutline size="30px" />
+                                        <p>{item.title}</p>
+                                        
+                                       
                                     </Flex>
-
+                                    <Flex flex='1' justifyContent='flex-end'>
+                                    <IconButton
+                                    mr='3rem'
+                                        backgroundColor="green"
+                                        color="white"
+                                        fontSize='24px'
+                                        fontWeight='bolder'
+                                        aria-label="Delete"
+                                        icon={<IoArrowDownCircleOutline />}
+                                        onClick={() => handleDownload(item.id)}
+                                    />
                                     <IconButton
                                         backgroundColor="red"
                                         color="white"
@@ -318,8 +329,11 @@ console.log(response)
                                         icon={<DeleteIcon />}
                                         onClick={() => handleDelete(item.id)}
                                     />
+                                    </Flex>
+
+                                    
                                 </AccordionButton>
-                                <Button onClick={() => handleDownload(item.id)}>download</Button>
+                                {/* <Button onClick={() => handleDownload(item.id)}>download</Button> */}
                             </h2>
                             <AccordionPanel pb={2} textAlign="center">
                                 {item.description}

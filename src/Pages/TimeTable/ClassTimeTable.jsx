@@ -17,9 +17,16 @@ import { IoArrowBack } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 import Stafftimetable from "./StaffTimeTable";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { useData } from "../context/DataContext";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink ,
+    BreadcrumbSeparator,
+  } from '@chakra-ui/react'
+  import { Link as ReactRouterLink } from 'react-router-dom'
 const Classtimetable = () => {
     const { Role, updateData } = useData()
     const [data, setData] = useState([])
@@ -1222,7 +1229,47 @@ const Classtimetable = () => {
     console.log(filteredData.length + 1)
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
-        
+        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/timetable"
+                                isCurrent={location.pathname === '/timetable'}
+                                color={location.pathname === '/timetable' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/timetable' ? 'bold' : 'normal'}
+                            >
+                                Time Table
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/classtimetable"
+                                isCurrent={location.pathname === '/classtimetable'}
+                                color={location.pathname === '/classtimetable' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/classtimetable' ? 'bold' : 'normal'}
+                            >
+                               Class Time Table
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+
+
+
+
+
+
+                    </Breadcrumb>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"

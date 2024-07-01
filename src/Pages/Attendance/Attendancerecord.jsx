@@ -5,7 +5,14 @@ import { PiChalkboardTeacher } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { IoArrowBack } from "react-icons/io5";
-
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink ,
+    BreadcrumbSeparator,
+  } from '@chakra-ui/react'
+  import { Link as ReactRouterLink } from 'react-router-dom'
+  import { ChevronRightIcon } from "@chakra-ui/icons";
 const Attendancerecord = () => {
     const navigate = useNavigate()
     const nextPage = (data) => {
@@ -22,7 +29,48 @@ const Attendancerecord = () => {
    
     return <Stack h="100vh">
         <Navbar/>
-        
+        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendance"
+                                isCurrent={location.pathname === '/attendance'}
+                                color={location.pathname === '/attendance' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendance' ? 'bold' : 'normal'}
+                            >
+                                Attendance
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendancerecord"
+                                isCurrent={location.pathname === '/attendancerecord'}
+                                color={location.pathname === '/attendancerecord' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendancerecord' ? 'bold' : 'normal'}
+                            >
+                                Attendance Record
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                       
+
+
+
+
+
+
+                    </Breadcrumb>
         <SimpleGrid spacing={4} templateColumns='1fr 1fr' margin="auto" width="90vw" padding="0 8%">
             <Card cursor="pointer" onClick={() => nextPage("classrecord")}>
                 <CardHeader>

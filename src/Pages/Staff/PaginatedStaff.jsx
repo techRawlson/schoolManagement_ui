@@ -35,9 +35,16 @@ import {
     PopoverBody
 
 } from '@chakra-ui/react'
-import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbSeparator,
+  } from '@chakra-ui/react'
+import { ArrowLeftIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
+import { Link as ReactRouterLink, useLocation, useNavigate } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -73,7 +80,7 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
     const [classValue, setClassValue] = useState('');
     const initialRef = useRef()
     const finalRef = useRef()
-
+    const location = useLocation();
     const formData = useSelector((state) => state.formData.formData);
     console.log(formData)
 
@@ -736,6 +743,47 @@ function PaginatedStaff({ filteredData, setFilteredData, setClassData, getData, 
             <div className="pagination-items">
                 <div>
                     <Navbar />
+                    <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/staff"
+                                isCurrent={location.pathname === '/staff'}
+                                color={location.pathname === '/staff' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/staff' ? 'bold' : 'normal'}
+                            >
+                                Staff
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                // to={`/studentdetails/`}  // Interpolate 'id' into the route
+                                isCurrent={location.pathname === `/studentdetails`}
+                                color={location.pathname === `/studentdetails/` ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === `/studentdetails/` ? 'bold' : 'normal'}
+                            >
+                                Staff Details
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+
+
+
+
+
+
+                    </Breadcrumb>
                     <ToastContainer />
 
                     <Stack   >

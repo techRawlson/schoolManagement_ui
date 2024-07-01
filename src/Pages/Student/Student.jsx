@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import Pagination from './Pagination';
 import { Stack } from '@chakra-ui/react';
 import { useData } from '../context/DataContext';
+import { useLocation } from 'react-router-dom';
 
 
 const Student = () => {
     const { Role, updateData } = useData();
+    const location = useLocation();
     console.log(Role)
     const [classData, setClassData] = useState([])
     const [uniqueKeys, setUniqueKeys] = useState(new Set());
@@ -16,10 +18,11 @@ const Student = () => {
     const d = renderItems(1, 10)
     const set = new Set()
     const getData = async () => {
+        console.log(location.pathname)
         try {
             const data = await fetch("http://192.168.1.121:8082/api/students/savedData");
             const fdata = await data.json();
-
+console.log(fdata)
             setClassData(fdata)
         } catch (error) {
             console.log(error)
@@ -144,10 +147,12 @@ const Student = () => {
     useEffect(() => {
         dataFilter();
     }, [filters]);
+
+
     useEffect(() => {
         getData()
 
-    }, [])
+    }, [location.pathname])
 
 
 
@@ -160,6 +165,7 @@ console.log(classData)
     const itemsPerPage = 10;
     return (
         <Stack minH="100vh" >
+            
             <Pagination
                 getStudentData={getData}
                 itemsPerPage={itemsPerPage}

@@ -22,12 +22,15 @@ import {
     Toast,
     FormControl, FormLabel, FormErrorMessage,
     IconButton,
-    Heading
+    Heading,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink
 
 } from '@chakra-ui/react'
 import { useData } from '../context/DataContext';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link as ReactRouterLink } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify';
@@ -49,10 +52,12 @@ import { Link } from 'react-router-dom';
 import Draggable from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import './Pagination.css'
+import { ChevronRightIcon } from '@chakra-ui/icons';
 
 // import Student from '../Pages/Student';
 function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPage, totalItems, onPageChange, admYearRef, handleFilterYear, classData, handleFilter, clasRef, handleSectionFilter, secFilter }) {
     const { Role, updateData } = useData();
+    const location = useLocation();
     const [currentPage, setCurrentPage] = useState(1);
     const [isVisible, setIsVisible] = useState(true)
     const [open, setOpen] = useState(false)
@@ -369,10 +374,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
             console.log(error)
         }
     }
-    useEffect(() => {
-
-        getClass()
-    }, [])
+    
 
 
 
@@ -410,27 +412,6 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
-    const handleMinimize = () => {
-        console.log(initialFormData)
-        setIsOpen(false);
-        console.log(initialFormData)
-        setSavedFormData(initialFormData); // Save current form data
-        setinitialFormData({
-            name: '',
-            email: '',
-            fathersname: '',
-            mobile: '',
-            address: '',
-            class: null,
-            section: '',
-            gender: '',
-            rollNo: '',
-            category: '',
-            session: '',
-        }); // Clear form data to hide from modal
-        // Hide the modal
-
-    };
 
     const handleRestore = () => {
         console.log(savedFormData)
@@ -455,17 +436,64 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
     const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
     const isTablet = useMediaQuery({ query: '(min-width: 601px) and (max-width: 900px)' });
     const isDesktop = useMediaQuery({ query: '(min-width: 901px)' });
+
+
+    useEffect(() => {
+
+        getClass()
+    }, [])
     return (
         <div style={{ width: '100vw', }}>
 
             <div className="pagination-items" >
                 <div>
                     <Navbar />
+                    <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />}>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/student"
+                                isCurrent={location.pathname === '/student'}
+                                color={location.pathname === '/student' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/student' ? 'bold' : 'normal'}
+                            >
+                                Student
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                // to={`/studentdetails/`}  // Interpolate 'id' into the route
+                                isCurrent={location.pathname === `/studentdetails/`}
+                                color={location.pathname === `/studentdetails/` ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === `/studentdetails/` ? 'bold' : 'normal'}
+                            >
+                                Student Details
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+
+
+
+
+
+
+                    </Breadcrumb>
                     <ToastContainer />
                     <Stack orientation="horizontal" marginX="auto" >
                         {
                             isDesktop || isTablet ? <Flex justifyContent="space-between" width="100%" m="1% 0" alignItems="center" >
-                                
+
                                 <Flex justifyContent="space-between" padding="1rem"  >
 
                                     <Select placeholder='Session' onChange={handleFilterYear} ref={admYearRef} margin="0 1vh">
@@ -507,7 +535,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
 
                         {
                             isMobile ? <Flex marginTop="1vh" marginBottom="-2vh" padding="0 6vw">
-                                                           </Flex >
+                            </Flex >
                                 : ''
                         }
 
@@ -692,7 +720,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                 {/* {
                                     Role == 'staff' ? '' : <Button onClick={() => setIsOpenFile(true)}>Upload</Button>
                                 } */}
-                                
+
                             </Stack>
 
 
@@ -781,7 +809,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                         >
                             <ModalCloseButton onClick={() => setIsOpen(false)} />
                             <ModalBody pb={3} >
-                                <Heading textAlign="center" color="black"  fontSize="medium">Add New</Heading>
+                                <Heading textAlign="center" color="black" fontSize="medium">Add New</Heading>
                                 <Formik
                                     initialValues={initialFormData}
                                     validate={(values) => {
@@ -1010,10 +1038,10 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                                                 </Field>
 
                                                 <Field name="enrollmentNumber">
-                                                    {({ field,form }) => (
+                                                    {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.enrollmentNumber && form.touched.enrollmentNumber} isRequired flexBasis="200px" flexGrow="1" m="0 1%">
                                                             <FormLabel htmlFor="enrollmentNumber">Enrollment No.</FormLabel>
-                                                            <Input {...field} id="enrollmentNumber" placeholder="Enrollment No." type="number" ref={enrollRef}/>
+                                                            <Input {...field} id="enrollmentNumber" placeholder="Enrollment No." type="number" ref={enrollRef} />
                                                             <FormErrorMessage>{form.errors.enrollmentNumber}</FormErrorMessage>
                                                         </FormControl>
                                                     )}

@@ -1,5 +1,5 @@
 // import { Stack } from "@chakra-ui/react"
-import { Badge, Button, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
+import { Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Checkbox, Flex, FormControl, FormLabel, Heading, IconButton, Input, Select, Stack, StatUpArrow, Text } from "@chakra-ui/react"
 import Navbar from '../../components/Navbar'
 import {
     Table,
@@ -14,14 +14,15 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from "react"
 import { IoAddSharp, IoReturnUpBackOutline } from "react-icons/io5";
-
+import { Link as ReactRouterLink } from 'react-router-dom'
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 // import Stafftimetable from "./StaffTimeTable";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { IoArrowBack } from "react-icons/io5";
+
 
 const AttendanceMarking = ({ user }) => {
     // const user = useSelector(state => state);
@@ -669,7 +670,48 @@ const AttendanceMarking = ({ user }) => {
 
     return <div style={{ minHeight: '100vh', minWidth: '100vw', fontFamily: 'Roboto' }}>
         <Navbar />
-        
+        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendance"
+                                isCurrent={location.pathname === '/attendance'}
+                                color={location.pathname === '/attendance' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendance' ? 'bold' : 'normal'}
+                            >
+                                Attendance
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attedancemarking"
+                                isCurrent={location.pathname === '/attedancemarking'}
+                                color={location.pathname === '/attedancemarking' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attedancemarking' ? 'bold' : 'normal'}
+                            >
+                                Attendance Marking
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                       
+
+
+
+
+
+
+                    </Breadcrumb>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"

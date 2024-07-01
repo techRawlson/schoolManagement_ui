@@ -6,7 +6,14 @@ import Navbar from "../../components/Navbar";
 import { IoArrowBack } from "react-icons/io5";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
-
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink ,
+    BreadcrumbSeparator,
+  } from '@chakra-ui/react'
+  import { Link as ReactRouterLink } from 'react-router-dom'
+  import { ChevronRightIcon } from "@chakra-ui/icons";
 const ClassRecord = () => {
     const navigate = useNavigate()
     const [session, setSession] = useState();
@@ -372,7 +379,59 @@ const ClassRecord = () => {
     console.log(Dates)
     return <Stack h="100vh">
         <Navbar />
-        
+        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendance"
+                                isCurrent={location.pathname === '/attendance'}
+                                color={location.pathname === '/attendance' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendance' ? 'bold' : 'normal'}
+                            >
+                                Attendance
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendancerecord"
+                                isCurrent={location.pathname === '/attendancerecord'}
+                                color={location.pathname === '/attendancerecord' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendancerecord' ? 'bold' : 'normal'}
+                            >
+                                Attendance Record
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/classrecord"
+                                isCurrent={location.pathname === '/classrecord'}
+                                color={location.pathname === '/classrecord' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/classrecord' ? 'bold' : 'normal'}
+                            >
+                                Class Record
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                       
+
+
+
+
+
+
+                    </Breadcrumb>
         <ToastContainer />
         <Stack display='flex' justifyContent='space-around' direction='row' alignItems='center'>
             <Flex margin="0 0 0  5%"

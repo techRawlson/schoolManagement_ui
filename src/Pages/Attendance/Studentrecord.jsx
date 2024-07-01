@@ -15,6 +15,14 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink ,
+  BreadcrumbSeparator,
+} from '@chakra-ui/react'
+import { Link as ReactRouterLink } from 'react-router-dom'
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 import PieChart from "./Piechart";
 import { IoArrowBack } from "react-icons/io5";
@@ -490,7 +498,59 @@ console.log(data)
 
   return <Stack width="100vw">
     <Navbar />
+    <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendance"
+                                isCurrent={location.pathname === '/attendance'}
+                                color={location.pathname === '/attendance' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendance' ? 'bold' : 'normal'}
+                            >
+                                Attendance
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/attendancerecord"
+                                isCurrent={location.pathname === '/attendancerecord'}
+                                color={location.pathname === '/attendancerecord' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/attendancerecord' ? 'bold' : 'normal'}
+                            >
+                                Attendance Record
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/studentrecord"
+                                isCurrent={location.pathname === '/studentrecord'}
+                                color={location.pathname === '/studentrecord' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/studentrecord' ? 'bold' : 'normal'}
+                            >
+                                Student Record
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                       
 
+
+
+
+
+
+                    </Breadcrumb>
     
     <Stack height="100vh" width="60vw" margin="0 auto 10% auto">
       <Flex justifyContent='space-around' alignItems='center'>

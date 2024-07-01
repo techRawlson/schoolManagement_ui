@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider, Center, IconButton } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, SimpleGrid, Heading, Button, Text, Stack, Box, Badge, Flex, Menu, MenuButton, MenuList, MenuGroup, MenuItem, MenuDivider, Center, IconButton, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { FiLogOut } from "react-icons/fi";
 import { Divider } from "@chakra-ui/react";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { IoArrowBack, IoNotifications } from "react-icons/io5";
 import './Navbar.css'
 import { useMediaQuery } from 'react-responsive';
@@ -13,6 +13,9 @@ import { useData } from '../Pages/context/DataContext';
 import { Link as ReactRouterLink } from 'react-router-dom'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import WebSocketService from './WebSocketService';
+import {
+} from '@chakra-ui/react'
+import { ChevronRightIcon } from '@chakra-ui/icons';
 const Navbar = () => {
   //for resposiveness
   const { Role, updateData } = useData();
@@ -47,10 +50,10 @@ const Navbar = () => {
       console.log(ids)
       setPerson(ids[0]?.name)
       const i = ids[0]?.id
-      const p=Role == 'staff' ?ids[0]?.staffId:ids[0]?.studentId
+      const p = Role == 'staff' ? ids[0]?.staffId : ids[0]?.studentId
       console.log(p)
       setpictureId(p)
-      
+
       console.log(ids)
       setId(i)
     } catch (error) {
@@ -59,7 +62,7 @@ const Navbar = () => {
   }
 
 
-console.log(pictureId)
+  console.log(pictureId)
 
 
 
@@ -164,7 +167,7 @@ console.log(pictureId)
           console.log(data);
           // Handle document notifications similarly to how you handle regular notifications
           // Update 'setNotifications' state based on your requirements
-          setNotifications([...notifications,data.document]);
+          setNotifications([...notifications, data.document]);
         };
 
         eventSource.onerror = (error) => {
@@ -185,7 +188,7 @@ console.log(pictureId)
     getNotification();
     getDocumentNotification();
 
-    
+
     // Clean up function to close EventSource connections
     return () => {
       // Close EventSource connections when component unmounts or is updated
@@ -237,7 +240,7 @@ console.log(pictureId)
 
     navigate('/annoucement')
 
-    
+
 
 
 
@@ -260,159 +263,115 @@ console.log(pictureId)
   }, [Role])
 
 
- 
+
 
 
   const goback = () => {
-      navigate(-1)
+    navigate(-1)
   }
 
-  
+  const location = useLocation();
+  console.log(location.pathname)
   return (
-    // //<div style={{ backgroundColor: "#FFBF00" }}>
-    <Box
-      fontSize="150%"
-      bgColor='#2196F3'
-      style={{
-        display: 'flex',
-        flexDirection: isDesktop || isTablet ? 'row' : 'column',
-        justifyContent: 'space-between',
-        alignItems: "center",
-        padding: '1.5% 0',
-        width: '100vw',
-        margin: '0',  // Reset margin to 0
-        overflowX: 'hidden' // Hide horizontal scrollbar
-      }}
-    >
+    <div style={{ backgroundColor: "#FFBF00" }}>
+      <Box
+        fontSize="150%"
+        bgColor='#2196F3'
+        style={{
+          display: 'flex',
+          flexDirection: isDesktop || isTablet ? 'row' : 'column',
+          justifyContent: 'space-between',
+          alignItems: "center",
+          padding: '1.5% 0',
+          width: '100vw',
+          margin: '0',
+          overflowX: 'hidden'
+        }}
+      >
+        {isDesktop || isTablet ? (
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw' background='#2196F3' justifyContent='center' textAlign='center' />
+            <FiLogOut as={Button} onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem' }} />
+          </span>
+        ) : null}
 
-
-
-
-      {
-        isDesktop || isTablet ? <span  style={{ display:'flex',alignItems:'center'}}>
-                <IconButton as={IoArrowBack} cursor="pointer" onClick={goback} size="sm" m='2vw'  background='#2196F3' justifyContent='center' textAlign='center'/>
-          <FiLogOut as={Button} onClick={() => logOut()} style={{ color: 'white', textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '2rem'}} />
-    
-
-        </span> : ''
-      }
-
-      {
-        isMobile ?
+        {isMobile ? (
           <Flex justifyContent="space-between" alignItems="center" width="100vw" bgColor="light" color="white">
             <Box display="flex" justifyContent="space-around" alignItems="center" width="100%">
               <span>
                 <FiLogOut onClick={() => logOut()} style={{ textAlign: "center", cursor: 'pointer', marginLeft: isDesktop ? '2.4rem' : '.08rem' }} />
               </span>
-              <Text textAlign="center"  >
+              <Text textAlign="center">
                 Rawlson Technologies
               </Text>
-
               <Menu>
                 <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" flexDir="column">
-                  <Box display="flex" gap="1rem" alignItems="center" >
+                  <Box display="flex" gap="1rem" alignItems="center">
                     <Avatar bg="red.500" onClick={() => nextPage("hello")} />
                     <MenuButton padding="9% 0 0 0">
                       <IoNotifications color="white" size="32" />
-
-                      {
-                        notifications.length > 0 ? <Box style={mobileStyle} id='dot' ></Box> : ''
-                      }
-
-
+                      {notifications.length > 0 ? <Box style={mobileStyle} id='dot' ></Box> : ''}
                     </MenuButton>
-
                   </Box>
-                  <span style={{ color: 'white' }} >{person}</span>
-
-
-
+                  <span style={{ color: 'white' }}>{person}</span>
                 </Flex>
-                <MenuList>
-                  <MenuGroup title='Notifications'>
-                    {notifications.map((notification, index) => (
-                      <MenuItem
-                        key={index}
-                        as='a'
-                        href='#'
-                        bgColor={notification.read ? "#f0f0f0" : "#e0f7fa"}
-                        color={notification.read ? "#6c757d" : "inherit"}
-                        onClick={() => handleNotificationClick(notification.id)}
-                      >
-                        {notification.message} from {notification.staffName}
-                      </MenuItem>
-                    ))}
-                  </MenuGroup>
-                </MenuList>
               </Menu>
             </Box>
-
           </Flex>
-          : ''
+        ) : null}
 
-      }
+        {isDesktop || isTablet ? (
+          <Text textAlign="center" marginLeft="5rem" color='green.9000'>
+            Rawlson Technologies
+          </Text>
+        ) : null}
 
-      {
-        isDesktop || isTablet ? <Text textAlign="center" marginLeft="5rem" color='green.9000'>
+        {isDesktop || isTablet ? (
+          <Menu>
+            <div style={gridContainerStyle}>
+              <Center padding="0 1rem">
+                <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" gap="1rem">
+                  <ChakraLink
+                    as={ReactRouterLink}
+                    to={Role === 'student' ? `/studentdetails/${id}` : `/staffdetails/${id}`}
+                  >
+                    <Avatar cursor="pointer" src={Role === 'staff' ? `http://192.168.1.121:8083/api/staff-images/${pictureId}` : `http://192.168.1.121:8082/api/images/${pictureId}`} />
+                  </ChakraLink>
+                  <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
+                </Flex>
+                <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
+                  <MenuButton paddingTop="32%" mr="1rem">
+                    <IoNotifications size="32" color="yellow" />
+                    {notifications?.length > 0 ? <Box style={style} id='dot' ></Box> : ''}
+                  </MenuButton>
+                </Box>
+              </Center>
+            </div>
+            <MenuList>
+              <MenuGroup title='Notifications'>
+                {notifications?.map((notification, index) => (
+                  <MenuItem
+                    key={index}
+                    as='a'
+                    href='#'
+                    bgColor={notification.read ? "#f0f0f0" : "#e0f7fa"}
+                    color={notification.read ? "#6c757d" : "inherit"}
+                    onClick={() => handleNotificationClick(notification.id)}
+                  >
+                    {notification.title}
+                  </MenuItem>
+                ))}
+              </MenuGroup>
+            </MenuList>
+          </Menu>
+        ) : null}
 
-          Rawlson Technologies
-        </Text> : ''
-      }
-
-
-      {
-        isDesktop || isTablet ? <Menu>
-          <div style={gridContainerStyle}>
-            <Center padding="0 1rem">
-              <Flex alignItems="center" justifyContent="space-between" padding="0 1rem" gap="1rem">
-
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to={Role === 'student' ? `/studentdetails/${id}` : `/staffdetails/${id}`}
-
-                >
-                  <Avatar cursor="pointer" src={Role=='staff'?`http://192.168.1.121:8083/api/staff-images/${pictureId}`:`http://192.168.1.121:8082/api/images/${pictureId}`} />
-                </ChakraLink>
-                <span fontSize="80%" style={{ color: 'white' }}>{person}</span>
-              </Flex>
-              <Box style={{ cursor: 'pointer', outline: 'none !important' }}>
-                <MenuButton paddingTop="32%" mr="1rem">
-                  <IoNotifications size="32" color="yellow" />
-                  {
-                    notifications?.length > 0 ? <Box style={style} id='dot' ></Box> : ''
-                  }
-
-                </MenuButton>
-
-              </Box>
-            </Center>
-          </div>
-
-          <MenuList>
-            <MenuGroup title='Notifications'>
-              {notifications?.map((notification, index) => (
-                <MenuItem
-                  key={index}
-                  as='a'
-                  href='#'
-                  bgColor={notification.read ? "#f0f0f0" : "#e0f7fa"}
-                  color={notification.read ? "#6c757d" : "inherit"}
-                  onClick={() => handleNotificationClick(notification.id)}
-                >
-                  {notification.title} 
-                </MenuItem>
-              ))}
-            </MenuGroup>
-          </MenuList>
-        </Menu> : ''
-      }
-
-
-
+      
+      </Box>
+      <Box bgColor="#FFBF00">
+      
     </Box>
-
-
-    //
+    </div>
   )
 }
 

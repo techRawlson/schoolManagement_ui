@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import { Flex, Stack, Grid, GridItem, Input, Button, FormControl, FormLabel, Select, Toast, Icon, Menu, MenuButton, MenuList, MenuItem, Checkbox, IconButton, useDisclosure, InputRightElement, InputGroup } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup, Wrap } from '@chakra-ui/react'
-import { Navigate, useParams, useNavigate } from 'react-router-dom';
+import { Navigate, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ArrowLeftIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon, ChevronRightIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { MdClose } from 'react-icons/md';
 import { IoArrowBack } from "react-icons/io5";
 import {
@@ -17,9 +17,16 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react'
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink ,
+    BreadcrumbSeparator,
+  } from '@chakra-ui/react'
+  import { Link as ReactRouterLink } from 'react-router-dom'
 const StaffDetails = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const location = useLocation();
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
     const navigate = useNavigate()
@@ -333,6 +340,47 @@ const StaffDetails = () => {
     return (
         <Stack minH="100vh" id='staffDetails'>
             <Navbar />
+            <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} >
+                        <BreadcrumbItem >
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/dashboard"
+                                isCurrent={location.pathname === '/dashboard'}
+                                color={location.pathname === '/dashboard' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/dashboard' ? 'bold' : 'normal'}
+                            >
+                                Home
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to="/student"
+                                isCurrent={location.pathname === '/staff'}
+                                color={location.pathname === '/student' ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === '/student' ? 'bold' : 'normal'}
+                            >
+                                Staff
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                // to={`/studentdetails/`}  // Interpolate 'id' into the route
+                                isCurrent={location.pathname === `/studentdetails/`}
+                                color={location.pathname === `/studentdetails/` ? 'blue.400' : 'gray.400'}
+                                fontWeight={location.pathname === `/studentdetails/` ? 'bold' : 'normal'}
+                            >
+                                Staff Details
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+
+
+
+
+
+
+                    </Breadcrumb>
             <ToastContainer /> {/* Add this line */}
 
 

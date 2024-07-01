@@ -45,7 +45,7 @@ const Navbar = () => {
       console.log(studentId)
       const ids = Role == 'staff' ? staffId : studentId
       console.log(ids)
-      setPerson(ids[0].name)
+      setPerson(ids[0]?.name)
       const i = ids[0]?.id
       const p=Role == 'staff' ?ids[0]?.staffId:ids[0]?.studentId
       console.log(p)
@@ -116,79 +116,132 @@ console.log(pictureId)
 
 
 
-  const getNotification = () => {
-    try {
-      const eventSource = new EventSource(`http://localhost:8090/api/notifications/stream/${staffName}`);
-
-      eventSource.onmessage = (event) => {
-        console.log("New notification received");
-        const data = JSON.parse(event.data);
-        console.log(data);
-        setNotifications((prevNotifications) => {
-          const notificationSet = new Set(prevNotifications.map(notification => notification.id));
-          if (!notificationSet.has(data.id)) {
-            // Add the new notification only if its ID is not already in the set
-            const notifi = [...prevNotifications, data];
-            // const filter=notifi
-            return notifi.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).filter((fil) => fil.read == 0);
-          }
-          return prevNotifications; // If the notification already exists, return the previous state
-        });
-      };
-
-      eventSource.onerror = (error) => {
-        console.error('EventSource failed: ', error);
-        eventSource.close();
-
-        // Attempt to reconnect after 5 seconds
-        // setTimeout(() => {
-        //   getNotification(staffName, setNotifications);
-        // }, 5000);
-      };
-    } catch (error) {
-      console.error('Failed to initialize EventSource:', error);
-    }
-  };
 
 
   useEffect(() => {
-    if (staffName) {
-      getNotification();
-    } else {
-      console.error("Staff name is undefined or null");
-    }
+    // Function to subscribe to notifications from the first API
+    const getNotification = () => {
+      try {
+        const eventSource = new EventSource(`http://localhost:8090/api/notifications/stream/${staffName}`);
+
+        eventSource.onmessage = (event) => {
+          console.log("New notification received");
+          const data = JSON.parse(event.data);
+          console.log(data);
+          setNotifications((prevNotifications) => {
+            const notificationSet = new Set(prevNotifications.map(notification => notification.id));
+            if (!notificationSet.has(data.id)) {
+              // Add the new notification only if its ID is not already in the set
+              const updatedNotifications = [...prevNotifications, data];
+              return updatedNotifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).filter((notification) => notification.read === 0);
+            }
+            return prevNotifications; // If the notification already exists, return the previous state
+          });
+        };
+
+        eventSource.onerror = (error) => {
+          console.error('EventSource failed: ', error);
+          eventSource.close();
+
+          // Attempt to reconnect after 5 seconds
+          // setTimeout(() => {
+          //   getNotification(staffName, setNotifications);
+          // }, 5000);
+        };
+      } catch (error) {
+        console.error('Failed to initialize EventSource:', error);
+      }
+    };
+
+    // Function to subscribe to notifications from the second API (documents)
+    const getDocumentNotification = () => {
+      try {
+        const eventSource = new EventSource(`http://192.168.1.121:8082/api/documents/stream`);
+
+        eventSource.onmessage = (event) => {
+          console.log("New document notification received");
+          const data = JSON.parse(event.data);
+          console.log(data);
+          // Handle document notifications similarly to how you handle regular notifications
+          // Update 'setNotifications' state based on your requirements
+          setNotifications([...notifications,data.document]);
+        };
+
+        eventSource.onerror = (error) => {
+          console.error('EventSource for documents failed: ', error);
+          eventSource.close();
+
+          // Attempt to reconnect after 5 seconds
+          // setTimeout(() => {
+          //   getDocumentNotification();
+          // }, 5000);
+        };
+      } catch (error) {
+        console.error('Failed to initialize EventSource for documents:', error);
+      }
+    };
+
+    // Call both functions to subscribe to notifications
+    getNotification();
+    getDocumentNotification();
+
+    
+    // Clean up function to close EventSource connections
+    return () => {
+      // Close EventSource connections when component unmounts or is updated
+      // This ensures no memory leaks or open connections
+      // eventSource.close(); // Close eventSource connections here if needed
+    };
   }, [staffName]);
 
 
 
 
+
+
+
+
+
+
+
+
+
+
   console.log(notifications)
-  notifications.map((not) => console.log(not.message))
 
 
 
   const handleNotificationClick = async (id) => {
 
     console.log(id)
-    try {
-      const response = await fetch(`http://localhost:8090/api/all/read`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // body: JSON.stringify({ isRead: true }),
-      });
+    //this code is for leave application notification
+    // try {
+    //   const response = await fetch(`http://localhost:8090/api/all/read`, {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     // body: JSON.stringify({ isRead: true }),
+    //   });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      getNotification()
-      // Optionally, you might want to refresh the notifications list here
+    //   if (!response.ok) {
+    //     throw new Error(`Error: ${response.status} ${response.statusText}`);
+    //   }
+    //   getNotification()
+    //   // Optionally, you might want to refresh the notifications list here
 
-      navigate("/lmsleaveapproval", { replace: true });
-    } catch (error) {
-      console.error('Failed to update notification:', error);
-    }
+    //   navigate("/lmsleaveapproval", { replace: true });
+    // } catch (error) {
+    //   console.error('Failed to update notification:', error);
+    // }
+
+    navigate('/annoucement')
+
+    
+
+
+
+
   };
 
 
@@ -326,7 +379,7 @@ console.log(pictureId)
                 <MenuButton paddingTop="32%" mr="1rem">
                   <IoNotifications size="32" color="yellow" />
                   {
-                    notifications.length > 0 ? <Box style={style} id='dot' ></Box> : ''
+                    notifications?.length > 0 ? <Box style={style} id='dot' ></Box> : ''
                   }
 
                 </MenuButton>
@@ -337,7 +390,7 @@ console.log(pictureId)
 
           <MenuList>
             <MenuGroup title='Notifications'>
-              {notifications.map((notification, index) => (
+              {notifications?.map((notification, index) => (
                 <MenuItem
                   key={index}
                   as='a'
@@ -346,7 +399,7 @@ console.log(pictureId)
                   color={notification.read ? "#6c757d" : "inherit"}
                   onClick={() => handleNotificationClick(notification.id)}
                 >
-                  {notification.message} from {notification.staffName}
+                  {notification.title} 
                 </MenuItem>
               ))}
             </MenuGroup>

@@ -90,25 +90,33 @@ const ModalForm = () => {
 
     console.log(receivedMessage)
     const [files, setFiles] = useState([]);
-   
+
     const handleSave = async (e) => {
-        
-        formData.date=date;
-console.log(formData)
+        const data = new FormData();
+        // Assuming date is a Date object
+        data.append('date', date); // Using ISO string format
+        // Adding other formData fields
+        data.append('title', formData.title);
+        data.append('description', formData.description);
+        console.log(files)
+        for (let i = 0; i < files.length; i++) {
+            data.append('file', files[i]);
+        }
         try {
-            const response = await fetch('http://192.168.1.121:8081/api/announcements/upload', {
+            const response = await fetch('http://192.168.1.121:8082/api/documents/create', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData),
+                // headers: {
+                //     'Content-Type': 'application/json'
+                // },
+                body: data
+                // body: JSON.stringify(formData),
             });
-        
+
             if (!response.ok) {
                 const errorResponseData = await response.json();
                 throw new Error(`HTTP error! Status: ${response.status}, Message: ${JSON.stringify(errorResponseData)}`);
             }
-        
+
             const responseData = await response.json();
             console.log(responseData);
         } catch (error) {
@@ -138,7 +146,7 @@ console.log(formData)
         console.log(id);
 
         try {
-            const response = await fetch(`http://192.168.1.121:8081/api/announcements/${id}`, {
+            const response = await fetch(`http://192.168.1.121:8082/api/documents/${id}`, {
                 method: 'DELETE'
             });
 
@@ -156,16 +164,17 @@ console.log(formData)
     };
 
     const fetchEmployees = async () => {
+        console.log("here before fetching")
         try {
             // Ensure the URL is properly formatted
-            const response = await fetch('http://192.168.1.121:8081/api/announcements/all');
+            const response = await fetch('http://192.168.1.121:8082/api/documents/all');
 
             // Check if the response status is OK (200)
             if (!response.ok) {
-                console.log()
+                console.log(response)
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+console.log(response)
             // Parse the JSON data
             const employeeData = await response.json();
 
@@ -187,10 +196,21 @@ console.log(formData)
 
 
     const handleFileChange = (event) => {
-        setFiles(event.target.files);
+        const fileList = event.target.files; // Access the FileList object
+    
+        // Log the FileList object to see its contents
+        console.log(fileList);
+    
+        // You can loop through fileList if multiple files are selected
+        for (let i = 0; i < fileList.length; i++) {
+            const file = fileList[i];
+            console.log(`File ${i + 1}:`, file.name, file.size, file.type);
+            // Perform further actions like uploading files, storing file information, etc.
+        }
+        setFiles(fileList)
     };
     const handleDownload = (id) => {
-        const downloadUrl = `http://192.168.1.121:8081/api/files/pdf/announcement/${id}`;
+        const downloadUrl = `http://192.168.1.121:8082/api/documents/download/${id}`;
         fetch(downloadUrl)
             .then(response => response.blob())
             .then(blob => {
@@ -250,18 +270,18 @@ console.log(formData)
                         </FormControl>
                     </ModalBody>
 
-                    <FormControl mt={4} as="form" encType="multipart/form-data" onChange={handleFileChange}>
+                    <FormControl mt={4} as="form" encType="multipart/form-data">
                         <FormLabel htmlFor="fileInput">Upload a file:</FormLabel>
                         <input
                             type="file"
                             id="fileInput"
                             name="file"
-                            accept=".pdf, .doc, .docx, .xls, .xlsx, image/*"
-                            multiple
-
+                            accept=".pdf, .doc, .docx, .xls, .xlsx, image/*" // Adjust as needed
+                            multiple // Allow multiple file selection
+                            onChange={handleFileChange} // Handle file change event
                         />
-
                     </FormControl>
+
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={handleSave}>
                             {isEditing ? "Update" : "Publish"}

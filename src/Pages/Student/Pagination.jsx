@@ -781,7 +781,7 @@ function Pagination({ getStudentData, searchRef, handleFilterSearch, itemsPerPag
                         >
                             <ModalCloseButton onClick={() => setIsOpen(false)} />
                             <ModalBody pb={3} >
-                                <Heading textAlign="center" color="black" fontFamily="Roboto" fontSize="medium">Add New</Heading>
+                                <Heading textAlign="center" color="black"  fontSize="medium">Add New</Heading>
                                 <Formik
                                     initialValues={initialFormData}
                                     validate={(values) => {
